@@ -1,0 +1,18 @@
+{
+    "login_text": "Login",
+    "email_address": "Email Address",
+    "send_otp": "Send OTP",
+    "your_profile": "Your Profile",
+    "your_metrics": "Your metrics",
+    "phrases": "Phrases",
+    "back": "< Back",
+    "vocab": "Vocab",
+    "effort": "Effort",
+    "score": "Score",
+    "your_classes": "Your classes",
+    "read_and_practise": "Read & Practise",
+    "remember_and_practise": "Remember & Practise",
+    "recording": "Recording",
+    "submit_score": "Submit Score",
+    "profile_header": "This is your profile information which is not shared or editale."
+}
