@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import '../presentation/auth_viewmodel.dart';
-import '../data/auth_repository.dart';
+import 'login_view_model.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -12,10 +11,11 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => AuthViewModel(AuthRepository()),
+      create: (_) => AuthViewModel(),
       child: Consumer<AuthViewModel>(
         builder: (context, vm, _) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Stack(
               children: [
                 Image.asset(ImageConstants.loginBg),
@@ -85,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    onPressed: () =>vm.login(),
+                                    onPressed: () => vm.login(),
                                     child: Text(
                                       text.send_otp,
                                       style:

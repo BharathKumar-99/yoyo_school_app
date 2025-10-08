@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
+import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 import 'config/router/app_router.dart';
 import 'config/theme/app_theme.dart';
 import 'core/supabase/supabase_client.dart';
@@ -16,17 +19,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ProfileProvider(ProfileRepository()),
+        ),
       ],
-      supportedLocales: const [Locale('en')],
-      routerConfig: AppRoutes.router,
-      theme: AppTheme.lightTheme,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en')],
+        routerConfig: AppRoutes.router,
+        theme: AppTheme.lightTheme,
+      ),
     );
   }
 }

@@ -15,23 +15,19 @@ AppLocalizations get text {
 }
 
 class NavigationHelper {
-  static BuildContext? get context => AppRoutes.navigatorKey.currentContext;
-
   static void go(String route, {Object? extra}) {
-    if (context != null) {
-      context!.go(route, extra: extra);
-    }
+    ctx!.go(route, extra: extra);
   }
 
   static void push(String route, {Object? extra}) {
-    if (context != null) {
-      context!.push(route, extra: extra);
-    }
+    ctx!.push(route, extra: extra);
   }
 
   static void pop<T extends Object?>([T? result]) {
-    if (context != null && Navigator.canPop(context!)) {
-      Navigator.pop(context!, result);
+    if (ctx != null && Navigator.canPop(ctx!)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pop(ctx!, result);
+      });
     }
   }
 }

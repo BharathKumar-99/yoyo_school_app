@@ -14,5 +14,18 @@
     "remember_and_practise": "Remember & Practise",
     "recording": "Recording",
     "submit_score": "Submit Score",
-    "profile_header": "This is your profile information which is not shared or editale."
+    "profile_header": "This is your profile information which is not shared or editale.",
+    "verify_otp": "Verify OTP",
+    "otp_header": "Please enter the 6-digit code sent to",
+    "resend_otp": "Resend OTP",
+    "save": "Save",
+    "level": "Level: ",
+    "classText": "Class:",
+    "you": "You:",
+    "newText": "New",
+    "chooseFromGallery": "Choose from Gallery",
+    "takeAPhoto": "Take a Photo",
+    "recorded": "Recorded",
+    "somethingWentWrong": "Something Went Wrong",
+    "profileUpdated": "Profile Updated"
 }

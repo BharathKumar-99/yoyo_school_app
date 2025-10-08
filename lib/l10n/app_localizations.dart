@@ -189,6 +189,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This is your profile information which is not shared or editale.'**
   String get profile_header;
+
+  /// No description provided for @verify_otp.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify OTP'**
+  String get verify_otp;
+
+  /// No description provided for @otp_header.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the 6-digit code sent to'**
+  String get otp_header;
+
+  /// No description provided for @resend_otp.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP'**
+  String get resend_otp;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @level.
+  ///
+  /// In en, this message translates to:
+  /// **'Level: '**
+  String get level;
+
+  /// No description provided for @classText.
+  ///
+  /// In en, this message translates to:
+  /// **'Class:'**
+  String get classText;
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You:'**
+  String get you;
+
+  /// No description provided for @newText.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get newText;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @takeAPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a Photo'**
+  String get takeAPhoto;
+
+  /// No description provided for @recorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded'**
+  String get recorded;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something Went Wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Updated'**
+  String get profileUpdated;
 }
 
 class _AppLocalizationsDelegate

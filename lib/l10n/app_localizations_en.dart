@@ -56,4 +56,43 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profile_header =>
       'This is your profile information which is not shared or editale.';
+
+  @override
+  String get verify_otp => 'Verify OTP';
+
+  @override
+  String get otp_header => 'Please enter the 6-digit code sent to';
+
+  @override
+  String get resend_otp => 'Resend OTP';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get level => 'Level: ';
+
+  @override
+  String get classText => 'Class:';
+
+  @override
+  String get you => 'You:';
+
+  @override
+  String get newText => 'New';
+
+  @override
+  String get chooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get takeAPhoto => 'Take a Photo';
+
+  @override
+  String get recorded => 'Recorded';
+
+  @override
+  String get somethingWentWrong => 'Something Went Wrong';
+
+  @override
+  String get profileUpdated => 'Profile Updated';
 }
