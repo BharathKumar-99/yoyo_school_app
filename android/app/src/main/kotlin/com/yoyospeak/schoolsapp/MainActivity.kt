@@ -1,4 +1,4 @@
-package com.example.yoyo_school_app
+package com.yoyospeak.schoolsapp
 
 import io.flutter.embedding.android.FlutterActivity
 
