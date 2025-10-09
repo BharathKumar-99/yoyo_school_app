@@ -95,4 +95,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileUpdated => 'Profile Updated';
+
+  @override
+  String get readAndpractise => 'Read & Practise';
+
+  @override
+  String get rememberAndPractise => 'Remember & Practise';
 }
