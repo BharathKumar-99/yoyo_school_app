@@ -110,7 +110,7 @@ class PhraseRecordingScreen extends StatelessWidget {
                     ),
                     child: Text(
                       text.rememberAndPractise,
-                      style: AppTextStyles.textTheme.titleMedium,
+                      style: AppTextStyles.textTheme.titleMedium ,
                     ),
                   ),
                 ),
