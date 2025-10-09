@@ -267,6 +267,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile Updated'**
   String get profileUpdated;
+
+  /// No description provided for @readAndpractise.
+  ///
+  /// In en, this message translates to:
+  /// **'Read & Practise'**
+  String get readAndpractise;
+
+  /// No description provided for @rememberAndPractise.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember & Practise'**
+  String get rememberAndPractise;
 }
 
 class _AppLocalizationsDelegate
