@@ -4,9 +4,11 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
+import 'package:yoyo_school_app/features/recording/presentation/phrase_recording_screen.dart';
 
 class AppRoutes {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -42,6 +44,11 @@ class AppRoutes {
             student: data['student'],
           );
         },
+      ),
+      GoRoute(
+        path: RouteNames.phrases,
+        builder: (context, state) =>
+            PhraseRecordingScreen(phrase: state.extra as PhraseModel),
       ),
       GoRoute(
         path: RouteNames.profile,

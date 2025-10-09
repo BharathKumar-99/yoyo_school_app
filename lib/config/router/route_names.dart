@@ -4,4 +4,5 @@ class RouteNames {
   static const profile = '/profile';
   static const otp = '/otp';
   static const phrasesDetails = '/phrasesDetails';
+  static const phrases = '/phrases';
 }
