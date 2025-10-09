@@ -16,24 +16,57 @@ class PhraseRecordingScreen extends StatelessWidget {
       child: Consumer<PhraseRecordingProvider>(
         builder: (context, value, child) => Scaffold(
           appBar: AppBar(leadingWidth: 80, leading: backBtn()),
-          body: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Color(0xFFF6895B), width: 3),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      phrase.phrase ?? "",
-                      style: AppTextStyles.textTheme.headlineLarge,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28.0),
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Color(0xFFF6895B), width: 3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          phrase.phrase ?? "",
+                          maxLines: 3,
+                          style: AppTextStyles.textTheme.headlineLarge,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.visibility, size: 50),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.play_arrow_outlined, size: 50),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.translate_rounded),
+                      ),
+                      Expanded(child: Text(phrase.translation ?? '')),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
