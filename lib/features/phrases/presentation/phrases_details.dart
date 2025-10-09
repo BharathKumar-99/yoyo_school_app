@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/widgets/app_bar.dart';
@@ -82,7 +84,10 @@ class PhrasesDetails extends StatelessWidget {
                             ),
                             Column(
                               children: [
-                                SizedBox(height: 120, child: getAppBar(context)),
+                                SizedBox(
+                                  height: 120,
+                                  child: getAppBar(context),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
@@ -276,9 +281,15 @@ class PhrasesDetails extends StatelessWidget {
                             itemBuilder: (context, index) {
                               PhraseModel? model =
                                   provider.classes.language?.phrase?[index];
-                              return PhrasesWidget(
-                                title: model?.phrase ?? "",
-                                subTitle: model?.translation ?? "",
+                              return GestureDetector(
+                                onTap: () => context.push(
+                                  RouteNames.phrases,
+                                  extra: model,
+                                ),
+                                child: PhrasesWidget(
+                                  title: model?.phrase ?? "",
+                                  subTitle: model?.translation ?? "",
+                                ),
                               );
                             },
                             separatorBuilder: (context, index) {
