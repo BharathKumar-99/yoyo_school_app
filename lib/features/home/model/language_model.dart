@@ -47,7 +47,7 @@ class Language {
       'image': image,
       'level': level,
       'phrase': phrase?.map((p) => p.toJson()).toList(),
-      'gradient': gradient?.map((c) => c.value).toList(),
+      'gradient': gradient?.map((c) => c).toList(),
       'language': language,
       'created_at': createdAt?.toIso8601String(),
     };

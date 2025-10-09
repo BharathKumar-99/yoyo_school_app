@@ -4,7 +4,7 @@ import 'app_text_styles.dart';
 
 class AppTheme {
   static ThemeData get lightTheme {
-    return ThemeData(
+    return ThemeData( 
       primaryColor: AppColors.primary,
       textTheme: AppTextStyles.textTheme,
       elevatedButtonTheme: ElevatedButtonThemeData(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../features/home/model/level_model.dart';
+
 class UsefullFunctions {
   UsefullFunctions._();
 
@@ -31,5 +33,16 @@ class UsefullFunctions {
         duration: duration,
       ),
     );
+  }
+
+  static String returnLevel(int id, List<Level>? levels) {
+    final levelName = levels
+        ?.firstWhere((val) => val.id == id, orElse: () => Level(level: "NA"))
+        .level;
+
+    return ((levelName?.length ?? 0) >= 2
+            ? levelName?.substring(0, 2)
+            : levelName) ??
+        "NA";
   }
 }

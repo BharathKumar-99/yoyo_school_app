@@ -96,14 +96,14 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> saveImageButton(BuildContext context) async {
+  Future<void> saveImageButton() async {
     if (localImage != null) {
       final result = await profileRepository.saveImage(localImage);
       if (!result) {
-        UsefullFunctions.showSnackBar(context, text.somethingWentWrong);
+        UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
         return;
       } else {
-        UsefullFunctions.showSnackBar(context, text.profileUpdated);
+        UsefullFunctions.showSnackBar(ctx!, text.profileUpdated);
       }
     }
     NavigationHelper.go(RouteNames.home);

@@ -3,17 +3,26 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 
 class HomeRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
+
+  Future<List<Level>>? getLevel() async {
+    List<Level> lvl = [];
+    final studentInfo = await _client.from(DbTable.level).select('*');
+    for (var va in studentInfo) {
+      lvl.add(Level.fromJson(va));
+    }
+    return lvl;
+  }
 
   Future<Student> getClasses() async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     if (userId.isEmpty) throw Exception("User ID not found");
 
     try {
-      // 1️⃣ Get student's language level
       final studentInfo = await _client
           .from(DbTable.student)
           .select('language_level')
@@ -22,8 +31,6 @@ class HomeRepository {
 
       if (studentInfo == null) throw Exception("Student not found");
       final languageLevel = studentInfo['language_level'];
-
-      // 2️⃣ Fetch complete structure
       final data = await _client
           .from(DbTable.student)
           .select('''
@@ -48,18 +55,15 @@ class HomeRepository {
 
       if (data == null) throw Exception("No data found for user $userId");
       log(data.toString());
-      // 3️⃣ Convert to model
+
       final student = Student.fromJson(data);
 
-      // 4️⃣ Filter languages and phrases by student's language level
       final school = student.classes?.school;
       if (school != null && school.schoolLanguage != null) {
-        // ✅ First, filter the schoolLanguage list
         school.schoolLanguage = school.schoolLanguage!
             .where((sl) => sl.language?.level == languageLevel)
             .toList();
 
-        // ✅ Then, for each remaining language, filter its phrases
         for (final schoolLang in school.schoolLanguage!) {
           final lang = schoolLang.language;
           if (lang?.phrase != null) {
@@ -70,7 +74,6 @@ class HomeRepository {
         }
       }
 
-      log("Filtered languages and phrases by level $languageLevel");
       return student;
     } catch (e, st) {
       log("Error fetching student classes: $e", stackTrace: st);

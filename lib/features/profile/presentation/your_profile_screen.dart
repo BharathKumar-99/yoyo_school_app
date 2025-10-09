@@ -155,7 +155,7 @@ class _YourProfileState extends State<YourProfile> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => provider.saveImageButton(context),
+                      onPressed: () => provider.saveImageButton(),
                       child: Text(
                         text.save,
                         style: AppTextStyles.textTheme.titleMedium,

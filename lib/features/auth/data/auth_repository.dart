@@ -14,6 +14,7 @@ class AuthRepository {
       await client.auth.signInWithOtp(email: email);
     } catch (e) {
       log(e.toString());
+      throw Exception(e);
     }
   }
 

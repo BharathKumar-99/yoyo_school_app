@@ -4,7 +4,6 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
-import 'package:yoyo_school_app/features/home/model/classes_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
@@ -32,11 +31,18 @@ class AppRoutes {
         path: RouteNames.home,
         builder: (context, state) => const HomeScreen(),
       ),
-      // GoRoute(
-      //   path: RouteNames.phrasesDetails,
-      //   builder: (context, state) =>
-      //       PhrasesDetails(classes: state.extra as Classes),
-      // ),
+      GoRoute(
+        path: RouteNames.phrasesDetails,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return PhrasesDetails(
+            language: data['language'],
+            className: data['className'],
+            levels: data['level'],
+            student: data['student'],
+          );
+        },
+      ),
       GoRoute(
         path: RouteNames.profile,
         builder: (context, state) =>
