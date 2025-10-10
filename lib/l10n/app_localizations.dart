@@ -160,18 +160,6 @@ abstract class AppLocalizations {
   /// **'Your classes'**
   String get your_classes;
 
-  /// No description provided for @read_and_practise.
-  ///
-  /// In en, this message translates to:
-  /// **'Read & Practise'**
-  String get read_and_practise;
-
-  /// No description provided for @remember_and_practise.
-  ///
-  /// In en, this message translates to:
-  /// **'Remember & Practise'**
-  String get remember_and_practise;
-
   /// No description provided for @recording.
   ///
   /// In en, this message translates to:

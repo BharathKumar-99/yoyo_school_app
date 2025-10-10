@@ -28,7 +28,10 @@ class PhraseRecordingScreen extends StatelessWidget {
                     side: BorderSide(color: Color(0xFFF6895B), width: 3),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 28.0,
+                      vertical: 20,
+                    ),
                     child: Column(
                       children: [
                         Text(
@@ -53,7 +56,7 @@ class PhraseRecordingScreen extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => value.playAudio(),
                               icon: Icon(Icons.play_arrow_outlined, size: 50),
                             ),
                           ],
@@ -91,7 +94,7 @@ class PhraseRecordingScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => value.showReadBottomPopup(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFF6865A),
                     ),
@@ -104,13 +107,13 @@ class PhraseRecordingScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => value.showReadBottomPopup(context),
+                    onPressed: () => value.showRememberBottomPopup(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFEF2E36),
                     ),
                     child: Text(
                       text.rememberAndPractise,
-                      style: AppTextStyles.textTheme.titleMedium ,
+                      style: AppTextStyles.textTheme.titleMedium,
                     ),
                   ),
                 ),

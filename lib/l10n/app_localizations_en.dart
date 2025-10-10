@@ -42,12 +42,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get your_classes => 'Your classes';
 
   @override
-  String get read_and_practise => 'Read & Practise';
-
-  @override
-  String get remember_and_practise => 'Remember & Practise';
-
-  @override
   String get recording => 'Recording';
 
   @override

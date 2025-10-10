@@ -9,9 +9,7 @@
     "vocab": "Vocab",
     "effort": "Effort",
     "score": "Score",
-    "your_classes": "Your classes",
-    "read_and_practise": "Read & Practise",
-    "remember_and_practise": "Remember & Practise",
+    "your_classes": "Your classes", 
     "recording": "Recording",
     "submit_score": "Submit Score",
     "profile_header": "This is your profile information which is not shared or editale.",
@@ -30,4 +28,5 @@
     "profileUpdated": "Profile Updated",
     "readAndpractise": "Read & Practise",
     "rememberAndPractise": "Remember & Practise"
+   
 }
