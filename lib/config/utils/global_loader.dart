@@ -18,7 +18,7 @@ class GlobalLoader {
         color: Colors.black54,
         child: const Center(
           child: SizedBox(
-            height: 100,
+            height: 80,
             child: CircularProgressIndicator.adaptive(),
           ),
         ),

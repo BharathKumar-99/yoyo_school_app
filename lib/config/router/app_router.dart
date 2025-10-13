@@ -9,6 +9,7 @@ import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/recording/presentation/phrase_recording_screen.dart';
+import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
 
 class AppRoutes {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -42,6 +43,17 @@ class AppRoutes {
             className: data['className'],
             levels: data['level'],
             student: data['student'],
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.result,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return ResultScreen(
+            phraseModel: data['phraseModel'],
+            language: data['language'],
+            audioPath: data['path'],
           );
         },
       ),

@@ -1,6 +1,6 @@
+import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../features/home/model/level_model.dart';
 
 class UsefullFunctions {
@@ -44,5 +44,13 @@ class UsefullFunctions {
             ? levelName?.substring(0, 2)
             : levelName) ??
         "NA";
+  }
+
+  static Future<String?> convertToWav(String inputPath) async {
+    final outputPath = inputPath.replaceAll('.m4a', '.wav');
+    final command =
+        '-i "$inputPath" -ar 16000 -ac 1 -acodec pcm_s16le "$outputPath"';
+    await FFmpegKit.execute(command);
+    return outputPath;
   }
 }

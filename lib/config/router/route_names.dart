@@ -5,4 +5,5 @@ class RouteNames {
   static const otp = '/otp';
   static const phrasesDetails = '/phrasesDetails';
   static const phrases = '/phrases';
+  static const result = '/result';
 }

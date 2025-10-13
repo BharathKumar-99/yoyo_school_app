@@ -2,15 +2,23 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/recording/presentation/recorder_provider.dart';
 
 class ReadAndPractiseScreen extends StatelessWidget {
-  const ReadAndPractiseScreen({super.key});
+  final PhraseModel model;
+  final Language launguage;
+  const ReadAndPractiseScreen({
+    super.key,
+    required this.model,
+    required this.launguage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecordingProvider>(
-      create: (context) => RecordingProvider(),
+      create: (context) => RecordingProvider(model, launguage),
       child: Consumer<RecordingProvider>(
         builder: (context, value, wid) {
           return Container(

@@ -6,7 +6,7 @@ Widget backBtn() => IconButton(
   onPressed: () => NavigationHelper.pop(),
   icon: const Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.black),
   style: ButtonStyle(
-    backgroundColor: WidgetStateProperty.all(Colors.white),
+    backgroundColor: WidgetStateProperty.all(Colors.transparent),
     shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

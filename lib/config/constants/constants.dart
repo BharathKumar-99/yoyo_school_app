@@ -1,4 +1,6 @@
-class Constants {}
+class UrlConstants {
+  static const String superSpeachApi = "api.speechsuper.com";
+}
 
 class ImageConstants {
   static const String assetsLoc = "assets/images/";
@@ -30,8 +32,14 @@ class DbTable {
   static const String teacher = 'teacher';
   static const String users = 'users';
   static const String attemptedPhrases = 'attempted_phrases';
+  static const String remoteConfig = 'remote_config';
 }
 
 class Stroage {
   static const String userBucket = 'user';
+}
+
+class Constants {
+  static const int minimumWordScore = 50;
+  static const int minimumSubmitScore = 75;
 }

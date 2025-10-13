@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:yoyo_school_app/core/widgets/back_btn.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+import 'package:yoyo_school_app/features/recording/data/phrase_repo.dart';
 import 'package:yoyo_school_app/features/recording/presentation/read_and_practise_screen.dart';
 import 'package:yoyo_school_app/features/recording/presentation/remember_and_practise_screen.dart';
 
 class PhraseRecordingProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   bool showPhrase = true;
+  late final Language language;
+  final PhraseRepo _repo = PhraseRepo();
   final player = AudioPlayer();
 
   PhraseRecordingProvider(this.phraseModel) {
@@ -16,6 +21,7 @@ class PhraseRecordingProvider extends ChangeNotifier {
   initAudio() async {
     await player.setUrl(phraseModel.recording ?? "");
     await player.setVolume(1);
+    language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
   }
 
   togglePhrase() {
@@ -37,12 +43,50 @@ class PhraseRecordingProvider extends ChangeNotifier {
   showReadBottomPopup(BuildContext context) => showModalBottomSheet(
     elevation: 1,
     context: context,
-    builder: (_) => ReadAndPractiseScreen(),
+    builder: (_) =>
+        ReadAndPractiseScreen(model: phraseModel, launguage: language),
   );
 
   showRememberBottomPopup(BuildContext context) => showModalBottomSheet(
     elevation: 1,
     context: context,
-    builder: (_) => RememberAndPractiseScreen(),
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) => Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: language.gradient ?? [],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        image: DecorationImage(
+          image: NetworkImage(language.image ?? ""),
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 30),
+            child: Align(alignment: Alignment.topLeft, child: backBtn()),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.translate_rounded),
+                ),
+                Expanded(child: Text(phraseModel.translation ?? '')),
+              ],
+            ),
+          ),
+          Spacer(),
+          RememberAndPractiseScreen(model: phraseModel, launguage: language),
+        ],
+      ),
+    ),
   );
 }

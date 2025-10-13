@@ -4,15 +4,22 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
+
+import '../../home/model/phrases_model.dart';
 
 class RecordingProvider extends ChangeNotifier {
   late final RecorderController recorderController;
+  PhraseModel phraseModel;
+  Language launguage;
   final player = AudioPlayer();
   bool isRecording = false;
   String? recordingPath;
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
-  RecordingProvider() {
+  RecordingProvider(this.phraseModel, this.launguage) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
       ..androidOutputFormat = AndroidOutputFormat.mpeg4
@@ -50,8 +57,14 @@ class RecordingProvider extends ChangeNotifier {
         if (recordingPath != null) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
-          await player.setVolume(1);
-          await player.play();
+          NavigationHelper.push(
+            RouteNames.result,
+            extra: {
+              'phraseModel': phraseModel,
+              'path': recordingPath,
+              'language': launguage,
+            },
+          );
         }
         notifyListeners();
       } else {
