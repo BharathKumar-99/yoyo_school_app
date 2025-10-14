@@ -9,7 +9,7 @@
     "vocab": "Vocab",
     "effort": "Effort",
     "score": "Score",
-    "your_classes": "Your classes", 
+    "your_classes": "Your classes",
     "recording": "Recording",
     "submit_score": "Submit Score",
     "profile_header": "This is your profile information which is not shared or editale.",
@@ -27,6 +27,8 @@
     "somethingWentWrong": "Something Went Wrong",
     "profileUpdated": "Profile Updated",
     "readAndpractise": "Read & Practise",
-    "rememberAndPractise": "Remember & Practise"
-   
+    "rememberAndPractise": "Remember & Practise",
+    "notAttemptText": "Nice Try!",
+    "improvedBy": "Wow, you improved by +",
+    "noImporove": "Oh no, you didn't improve"
 }

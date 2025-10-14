@@ -89,7 +89,7 @@ class ResultScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                'Wow, you improved by +11%!',
+                                value.resultTest,
                                 style: AppTextStyles.textTheme.headlineMedium!
                                     .copyWith(color: Colors.white),
                               ),
@@ -121,14 +121,13 @@ class ResultScreen extends StatelessWidget {
                                                             fontSize: w(
                                                               0.06,
                                                             ), // 24
-                                                            color:
-                                                                (word.scores?.overall ??
-                                                                        0) >=
-                                                                    Constants
-                                                                        .minimumWordScore
-                                                                ? Colors.green
-                                                                : Colors
-                                                                      .redAccent,
+                                                            color: value
+                                                                .getWordColor(
+                                                                  word
+                                                                          .scores
+                                                                          ?.overall ??
+                                                                      0,
+                                                                ),
                                                           ),
                                                     ),
                                                   )
@@ -195,7 +194,14 @@ class ResultScreen extends StatelessWidget {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () => value.upsertResult(
+                                      value
+                                              .speechEvaluationModel
+                                              ?.result
+                                              ?.overall ??
+                                          0,
+                                      submit: true,
+                                    ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
                                           value.language.gradient?.first ??

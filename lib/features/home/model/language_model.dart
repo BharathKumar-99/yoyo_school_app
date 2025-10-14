@@ -10,6 +10,7 @@ class Language {
   String? language;
   List<PhraseModel>? phrase;
   DateTime? createdAt;
+  String? launguageCode;
 
   Language({
     this.id,
@@ -19,6 +20,7 @@ class Language {
     this.language,
     this.phrase,
     this.createdAt,
+    this.launguageCode,
   });
 
   factory Language.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class Language {
           ?.map((e) => PhraseModel.fromJson(e))
           .toList(),
       language: json['language'] as String?,
+      launguageCode: json['launguage_code'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
           : null,
@@ -50,6 +53,7 @@ class Language {
       'gradient': gradient?.map((c) => c).toList(),
       'language': language,
       'created_at': createdAt?.toIso8601String(),
+      'launguage_code': launguageCode,
     };
   }
 }

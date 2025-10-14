@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
@@ -19,9 +20,11 @@ class PhraseRecordingProvider extends ChangeNotifier {
   }
 
   initAudio() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
     await player.setUrl(phraseModel.recording ?? "");
     await player.setVolume(1);
     language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
   togglePhrase() {

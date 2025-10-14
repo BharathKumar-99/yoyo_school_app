@@ -267,6 +267,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remember & Practise'**
   String get rememberAndPractise;
+
+  /// No description provided for @notAttemptText.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice Try!'**
+  String get notAttemptText;
+
+  /// No description provided for @improvedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Wow, you improved by +'**
+  String get improvedBy;
+
+  /// No description provided for @noImporove.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh no, you didn\'t improve'**
+  String get noImporove;
 }
 
 class _AppLocalizationsDelegate

@@ -23,11 +23,16 @@ class HomeScreen extends StatelessWidget {
         builder: (context, homeProvider, wi) {
           return Scaffold(
             body: SafeArea(
+              top: false,
               child: CustomScrollView(
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: 120, child: getAppBar(context)),
+                  SliverAppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    toolbarHeight: 80,
+                    flexibleSpace: getAppBar(context),
                   ),
+
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     sliver: SliverList(

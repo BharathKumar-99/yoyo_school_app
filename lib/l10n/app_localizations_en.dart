@@ -95,4 +95,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rememberAndPractise => 'Remember & Practise';
+
+  @override
+  String get notAttemptText => 'Nice Try!';
+
+  @override
+  String get improvedBy => 'Wow, you improved by +';
+
+  @override
+  String get noImporove => 'Oh no, you didn\'t improve';
 }

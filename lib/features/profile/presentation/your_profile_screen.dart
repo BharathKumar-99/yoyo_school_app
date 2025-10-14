@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import 'package:yoyo_school_app/core/widgets/back_btn.dart'; 
+import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
 class YourProfile extends StatefulWidget {
@@ -45,10 +45,13 @@ class _YourProfileState extends State<YourProfile> {
                     const SizedBox(width: 10),
                     (widget.isFromOtp ?? false)
                         ? const SizedBox.shrink()
-                        : Image.asset(
-                            IconConstants.logOutIcon,
-                            height: 31,
-                            width: 31,
+                        : GestureDetector(
+                            onTap: () => provider.logout(),
+                            child: Image.asset(
+                              IconConstants.logOutIcon,
+                              height: 31,
+                              width: 31,
+                            ),
                           ),
                   ],
                 ),

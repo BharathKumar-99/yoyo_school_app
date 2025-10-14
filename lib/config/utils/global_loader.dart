@@ -15,12 +15,11 @@ class GlobalLoader {
 
     _loaderEntry = OverlayEntry(
       builder: (context) => Container(
+        height: double.infinity,
+        width: double.infinity,
         color: Colors.black54,
         child: const Center(
-          child: SizedBox(
-            height: 80,
-            child: CircularProgressIndicator.adaptive(),
-          ),
+          child: CircularProgressIndicator.adaptive(strokeWidth: 5),
         ),
       ),
     );

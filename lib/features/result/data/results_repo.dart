@@ -7,6 +7,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
+import '../../../config/utils/get_user_details.dart';
 import '../model/remote_config_model.dart';
 import '../model/speech_evaluation_model.dart';
 
@@ -20,6 +22,20 @@ class ResultsRepo {
         .limit(1)
         .maybeSingle();
     return RemoteConfig.fromJson(data!);
+  }
+
+  Future<UserResult?> getAttemptedPhrase(int pid) async {
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+    final data = await _client
+        .from(DbTable.userResult)
+        .select('*')
+        .eq('user_id', userId)
+        .eq('phrases_id', pid)
+        .maybeSingle();
+    if (data == null) {
+      return null;
+    }
+    return UserResult.fromJson(data);
   }
 
   Future<SpeechEvaluationModel?> callSuperSpeechApi({
@@ -106,12 +122,30 @@ class ResultsRepo {
         return null;
       }
 
-      // 7️⃣ Parse JSON safely
       final Map<String, dynamic> respJson = jsonDecode(responseString);
       return SpeechEvaluationModel.fromJson(respJson);
     } catch (e, st) {
       log("callSuperSpeechApi Error: $e\n$st");
       return null;
     }
+  }
+
+  Future<UserResult> upsertResult(UserResult result) async {
+    PostgrestMap? data;
+    if (result.id != null) {
+      data = await _client
+          .from(DbTable.userResult)
+          .update(result.toJson())
+          .eq('id', result.id ?? 0)
+          .select("*")
+          .maybeSingle();
+    } else {
+      data = await _client
+          .from(DbTable.userResult)
+          .insert({'user_id': result.userId, 'phrases_id': result.phrasesId})
+          .select("*")
+          .maybeSingle();
+    }
+    return UserResult.fromJson(data!);
   }
 }

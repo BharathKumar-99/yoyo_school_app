@@ -33,6 +33,7 @@ class DbTable {
   static const String users = 'users';
   static const String attemptedPhrases = 'attempted_phrases';
   static const String remoteConfig = 'remote_config';
+  static const String userResult = 'user_results';
 }
 
 class Stroage {
@@ -40,6 +41,7 @@ class Stroage {
 }
 
 class Constants {
-  static const int minimumWordScore = 50;
-  static const int minimumSubmitScore = 75;
+  static const int minimumWordScoreleft = 45;
+  static const int minimumWordScoreright = 65;
+  static const int minimumSubmitScore = 50;
 }

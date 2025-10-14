@@ -9,6 +9,7 @@ class School {
   String? schoolAddress;
   List<SchoolLanguage>? schoolLanguage;
   int? schoolTelephoneNo;
+  String? image;
 
   School({
     this.id,
@@ -19,6 +20,7 @@ class School {
     this.schoolAddress,
     this.schoolLanguage,
     this.schoolTelephoneNo,
+    this.image,
   });
 
   factory School.fromJson(Map<String, dynamic> json) {
@@ -36,6 +38,7 @@ class School {
           ?.map((e) => SchoolLanguage.fromJson(e))
           .toList(),
       schoolTelephoneNo: json['school_telephone_no'],
+      image: json['image'],
     );
   }
 
@@ -49,6 +52,7 @@ class School {
       'school_address': schoolAddress,
       'school_language': schoolLanguage?.map((e) => e.toJson()).toList(),
       'school_telephone_no': schoolTelephoneNo,
+      'image': image,
     };
   }
 }

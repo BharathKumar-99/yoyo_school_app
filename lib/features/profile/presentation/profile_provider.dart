@@ -23,13 +23,11 @@ class ProfileProvider extends ChangeNotifier {
 
   ProfileProvider(this.profileRepository);
 
-  /// Initialize the provider and start listening to real-time user data
   void initialize({bool fromOtp = false}) {
     isFromOtp = fromOtp;
     _subscribeToUserData();
   }
 
-  /// Subscribe to real-time updates of the user
   void _subscribeToUserData() {
     isLoading = true;
     notifyListeners();
@@ -107,6 +105,10 @@ class ProfileProvider extends ChangeNotifier {
       }
     }
     NavigationHelper.go(RouteNames.home);
+  }
+
+  logout() async {
+    await profileRepository.logout();
   }
 
   @override
