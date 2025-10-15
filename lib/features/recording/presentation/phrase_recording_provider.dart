@@ -13,10 +13,11 @@ import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 class PhraseRecordingProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   bool showPhrase = true;
-  late final Language language;
+  Language? language;
   final PhraseRepo _repo = PhraseRepo();
   final player = AudioPlayer();
   late UserResult? result;
+  bool isLoading = true;
 
   PhraseRecordingProvider(this.phraseModel) {
     initAudio();
@@ -24,10 +25,12 @@ class PhraseRecordingProvider extends ChangeNotifier {
 
   initAudio() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+    language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
     await player.setUrl(phraseModel.recording ?? "");
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     await player.setVolume(1);
-    language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
+    isLoading = false;
+    notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
@@ -59,7 +62,7 @@ class PhraseRecordingProvider extends ChangeNotifier {
     elevation: 1,
     context: context,
     builder: (_) =>
-        ReadAndPractiseScreen(model: phraseModel, launguage: language),
+        ReadAndPractiseScreen(model: phraseModel, launguage: language!),
   );
 
   showRememberBottomPopup(BuildContext context) => showModalBottomSheet(
@@ -70,12 +73,12 @@ class PhraseRecordingProvider extends ChangeNotifier {
     builder: (_) => Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: language.gradient ?? [],
+          colors: language?.gradient ?? [],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         image: DecorationImage(
-          image: NetworkImage(language.image ?? ""),
+          image: NetworkImage(language?.image ?? ""),
           fit: BoxFit.fitWidth,
         ),
       ),
@@ -99,7 +102,7 @@ class PhraseRecordingProvider extends ChangeNotifier {
             ),
           ),
           Spacer(),
-          RememberAndPractiseScreen(model: phraseModel, launguage: language),
+          RememberAndPractiseScreen(model: phraseModel, launguage: language!),
         ],
       ),
     ),

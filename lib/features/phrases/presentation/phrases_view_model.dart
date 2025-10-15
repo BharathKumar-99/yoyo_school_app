@@ -44,10 +44,28 @@ class PhrasesViewModel extends ChangeNotifier {
     });
 
     int classStrength = student?.classes?.noOfStudents ?? 0;
-    classPercentage = (classesScore.reduce((a, b) => a + b) / classStrength)
-        .round();
-    int phraseLength = classes.language?.phrase?.length ?? 0;
-    userPercentage = (userScore.reduce((a, b) => a + b) / phraseLength).round();
+
+    final classScores = classesScore;
+    final userScores = userScore;
+
+    final totalClassScore = classScores.isNotEmpty
+        ? classScores.reduce((a, b) => a + b)
+        : 0;
+
+    final totalUserScore = userScores.isNotEmpty
+        ? userScores.reduce((a, b) => a + b)
+        : 0;
+
+    final totalClassStrength = classStrength;
+    final phraseLength = classes.language?.phrase?.length ?? 0;
+
+    if (totalClassStrength > 0) {
+      classPercentage = (totalClassScore / totalClassStrength).round();
+    }
+
+    if (phraseLength > 0) {
+      userPercentage = (totalUserScore / phraseLength).round();
+    }
 
     notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());

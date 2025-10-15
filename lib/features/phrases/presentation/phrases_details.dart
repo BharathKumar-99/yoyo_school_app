@@ -9,6 +9,7 @@ import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/widgets/app_bar.dart';
 import 'package:yoyo_school_app/features/home/model/attempt_phrases_model.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_view_model.dart';
 
@@ -290,6 +291,7 @@ class PhrasesDetails extends StatelessWidget {
                                 child: PhrasesWidget(
                                   title: model?.phrase ?? "",
                                   subTitle: model?.translation ?? "",
+                                  launguage: provider.classes.language,
                                 ),
                               );
                             },
@@ -312,6 +314,7 @@ class PhrasesDetails extends StatelessWidget {
                                 subTitle: phrase.phrase?.translation ?? '',
                                 precentage:
                                     '${phrase.phrase?.score.toString() ?? '0'}%',
+                                launguage: provider.classes.language,
                               );
                             },
                             separatorBuilder: (context, index) {
@@ -337,11 +340,13 @@ class PhrasesWidget extends StatelessWidget {
   final String title;
   final String subTitle;
   final String? precentage;
+  final Language? launguage;
   const PhrasesWidget({
     super.key,
     required this.title,
     required this.subTitle,
     this.precentage,
+    this.launguage,
   });
 
   @override
@@ -360,7 +365,9 @@ class PhrasesWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
-                colors: [Color(0xFFEF2E36), Color(0xFFFEE37F)],
+                colors: launguage?.gradient ?? [Colors.white],
+                begin: AlignmentGeometry.bottomLeft,
+                end: AlignmentGeometry.topRight,
               ),
             ),
             child: Column(

@@ -17,72 +17,81 @@ class PhraseRecordingScreen extends StatelessWidget {
       child: Consumer<PhraseRecordingProvider>(
         builder: (context, value, child) => Scaffold(
           appBar: AppBar(leadingWidth: 80, leading: backBtn()),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28.0),
-            child: Column(
-              children: [
-                Card(
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: Color(0xFFF6895B), width: 3),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 28.0,
-                      vertical: 20,
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          value.showPhrase
-                              ? value.phraseModel.phrase ?? ""
-                              : '',
-                          maxLines: 3,
-                          style: AppTextStyles.textTheme.headlineLarge,
+          body: value.isLoading
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                  child: Column(
+                    children: [
+                      Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color:
+                                value.language?.gradient?.first ?? Colors.white,
+                            width: 3,
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                value.togglePhrase();
-                              },
-                              icon: Icon(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 28.0,
+                            vertical: 20,
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
                                 value.showPhrase
-                                    ? Icons.visibility_rounded
-                                    : Icons.visibility_off_rounded,
-                                size: 50,
+                                    ? value.phraseModel.phrase ?? ""
+                                    : '',
+                                maxLines: 3,
+                                style: AppTextStyles.textTheme.headlineLarge,
                               ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      value.togglePhrase();
+                                    },
+                                    icon: Icon(
+                                      value.showPhrase
+                                          ? Icons.visibility_rounded
+                                          : Icons.visibility_off_rounded,
+                                      size: 50,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => value.playAudio(),
+                                    icon: Icon(
+                                      Icons.play_arrow_outlined,
+                                      size: 50,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.translate_rounded),
                             ),
-                            IconButton(
-                              onPressed: () => value.playAudio(),
-                              icon: Icon(Icons.play_arrow_outlined, size: 50),
+                            Expanded(
+                              child: Text(value.phraseModel.translation ?? ''),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.translate_rounded),
-                      ),
-                      Expanded(
-                        child: Text(value.phraseModel.translation ?? ''),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: Padding(
@@ -96,7 +105,8 @@ class PhraseRecordingScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () => value.showReadBottomPopup(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFF6865A),
+                      backgroundColor:
+                          value.language?.gradient?.first ?? Colors.white,
                     ),
                     child: Text(
                       text.readAndpractise,
@@ -109,7 +119,8 @@ class PhraseRecordingScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () => value.showRememberBottomPopup(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFEF2E36),
+                      backgroundColor:
+                          value.language?.gradient?.last ?? Colors.white,
                     ),
                     child: Text(
                       text.rememberAndPractise,

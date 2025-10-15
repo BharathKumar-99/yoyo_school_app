@@ -25,7 +25,7 @@ class RememberAndPractiseScreen extends StatelessWidget {
           return Container(
             height: MediaQuery.sizeOf(context).height / 3,
             decoration: BoxDecoration(
-              color: Color(0xFFEF2E36),
+              color: launguage.gradient?.last ?? Colors.white,
               borderRadius: BorderRadius.circular(16),
             ),
             width: double.infinity,

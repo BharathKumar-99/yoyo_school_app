@@ -90,7 +90,7 @@ class ResultScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                value.resultTest,
+                                value.resultText,
                                 style: AppTextStyles.textTheme.headlineMedium!
                                     .copyWith(color: Colors.white),
                               ),
@@ -189,11 +189,12 @@ class ResultScreen extends StatelessWidget {
                               ),
                               SizedBox(height: h(0.04)),
                               if ((value
-                                          .speechEvaluationModel
-                                          ?.result
-                                          ?.overall ??
-                                      0) >=
-                                  Constants.minimumSubmitScore)
+                                              .speechEvaluationModel
+                                              ?.result
+                                              ?.overall ??
+                                          0) >=
+                                      Constants.minimumSubmitScore &&
+                                  value.resultText != text.noImporove)
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(

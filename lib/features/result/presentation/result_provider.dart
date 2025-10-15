@@ -18,7 +18,7 @@ class ResultProvider extends ChangeNotifier {
   late UserResult? result;
   late RemoteConfig apiCred;
   SpeechEvaluationModel? speechEvaluationModel;
-  String resultTest = text.notAttemptText;
+  String resultText = text.notAttemptText;
   String audioPath;
   final ResultsRepo _repo = ResultsRepo();
 
@@ -41,10 +41,10 @@ class ResultProvider extends ChangeNotifier {
     if ((result?.attempt ?? 0) >= 0) {
       if ((result?.score ?? 0) >
           (speechEvaluationModel?.result?.overall ?? 0)) {
-        resultTest =
+        resultText =
             '${text.improvedBy}${(result?.score ?? 0) - (speechEvaluationModel?.result?.overall ?? 0)}%!';
       } else {
-        resultTest = text.noImporove;
+        resultText = text.noImporove;
       }
     }
     notifyListeners();

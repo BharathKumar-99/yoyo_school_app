@@ -24,7 +24,7 @@ class ReadAndPractiseScreen extends StatelessWidget {
           return Container(
             height: MediaQuery.sizeOf(context).height / 3,
             decoration: BoxDecoration(
-              color: Color(0xFFF6865A),
+              color: launguage.gradient?.first ?? Colors.white,
               borderRadius: BorderRadius.circular(16),
             ),
             width: double.infinity,

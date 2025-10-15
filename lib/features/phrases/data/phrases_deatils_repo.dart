@@ -37,8 +37,11 @@ class PhrasesDeatilsRepo {
 
     for (var val in data) {
       AttemptedPhrase ph = AttemptedPhrase.fromJson(val);
-      final sc = results.firstWhere((val) => val.phrasesId == ph.phrasesId);
-      ph.phrase?.score = sc.score;
+      final sc = results.firstWhere(
+        (val) => val.phrasesId == ph.phrasesId,
+        orElse: () => UserResult(),
+      );
+      ph.phrase?.score = sc.score ?? 0;
       phrases.add(ph);
     }
     return phrases;
