@@ -7,6 +7,9 @@ class UserResult {
   int? vocab;
   int? attempt;
   bool? scoreSubmitted;
+  List<String>? goodWords;
+  List<String>? badWords;
+  int? listen;
 
   UserResult({
     this.id,
@@ -17,33 +20,44 @@ class UserResult {
     this.vocab,
     this.attempt,
     this.scoreSubmitted,
+    this.goodWords,
+    this.badWords,
+    this.listen,
   });
 
   factory UserResult.fromJson(Map<String, dynamic> json) {
     return UserResult(
-      id: json['id'],
-      createdAt: DateTime.parse(json['created_at']),
-      userId: json['user_id'],
-      phrasesId: json['phrases_id'],
-      score: json['score'],
-      vocab: json['vocab'],
-      attempt: json['attempt'],
-      scoreSubmitted: json['score_submited'] != null
-          ? (json['score_submited'])
+      id: json['id'] as int?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
           : null,
+      userId: json['user_id'] as String?,
+      phrasesId: json['phrases_id'] as int?,
+      score: json['score'] as int?,
+      vocab: json['vocab'] as int?,
+      attempt: json['attempt'] as int?,
+      listen: json['listens'] as int?,
+      scoreSubmitted: json['score_submited'] as bool?,
+      goodWords: (json['good_words'] as List?)
+          ?.map((e) => e.toString())
+          .toList(),
+      badWords: (json['bad_words'] as List?)?.map((e) => e.toString()).toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'created_at': createdAt?.toIso8601String(),
-      'user_id': userId,
-      'phrases_id': phrasesId,
-      'score': score,
-      'vocab': vocab,
-      'attempt': attempt,
-      'score_submited': scoreSubmitted,
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt!.toIso8601String(),
+      if (userId != null) 'user_id': userId,
+      if (phrasesId != null) 'phrases_id': phrasesId,
+      if (score != null) 'score': score,
+      if (vocab != null) 'vocab': vocab,
+      if (attempt != null) 'attempt': attempt,
+      if (scoreSubmitted != null) 'score_submited': scoreSubmitted,
+      if (goodWords != null) 'good_words': goodWords,
+      if (badWords != null) 'bad_words': badWords,
+      if (listen != null) 'listens': listen,
     };
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
@@ -43,10 +44,38 @@ class HomeScreen extends StatelessWidget {
                         _AnimatedRow(
                           delay: 200,
                           children: [
-                            getMetricCard(text.phrases, "0"),
-                            getMetricCard(text.vocab, "0"),
-                            getMetricCard(text.effort, "0"),
-                            getMetricCard(text.score, "0"),
+                            getMetricCard(
+                              text.phrases,
+                              "${homeProvider.atemptedPhrases}/${homeProvider.totalPhrases}",
+                              (homeProvider.atemptedPhrases) >
+                                      (homeProvider.totalPhrases / 2)
+                                  ? Colors.green.shade700
+                                  : Colors.orangeAccent,
+                            ),
+                            getMetricCard(
+                              text.vocab,
+                              homeProvider.student?.vocab.toString() ?? "0",
+                              (homeProvider.student?.vocab ?? 0) >
+                                      Constants.minimumSubmitScore
+                                  ? Colors.green.shade700
+                                  : Colors.orangeAccent,
+                            ),
+                            getMetricCard(
+                              text.effort,
+                              "${homeProvider.student?.effort.toString() ?? "0"}% ",
+                              (homeProvider.student?.effort ?? 0) >
+                                      Constants.minimumSubmitScore
+                                  ? Colors.green.shade700
+                                  : Colors.orangeAccent,
+                            ),
+                            getMetricCard(
+                              text.score,
+                              "${homeProvider.student?.score.toString() ?? "0"}%",
+                              (homeProvider.student?.score ?? 0) >
+                                      Constants.minimumSubmitScore
+                                  ? Colors.green.shade700
+                                  : Colors.orangeAccent,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 50),
@@ -295,9 +324,9 @@ class _LaunguageCardState extends State<LaunguageCard> {
   }
 }
 
-Column getMetricCard(String title, String data) => Column(
+Column getMetricCard(String title, String data, Color bgColor) => Column(
   mainAxisSize: MainAxisSize.min,
-  crossAxisAlignment: CrossAxisAlignment.start,
+  crossAxisAlignment: CrossAxisAlignment.center,
   children: [
     Text(title, style: AppTextStyles.textTheme.titleMedium),
     const SizedBox(height: 10),
@@ -305,7 +334,7 @@ Column getMetricCard(String title, String data) => Column(
       width: 63,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey,
+        color: bgColor,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

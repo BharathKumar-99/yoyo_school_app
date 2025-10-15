@@ -8,6 +8,7 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/widgets/app_bar.dart';
+import 'package:yoyo_school_app/features/home/model/attempt_phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_view_model.dart';
 
@@ -31,7 +32,7 @@ class PhrasesDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PhrasesViewModel>(
-      create: (_) => PhrasesViewModel(language),
+      create: (_) => PhrasesViewModel(language, student),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return DefaultTabController(
@@ -169,7 +170,7 @@ class PhrasesDetails extends StatelessWidget {
                                                     ),
                                                     child: Center(
                                                       child: Text(
-                                                        "88%",
+                                                        '${provider.classPercentage}%',
                                                         style: AppTextStyles
                                                             .textTheme
                                                             .bodyLarge!
@@ -212,7 +213,7 @@ class PhrasesDetails extends StatelessWidget {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    "0%",
+                                                    '${provider.userPercentage}%',
                                                     style: AppTextStyles
                                                         .textTheme
                                                         .bodyLarge!
@@ -303,16 +304,20 @@ class PhrasesDetails extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 26),
                           child: ListView.separated(
                             itemBuilder: (context, index) {
+                              AttemptedPhrase phrase =
+                                  provider.attemptedPhrase?[index] ??
+                                  AttemptedPhrase();
                               return PhrasesWidget(
-                                title: "¿Puedes repetir eso por favor?",
-                                subTitle: "can you repeat that Please?",
-                                precentage: "88%",
+                                title: phrase.phrase?.phrase ?? '',
+                                subTitle: phrase.phrase?.translation ?? '',
+                                precentage:
+                                    '${phrase.phrase?.score.toString() ?? '0'}%',
                               );
                             },
                             separatorBuilder: (context, index) {
                               return SizedBox(height: 20);
                             },
-                            itemCount: 5,
+                            itemCount: provider.attemptedPhrase?.length ?? 0,
                           ),
                         ),
                       ],

@@ -80,4 +80,52 @@ class HomeRepository {
       rethrow;
     }
   }
+
+  Future<Student?> fetchStudents() async {
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+    if (userId.isEmpty) throw Exception("User ID not found");
+    final response = await _client
+        .from(DbTable.student)
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    if (response != null) {
+      return Student.fromJson(response);
+    } else {
+      return null;
+    }
+  }
+
+  Stream<Student?> getUserDataStream() {
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+
+    try {
+      return _client
+          .from(DbTable.student)
+          .stream(primaryKey: ['id'])
+          .eq('user_id', userId)
+          .map((event) {
+            if (event.isNotEmpty) {
+              return Student.fromJson(event.first);
+            }
+            return null;
+          });
+    } catch (e, st) {
+      log('Realtime Student Error: $e\n$st');
+      return const Stream.empty();
+    }
+  }
+
+  Future<int> getTotalAtemptedPhrases() async {
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+    int count = 0;
+    final response = await _client
+        .from(DbTable.userResult)
+        .select('*')
+        .eq('user_id', userId)
+        .count(CountOption.exact);
+    count = response.count;
+    return count;
+  }
 }

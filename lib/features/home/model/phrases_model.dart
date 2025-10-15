@@ -1,15 +1,16 @@
 class PhraseModel {
-  final int? id;
-  final int? level;
-  final int? vocab;
-  final String? phrase;
-  final int? sounds;
-  final int? language;
-  final String? recording;
-  final DateTime? createdAt;
-  final String? translation;
+  int? id;
+  int? level;
+  int? vocab;
+  String? phrase;
+  int? sounds;
+  int? language;
+  String? recording;
+  DateTime? createdAt;
+  String? translation;
+  int? score;
 
-  const PhraseModel({
+  PhraseModel({
     this.id,
     this.level,
     this.vocab,
@@ -19,6 +20,7 @@ class PhraseModel {
     this.recording,
     this.createdAt,
     this.translation,
+    this.score,
   });
 
   factory PhraseModel.fromJson(Map<String, dynamic> json) {

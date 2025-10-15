@@ -53,13 +53,30 @@ class ResultProvider extends ChangeNotifier {
 
   Future<void> upsertResult(int score, {bool submit = false}) async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
+    List<String> goodWords = result?.goodWords ?? [];
+    List<String> badWords = result?.badWords ?? [];
+
+    if (speechEvaluationModel?.result?.words?.isNotEmpty ?? false) {
+      goodWords.clear();
+      badWords.clear();
+    }
+
+    speechEvaluationModel?.result?.words?.forEach((val) {
+      if (getWordColor(val.scores?.overall ?? 0) == Colors.green) {
+        goodWords.add(val.word ?? "");
+      } else if (getWordColor(val.scores?.overall ?? 0) == Colors.redAccent) {
+        badWords.add(val.word ?? "");
+      }
+    });
 
     result ??= UserResult(userId: userId, phrasesId: phraseModel.id);
 
     result?.score = score;
     result?.scoreSubmitted = submit;
+    result?.goodWords = goodWords;
+    result?.badWords = badWords;
     result?.attempt = (result?.attempt ?? 0) + 1;
-
+    result?.vocab = goodWords.length;
     result = await _repo.upsertResult(result!);
     if (submit) {
       NavigationHelper.go(RouteNames.home);
