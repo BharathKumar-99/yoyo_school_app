@@ -7,12 +7,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
+import 'package:yoyo_school_app/features/result/model/speech_evaluation_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import '../../../config/utils/get_user_details.dart';
-import '../model/remote_config_model.dart';
-import '../model/speech_evaluation_model.dart';
 
-class ResultsRepo {
+class MasterResultsRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
 
   Future<RemoteConfig> getSuperSpeachCred() async {
@@ -31,7 +31,7 @@ class ResultsRepo {
         .select('*')
         .eq('user_id', userId)
         .eq('phrases_id', pid)
-        .eq('type', Constants.learned)
+        .eq('type', Constants.mastered)
         .maybeSingle();
     if (data == null) {
       return null;
@@ -147,6 +147,7 @@ class ResultsRepo {
             'user_id': result.userId,
             'phrases_id': result.phrasesId,
             'type': result.type,
+            'listen': 1,
           })
           .select("*")
           .maybeSingle();

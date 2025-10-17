@@ -208,11 +208,29 @@ abstract class AppLocalizations {
   /// **'Level: '**
   String get level;
 
+  /// No description provided for @learned.
+  ///
+  /// In en, this message translates to:
+  /// **'Learned'**
+  String get learned;
+
+  /// No description provided for @mastered.
+  ///
+  /// In en, this message translates to:
+  /// **'Mastered'**
+  String get mastered;
+
   /// No description provided for @classText.
   ///
   /// In en, this message translates to:
   /// **'Class:'**
   String get classText;
+
+  /// No description provided for @empty_list.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show'**
+  String get empty_list;
 
   /// No description provided for @you.
   ///
@@ -285,6 +303,348 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Oh no, you didn\'t improve'**
   String get noImporove;
+
+  /// No description provided for @tryThisPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Try this Phrase'**
+  String get tryThisPhrase;
+
+  /// No description provided for @tryToMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Try to Master >'**
+  String get tryToMaster;
+
+  /// No description provided for @friendly_90_100_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Fantastic!'**
+  String get friendly_90_100_title;
+
+  /// No description provided for @friendly_90_100_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'You sound like a native speaker — keep it up!'**
+  String get friendly_90_100_feedback;
+
+  /// No description provided for @friendly_90_100_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Record again and notice how natural it feels.'**
+  String get friendly_90_100_microDrill;
+
+  /// No description provided for @friendly_80_89_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Really clear pronunciation!'**
+  String get friendly_80_89_title;
+
+  /// No description provided for @friendly_80_89_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Just smooth out your rhythm a little.'**
+  String get friendly_80_89_feedback;
+
+  /// No description provided for @friendly_80_89_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Say it once slowly, once fast, keeping it clear.'**
+  String get friendly_80_89_microDrill;
+
+  /// No description provided for @friendly_70_79_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Good work!'**
+  String get friendly_70_79_title;
+
+  /// No description provided for @friendly_70_79_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on linking words more naturally.'**
+  String get friendly_70_79_feedback;
+
+  /// No description provided for @friendly_70_79_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat twice, connecting every word in one breath.'**
+  String get friendly_70_79_microDrill;
+
+  /// No description provided for @friendly_60_69_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice effort!'**
+  String get friendly_60_69_title;
+
+  /// No description provided for @friendly_60_69_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Try slowing down and opening your vowels.'**
+  String get friendly_60_69_feedback;
+
+  /// No description provided for @friendly_60_69_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Clap once per syllable, then say it smoothly.'**
+  String get friendly_60_69_microDrill;
+
+  /// No description provided for @friendly_0_59_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there!'**
+  String get friendly_0_59_title;
+
+  /// No description provided for @friendly_0_59_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again, listening carefully to each word.'**
+  String get friendly_0_59_feedback;
+
+  /// No description provided for @friendly_0_59_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Echo the model phrase three times.'**
+  String get friendly_0_59_microDrill;
+
+  /// No description provided for @exam_90_100_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent accuracy!'**
+  String get exam_90_100_title;
+
+  /// No description provided for @exam_90_100_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'That would earn full marks in an exam.'**
+  String get exam_90_100_feedback;
+
+  /// No description provided for @exam_90_100_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat once more to confirm consistency.'**
+  String get exam_90_100_microDrill;
+
+  /// No description provided for @exam_80_89_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong pronunciation!'**
+  String get exam_80_89_title;
+
+  /// No description provided for @exam_80_89_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Refine intonation for a natural exam tone.'**
+  String get exam_80_89_feedback;
+
+  /// No description provided for @exam_80_89_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Shadow a native recording focusing on stress.'**
+  String get exam_80_89_microDrill;
+
+  /// No description provided for @exam_70_79_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear and intelligible!'**
+  String get exam_70_79_title;
+
+  /// No description provided for @exam_70_79_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve stress on key syllables.'**
+  String get exam_70_79_feedback;
+
+  /// No description provided for @exam_70_79_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Underline stressed syllables and repeat twice.'**
+  String get exam_70_79_microDrill;
+
+  /// No description provided for @exam_60_69_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Understandable!'**
+  String get exam_60_69_title;
+
+  /// No description provided for @exam_60_69_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs clearer vowel sounds.'**
+  String get exam_60_69_feedback;
+
+  /// No description provided for @exam_60_69_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Record again, exaggerating vowel length slightly.'**
+  String get exam_60_69_microDrill;
+
+  /// No description provided for @exam_0_59_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Reattempt needed!'**
+  String get exam_0_59_title;
+
+  /// No description provided for @exam_0_59_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on saying each word distinctly.'**
+  String get exam_0_59_feedback;
+
+  /// No description provided for @exam_0_59_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause after each word, then blend together.'**
+  String get exam_0_59_microDrill;
+
+  /// No description provided for @challenge_90_100_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Outstanding!'**
+  String get challenge_90_100_title;
+
+  /// No description provided for @challenge_90_100_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve mastered it — can you beat your time?'**
+  String get challenge_90_100_feedback;
+
+  /// No description provided for @challenge_90_100_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Say it faster with perfect clarity.'**
+  String get challenge_90_100_microDrill;
+
+  /// No description provided for @challenge_80_89_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong score!'**
+  String get challenge_80_89_title;
+
+  /// No description provided for @challenge_80_89_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Aim for 90+ next try!'**
+  String get challenge_80_89_feedback;
+
+  /// No description provided for @challenge_80_89_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Record again, keeping rhythm tight and fluent.'**
+  String get challenge_80_89_microDrill;
+
+  /// No description provided for @challenge_70_79_title.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re close to pro level!'**
+  String get challenge_70_79_title;
+
+  /// No description provided for @challenge_70_79_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharpen the stress on tough words.'**
+  String get challenge_70_79_feedback;
+
+  /// No description provided for @challenge_70_79_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat until it sounds effortless twice in a row.'**
+  String get challenge_70_79_microDrill;
+
+  /// No description provided for @challenge_60_69_title.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re improving !'**
+  String get challenge_60_69_title;
+
+  /// No description provided for @challenge_60_69_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Precision beats speed — aim for 70+.'**
+  String get challenge_60_69_feedback;
+
+  /// No description provided for @challenge_60_69_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on tricky word endings and retry.'**
+  String get challenge_60_69_microDrill;
+
+  /// No description provided for @challenge_0_59_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tough one!'**
+  String get challenge_0_59_title;
+
+  /// No description provided for @challenge_0_59_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s go again — you can beat this.'**
+  String get challenge_0_59_feedback;
+
+  /// No description provided for @challenge_0_59_microDrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep practicing until you feel confident.'**
+  String get challenge_0_59_microDrill;
+
+  /// No description provided for @especially_in.
+  ///
+  /// In en, this message translates to:
+  /// **'especially in'**
+  String get especially_in;
+
+  /// No description provided for @repeat_slowly.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat slowly:'**
+  String get repeat_slowly;
+
+  /// No description provided for @congratulations.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations!'**
+  String get congratulations;
+
+  /// No description provided for @you_did_it.
+  ///
+  /// In en, this message translates to:
+  /// **'you did it!'**
+  String get you_did_it;
+
+  /// No description provided for @learnedPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'you have learned this phrase, now can you master it ?'**
+  String get learnedPhrase;
+
+  /// No description provided for @wow.
+  ///
+  /// In en, this message translates to:
+  /// **'Wow!'**
+  String get wow;
+
+  /// No description provided for @masteredIt.
+  ///
+  /// In en, this message translates to:
+  /// **'You Mastered it!'**
+  String get masteredIt;
+
+  /// No description provided for @your_score.
+  ///
+  /// In en, this message translates to:
+  /// **'Your score was'**
+  String get your_score;
+
+  /// No description provided for @master_more.
+  ///
+  /// In en, this message translates to:
+  /// **'Master more phrases and you will get your Alicante Badge! '**
+  String get master_more;
+
+  /// No description provided for @next_phrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Phrase..'**
+  String get next_phrase;
 }
 
 class _AppLocalizationsDelegate

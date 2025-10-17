@@ -57,7 +57,7 @@ class RememberRecorderProvider extends ChangeNotifier {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
           NavigationHelper.push(
-            RouteNames.result,
+            RouteNames.masterResult,
             extra: {
               'phraseModel': phraseModel,
               'path': recordingPath,

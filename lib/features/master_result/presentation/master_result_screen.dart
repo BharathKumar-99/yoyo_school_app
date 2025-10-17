@@ -10,14 +10,14 @@ import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/result/presentation/result_provider.dart';
+import 'package:yoyo_school_app/features/master_result/presentation/master_result_provider.dart';
 
-class ResultScreen extends StatelessWidget {
+class MasterResultScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final Language language;
 
   final String audioPath;
-  const ResultScreen({
+  const MasterResultScreen({
     super.key,
     required this.phraseModel,
     required this.audioPath,
@@ -32,9 +32,9 @@ class ResultScreen extends StatelessWidget {
     double h(double factor) => height * factor;
     double w(double factor) => width * factor;
 
-    return ChangeNotifierProvider<ResultProvider>(
-      create: (_) => ResultProvider(phraseModel, audioPath, language),
-      child: Consumer<ResultProvider>(
+    return ChangeNotifierProvider<MasterResultProvider>(
+      create: (_) => MasterResultProvider(phraseModel, audioPath, language),
+      child: Consumer<MasterResultProvider>(
         builder: (context, value, child) => Scaffold(
           body: value.speechEvaluationModel == null
               ? Container()
@@ -296,18 +296,47 @@ class ResultScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        text.congratulations,
+                                        text.wow,
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
                                       ),
                                       Text(
-                                        text.you_did_it,
+                                        text.masteredIt,
                                         style: AppTextStyles
                                             .textTheme
-                                            .headlineMedium,
+                                            .headlineLarge,
                                       ),
-                                      Text(text.learnedPhrase),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: text.your_score,
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(color: Colors.black),
+                                          children: [
+                                            TextSpan(
+                                              text: '${value.score}!',
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                            ),
+                                            TextSpan(
+                                              text: text.master_more,
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    color: Colors.black,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -324,13 +353,13 @@ class ResultScreen extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => context.push(RouteNames.masterPhrases,extra: phraseModel),
+                      onPressed: () => context.go(RouteNames.home),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             value.language.gradient?.first ?? Colors.blue,
                       ),
                       child: Text(
-                        text.tryToMaster,
+                        text.next_phrase,
                         style: AppTextStyles.textTheme.titleMedium,
                       ),
                     ),

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import 'package:yoyo_school_app/core/widgets/back_btn.dart';
+import 'package:yoyo_school_app/config/theme/app_text_styles.dart'
+    show AppTextStyles;
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/recording/presentation/phrase_recording_provider.dart';
+import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 
-class PhraseRecordingScreen extends StatelessWidget {
-  final PhraseModel phrase;
-  const PhraseRecordingScreen({super.key, required this.phrase});
+import '../../../core/widgets/back_btn.dart';
+
+class TryPhrasesScreen extends StatelessWidget {
+  final PhraseModel phraseModel;
+  const TryPhrasesScreen({super.key, required this.phraseModel});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<PhraseRecordingProvider>(
-      create: (_) => PhraseRecordingProvider(phrase),
-      child: Consumer<PhraseRecordingProvider>(
+    return ChangeNotifierProvider<TryPhrasesProvider>(
+      create: (_) => TryPhrasesProvider(phraseModel),
+      child: Consumer<TryPhrasesProvider>(
         builder: (context, value, child) => Scaffold(
           appBar: AppBar(leadingWidth: 80, leading: backBtn()),
           body: value.isLoading
@@ -29,7 +31,10 @@ class PhraseRecordingScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                           side: BorderSide(
                             color:
-                                value.language?.gradient?.first ?? Colors.white,
+                                value.language?.gradient?.first.withValues(
+                                  alpha: 0.4,
+                                ) ??
+                                Colors.white,
                             width: 3,
                           ),
                         ),
@@ -96,39 +101,19 @@ class PhraseRecordingScreen extends StatelessWidget {
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 25),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 20,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => value.showReadBottomPopup(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          value.language?.gradient?.first ?? Colors.white,
-                    ),
-                    child: Text(
-                      text.readAndpractise,
-                      style: AppTextStyles.textTheme.titleMedium,
-                    ),
-                  ),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => value.showReadBottomPopup(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      value.language?.gradient?.first ?? Colors.white,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => value.showRememberBottomPopup(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          value.language?.gradient?.last ?? Colors.white,
-                    ),
-                    child: Text(
-                      text.rememberAndPractise,
-                      style: AppTextStyles.textTheme.titleMedium,
-                    ),
-                  ),
+                child: Text(
+                  text.tryThisPhrase,
+                  style: AppTextStyles.textTheme.titleMedium,
                 ),
-              ],
+              ),
             ),
           ),
         ),

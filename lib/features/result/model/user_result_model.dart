@@ -10,6 +10,7 @@ class UserResult {
   List<String>? goodWords;
   List<String>? badWords;
   int? listen;
+  String? type;
 
   UserResult({
     this.id,
@@ -23,6 +24,7 @@ class UserResult {
     this.goodWords,
     this.badWords,
     this.listen,
+    this.type,
   });
 
   factory UserResult.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class UserResult {
           ?.map((e) => e.toString())
           .toList(),
       badWords: (json['bad_words'] as List?)?.map((e) => e.toString()).toList(),
+      type: json['type'] as String?,
     );
   }
 
@@ -58,6 +61,7 @@ class UserResult {
       if (goodWords != null) 'good_words': goodWords,
       if (badWords != null) 'bad_words': badWords,
       if (listen != null) 'listens': listen,
+      if (type != null) 'type': type,
     };
   }
 }

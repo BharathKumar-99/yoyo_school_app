@@ -5,12 +5,13 @@ import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/result/data/results_repo.dart';
 import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
+import 'package:yoyo_school_app/features/result/model/speech_evaluation_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
-import '../model/speech_evaluation_model.dart';
 
-class ResultProvider extends ChangeNotifier {
+import '../data/master_results_repo.dart';
+
+class MasterResultProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   Language language;
   late UserResult? result;
@@ -19,10 +20,11 @@ class ResultProvider extends ChangeNotifier {
   FeedbackResult? resultText;
   String audioPath;
   int score = 0;
-  final ResultsRepo _repo = ResultsRepo();
+
+  final MasterResultsRepo _repo = MasterResultsRepo();
   bool showRivePopup = false;
 
-  ResultProvider(this.phraseModel, this.audioPath, this.language) {
+  MasterResultProvider(this.phraseModel, this.audioPath, this.language) {
     init();
   }
 
@@ -84,7 +86,7 @@ class ResultProvider extends ChangeNotifier {
     result ??= UserResult(
       userId: userId,
       phrasesId: phraseModel.id,
-      type: Constants.learned,
+      type: Constants.mastered,
     );
     result?.score = score;
     result?.scoreSubmitted = submit;

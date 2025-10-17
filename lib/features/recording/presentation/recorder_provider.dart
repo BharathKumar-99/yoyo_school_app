@@ -63,6 +63,7 @@ class RecordingProvider extends ChangeNotifier {
               'phraseModel': phraseModel,
               'path': recordingPath,
               'language': launguage,
+              'from': 'read',
             },
           );
         }

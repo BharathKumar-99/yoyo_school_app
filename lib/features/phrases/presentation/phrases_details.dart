@@ -8,7 +8,6 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/widgets/app_bar.dart';
-import 'package:yoyo_school_app/features/home/model/attempt_phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_view_model.dart';
@@ -22,6 +21,7 @@ class PhrasesDetails extends StatelessWidget {
   final Student? student;
   final String className;
   final List<Level> levels;
+
   const PhrasesDetails({
     super.key,
     required this.language,
@@ -37,11 +37,11 @@ class PhrasesDetails extends StatelessWidget {
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return DefaultTabController(
-            length: 2,
+            length: 3,
             child: Scaffold(
               body: CustomScrollView(
                 slivers: [
-                  // Hero container
+                  // Hero Header
                   SliverToBoxAdapter(
                     child: Hero(
                       tag: language.language?.language ?? "",
@@ -51,7 +51,6 @@ class PhrasesDetails extends StatelessWidget {
                           gradient: LinearGradient(
                             colors: provider.classes.language?.gradient ?? [],
                           ),
-
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withAlpha(70),
@@ -125,10 +124,6 @@ class PhrasesDetails extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 text.classText,
@@ -187,10 +182,6 @@ class PhrasesDetails extends StatelessWidget {
                                             ],
                                           ),
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 text.you,
@@ -241,87 +232,62 @@ class PhrasesDetails extends StatelessWidget {
                   ),
                   SliverToBoxAdapter(child: SizedBox(height: 30)),
 
+                  // TabBar
                   SliverPersistentHeader(
                     pinned: true,
                     delegate: _SliverAppBarDelegate(
                       TabBar(
                         labelColor: Colors.white,
-                        dividerColor: Colors.transparent,
                         unselectedLabelColor: Colors.black,
                         indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorWeight: 1,
-                        indicatorPadding: EdgeInsetsGeometry.symmetric(
-                          horizontal: 26,
-                        ),
                         indicator: BoxDecoration(
                           color:
                               provider.classes.language?.gradient?.first ??
                               Colors.amberAccent,
                           borderRadius: BorderRadius.circular(16),
                         ),
+                        dividerColor: Colors.transparent,
                         tabs: [
                           Tab(
                             text:
-                                "${text.newText} (${provider.classes.language?.phrase?.length})",
+                                "${text.newText} (${provider.newPhrases.length})",
                           ),
                           Tab(
                             text:
-                                "${text.recorded} (${student?.attemptedPhrases?.where((val) => val.phrase?.level == language.language?.level && language.language?.id == val.phrase?.language).length}) ",
+                                "${text.learned} (${provider.learned.length})",
+                          ),
+                          Tab(
+                            text:
+                                "${text.mastered} (${provider.mastered.length})",
                           ),
                         ],
                       ),
                     ),
                   ),
 
+                  // TabBarView inside SliverFillRemaining
                   SliverFillRemaining(
                     child: TabBarView(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 26),
-                          child: ListView.separated(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              PhraseModel? model =
-                                  provider.classes.language?.phrase?[index];
-                              return GestureDetector(
-                                onTap: () => context.push(
-                                  RouteNames.phrases,
-                                  extra: model,
-                                ),
-                                child: PhrasesWidget(
-                                  title: model?.phrase ?? "",
-                                  subTitle: model?.translation ?? "",
-                                  launguage: provider.classes.language,
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 20);
-                            },
-                            itemCount:
-                                provider.classes.language?.phrase?.length ?? 0,
-                          ),
+                        _buildPhrasesList(
+                          provider.newPhrases,
+                          provider,
+                          context,
+                          RouteNames.tryPhrases,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 26),
-                          child: ListView.separated(
-                            itemBuilder: (context, index) {
-                              AttemptedPhrase phrase =
-                                  provider.attemptedPhrase?[index] ??
-                                  AttemptedPhrase();
-                              return PhrasesWidget(
-                                title: phrase.phrase?.phrase ?? '',
-                                subTitle: phrase.phrase?.translation ?? '',
-                                precentage:
-                                    '${phrase.phrase?.score.toString() ?? '0'}%',
-                                launguage: provider.classes.language,
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 20);
-                            },
-                            itemCount: provider.attemptedPhrase?.length ?? 0,
-                          ),
+                        _buildPhrasesList(
+                          provider.learned,
+                          provider,
+                          context,
+                          RouteNames.masterPhrases,
+                          showPercentage: true,
+                        ),
+                        _buildPhrasesList(
+                          provider.mastered,
+                          provider,
+                          context,
+                          RouteNames.masterPhrases,
+                          showPercentage: true,
                         ),
                       ],
                     ),
@@ -334,6 +300,46 @@ class PhrasesDetails extends StatelessWidget {
       ),
     );
   }
+
+  // Returns regular ListView for TabBarView (not slivers!)
+  Widget _buildPhrasesList(
+    List<PhraseModel> phrases,
+    PhrasesViewModel provider,
+    BuildContext context,
+    String routeName, {
+    bool showPercentage = false,
+  }) {
+    if (phrases.isEmpty) {
+      return Center(child: Text(text.empty_list));
+    }
+
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 20),
+      physics: BouncingScrollPhysics(),
+      itemCount: phrases.length,
+      itemBuilder: (context, index) {
+        final model = phrases[index];
+        String? percentage;
+        if (showPercentage && provider.userResult != null) {
+          final result = provider.userResult!.firstWhere(
+            (val) => val.phrasesId == model.id,
+          );
+          percentage = "${result.score}%";
+        }
+        return GestureDetector(
+          onTap: () => context.push(routeName, extra: model),
+          child: PhrasesWidget(
+            title: model.phrase ?? "",
+            subTitle: model.translation ?? "",
+            launguage: provider.classes.language,
+            precentage: percentage,
+            onIconTap: () => provider.playAudio(model),
+          ),
+        );
+      },
+      separatorBuilder: (_, __) => SizedBox(height: 20),
+    );
+  }
 }
 
 class PhrasesWidget extends StatelessWidget {
@@ -341,12 +347,15 @@ class PhrasesWidget extends StatelessWidget {
   final String subTitle;
   final String? precentage;
   final Language? launguage;
+  final VoidCallback onIconTap;
+
   const PhrasesWidget({
     super.key,
     required this.title,
     required this.subTitle,
     this.precentage,
     this.launguage,
+    required this.onIconTap,
   });
 
   @override
@@ -366,12 +375,11 @@ class PhrasesWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
                 colors: launguage?.gradient ?? [Colors.white],
-                begin: AlignmentGeometry.bottomLeft,
-                end: AlignmentGeometry.topRight,
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 if (precentage != null)
@@ -393,7 +401,7 @@ class PhrasesWidget extends StatelessWidget {
                     ),
                   ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: onIconTap,
                   icon: Icon(
                     Icons.play_arrow_outlined,
                     size: 35,
@@ -416,8 +424,8 @@ class PhrasesWidget extends StatelessWidget {
                   ),
                   Text(
                     subTitle,
-                    style: AppTextStyles.textTheme.bodyMedium,
                     maxLines: 2,
+                    style: AppTextStyles.textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -429,14 +437,13 @@ class PhrasesWidget extends StatelessWidget {
   }
 }
 
-// Helper class for pinned Sliver TabBar
+// SliverPersistentHeader helper for pinned TabBar
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar _tabBar;
   _SliverAppBarDelegate(this._tabBar);
 
   @override
   double get minExtent => _tabBar.preferredSize.height;
-
   @override
   double get maxExtent => _tabBar.preferredSize.height;
 
@@ -450,7 +457,5 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return true;
-  }
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) => true;
 }

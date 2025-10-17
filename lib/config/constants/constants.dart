@@ -43,5 +43,7 @@ class Stroage {
 class Constants {
   static const int minimumWordScoreleft = 45;
   static const int minimumWordScoreright = 65;
-  static const int minimumSubmitScore = 50;
+  static const int minimumSubmitScore = 80;
+  static const String learned = 'Learned';
+  static const String mastered = 'Mastered';
 }

@@ -6,10 +6,13 @@ import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
+import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
-import 'package:yoyo_school_app/features/recording/presentation/phrase_recording_screen.dart';
+import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
+
+import '../../features/try_phrases/presentation/try_phrases_screen.dart';
 
 class AppRoutes {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -58,9 +61,26 @@ class AppRoutes {
         },
       ),
       GoRoute(
-        path: RouteNames.phrases,
+        path: RouteNames.masterResult,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return MasterResultScreen(
+            phraseModel: data['phraseModel'],
+            language: data['language'],
+            audioPath: data['path'],
+          );
+        },
+      ),
+
+      GoRoute(
+        path: RouteNames.tryPhrases,
         builder: (context, state) =>
-            PhraseRecordingScreen(phrase: state.extra as PhraseModel),
+            TryPhrasesScreen(phraseModel: state.extra as PhraseModel),
+      ),
+      GoRoute(
+        path: RouteNames.masterPhrases,
+        builder: (context, state) =>
+            MasterPhraseSreen(model: state.extra as PhraseModel),
       ),
       GoRoute(
         path: RouteNames.profile,
