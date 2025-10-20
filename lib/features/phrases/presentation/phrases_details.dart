@@ -240,6 +240,9 @@ class PhrasesDetails extends StatelessWidget {
                         labelColor: Colors.white,
                         unselectedLabelColor: Colors.black,
                         indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorPadding: EdgeInsetsGeometry.symmetric(
+                          horizontal: 10,
+                        ),
                         indicator: BoxDecoration(
                           color:
                               provider.classes.language?.gradient?.first ??

@@ -324,29 +324,34 @@ class _LaunguageCardState extends State<LaunguageCard> {
   }
 }
 
-Column getMetricCard(String title, String data, Color bgColor) => Column(
-  mainAxisSize: MainAxisSize.min,
-  crossAxisAlignment: CrossAxisAlignment.center,
-  children: [
-    Text(title, style: AppTextStyles.textTheme.titleMedium),
-    const SizedBox(height: 10),
-    Container(
-      width: 63,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: bgColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Center(
-          child: Text(
-            data,
-            style: AppTextStyles.textTheme.headlineMedium!.copyWith(
-              color: Colors.white,
+getMetricCard(String title, String data, Color bgColor) => Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+  child: Expanded(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(title, style: AppTextStyles.textTheme.titleMedium),
+        const SizedBox(height: 10),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: bgColor,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            child: Center(
+              child: Text(
+                data,
+                maxLines: 1,
+                style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     ),
-  ],
+  ),
 );

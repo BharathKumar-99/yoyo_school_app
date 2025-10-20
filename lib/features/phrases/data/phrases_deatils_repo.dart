@@ -10,6 +10,7 @@ class PhrasesDeatilsRepo {
     final response = await _client
         .from(DbTable.userResult)
         .select()
+        .eq('score_submited', true)
         .inFilter('phrases_id', ids);
     final List<UserResult> results = (response)
         .map((e) => UserResult.fromJson(e))

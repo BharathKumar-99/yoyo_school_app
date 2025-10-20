@@ -18,6 +18,8 @@ class MasterPhraseProvider extends ChangeNotifier {
   }
 
   init() async {
+    isLoading = true;
+    notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
     language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);

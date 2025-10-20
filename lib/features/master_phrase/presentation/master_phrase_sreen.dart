@@ -22,69 +22,73 @@ class MasterPhraseSreen extends StatelessWidget {
       create: (_) => MasterPhraseProvider(model),
       child: Consumer<MasterPhraseProvider>(
         builder: (context, value, child) => Scaffold(
-          body: Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                colors: value.language?.gradient ?? [],
-                begin: AlignmentGeometry.topLeft,
-                end: AlignmentGeometry.bottomRight,
-              ),
-
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(70),
-                  spreadRadius: 5,
-                  blurRadius: 4,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  SizedBox(height: h(0.03)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: backBtn(),
+          body: value.isLoading
+              ? Container()
+              : Container(
+                  height: height,
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      colors: value.language?.gradient ?? [],
+                      begin: AlignmentGeometry.topLeft,
+                      end: AlignmentGeometry.bottomRight,
                     ),
+
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(70),
+                        spreadRadius: 5,
+                        blurRadius: 4,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: h(0.05)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 29.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  child: SafeArea(
+                    child: Column(
                       children: [
+                        SizedBox(height: h(0.03)),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.translate_rounded),
+                          padding: EdgeInsets.symmetric(horizontal: w(0.07)),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: backBtn(),
+                          ),
+                        ),
+                        SizedBox(height: h(0.05)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 29.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.translate_rounded),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  value.phraseModel.translation ?? '',
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Expanded(
-                          child: Text(value.phraseModel.translation ?? ''),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                  value.language?.image ?? "",
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                            value.language?.image ?? "",
-                          ),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: value.language != null

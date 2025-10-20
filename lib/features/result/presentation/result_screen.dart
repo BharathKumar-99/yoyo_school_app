@@ -86,7 +86,7 @@ class ResultScreen extends StatelessWidget {
                               child: backBtn(),
                             ),
                           ),
-                          (value.score < Constants.minimumSubmitScore)
+                          (value.score > Constants.minimumSubmitScore)
                               ? Padding(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: w(0.07),
@@ -169,7 +169,7 @@ class ResultScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: h(0.23)),
+                                      SizedBox(height: h(0.30)),
                                       Text(
                                         value.resultText?.title ?? "",
                                         style: AppTextStyles
@@ -273,6 +273,27 @@ class ResultScreen extends StatelessWidget {
                                           ],
                                         ),
                                       ),
+                                      SizedBox(height: h(0.015)),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          onPressed: () => context.pop(),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                value
+                                                    .language
+                                                    .gradient
+                                                    ?.first ??
+                                                Colors.blue,
+                                          ),
+                                          child: Text(
+                                            text.retry,
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 )
@@ -288,7 +309,7 @@ class ResultScreen extends StatelessWidget {
                                       SizedBox(
                                         height:
                                             MediaQuery.sizeOf(context).height /
-                                            2,
+                                            2.5,
                                         width: double.infinity,
                                         child: RiveAnimation.asset(
                                           'assets/animation/confetti.riv',
@@ -308,49 +329,31 @@ class ResultScreen extends StatelessWidget {
                                             .headlineMedium,
                                       ),
                                       Text(text.learnedPhrase),
+                                      SizedBox(height: h(0.015)),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          onPressed: () => context.push(
+                                            RouteNames.masterPhrases,
+                                            extra: phraseModel,
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                value
+                                                    .language
+                                                    .gradient
+                                                    ?.first ??
+                                                Colors.blue,
+                                          ),
+                                          child: Text(
+                                            text.tryToMaster,
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ),
+                                      ),
                                     ],
-                                  ),
-                                ),
-                          ((value.score) >= Constants.minimumSubmitScore)
-                              ? Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () => context.push(
-                                        RouteNames.masterPhrases,
-                                        extra: phraseModel,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            value.language.gradient?.first ??
-                                            Colors.blue,
-                                      ),
-                                      child: Text(
-                                        text.tryToMaster,
-                                        style:
-                                            AppTextStyles.textTheme.titleMedium,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: () => context.pop(),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            value.language.gradient?.first ??
-                                            Colors.blue,
-                                      ),
-                                      child: Text(
-                                        text.retry,
-                                        style:
-                                            AppTextStyles.textTheme.titleMedium,
-                                      ),
-                                    ),
                                   ),
                                 ),
                         ],
