@@ -340,32 +340,51 @@ class MasterResultScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                          ((value.score) >= Constants.minimumSubmitScore)
+                              ? Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () =>
+                                          context.go(RouteNames.home),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            value.language.gradient?.first ??
+                                            Colors.blue,
+                                      ),
+                                      child: Text(
+                                        text.next_phrase,
+                                        style:
+                                            AppTextStyles.textTheme.titleMedium,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () => context.pop(),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            value.language.gradient?.first ??
+                                            Colors.blue,
+                                      ),
+                                      child: Text(
+                                        text.retry,
+                                        style:
+                                            AppTextStyles.textTheme.titleMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
                   ],
                 ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: ((value.score) >= Constants.minimumSubmitScore)
-              ? Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => context.go(RouteNames.home),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            value.language.gradient?.first ?? Colors.blue,
-                      ),
-                      child: Text(
-                        text.next_phrase,
-                        style: AppTextStyles.textTheme.titleMedium,
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
         ),
       ),
     );

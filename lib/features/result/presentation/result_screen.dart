@@ -311,32 +311,53 @@ class ResultScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                          ((value.score) >= Constants.minimumSubmitScore)
+                              ? Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () => context.push(
+                                        RouteNames.masterPhrases,
+                                        extra: phraseModel,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            value.language.gradient?.first ??
+                                            Colors.blue,
+                                      ),
+                                      child: Text(
+                                        text.tryToMaster,
+                                        style:
+                                            AppTextStyles.textTheme.titleMedium,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () => context.pop(),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            value.language.gradient?.first ??
+                                            Colors.blue,
+                                      ),
+                                      child: Text(
+                                        text.retry,
+                                        style:
+                                            AppTextStyles.textTheme.titleMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
                   ],
                 ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: ((value.score) >= Constants.minimumSubmitScore)
-              ? Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => context.push(RouteNames.masterPhrases,extra: phraseModel),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            value.language.gradient?.first ?? Colors.blue,
-                      ),
-                      child: Text(
-                        text.tryToMaster,
-                        style: AppTextStyles.textTheme.titleMedium,
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
         ),
       ),
     );

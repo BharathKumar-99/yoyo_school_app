@@ -306,4 +306,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next_phrase => 'Next Phrase..';
+
+  @override
+  String get retry => 'Retry';
 }

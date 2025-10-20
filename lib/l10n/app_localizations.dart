@@ -645,6 +645,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next Phrase..'**
   String get next_phrase;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate
