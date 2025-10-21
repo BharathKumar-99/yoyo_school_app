@@ -22,7 +22,7 @@ class AppRoutes {
     navigatorKey: navigatorKey,
     initialLocation: RouteNames.profile,
     initialExtra: true,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false,
 
     routes: [
       GoRoute(

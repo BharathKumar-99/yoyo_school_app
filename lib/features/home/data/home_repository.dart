@@ -54,7 +54,6 @@ class HomeRepository {
           .maybeSingle();
 
       if (data == null) throw Exception("No data found for user $userId");
-      log(data.toString());
 
       final student = Student.fromJson(data);
 
