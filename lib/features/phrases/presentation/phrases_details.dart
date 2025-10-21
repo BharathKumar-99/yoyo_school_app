@@ -336,7 +336,9 @@ class PhrasesDetails extends StatelessWidget {
             subTitle: model.translation ?? "",
             launguage: provider.classes.language,
             precentage: percentage,
-            onIconTap: () => provider.playAudio(model),
+            onIconTap: () {
+              provider.playAudio(model);
+            },
           ),
         );
       },
@@ -403,9 +405,10 @@ class PhrasesWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                IconButton(
-                  onPressed: onIconTap,
-                  icon: Icon(
+                GestureDetector(
+                  onTap: onIconTap,
+                  behavior: HitTestBehavior.translucent,
+                  child: Icon(
                     Icons.play_arrow_outlined,
                     size: 35,
                     color: Colors.white,

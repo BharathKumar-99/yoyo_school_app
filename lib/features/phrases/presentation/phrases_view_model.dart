@@ -61,6 +61,8 @@ class PhrasesViewModel extends ChangeNotifier {
     learned = learned.toSet().toList();
     mastered = mastered.toSet().toList();
 
+    learned.removeWhere((item) => mastered.contains(item));
+
     classes.language?.phrase?.forEach((val) {
       if (!learned.contains(val) && !mastered.contains(val)) {
         newPhrases.add(val);

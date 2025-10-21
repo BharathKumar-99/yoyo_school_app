@@ -18,8 +18,8 @@ void main() async {
   unawaited(RiveFile.initialize());
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-      statusBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.dark,
     ),
   );

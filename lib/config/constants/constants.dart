@@ -11,6 +11,7 @@ class ImageConstants {
   static const String french = "${assetsLoc}french.png";
   static const String spanish = "${assetsLoc}spanish.png";
   static const String german = "${assetsLoc}german.png";
+  static const String buddha = "${assetsLoc}buddha.png";
 }
 
 class IconConstants {

@@ -1,0 +1,21 @@
+flutter_native_splash:
+  color: "#ffffff"
+  # If you want a gradient background:
+  color_dark: "#000000"
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
+  web: false
+
+  android_12:
+    color: "#ffffff"
+    color_dark: "#000000"
+
+  # You can use an image + gradient
+  image: assets/splash/splash_logo.png
+
+  
+
+
+  # Set image sizes
+  android: true
+  ios: true

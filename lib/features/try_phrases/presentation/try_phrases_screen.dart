@@ -43,7 +43,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                 color:
                                     (value.language?.gradient?.first ??
                                             Colors.black)
-                                        .withOpacity(0.1),
+                                        .withValues(alpha: 0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -101,8 +101,8 @@ class TryPhrasesScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(50),
                                       splashColor:
                                           value.language?.gradient?.first
-                                              .withOpacity(0.2) ??
-                                          Colors.grey.withOpacity(0.2),
+                                              .withValues(alpha: 0.2) ??
+                                          Colors.grey.withValues(alpha: 0.2),
                                       onTap: () => value.playAudio(),
                                       child: const Padding(
                                         padding: EdgeInsets.all(8.0),

@@ -40,143 +40,137 @@ class ResultScreen extends StatelessWidget {
               ? Container()
               : Stack(
                   children: [
-                    Container(
-                      height: h(0.5),
-                      width: width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: LinearGradient(
-                          colors: language.gradient ?? [],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(70),
-                            spreadRadius: 5,
-                            blurRadius: 4,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(height: h(0.12)),
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(16),
-                                bottomLeft: Radius.circular(16),
-                              ),
-                              child: CachedNetworkImage(
-                                width: width,
-                                imageUrl: value.language.image ?? '',
-                                fit: BoxFit.fill,
-                              ),
+                    Column(
+                      children: [
+                        Container(
+                          height: h(0.5),
+                          width: width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            gradient: LinearGradient(
+                              colors: language.gradient ?? [],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SafeArea(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: backBtn(),
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                value.language.image ?? '',
+                              ),
+                              fit: BoxFit.fill,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(70),
+                                spreadRadius: 5,
+                                blurRadius: 4,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
                           ),
-                          (value.score > Constants.minimumSubmitScore)
-                              ? Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: w(0.07),
+                          child: SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: w(0.07),
+                              ),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: backBtn(),
                                   ),
-                                  child: Column(
+                                  SizedBox(height: 20),
+                                  if (value.score <
+                                      Constants.minimumSubmitScore)
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: Card(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(w(0.04)),
+                                              child: Column(
+                                                children: [
+                                                  Wrap(
+                                                    spacing: w(0.013),
+                                                    children: value
+                                                        .speechEvaluationModel!
+                                                        .result!
+                                                        .words!
+                                                        .map(
+                                                          (word) => Text(
+                                                            word.word ?? "",
+                                                            style: AppTextStyles
+                                                                .textTheme
+                                                                .titleLarge!
+                                                                .copyWith(
+                                                                  fontSize: w(
+                                                                    0.06,
+                                                                  ),
+                                                                  color: value
+                                                                      .getWordColor(
+                                                                        word.scores?.overall ??
+                                                                            0,
+                                                                      ),
+                                                                ),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                  SizedBox(height: h(0.04)),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: -h(0.13),
+                                          child: Container(
+                                            width: w(0.40),
+                                            height: h(0.18),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  ImageConstants.loginBg,
+                                                ),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${value.score.toString()} %',
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .headlineLarge!
+                                                    .copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: w(0.12),
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: w(0.07)),
+                            child: (value.score < Constants.minimumSubmitScore)
+                                ? Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: Card(
-                                              child: Padding(
-                                                padding: EdgeInsets.all(
-                                                  w(0.04),
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Wrap(
-                                                      spacing: w(0.013),
-                                                      children: value
-                                                          .speechEvaluationModel!
-                                                          .result!
-                                                          .words!
-                                                          .map(
-                                                            (word) => Text(
-                                                              word.word ?? "",
-                                                              style: AppTextStyles
-                                                                  .textTheme
-                                                                  .titleLarge!
-                                                                  .copyWith(
-                                                                    fontSize: w(
-                                                                      0.06,
-                                                                    ),
-                                                                    color: value
-                                                                        .getWordColor(
-                                                                          word.scores?.overall ??
-                                                                              0,
-                                                                        ),
-                                                                  ),
-                                                            ),
-                                                          )
-                                                          .toList(),
-                                                    ),
-                                                    SizedBox(height: h(0.04)),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            bottom: -h(0.13),
-                                            child: Container(
-                                              width: w(0.40),
-                                              height: h(0.18),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                    ImageConstants.loginBg,
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  '${value.score.toString()} %',
-                                                  style: AppTextStyles
-                                                      .textTheme
-                                                      .headlineLarge!
-                                                      .copyWith(
-                                                        color: Colors.white,
-                                                        fontSize: w(0.12),
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: h(0.30)),
+                                      SizedBox(height: h(0.01)),
                                       Text(
                                         value.resultText?.title ?? "",
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
                                       ),
-
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 20.0,
@@ -189,20 +183,25 @@ class ResultScreen extends StatelessWidget {
                                                 .bodyMedium!
                                                 .copyWith(color: Colors.black),
                                             children: [
-                                              TextSpan(
-                                                text:
-                                                    ' ${text.especially_in} ${value.result?.badWords?.map((val) => val)}'
-                                                        .replaceAll('(', '')
-                                                        .replaceAll(')', ''),
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
-                                                    ),
-                                              ),
+                                              if (value
+                                                      .result
+                                                      ?.badWords
+                                                      ?.isNotEmpty ??
+                                                  false)
+                                                TextSpan(
+                                                  text:
+                                                      ' ${text.especially_in} ${value.result?.badWords?.map((val) => val)}'
+                                                          .replaceAll('(', '')
+                                                          .replaceAll(')', ''),
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                ),
                                             ],
                                           ),
                                         ),
@@ -273,7 +272,7 @@ class ResultScreen extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(height: h(0.015)),
+                                      Spacer(),
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
@@ -294,28 +293,14 @@ class ResultScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
+                                      Spacer(),
                                     ],
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 29.0,
-                                  ),
-                                  child: Column(
-                                    spacing: 30,
+                                  )
+                                : Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.sizeOf(context).height /
-                                            2.5,
-                                        width: double.infinity,
-                                        child: RiveAnimation.asset(
-                                          'assets/animation/confetti.riv',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                      Spacer(),
                                       Text(
                                         text.congratulations,
                                         style: AppTextStyles
@@ -329,7 +314,7 @@ class ResultScreen extends StatelessWidget {
                                             .headlineMedium,
                                       ),
                                       Text(text.learnedPhrase),
-                                      SizedBox(height: h(0.015)),
+                                      Spacer(),
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
@@ -353,12 +338,28 @@ class ResultScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
+                                      Spacer(),
                                     ],
                                   ),
-                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (value.score > Constants.minimumSubmitScore)
+                      Column(
+                        children: [
+                          Spacer(),
+                          SizedBox(
+                            height: MediaQuery.sizeOf(context).height / 5,
+                            width: double.infinity,
+                            child: RiveAnimation.asset(
+                              'assets/animation/confetti.riv',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Spacer(),
                         ],
                       ),
-                    ),
                   ],
                 ),
         ),
