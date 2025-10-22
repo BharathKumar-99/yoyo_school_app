@@ -22,6 +22,8 @@ class MasterPhraseSreen extends StatelessWidget {
       create: (_) => MasterPhraseProvider(model),
       child: Consumer<MasterPhraseProvider>(
         builder: (context, value, child) => Scaffold(
+          extendBody: true,
+          resizeToAvoidBottomInset: false,
           body: value.isLoading
               ? Container()
               : Container(

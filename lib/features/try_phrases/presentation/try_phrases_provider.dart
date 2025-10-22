@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:yoyo_school_app/config/utils/audio_manager_singleton.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
@@ -16,7 +15,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   bool showPhrase = true;
   Language? language;
   final TryPhrasesRepo _repo = TryPhrasesRepo();
-  final AudioManager audioManager = AudioManager();
+  final AudioPlayer audioManager = AudioPlayer();
   late UserResult? result;
   bool isLoading = true;
 
@@ -27,7 +26,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   initAudio() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
     language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
-    await audioManager.player.setUrl(phraseModel.recording ?? "");
+    await audioManager.setUrl(phraseModel.recording ?? "");
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     await audioManager.setVolume(1);
     await upsertResult(listen: false);
@@ -43,7 +42,7 @@ class TryPhrasesProvider extends ChangeNotifier {
 
   playAudio() async {
     try {
-      final player = audioManager.player;
+      final player = audioManager;
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }

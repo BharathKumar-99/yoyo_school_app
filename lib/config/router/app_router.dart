@@ -46,6 +46,7 @@ class AppRoutes {
             className: data['className'],
             levels: data['level'],
             student: data['student'],
+            next: data['next'],
           );
         },
       ),

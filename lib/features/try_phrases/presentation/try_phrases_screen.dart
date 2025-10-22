@@ -103,7 +103,8 @@ class TryPhrasesScreen extends StatelessWidget {
                                           value.language?.gradient?.first
                                               .withValues(alpha: 0.2) ??
                                           Colors.grey.withValues(alpha: 0.2),
-                                      onTap: () => value.playAudio(),
+                                      onTap: () async =>
+                                          await value.playAudio(),
                                       child: const Padding(
                                         padding: EdgeInsets.all(8.0),
                                         child: Icon(

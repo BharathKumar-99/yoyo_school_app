@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
@@ -19,6 +22,7 @@ class PhrasesViewModel extends ChangeNotifier {
   List<PhraseModel> newPhrases = [];
   List<PhraseModel> learned = [];
   List<PhraseModel> mastered = [];
+  bool isGoToNextPhrase = false;
   final Student? student;
   int classPercentage = 0;
   int userPercentage = 0;
@@ -26,7 +30,7 @@ class PhrasesViewModel extends ChangeNotifier {
   List<int> userScore = [];
   final AudioManager audioManager = AudioManager();
 
-  PhrasesViewModel(this.classes, this.student) {
+  PhrasesViewModel(this.classes, this.student, this.isGoToNextPhrase) {
     init();
   }
 
@@ -95,6 +99,9 @@ class PhrasesViewModel extends ChangeNotifier {
 
     notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+    if (isGoToNextPhrase && newPhrases.isNotEmpty) {
+      ctx!.pushReplacement(RouteNames.tryPhrases, extra: newPhrases.first);
+    }
   }
 
   playAudio(PhraseModel phraseModel) async {

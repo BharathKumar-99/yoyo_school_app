@@ -21,6 +21,7 @@ class PhrasesDetails extends StatelessWidget {
   final Student? student;
   final String className;
   final List<Level> levels;
+  final bool? next;
 
   const PhrasesDetails({
     super.key,
@@ -28,12 +29,13 @@ class PhrasesDetails extends StatelessWidget {
     required this.className,
     required this.levels,
     this.student,
+    this.next,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PhrasesViewModel>(
-      create: (_) => PhrasesViewModel(language, student),
+      create: (_) => PhrasesViewModel(language, student, next ?? false),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return DefaultTabController(
@@ -406,12 +408,17 @@ class PhrasesWidget extends StatelessWidget {
                     ),
                   ),
                 GestureDetector(
-                  onTap: onIconTap,
-                  behavior: HitTestBehavior.translucent,
-                  child: Icon(
-                    Icons.play_arrow_outlined,
-                    size: 35,
-                    color: Colors.white,
+                  onTap: () {
+                    onIconTap();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: AbsorbPointer(
+                    absorbing: false,
+                    child: Icon(
+                      Icons.play_arrow_outlined,
+                      size: 35,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ],

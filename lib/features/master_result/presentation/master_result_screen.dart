@@ -183,20 +183,25 @@ class MasterResultScreen extends StatelessWidget {
                                                 .bodyMedium!
                                                 .copyWith(color: Colors.black),
                                             children: [
-                                              TextSpan(
-                                                text:
-                                                    ' ${text.especially_in} ${value.result?.badWords?.map((val) => val)}'
-                                                        .replaceAll('(', '')
-                                                        .replaceAll(')', ''),
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
-                                                    ),
-                                              ),
+                                              if (value
+                                                      .result
+                                                      ?.badWords
+                                                      ?.isNotEmpty ??
+                                                  false)
+                                                TextSpan(
+                                                  text:
+                                                      ' ${text.especially_in} ${value.result?.badWords?.map((val) => val)}'
+                                                          .replaceAll('(', '')
+                                                          .replaceAll(')', ''),
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                ),
                                             ],
                                           ),
                                         ),
@@ -318,7 +323,7 @@ class MasterResultScreen extends StatelessWidget {
                                               .copyWith(color: Colors.black),
                                           children: [
                                             TextSpan(
-                                              text: '${value.score}!',
+                                              text: ' ${value.score}! ',
                                               style: AppTextStyles
                                                   .textTheme
                                                   .bodyMedium!
@@ -343,8 +348,21 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () =>
-                                              context.go(RouteNames.home),
+                                          onPressed: () => context.push(
+                                            RouteNames.phrasesDetails,
+                                            extra: {
+                                              'language': value.slanguage,
+                                              "className":
+                                                  value
+                                                      .userClases
+                                                      ?.classes
+                                                      ?.className ??
+                                                  "",
+                                              "level": value.levels ?? [],
+                                              'student': value.userClases,
+                                              'next': true,
+                                            },
+                                          ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value
