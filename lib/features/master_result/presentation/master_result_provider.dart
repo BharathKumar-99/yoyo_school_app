@@ -42,9 +42,9 @@ class MasterResultProvider extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = 85;
+    score = speechEvaluationModel?.result?.overall ?? 0;
 
-    //await upsertResult(score, submit: score > Constants.minimumSubmitScore);
+    await upsertResult(score, submit: score > Constants.minimumSubmitScore);
     if ((result?.attempt ?? 0) >= 0) {
       resultText = ScoreFeedback.getFeedback(
         mode: ModeType.friendly,

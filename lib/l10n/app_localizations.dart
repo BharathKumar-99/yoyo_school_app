@@ -250,6 +250,12 @@ abstract class AppLocalizations {
   /// **'Choose from Gallery'**
   String get chooseFromGallery;
 
+  /// No description provided for @learnAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn Again'**
+  String get learnAgain;
+
   /// No description provided for @takeAPhoto.
   ///
   /// In en, this message translates to:

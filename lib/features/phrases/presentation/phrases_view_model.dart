@@ -40,7 +40,9 @@ class PhrasesViewModel extends ChangeNotifier {
     List<int> ids = [];
     classes.language?.phrase?.forEach((val) => ids.add(val.id ?? 0));
     schoolResult = await _repo.getAllUserResults(ids);
-
+    learned = [];
+    mastered = [];
+    newPhrases = [];
     schoolResult?.forEach((val) {
       if (ids.contains(val.phrasesId)) {
         classesScore.add(val.score ?? 0);
@@ -120,5 +122,21 @@ class PhrasesViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> resetPhrase(int? id) async {
+    GlobalLoader.show();
+    schoolResult = [];
+    userResult = [];
+    newPhrases = [];
+    learned = [];
+    mastered = [];
+    classPercentage = 0;
+    userPercentage = 0;
+    classesScore = [];
+    userScore = [];
+    await _repo.resetPhrase(id ?? 0, student?.id ?? 0);
+    GlobalLoader.hide();
+    await init();
   }
 }

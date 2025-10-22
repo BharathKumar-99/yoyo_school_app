@@ -331,17 +331,40 @@ class PhrasesDetails extends StatelessWidget {
           );
           percentage = "${result.score}%";
         }
-        return GestureDetector(
-          onTap: () => context.push(routeName, extra: model),
-          child: PhrasesWidget(
-            title: model.phrase ?? "",
-            subTitle: model.translation ?? "",
-            launguage: provider.classes.language,
-            precentage: percentage,
-            onIconTap: () {
-              provider.playAudio(model);
-            },
-          ),
+        return Column(
+          children: [
+            GestureDetector(
+              onTap: () => context.push(routeName, extra: model),
+              child: PhrasesWidget(
+                title: model.phrase ?? "",
+                subTitle: model.translation ?? "",
+                launguage: provider.classes.language,
+                precentage: percentage,
+                onIconTap: () {
+                  provider.playAudio(model);
+                },
+              ),
+            ),
+            if (showPercentage == true)
+              GestureDetector(
+                onTap: () async {
+                  await provider.resetPhrase(model.id);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(Icons.refresh_rounded),
+                      Text(
+                        text.learnAgain,
+                        style: AppTextStyles.textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
         );
       },
       separatorBuilder: (_, __) => SizedBox(height: 20),
