@@ -91,9 +91,8 @@ class MasterPhraseSreen extends StatelessWidget {
                     ),
                   ),
                 ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: value.language != null
+
+          bottomNavigationBar: value.language != null
               ? RememberAndPractiseScreen(
                   model: model,
                   launguage: value.language!,
