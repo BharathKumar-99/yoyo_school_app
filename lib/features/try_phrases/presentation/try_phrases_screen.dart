@@ -69,7 +69,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                     child: Text(
                                       value.phraseModel.phrase ?? "",
                                       maxLines: 3,
-                                      textAlign: TextAlign.center,
+                                      textAlign: TextAlign.left,
                                       style:
                                           AppTextStyles.textTheme.headlineLarge,
                                     ),

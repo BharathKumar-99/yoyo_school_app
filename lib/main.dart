@@ -12,7 +12,7 @@ import 'package:rive/rive.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseClientService.instance.init();
   unawaited(RiveFile.initialize());
@@ -23,6 +23,7 @@ void main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
+
   runApp(const MyApp());
 }
 

@@ -47,10 +47,15 @@ class UsefullFunctions {
   }
 
   static Future<String?> convertToWav(String inputPath) async {
-    final outputPath = inputPath.replaceAll('.m4a', '.wav');
-    final command =
-        '-i "$inputPath" -ar 16000 -ac 1 -acodec pcm_s16le "$outputPath"';
-    await FFmpegKit.execute(command);
-    return outputPath;
+    try {
+      final outputPath = inputPath.replaceAll('.m4a', '.wav');
+      final command =
+          '-i "$inputPath" -ar 16000 -ac 1 -acodec pcm_s16le "$outputPath"';
+      await FFmpegKit.execute(command);
+      return outputPath;
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
   }
 }

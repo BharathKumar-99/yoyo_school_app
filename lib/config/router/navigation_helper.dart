@@ -23,6 +23,10 @@ class NavigationHelper {
     ctx!.push(route, extra: extra);
   }
 
+  static void pushReplacement(String route, {Object? extra}) {
+    ctx!.pushReplacement(route, extra: extra);
+  }
+
   static void pop<T extends Object?>([T? result]) {
     if (ctx != null && Navigator.canPop(ctx!)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

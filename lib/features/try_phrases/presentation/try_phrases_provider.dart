@@ -33,6 +33,7 @@ class TryPhrasesProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+    await playAudio();
   }
 
   togglePhrase() {

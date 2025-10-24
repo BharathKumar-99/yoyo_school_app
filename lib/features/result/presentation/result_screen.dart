@@ -318,7 +318,7 @@ class ResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () => context.push(
+                                          onPressed: () => context.pushReplacement(
                                             RouteNames.masterPhrases,
                                             extra: phraseModel,
                                           ),
