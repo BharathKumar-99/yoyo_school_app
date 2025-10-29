@@ -48,7 +48,7 @@ class ResultsRepo {
       RemoteConfig apiCred = await getSuperSpeachCred();
       final wavPath = await UsefullFunctions.convertToWav(audioPath);
       if (wavPath == null || !File(wavPath).existsSync()) {
-        print("WAV file not found or conversion failed: $wavPath");
+        log("WAV file not found or conversion failed: $wavPath");
         return null;
       }
 
@@ -126,7 +126,7 @@ class ResultsRepo {
       final Map<String, dynamic> respJson = jsonDecode(responseString);
       return SpeechEvaluationModel.fromJson(respJson);
     } catch (e, st) {
-      print("callSuperSpeechApi Error: $e\n$st");
+      log("callSuperSpeechApi Error: $e\n$st");
       return null;
     }
   }

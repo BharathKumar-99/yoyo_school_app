@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,7 +56,7 @@ class UsefullFunctions {
       await FFmpegKit.execute(command);
       return outputPath;
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
     return null;
   }

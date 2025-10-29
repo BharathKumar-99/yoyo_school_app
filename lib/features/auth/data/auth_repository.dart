@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 
 import '../../../core/supabase/supabase_client.dart';
 
@@ -28,6 +29,7 @@ class AuthRepository {
       NavigationHelper.push(RouteNames.profile, extra: true);
     } catch (e) {
       log(e.toString());
+      UsefullFunctions.showSnackBar(ctx!, text.otp_expired);
     }
   }
 }

@@ -276,7 +276,11 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () => context.pop(),
+                                          onPressed: () =>
+                                              context.pushReplacement(
+                                                RouteNames.masterPhrases,
+                                                extra: phraseModel,
+                                              ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value
@@ -348,21 +352,22 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () => context.pushReplacement(
-                                            RouteNames.phrasesDetails,
-                                            extra: {
-                                              'language': value.slanguage,
-                                              "className":
-                                                  value
-                                                      .userClases
-                                                      ?.classes
-                                                      ?.className ??
-                                                  "",
-                                              "level": value.levels ?? [],
-                                              'student': value.userClases,
-                                              'next': true,
-                                            },
-                                          ),
+                                          onPressed: () =>
+                                              context.pushReplacement(
+                                                RouteNames.phrasesDetails,
+                                                extra: {
+                                                  'language': value.slanguage,
+                                                  "className":
+                                                      value
+                                                          .userClases
+                                                          ?.classes
+                                                          ?.className ??
+                                                      "",
+                                                  "level": value.levels ?? [],
+                                                  'student': value.userClases,
+                                                  'next': true,
+                                                },
+                                              ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value

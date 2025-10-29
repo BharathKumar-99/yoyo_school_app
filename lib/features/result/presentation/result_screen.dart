@@ -276,7 +276,11 @@ class ResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () => context.pop(),
+                                          onPressed: () =>
+                                              context.pushReplacement(
+                                                RouteNames.tryPhrases,
+                                                extra: phraseModel,
+                                              ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value
@@ -318,10 +322,11 @@ class ResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () => context.pushReplacement(
-                                            RouteNames.masterPhrases,
-                                            extra: phraseModel,
-                                          ),
+                                          onPressed: () =>
+                                              context.pushReplacement(
+                                                RouteNames.masterPhrases,
+                                                extra: phraseModel,
+                                              ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value

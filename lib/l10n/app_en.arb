@@ -16,6 +16,7 @@
     "verify_otp": "Verify OTP",
     "otp_header": "Please enter the 6-digit code sent to",
     "resend_otp": "Resend OTP",
+    "otp_expired": "OTP Expiried or Invalid",
     "save": "Save",
     "level": "Level: ",
     "learned": "Learned",

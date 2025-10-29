@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resend_otp => 'Resend OTP';
 
   @override
+  String get otp_expired => 'OTP Expiried or Invalid';
+
+  @override
   String get save => 'Save';
 
   @override

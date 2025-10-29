@@ -196,6 +196,12 @@ abstract class AppLocalizations {
   /// **'Resend OTP'**
   String get resend_otp;
 
+  /// No description provided for @otp_expired.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP Expiried or Invalid'**
+  String get otp_expired;
+
   /// No description provided for @save.
   ///
   /// In en, this message translates to:
