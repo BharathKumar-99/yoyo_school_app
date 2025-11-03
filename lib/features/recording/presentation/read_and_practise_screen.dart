@@ -48,20 +48,23 @@ class ReadAndPractiseScreen extends StatelessWidget {
                         recorderController: value.recorderController,
                       ),
                     Spacer(),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 80 / 2,
-                      child: IconButton(
-                        onPressed: () => value.toggleRecording(),
-                        icon: Icon(
+                    Listener(
+                      onPointerDown: (_) => value.toggleRecording(),
+                      onPointerUp: (_) => value.toggleRecording(),
+                      onPointerCancel: (_) => value.toggleRecording(),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 40,
+                        child: Icon(
                           value.isRecording
-                              ? Icons.close_rounded
+                              ? Icons.mic
                               : Icons.mic_none_rounded,
                           size: 45,
-                          color: Colors.black,
+                          color: value.isRecording ? Colors.red : Colors.black,
                         ),
                       ),
                     ),
+
                     Spacer(),
                     if (value.isRecording)
                       AudioWaveforms(
