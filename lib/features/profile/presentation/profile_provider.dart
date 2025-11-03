@@ -30,7 +30,8 @@ class ProfileProvider extends ChangeNotifier {
 
   void _subscribeToUserData() {
     isLoading = true;
-    notifyListeners();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
 
     _userSubscription = profileRepository.getUserDataStream().listen(
       (userData) async {
@@ -40,7 +41,6 @@ class ProfileProvider extends ChangeNotifier {
 
         if (isFromOtp) {
           if (user?.lastLogin != null) {
-            NavigationHelper.go(RouteNames.home);
           } else {
             profileRepository.updateLastLogin();
           }
@@ -53,12 +53,12 @@ class ProfileProvider extends ChangeNotifier {
 
         email.text = user?.email ?? "";
         isLoading = false;
-        notifyListeners();
+        WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
       },
       onError: (error) {
         debugPrint('User stream error: $error');
         isLoading = false;
-        notifyListeners();
+        WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
       },
     );
   }

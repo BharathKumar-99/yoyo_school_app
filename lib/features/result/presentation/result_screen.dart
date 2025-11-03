@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:rive/rive.dart' hide LinearGradient;
+import 'package:lottie/lottie.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -76,16 +76,14 @@ class ResultScreen extends StatelessWidget {
                                     alignment: Alignment.topLeft,
                                     child: backBtn(),
                                   ),
-                                  SizedBox(height: 20),
-                                  if (value.score <
-                                      Constants.minimumSubmitScore)
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Card(
+                                  Spacer(),
+
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child:
+                                        (value.score >
+                                            Constants.minimumSubmitScore)
+                                        ? Card(
                                             child: Padding(
                                               padding: EdgeInsets.all(w(0.04)),
                                               child: Column(
@@ -120,21 +118,11 @@ class ResultScreen extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: -h(0.13),
-                                          child: Container(
+                                          )
+                                        : SizedBox(
                                             width: w(0.40),
                                             height: h(0.18),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                  ImageConstants.loginBg,
-                                                ),
-                                              ),
-                                            ),
+
                                             child: Center(
                                               child: Text(
                                                 '${value.score.toString()} %',
@@ -148,9 +136,8 @@ class ResultScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -305,6 +292,7 @@ class ResultScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Spacer(),
+
                                       Text(
                                         text.congratulations,
                                         style: AppTextStyles
@@ -357,8 +345,8 @@ class ResultScreen extends StatelessWidget {
                           SizedBox(
                             height: MediaQuery.sizeOf(context).height / 5,
                             width: double.infinity,
-                            child: RiveAnimation.asset(
-                              'assets/animation/confetti.riv',
+                            child: Lottie.asset(
+                              'assets/animation/success.json',
                               fit: BoxFit.cover,
                             ),
                           ),

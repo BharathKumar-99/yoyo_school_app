@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/data/home_repository.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
+import '../../../config/router/navigation_helper.dart';
 import '../model/level_model.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
@@ -14,8 +17,10 @@ class HomeScreenProvider extends ChangeNotifier {
   int totalPhrases = 0;
   int atemptedPhrases = 0;
   StreamSubscription<Student?>? _studentSubscription;
-
+  ProfileProvider? _profileProvider;
   HomeScreenProvider(this.homeRepository) {
+    _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
+    _profileProvider?.initialize(fromOtp: false);
     init();
   }
 

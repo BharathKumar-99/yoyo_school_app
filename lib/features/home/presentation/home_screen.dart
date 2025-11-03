@@ -147,7 +147,6 @@ class _AnimatedSectionTitle extends StatelessWidget {
   }
 }
 
-/// 🌟 Fade + Slide-in for row of metrics
 class _AnimatedRow extends StatelessWidget {
   final List<Widget> children;
   final int delay;
@@ -158,16 +157,13 @@ class _AnimatedRow extends StatelessWidget {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeOutBack,
-      tween: Tween(begin: 0, end: 1),
+      tween: Tween(begin: 0.2, end: 1),
       builder: (context, value, child) {
-        return Opacity(
-          opacity: value,
-          child: Transform.translate(
-            offset: Offset(0, 30 * (1 - value)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: children,
-            ),
+        return Transform.translate(
+          offset: Offset(0, 30 * (1 - value)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: children,
           ),
         );
       },
@@ -175,7 +171,6 @@ class _AnimatedRow extends StatelessWidget {
   }
 }
 
-/// 🌟 Subtle fade-in + upward slide for each language card
 class _AnimatedCard extends StatelessWidget {
   final Widget child;
   final int delay;

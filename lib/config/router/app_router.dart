@@ -20,7 +20,7 @@ class AppRoutes {
 
   static final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: RouteNames.profile,
+    initialLocation: RouteNames.home,
     initialExtra: true,
     debugLogDiagnostics: false,
 
