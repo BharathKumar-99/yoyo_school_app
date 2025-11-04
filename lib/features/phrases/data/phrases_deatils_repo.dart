@@ -28,7 +28,7 @@ class PhrasesDeatilsRepo {
         .eq('user_id', uid)
         .eq('language_id', lid ?? 0)
         .maybeSingle();
-    return response?['max_streak'];
+    return response?['max_streak'] ?? 0;
   }
 
   Future<void> insertStreak(String uid, int? lid) async {
