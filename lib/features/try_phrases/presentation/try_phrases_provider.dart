@@ -14,12 +14,13 @@ class TryPhrasesProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   bool showPhrase = true;
   Language? language;
+  int? streak;
   final TryPhrasesRepo _repo = TryPhrasesRepo();
   final AudioPlayer audioManager = AudioPlayer();
   late UserResult? result;
   bool isLoading = true;
 
-  TryPhrasesProvider(this.phraseModel) {
+  TryPhrasesProvider(this.phraseModel, this.streak) {
     initAudio();
   }
 
@@ -71,7 +72,10 @@ class TryPhrasesProvider extends ChangeNotifier {
     elevation: 1,
     context: context,
     backgroundColor: Colors.transparent,
-    builder: (_) =>
-        ReadAndPractiseScreen(model: phraseModel, launguage: language!),
+    builder: (_) => ReadAndPractiseScreen(
+      model: phraseModel,
+      launguage: language!,
+      streak: streak,
+    ),
   );
 }

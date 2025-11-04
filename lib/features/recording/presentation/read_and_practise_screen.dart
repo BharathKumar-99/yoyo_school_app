@@ -9,16 +9,18 @@ import 'package:yoyo_school_app/features/recording/presentation/recorder_provide
 class ReadAndPractiseScreen extends StatelessWidget {
   final PhraseModel model;
   final Language launguage;
+  final int? streak;
   const ReadAndPractiseScreen({
     super.key,
     required this.model,
     required this.launguage,
+    this.streak,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecordingProvider>(
-      create: (context) => RecordingProvider(model, launguage),
+      create: (context) => RecordingProvider(model, launguage, streak),
       child: Consumer<RecordingProvider>(
         builder: (context, value, wid) {
           return Container(
@@ -84,9 +86,11 @@ class ReadAndPractiseScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  (value.isRecording) ? text.recording : text.readAndpractise,
+                  (value.isRecording) ? text.recording : text.learnIt,
                   style: TextStyle(color: Colors.white),
                 ),
+                SizedBox(height: 5),
+                Text(text.holdAndRecord, style: TextStyle(color: Colors.white)),
                 SizedBox(height: 5),
                 if (value.isRecording)
                   Text(

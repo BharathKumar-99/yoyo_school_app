@@ -22,6 +22,7 @@ class PhrasesDetails extends StatelessWidget {
   final String className;
   final List<Level> levels;
   final bool? next;
+  final int? streak;
 
   const PhrasesDetails({
     super.key,
@@ -30,12 +31,13 @@ class PhrasesDetails extends StatelessWidget {
     required this.levels,
     this.student,
     this.next,
+    this.streak,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PhrasesViewModel>(
-      create: (_) => PhrasesViewModel(language, student, next ?? false),
+      create: (_) => PhrasesViewModel(language, student, next ?? false, streak),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return DefaultTabController(
@@ -227,6 +229,60 @@ class PhrasesDetails extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            if ((provider.streakNumber ?? 0) > 0)
+                              Positioned(
+                                bottom: 0,
+                                right: MediaQuery.sizeOf(context).width / 3.5,
+                                left: MediaQuery.sizeOf(context).width / 3.1,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      text.streak,
+                                      style: AppTextStyles.textTheme.bodyLarge
+                                          ?.copyWith(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.deepPurple,
+                                            fontFamily: 'Sansita',
+                                          ),
+                                    ),
+                                    Container(
+                                      height: 100,
+                                      width: 130,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            ImageConstants.star,
+                                          ),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 16.0,
+                                            ),
+                                            child: Text(
+                                              provider.streakNumber.toString(),
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.copyWith(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Sansita',
+                                                    color: Colors.deepPurple,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                           ],
                         ),
                       ),
@@ -334,7 +390,10 @@ class PhrasesDetails extends StatelessWidget {
         return Column(
           children: [
             GestureDetector(
-              onTap: () => context.push(routeName, extra: model),
+              onTap: () => context.push(
+                routeName,
+                extra: {"phrase": model, "streak": streak},
+              ),
               child: PhrasesWidget(
                 title: model.phrase ?? "",
                 subTitle: model.translation ?? "",

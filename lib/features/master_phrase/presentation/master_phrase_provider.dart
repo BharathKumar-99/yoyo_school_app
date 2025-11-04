@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
@@ -12,6 +13,7 @@ class MasterPhraseProvider extends ChangeNotifier {
   final MasterPhraseRepo _repo = MasterPhraseRepo();
   Language? language;
   late UserResult? result;
+  final AudioPlayer audioManager = AudioPlayer();
   bool isLoading = true;
   MasterPhraseProvider(this.phraseModel) {
     init();
@@ -25,6 +27,8 @@ class MasterPhraseProvider extends ChangeNotifier {
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     await upsertResult(listen: false);
     isLoading = false;
+    await audioManager.setUrl(phraseModel.recording ?? "");
+    await audioManager.setVolume(1);
     notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
@@ -38,5 +42,18 @@ class MasterPhraseProvider extends ChangeNotifier {
     );
 
     result = await _repo.upsertResult(result!);
+  }
+
+  playAudio() async {
+    try {
+      final player = audioManager;
+      if (player.playerState.processingState == ProcessingState.completed) {
+        await player.seek(Duration.zero);
+      }
+      await player.play();
+      await upsertResult();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

@@ -82,6 +82,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get empty_list => 'Nothing to show';
 
   @override
+  String get holdAndRecord => 'Hold & Speak';
+
+  @override
+  String get learnIt => 'Learn It';
+
+  @override
+  String get masterIt => 'Master It';
+
+  @override
+  String get goOnAStreak => 'Go on a Streak';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get youareJust => 'You were just';
+
+  @override
+  String get off => 'off';
+
+  @override
+  String get canYouMasterIT => 'Can you Master it?';
+
+  @override
+  String get streak => 'Streak';
+
+  @override
   String get you => 'You:';
 
   @override
@@ -296,6 +323,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get learnedPhrase =>
       'you have learned this phrase, now can you master it ?';
+
+  @override
+  String get withAScoreOf => 'With a score of';
+
+  @override
+  String get youRocked => 'you really rocked this one!';
 
   @override
   String get wow => 'Wow!';

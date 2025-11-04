@@ -8,6 +8,9 @@ import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
 import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
+import '../../home/model/level_model.dart';
+import '../../home/model/school_launguage.dart';
+import '../../home/model/student_model.dart';
 import '../model/speech_evaluation_model.dart';
 
 class ResultProvider extends ChangeNotifier {
@@ -15,14 +18,18 @@ class ResultProvider extends ChangeNotifier {
   Language language;
   late UserResult? result;
   late RemoteConfig apiCred;
+  SchoolLanguage? slanguage;
   SpeechEvaluationModel? speechEvaluationModel;
   FeedbackResult? resultText;
   String audioPath;
   int score = 0;
+  Student? userClases;
+  List<Level>? levels = [];
+  int? streak;
   final ResultsRepo _repo = ResultsRepo();
   bool showRivePopup = false;
 
-  ResultProvider(this.phraseModel, this.audioPath, this.language) {
+  ResultProvider(this.phraseModel, this.audioPath, this.language, this.streak) {
     init();
   }
 
@@ -30,12 +37,17 @@ class ResultProvider extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
+    userClases = await _repo.getClasses();
     speechEvaluationModel = await _repo.callSuperSpeechApi(
       audioPath: audioPath,
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = speechEvaluationModel?.result?.overall ?? 0;
+    score = 85;
+    slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
+      (val) => val.language?.id == language.id,
+    );
+    levels = await _repo.getLevel();
 
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
     if ((result?.attempt ?? 0) >= 0) {
@@ -67,7 +79,7 @@ class ResultProvider extends ChangeNotifier {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     List<String> goodWords = result?.goodWords ?? [];
     List<String> badWords = result?.badWords ?? [];
-
+    await _repo.updateStreak(phraseModel.language, userId, streak ?? 0);
     if (speechEvaluationModel?.result?.words?.isNotEmpty ?? false) {
       goodWords.clear();
       badWords.clear();

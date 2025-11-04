@@ -12,6 +12,8 @@ class ImageConstants {
   static const String spanish = "${assetsLoc}spanish.png";
   static const String german = "${assetsLoc}german.png";
   static const String buddha = "${assetsLoc}buddha.png";
+  static const String star = "${assetsLoc}star.png";
+  static const String streak = "${assetsLoc}streak.png";
 }
 
 class IconConstants {
@@ -35,6 +37,7 @@ class DbTable {
   static const String attemptedPhrases = 'attempted_phrases';
   static const String remoteConfig = 'remote_config';
   static const String userResult = 'user_results';
+  static const String streakTable = 'streak_table';
 }
 
 class Stroage {

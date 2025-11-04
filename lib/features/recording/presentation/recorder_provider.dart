@@ -14,12 +14,13 @@ class RecordingProvider extends ChangeNotifier {
   late final RecorderController recorderController;
   PhraseModel phraseModel;
   Language launguage;
+  int? streak;
   final player = AudioPlayer();
   bool isRecording = false;
   String? recordingPath;
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
-  RecordingProvider(this.phraseModel, this.launguage) {
+  RecordingProvider(this.phraseModel, this.launguage, this.streak) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
       ..androidOutputFormat = AndroidOutputFormat.mpeg4
@@ -64,6 +65,7 @@ class RecordingProvider extends ChangeNotifier {
               'path': recordingPath,
               'language': launguage,
               'from': 'read',
+              "streak": streak,
             },
           );
         }

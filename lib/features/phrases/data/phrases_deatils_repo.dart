@@ -21,6 +21,24 @@ class PhrasesDeatilsRepo {
     return results;
   }
 
+  Future<int>? getStreakValue(String uid, int? lid) async {
+    final response = await _client
+        .from(DbTable.streakTable)
+        .select('max_streak')
+        .eq('user_id', uid)
+        .eq('language_id', lid ?? 0)
+        .maybeSingle();
+    return response?['max_streak'];
+  }
+
+  Future<void> insertStreak(String uid, int? lid) async {
+    await _client.from(DbTable.streakTable).insert({
+      'user_id': uid,
+      'language_id': lid,
+      'max_streak': 0,
+    });
+  }
+
   Future<void> resetPhrase(int id, int studenId) async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     await _client

@@ -15,6 +15,7 @@ import 'package:yoyo_school_app/features/result/presentation/result_provider.dar
 class ResultScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final Language language;
+  final int? streak;
 
   final String audioPath;
   const ResultScreen({
@@ -22,6 +23,7 @@ class ResultScreen extends StatelessWidget {
     required this.phraseModel,
     required this.audioPath,
     required this.language,
+    this.streak,
   });
 
   @override
@@ -33,7 +35,7 @@ class ResultScreen extends StatelessWidget {
     double w(double factor) => width * factor;
 
     return ChangeNotifierProvider<ResultProvider>(
-      create: (_) => ResultProvider(phraseModel, audioPath, language),
+      create: (_) => ResultProvider(phraseModel, audioPath, language, streak),
       child: Consumer<ResultProvider>(
         builder: (context, value, child) => Scaffold(
           body: value.speechEvaluationModel == null
@@ -81,43 +83,76 @@ class ResultScreen extends StatelessWidget {
                                   SizedBox(
                                     width: double.infinity,
                                     child:
-                                        (value.score >
+                                        (value.score <
                                             Constants.minimumSubmitScore)
-                                        ? Card(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(w(0.04)),
-                                              child: Column(
-                                                children: [
-                                                  Wrap(
-                                                    spacing: w(0.013),
-                                                    children: value
-                                                        .speechEvaluationModel!
-                                                        .result!
-                                                        .words!
-                                                        .map(
-                                                          (word) => Text(
-                                                            word.word ?? "",
-                                                            style: AppTextStyles
-                                                                .textTheme
-                                                                .titleLarge!
-                                                                .copyWith(
-                                                                  fontSize: w(
-                                                                    0.06,
-                                                                  ),
-                                                                  color: value
-                                                                      .getWordColor(
-                                                                        word.scores?.overall ??
-                                                                            0,
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Card(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(
+                                                    w(0.04),
+                                                  ),
+                                                  child: SizedBox(
+                                                    width: double.infinity,
+                                                    child: Column(
+                                                      children: [
+                                                        Wrap(
+                                                          spacing: w(0.013),
+                                                          children: value
+                                                              .speechEvaluationModel!
+                                                              .result!
+                                                              .words!
+                                                              .map(
+                                                                (word) => Text(
+                                                                  word.word ??
+                                                                      "",
+                                                                  style: AppTextStyles
+                                                                      .textTheme
+                                                                      .titleLarge!
+                                                                      .copyWith(
+                                                                        fontSize: w(
+                                                                          0.06,
+                                                                        ),
+                                                                        color: value.getWordColor(
+                                                                          word.scores?.overall ??
+                                                                              0,
+                                                                        ),
                                                                       ),
                                                                 ),
-                                                          ),
-                                                        )
-                                                        .toList(),
+                                                              )
+                                                              .toList(),
+                                                        ),
+                                                        SizedBox(
+                                                          height: h(0.04),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  SizedBox(height: h(0.04)),
-                                                ],
+                                                ),
                                               ),
-                                            ),
+                                              if ((Constants.minimumSubmitScore -
+                                                          value.score <
+                                                      10) &&
+                                                  Constants.minimumSubmitScore -
+                                                          value.score >
+                                                      0)
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    12.0,
+                                                  ),
+                                                  child: Text(
+                                                    "${text.youareJust} ${Constants.minimumSubmitScore - value.score}% ${text.off}",
+                                                    style: AppTextStyles
+                                                        .textTheme
+                                                        .headlineMedium!
+                                                        .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                  ),
+                                                ),
+                                            ],
                                           )
                                         : SizedBox(
                                             width: w(0.40),
@@ -266,7 +301,10 @@ class ResultScreen extends StatelessWidget {
                                           onPressed: () =>
                                               context.pushReplacement(
                                                 RouteNames.tryPhrases,
-                                                extra: phraseModel,
+                                                extra: {
+                                                  "streak": streak,
+                                                  "phrase": phraseModel,
+                                                },
                                               ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
@@ -277,7 +315,7 @@ class ResultScreen extends StatelessWidget {
                                                 Colors.blue,
                                           ),
                                           child: Text(
-                                            text.retry,
+                                            text.tryAgain,
                                             style: AppTextStyles
                                                 .textTheme
                                                 .titleMedium,
@@ -291,29 +329,44 @@ class ResultScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Spacer(),
-
+                                      Spacer(flex: 2),
                                       Text(
                                         text.congratulations,
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
                                       ),
+
                                       Text(
                                         text.you_did_it,
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineMedium,
                                       ),
-                                      Text(text.learnedPhrase),
+                                      Spacer(),
+                                      Text(
+                                        "${text.withAScoreOf} ${value.score.toString()}% ${text.youRocked}",
+                                      ),
                                       Spacer(),
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
                                           onPressed: () =>
                                               context.pushReplacement(
-                                                RouteNames.masterPhrases,
-                                                extra: phraseModel,
+                                                RouteNames.phrasesDetails,
+                                                extra: {
+                                                  'language': value.slanguage,
+                                                  "className":
+                                                      value
+                                                          .userClases
+                                                          ?.classes
+                                                          ?.className ??
+                                                      "",
+                                                  "level": value.levels ?? [],
+                                                  'student': value.userClases,
+                                                  'next': true,
+                                                  "streak": (streak ?? 0) + 1,
+                                                },
                                               ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
@@ -324,7 +377,7 @@ class ResultScreen extends StatelessWidget {
                                                 Colors.blue,
                                           ),
                                           child: Text(
-                                            text.tryToMaster,
+                                            text.goOnAStreak,
                                             style: AppTextStyles
                                                 .textTheme
                                                 .titleMedium,

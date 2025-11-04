@@ -25,12 +25,14 @@ class PhrasesViewModel extends ChangeNotifier {
   bool isGoToNextPhrase = false;
   final Student? student;
   int classPercentage = 0;
+  int? streak;
+  int? streakNumber;
   int userPercentage = 0;
   List<int> classesScore = [];
   List<int> userScore = [];
   final AudioManager audioManager = AudioManager();
 
-  PhrasesViewModel(this.classes, this.student, this.isGoToNextPhrase) {
+  PhrasesViewModel(this.classes, this.student, this.isGoToNextPhrase,this.streak) {
     init();
   }
 
@@ -40,6 +42,10 @@ class PhrasesViewModel extends ChangeNotifier {
     List<int> ids = [];
     classes.language?.phrase?.forEach((val) => ids.add(val.id ?? 0));
     schoolResult = await _repo.getAllUserResults(ids);
+    streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
+    if ((streakNumber ?? 0) > 0) {
+      await _repo.insertStreak(userId, classes.language?.id);
+    }
     learned = [];
     mastered = [];
     newPhrases = [];
@@ -102,7 +108,10 @@ class PhrasesViewModel extends ChangeNotifier {
     notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
     if (isGoToNextPhrase && newPhrases.isNotEmpty) {
-      ctx!.pushReplacement(RouteNames.tryPhrases, extra: newPhrases.first);
+      ctx!.pushReplacement(
+        RouteNames.tryPhrases,
+        extra: {"phrase": newPhrases.first, "streak": streak},
+      );
     }
   }
 

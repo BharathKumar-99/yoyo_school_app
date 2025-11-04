@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 
+import '../../../config/router/navigation_helper.dart';
+
 class TryPhrasesScreen extends StatelessWidget {
   final PhraseModel phraseModel;
-  const TryPhrasesScreen({super.key, required this.phraseModel});
+  final int? streak;
+  const TryPhrasesScreen({super.key, required this.phraseModel, this.streak});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TryPhrasesProvider>(
-      create: (_) => TryPhrasesProvider(phraseModel),
+      create: (_) => TryPhrasesProvider(phraseModel, streak),
       child: Consumer<TryPhrasesProvider>(
         builder: (context, value, child) => Scaffold(
           appBar: AppBar(leadingWidth: 80, leading: backBtn()),
@@ -142,6 +146,41 @@ class TryPhrasesScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        if (streak != null)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                text.streak,
+                                style: AppTextStyles.textTheme.bodyLarge
+                                    ?.copyWith(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.deepPurple,
+                                      fontFamily: 'Sansita',
+                                    ),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "X$streak ",
+                                    style: AppTextStyles.textTheme.bodyLarge
+                                        ?.copyWith(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.deepPurple,
+                                          fontFamily: 'Sansita',
+                                        ),
+                                  ),
+                                  Image.asset(
+                                    ImageConstants.streak,
+                                    height: 80,
+                                    width: 80,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -166,7 +205,7 @@ class TryPhrasesScreen extends StatelessWidget {
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   child: Text(
-                    "Try this phrase",
+                    text.tryThisPhrase,
                     key: ValueKey(value.showPhrase),
                     style: AppTextStyles.textTheme.titleMedium?.copyWith(
                       color: Colors.white,

@@ -1,7 +1,7 @@
 name: yoyo_school_app
 description: "A new Flutter project."
 publish_to: "none"
-version: 0.1.22
+version: 0.1.23
 
 environment:
   sdk: ^3.8.1
@@ -54,4 +54,7 @@ flutter:
           weight: 600
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
+    - family: Sansita
+      fonts:
+        - asset: assets/fonts/SansitaOne.ttf
   generate: true

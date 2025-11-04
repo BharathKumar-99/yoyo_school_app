@@ -238,6 +238,60 @@ abstract class AppLocalizations {
   /// **'Nothing to show'**
   String get empty_list;
 
+  /// No description provided for @holdAndRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold & Speak'**
+  String get holdAndRecord;
+
+  /// No description provided for @learnIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn It'**
+  String get learnIt;
+
+  /// No description provided for @masterIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Master It'**
+  String get masterIt;
+
+  /// No description provided for @goOnAStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Go on a Streak'**
+  String get goOnAStreak;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @youareJust.
+  ///
+  /// In en, this message translates to:
+  /// **'You were just'**
+  String get youareJust;
+
+  /// No description provided for @off.
+  ///
+  /// In en, this message translates to:
+  /// **'off'**
+  String get off;
+
+  /// No description provided for @canYouMasterIT.
+  ///
+  /// In en, this message translates to:
+  /// **'Can you Master it?'**
+  String get canYouMasterIT;
+
+  /// No description provided for @streak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get streak;
+
   /// No description provided for @you.
   ///
   /// In en, this message translates to:
@@ -627,6 +681,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'you have learned this phrase, now can you master it ?'**
   String get learnedPhrase;
+
+  /// No description provided for @withAScoreOf.
+  ///
+  /// In en, this message translates to:
+  /// **'With a score of'**
+  String get withAScoreOf;
+
+  /// No description provided for @youRocked.
+  ///
+  /// In en, this message translates to:
+  /// **'you really rocked this one!'**
+  String get youRocked;
 
   /// No description provided for @wow.
   ///

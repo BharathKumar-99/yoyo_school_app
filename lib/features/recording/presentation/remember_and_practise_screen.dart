@@ -13,6 +13,7 @@ class RememberAndPractiseScreen extends StatelessWidget {
   const RememberAndPractiseScreen({
     super.key,
     required this.model,
+
     required this.launguage,
   });
 
@@ -86,9 +87,11 @@ class RememberAndPractiseScreen extends StatelessWidget {
 
                 SizedBox(height: 20),
                 Text(
-                  (value.isRecording) ? text.recording : text.tryToMaster,
+                  (value.isRecording) ? text.recording : text.masterIt,
                   style: TextStyle(color: Colors.white),
                 ),
+                SizedBox(height: 5),
+                Text(text.holdAndRecord, style: TextStyle(color: Colors.white)),
                 SizedBox(height: 5),
                 if (value.isRecording)
                   Text(

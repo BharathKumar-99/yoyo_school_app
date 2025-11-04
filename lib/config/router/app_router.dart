@@ -47,6 +47,7 @@ class AppRoutes {
             levels: data['level'],
             student: data['student'],
             next: data['next'],
+            streak: data['streak'],
           );
         },
       ),
@@ -58,6 +59,7 @@ class AppRoutes {
             phraseModel: data['phraseModel'],
             language: data['language'],
             audioPath: data['path'],
+            streak: data['streak'],
           );
         },
       ),
@@ -69,19 +71,30 @@ class AppRoutes {
             phraseModel: data['phraseModel'],
             language: data['language'],
             audioPath: data['path'],
+            streak: data['streak'],
           );
         },
       ),
 
       GoRoute(
         path: RouteNames.tryPhrases,
-        builder: (context, state) =>
-            TryPhrasesScreen(phraseModel: state.extra as PhraseModel),
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return TryPhrasesScreen(
+            phraseModel: data['phrase'] as PhraseModel,
+            streak: data['streak'],
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.masterPhrases,
-        builder: (context, state) =>
-            MasterPhraseSreen(model: state.extra as PhraseModel),
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return MasterPhraseSreen(
+            model: data['phrase'] as PhraseModel,
+            streak: data['streak'],
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.profile,
