@@ -376,6 +376,30 @@ abstract class AppLocalizations {
   /// **'Try this Phrase'**
   String get tryThisPhrase;
 
+  /// No description provided for @checking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking'**
+  String get checking;
+
+  /// No description provided for @niceWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice work!'**
+  String get niceWork;
+
+  /// No description provided for @ohNoNotThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh no, not this time..'**
+  String get ohNoNotThis;
+
+  /// No description provided for @yourStreakWas.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streak was'**
+  String get yourStreakWas;
+
   /// No description provided for @tryToMaster.
   ///
   /// In en, this message translates to:

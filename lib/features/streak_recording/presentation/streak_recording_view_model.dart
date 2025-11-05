@@ -1,41 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
-import 'package:yoyo_school_app/config/constants/feedback_constants.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
-import 'package:yoyo_school_app/config/utils/global_loader.dart';
-import 'package:yoyo_school_app/features/home/model/language_model.dart';
-import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+import 'package:yoyo_school_app/features/home/model/level_model.dart';
+import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
-import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
-import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
-import '../../home/model/level_model.dart';
-import '../../home/model/school_launguage.dart';
-import '../../home/model/student_model.dart';
-import '../model/speech_evaluation_model.dart';
 
-class ResultProvider extends ChangeNotifier {
-  PhraseModel phraseModel;
-  Language language;
+import '../../home/model/language_model.dart';
+import '../../home/model/phrases_model.dart';
+import '../../home/model/student_model.dart';
+import '../../result/model/speech_evaluation_model.dart';
+import '../../result/model/user_result_model.dart';
+
+class StreakRecordingViewModel extends ChangeNotifier {
+  final PhraseModel phraseModel;
+  final Language language;
+  final String audioPath;
   late UserResult? result;
-  late RemoteConfig apiCred;
-  SchoolLanguage? slanguage;
-  SpeechEvaluationModel? speechEvaluationModel;
-  FeedbackResult? resultText;
-  String audioPath;
-  int score = 0;
   Student? userClases;
   List<Level>? levels = [];
-
+  int streak;
+  String form;
+  SchoolLanguage? slanguage;
+  bool loading = true;
+  int score = 0;
+  SpeechEvaluationModel? speechEvaluationModel;
   final ResultsRepo _repo = ResultsRepo();
-  bool showRivePopup = false;
-
-  ResultProvider(this.phraseModel, this.audioPath, this.language) {
+  StreakRecordingViewModel(
+    this.phraseModel,
+    this.audioPath,
+    this.language,
+    this.streak,
+    this.form,
+  ) {
     init();
   }
 
   init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-
+    loading = true;
+    notifyListeners();
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     userClases = await _repo.getClasses();
     speechEvaluationModel = await _repo.callSuperSpeechApi(
@@ -50,29 +54,35 @@ class ResultProvider extends ChangeNotifier {
     levels = await _repo.getLevel();
 
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
-    if ((result?.attempt ?? 0) >= 0) {
-      resultText = ScoreFeedback.getFeedback(
-        mode: ModeType.friendly,
-        score: score,
-      );
-    }
-    notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-  }
 
-  void showAnimationPopup() {
-    showRivePopup = true;
+    loading = false;
     notifyListeners();
-  }
 
-  void hideAnimationPopup() {
-    showRivePopup = false;
-    notifyListeners();
-  }
-
-  void onEvaluationComplete() {
-    showAnimationPopup();
-    Future.delayed(const Duration(seconds: 3), hideAnimationPopup);
+    Future.delayed(Duration(seconds: 3), () {
+      if (score > Constants.minimumSubmitScore) {
+        NavigationHelper.pushReplacement(
+          RouteNames.phrasesDetails,
+          extra: {
+            'language': slanguage,
+            "className": userClases?.classes?.className ?? "",
+            "level": levels ?? [],
+            'student': userClases,
+            'next': true,
+            'from': form,
+            "streak": streak + 1,
+          },
+        );
+      } else {
+        NavigationHelper.pushReplacement(
+          form == 'new' ? RouteNames.result : RouteNames.masterResult,
+          extra: {
+            'phraseModel': phraseModel,
+            'path': audioPath,
+            'language': language,
+          },
+        );
+      }
+    });
   }
 
   Future<void> upsertResult(int score, {bool submit = false}) async {

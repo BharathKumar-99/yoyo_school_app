@@ -1,116 +1,167 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:yoyo_school_app/config/constants/constants.dart';
-import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
-import 'package:yoyo_school_app/features/home/model/student_model.dart';
-import 'package:yoyo_school_app/features/phrases/data/phrases_deatils_repo.dart';
-import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
-
-import '../../../config/utils/audio_manager_singleton.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
+import '../../common/presentation/global_provider.dart';
 import '../../home/model/phrases_model.dart';
 import '../../home/model/school_launguage.dart';
+import '../../home/model/student_model.dart';
+import '../../../config/utils/audio_manager_singleton.dart';
+import '../../phrases/data/phrases_deatils_repo.dart';
 
 class PhrasesViewModel extends ChangeNotifier {
   final SchoolLanguage classes;
+  final Student? student;
+  final bool isGoToNextPhrase;
+  final int? streak;
+  final String? from;
+  final AudioManager audioManager = AudioManager();
+  List<UserResult> schoolResult = [];
+  List<UserResult> userResult = [];
   final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
-  List<UserResult>? schoolResult = [];
-  List<UserResult>? userResult = [];
+  List<int> classesScore = [];
+  List<int> userScore = [];
   List<PhraseModel> newPhrases = [];
   List<PhraseModel> learned = [];
   List<PhraseModel> mastered = [];
-  bool isGoToNextPhrase = false;
-  final Student? student;
+  bool _isDisposed = false;
   int classPercentage = 0;
-  int? streak;
-  int? streakNumber;
   int userPercentage = 0;
-  List<int> classesScore = [];
-  List<int> userScore = [];
-  final AudioManager audioManager = AudioManager();
+  int? streakNumber;
+  late VoidCallback _userResultListener;
+  BuildContext? ctx;
 
-  PhrasesViewModel(this.classes, this.student, this.isGoToNextPhrase,this.streak) {
+  PhrasesViewModel(
+    this.classes,
+    this.student,
+    this.isGoToNextPhrase,
+    this.streak,
+    this.from,
+    this.ctx,
+  ) {
     init();
   }
+  @override
+  void dispose() {
+    _isDisposed = true;
+    try {
+      final userResultProvider = Provider.of<GlobalProvider>(
+        ctx!,
+        listen: false,
+      );
+      userResultProvider.removeListener(_userResultListener);
+    } catch (_) {}
+    super.dispose();
+  }
 
-  init() async {
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) super.notifyListeners();
+  }
+
+  Future<void> init() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+
     final userId = GetUserDetails.getCurrentUserId() ?? "";
-    List<int> ids = [];
-    classes.language?.phrase?.forEach((val) => ids.add(val.id ?? 0));
-    schoolResult = await _repo.getAllUserResults(ids);
+    final ids = classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
+
+    // Initialize streak only once
     streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
     if ((streakNumber ?? 0) <= 0) {
       await _repo.insertStreak(userId, classes.language?.id);
     }
+    final userResultProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
+
+    await userResultProvider.initRealtimeResults(ids);
+
+    // remove old listener if exists
+    try {
+      userResultProvider.removeListener(_userResultListener);
+    } catch (_) {}
+
+    _userResultListener = () {
+      if (_isDisposed) return;
+      schoolResult = userResultProvider.results;
+      _processResults(userId, ids);
+    };
+    userResultProvider.addListener(_userResultListener);
+  }
+
+  void _processResults(String userId, List<int> ids) {
+    if (_isDisposed || ctx == null || !ctx!.mounted) return;
+
     learned = [];
     mastered = [];
     newPhrases = [];
-    schoolResult?.forEach((val) {
+
+    for (final val in schoolResult) {
       if (ids.contains(val.phrasesId)) {
         classesScore.add(val.score ?? 0);
         if (val.userId == userId) {
           userScore.add(val.score ?? 0);
-          userResult?.add(val);
+          userResult.add(val);
         }
       }
-    });
+    }
 
-    userResult?.forEach((val) {
-      classes.language?.phrase?.forEach((phrases) {
-        if (val.phrasesId == phrases.id) {
+    for (final val in userResult) {
+      for (final phrase in classes.language?.phrase ?? []) {
+        if (val.phrasesId == phrase.id) {
           if (val.type == Constants.learned) {
-            learned.add(phrases);
+            learned.add(phrase);
           } else if (val.type == Constants.mastered) {
-            mastered.add(phrases);
+            mastered.add(phrase);
           }
         }
-      });
-    });
+      }
+    }
+
     learned = learned.toSet().toList();
     mastered = mastered.toSet().toList();
-
     learned.removeWhere((item) => mastered.contains(item));
 
-    classes.language?.phrase?.forEach((val) {
+    for (final val in classes.language?.phrase ?? []) {
       if (!learned.contains(val) && !mastered.contains(val)) {
         newPhrases.add(val);
       }
-    });
-
-    int classStrength = student?.classes?.noOfStudents ?? 0;
-
-    final classScores = classesScore;
-    final userScores = userScore;
-
-    final totalClassScore = classScores.isNotEmpty
-        ? classScores.reduce((a, b) => a + b)
-        : 0;
-
-    final totalUserScore = userScores.isNotEmpty
-        ? userScores.reduce((a, b) => a + b)
-        : 0;
-
-    final totalClassStrength = classStrength;
-    final phraseLength = classes.language?.phrase?.length ?? 0;
-
-    if (totalClassStrength > 0) {
-      classPercentage = (totalClassScore / totalClassStrength).round();
     }
 
+    final classStrength = student?.classes?.noOfStudents ?? 0;
+    final totalClassScore = classesScore.isNotEmpty
+        ? classesScore.reduce((a, b) => a + b)
+        : 0;
+    final totalUserScore = userScore.isNotEmpty
+        ? userScore.reduce((a, b) => a + b)
+        : 0;
+    final phraseLength = classes.language?.phrase?.length ?? 0;
+
+    if (classStrength > 0) {
+      classPercentage = (totalClassScore / classStrength).round();
+    }
     if (phraseLength > 0) {
       userPercentage = (totalUserScore / phraseLength).round();
     }
 
     notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-    if (isGoToNextPhrase && newPhrases.isNotEmpty) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_isDisposed) GlobalLoader.hide();
+    });
+
+    if (isGoToNextPhrase &&
+        ((from == 'new' && newPhrases.isNotEmpty) ||
+            (from == 'learned' && learned.isNotEmpty))) {
       ctx!.pushReplacement(
-        RouteNames.tryPhrases,
-        extra: {"phrase": newPhrases.first, "streak": streak},
+        from == 'new' ? RouteNames.tryPhrases : RouteNames.masterPhrases,
+        extra: {
+          "phrase": from == 'new' ? newPhrases.first : learned.first,
+          "streak": streak,
+        },
       );
     }
   }

@@ -3,12 +3,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 
 import '../../home/model/phrases_model.dart';
+import '../../streak_recording/presentation/streak_recording_popup.dart';
 
 class RecordingProvider extends ChangeNotifier {
   late final RecorderController recorderController;
@@ -50,7 +52,7 @@ class RecordingProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> toggleRecording() async {
+  Future<void> toggleRecording(BuildContext ct) async {
     try {
       if (isRecording) {
         recordingPath = await recorderController.stop();
@@ -58,16 +60,34 @@ class RecordingProvider extends ChangeNotifier {
         if (recordingPath != null) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
-          NavigationHelper.pushReplacement(
-            RouteNames.result,
-            extra: {
-              'phraseModel': phraseModel,
-              'path': recordingPath,
-              'language': launguage,
-              'from': 'read',
-              "streak": streak,
-            },
-          );
+          if (streak != null) {
+            ctx!.pop();
+
+            showModalBottomSheet(
+              elevation: 1,
+              context: ct,
+              isDismissible: false,
+              backgroundColor: Colors.transparent,
+              builder: (_) => StreakRecordingPopup(
+                phraseModel: phraseModel,
+                launguage: launguage,
+                streak: streak!,
+                audioPath: recordingPath!,
+                form: "new",
+              ),
+            );
+          } else {
+            NavigationHelper.pushReplacement(
+              RouteNames.result,
+              extra: {
+                'phraseModel': phraseModel,
+                'path': recordingPath,
+                'language': launguage,
+                'from': 'new',
+                "streak": streak,
+              },
+            );
+          }
         }
         notifyListeners();
       } else {

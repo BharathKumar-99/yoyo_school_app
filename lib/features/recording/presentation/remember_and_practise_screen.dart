@@ -10,17 +10,18 @@ import 'remember_recorder_provider.dart';
 class RememberAndPractiseScreen extends StatelessWidget {
   final PhraseModel model;
   final Language launguage;
+  final int? streak;
   const RememberAndPractiseScreen({
     super.key,
     required this.model,
-
     required this.launguage,
+    required this.streak,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RememberRecorderProvider>(
-      create: (context) => RememberRecorderProvider(model, launguage),
+      create: (context) => RememberRecorderProvider(model, launguage, streak),
       child: Consumer<RememberRecorderProvider>(
         builder: (context, value, wid) {
           return Container(
@@ -51,9 +52,9 @@ class RememberAndPractiseScreen extends StatelessWidget {
                       ),
                     Spacer(),
                     Listener(
-                      onPointerDown: (_) => value.toggleRecording(),
-                      onPointerUp: (_) => value.toggleRecording(),
-                      onPointerCancel: (_) => value.toggleRecording(),
+                      onPointerDown: (_) => value.toggleRecording(context),
+                      onPointerUp: (_) => value.toggleRecording(context),
+                      onPointerCancel: (_) => value.toggleRecording(context),
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 40,

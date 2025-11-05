@@ -3,22 +3,25 @@ import 'dart:developer';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+import 'package:yoyo_school_app/features/streak_recording/presentation/streak_recording_popup.dart';
 
 class RememberRecorderProvider extends ChangeNotifier {
   late final RecorderController recorderController;
   PhraseModel phraseModel;
   final player = AudioPlayer();
   Language language;
+  int? streak;
   bool isRecording = false;
   String? recordingPath;
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
-  RememberRecorderProvider(this.phraseModel, this.language) {
+  RememberRecorderProvider(this.phraseModel, this.language, this.streak) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
       ..androidOutputFormat = AndroidOutputFormat.mpeg4
@@ -48,7 +51,7 @@ class RememberRecorderProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> toggleRecording() async {
+  Future<void> toggleRecording(BuildContext ct) async {
     try {
       if (isRecording) {
         recordingPath = await recorderController.stop();
@@ -56,6 +59,23 @@ class RememberRecorderProvider extends ChangeNotifier {
         if (recordingPath != null) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
+          if (streak != null) {
+            ctx!.pop();
+
+            showModalBottomSheet(
+              elevation: 1,
+              context: ct,
+              isDismissible: false,
+              backgroundColor: Colors.transparent,
+              builder: (_) => StreakRecordingPopup(
+                phraseModel: phraseModel,
+                launguage: language,
+                streak: streak!,
+                audioPath: recordingPath!,
+                form: "learned",
+              ),
+            );
+          }
           NavigationHelper.pushReplacement(
             RouteNames.masterResult,
             extra: {

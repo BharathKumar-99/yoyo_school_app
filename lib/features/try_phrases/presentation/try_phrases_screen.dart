@@ -147,39 +147,42 @@ class TryPhrasesScreen extends StatelessWidget {
                           ),
                         ),
                         if (streak != null)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                text.streak,
-                                style: AppTextStyles.textTheme.bodyLarge
-                                    ?.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.deepPurple,
-                                      fontFamily: 'Sansita',
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  text.streak,
+                                  style: AppTextStyles.textTheme.bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.deepPurple,
+                                        fontFamily: 'Sansita',
+                                      ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "X$streak ",
+                                      style: AppTextStyles.textTheme.bodyLarge
+                                          ?.copyWith(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.deepPurple,
+                                            fontFamily: 'Sansita',
+                                          ),
                                     ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "X$streak ",
-                                    style: AppTextStyles.textTheme.bodyLarge
-                                        ?.copyWith(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.deepPurple,
-                                          fontFamily: 'Sansita',
-                                        ),
-                                  ),
-                                  Image.asset(
-                                    ImageConstants.streak,
-                                    height: 80,
-                                    width: 80,
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    Image.asset(
+                                      ImageConstants.streak,
+                                      height: 80,
+                                      width: 80,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                       ],
                     ),

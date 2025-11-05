@@ -15,15 +15,12 @@ import 'package:yoyo_school_app/features/result/presentation/result_provider.dar
 class ResultScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final Language language;
-  final int? streak;
-
   final String audioPath;
   const ResultScreen({
     super.key,
     required this.phraseModel,
     required this.audioPath,
     required this.language,
-    this.streak,
   });
 
   @override
@@ -35,7 +32,7 @@ class ResultScreen extends StatelessWidget {
     double w(double factor) => width * factor;
 
     return ChangeNotifierProvider<ResultProvider>(
-      create: (_) => ResultProvider(phraseModel, audioPath, language, streak),
+      create: (_) => ResultProvider(phraseModel, audioPath, language),
       child: Consumer<ResultProvider>(
         builder: (context, value, child) => Scaffold(
           body: value.speechEvaluationModel == null
@@ -298,14 +295,7 @@ class ResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () =>
-                                              context.pushReplacement(
-                                                RouteNames.tryPhrases,
-                                                extra: {
-                                                  "streak": streak,
-                                                  "phrase": phraseModel,
-                                                },
-                                              ),
+                                          onPressed: () => context.pop(),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value
@@ -365,7 +355,8 @@ class ResultScreen extends StatelessWidget {
                                                   "level": value.levels ?? [],
                                                   'student': value.userClases,
                                                   'next': true,
-                                                  "streak": (streak ?? 0) + 1,
+                                                  'from': 'new',
+                                                  "streak": 1,
                                                 },
                                               ),
                                           style: ElevatedButton.styleFrom(
@@ -384,7 +375,27 @@ class ResultScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      Spacer(),
+
+                                      SizedBox(height: 5),
+                                      Center(
+                                        child: TextButton(
+                                          onPressed: () {
+                                            context.go(RouteNames.home);
+                                          },
+                                          child: Text(
+                                            'Back to dashboard',
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .bodySmall!
+                                                .copyWith(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  color: Colors.black,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
                                     ],
                                   ),
                           ),

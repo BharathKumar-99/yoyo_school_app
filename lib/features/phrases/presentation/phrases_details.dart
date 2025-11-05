@@ -23,6 +23,7 @@ class PhrasesDetails extends StatelessWidget {
   final List<Level> levels;
   final bool? next;
   final int? streak;
+  final String? from;
 
   const PhrasesDetails({
     super.key,
@@ -32,12 +33,20 @@ class PhrasesDetails extends StatelessWidget {
     this.student,
     this.next,
     this.streak,
+    this.from,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PhrasesViewModel>(
-      create: (_) => PhrasesViewModel(language, student, next ?? false, streak),
+      create: (_) => PhrasesViewModel(
+        language,
+        student,
+        next ?? false,
+        streak,
+        from,
+        context,
+      ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return DefaultTabController(
@@ -381,8 +390,8 @@ class PhrasesDetails extends StatelessWidget {
       itemBuilder: (context, index) {
         final model = phrases[index];
         String? percentage;
-        if (showPercentage && provider.userResult != null) {
-          final result = provider.userResult!.firstWhere(
+        if (showPercentage) {
+          final result = provider.userResult.firstWhere(
             (val) => val.phrasesId == model.id,
           );
           percentage = "${result.score}%";

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 import 'config/router/app_router.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ProfileProvider(ProfileRepository()),
         ),
+        ChangeNotifierProvider(create: (_) => GlobalProvider()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

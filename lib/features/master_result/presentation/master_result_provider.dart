@@ -28,14 +28,8 @@ class MasterResultProvider extends ChangeNotifier {
   Student? userClases;
   final MasterResultsRepo _repo = MasterResultsRepo();
   bool showRivePopup = false;
-  int? streak;
 
-  MasterResultProvider(
-    this.phraseModel,
-    this.audioPath,
-    this.language,
-    this.streak,
-  ) {
+  MasterResultProvider(this.phraseModel, this.audioPath, this.language) {
     init();
   }
 

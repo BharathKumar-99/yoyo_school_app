@@ -14,6 +14,7 @@ class ImageConstants {
   static const String buddha = "${assetsLoc}buddha.png";
   static const String star = "${assetsLoc}star.png";
   static const String streak = "${assetsLoc}streak.png";
+  static const String correct = "${assetsLoc}corect.png";
 }
 
 class IconConstants {

@@ -48,6 +48,7 @@ class AppRoutes {
             student: data['student'],
             next: data['next'],
             streak: data['streak'],
+            from: data['from'],
           );
         },
       ),
@@ -59,7 +60,6 @@ class AppRoutes {
             phraseModel: data['phraseModel'],
             language: data['language'],
             audioPath: data['path'],
-            streak: data['streak'],
           );
         },
       ),
@@ -71,7 +71,6 @@ class AppRoutes {
             phraseModel: data['phraseModel'],
             language: data['language'],
             audioPath: data['path'],
-            streak: data['streak'],
           );
         },
       ),

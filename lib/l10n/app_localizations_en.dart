@@ -151,6 +151,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryThisPhrase => 'Try this Phrase';
 
   @override
+  String get checking => 'Checking';
+
+  @override
+  String get niceWork => 'Nice work!';
+
+  @override
+  String get ohNoNotThis => 'Oh no, not this time..';
+
+  @override
+  String get yourStreakWas => 'Your streak was';
+
+  @override
   String get tryToMaster => 'Try to Master >';
 
   @override

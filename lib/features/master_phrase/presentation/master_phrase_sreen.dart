@@ -8,6 +8,8 @@ import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/recording/presentation/remember_and_practise_screen.dart';
 
+import '../../../config/constants/constants.dart';
+
 class MasterPhraseSreen extends StatelessWidget {
   final PhraseModel model;
   final int? streak;
@@ -137,6 +139,45 @@ class MasterPhraseSreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        if (streak != null)
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  text.streak,
+                                  style: AppTextStyles.textTheme.bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.deepPurple,
+                                        fontFamily: 'Sansita',
+                                      ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "X$streak ",
+                                      style: AppTextStyles.textTheme.bodyLarge
+                                          ?.copyWith(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.deepPurple,
+                                            fontFamily: 'Sansita',
+                                          ),
+                                    ),
+                                    Image.asset(
+                                      ImageConstants.streak,
+                                      height: 80,
+                                      width: 80,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
@@ -158,6 +199,7 @@ class MasterPhraseSreen extends StatelessWidget {
               ? RememberAndPractiseScreen(
                   model: model,
                   launguage: value.language!,
+                  streak: streak,
                 )
               : Container(),
         ),

@@ -15,15 +15,12 @@ import 'package:yoyo_school_app/features/master_result/presentation/master_resul
 class MasterResultScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final Language language;
-  final int? streak;
-
   final String audioPath;
   const MasterResultScreen({
     super.key,
     required this.phraseModel,
     required this.audioPath,
     required this.language,
-    this.streak,
   });
 
   @override
@@ -35,8 +32,7 @@ class MasterResultScreen extends StatelessWidget {
     double w(double factor) => width * factor;
 
     return ChangeNotifierProvider<MasterResultProvider>(
-      create: (_) =>
-          MasterResultProvider(phraseModel, audioPath, language, streak),
+      create: (_) => MasterResultProvider(phraseModel, audioPath, language),
       child: Consumer<MasterResultProvider>(
         builder: (context, value, child) => Scaffold(
           body: value.speechEvaluationModel == null
@@ -334,48 +330,7 @@ class MasterResultScreen extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      if (streak != null)
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              text.streak,
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.copyWith(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.deepPurple,
-                                                    fontFamily: 'Sansita',
-                                                  ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "X$streak ",
-                                                  style: AppTextStyles
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.copyWith(
-                                                        fontSize: 32,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Colors.deepPurple,
-                                                        fontFamily: 'Sansita',
-                                                      ),
-                                                ),
-                                                Image.asset(
-                                                  ImageConstants.streak,
-                                                  height: 80,
-                                                  width: 80,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+
                                       Spacer(),
                                       SizedBox(
                                         width: double.infinity,
@@ -394,7 +349,8 @@ class MasterResultScreen extends StatelessWidget {
                                                   "level": value.levels ?? [],
                                                   'student': value.userClases,
                                                   'next': true,
-                                                  "streak": (streak ?? 0) + 1,
+                                                  "streak": 1,
+                                                  "from": "learned",
                                                 },
                                               ),
                                           style: ElevatedButton.styleFrom(
@@ -406,14 +362,33 @@ class MasterResultScreen extends StatelessWidget {
                                                 Colors.blue,
                                           ),
                                           child: Text(
-                                            text.next_phrase,
+                                            text.goOnAStreak,
                                             style: AppTextStyles
                                                 .textTheme
                                                 .titleMedium,
                                           ),
                                         ),
                                       ),
-                                      Spacer(),
+                                      SizedBox(height: 5),
+                                      Center(
+                                        child: TextButton(
+                                          onPressed: () {
+                                            context.go(RouteNames.home);
+                                          },
+                                          child: Text(
+                                            'Back to dashboard',
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .bodySmall!
+                                                .copyWith(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  color: Colors.black,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
                                     ],
                                   ),
                           ),

@@ -51,9 +51,9 @@ class ReadAndPractiseScreen extends StatelessWidget {
                       ),
                     Spacer(),
                     Listener(
-                      onPointerDown: (_) => value.toggleRecording(),
-                      onPointerUp: (_) => value.toggleRecording(),
-                      onPointerCancel: (_) => value.toggleRecording(),
+                      onPointerDown: (_) => value.toggleRecording(context),
+                      onPointerUp: (_) => value.toggleRecording(context),
+                      onPointerCancel: (_) => value.toggleRecording(context),
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 40,
