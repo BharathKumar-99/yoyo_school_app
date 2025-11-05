@@ -32,11 +32,13 @@ class PhrasesDeatilsRepo {
   }
 
   Future<void> insertStreak(String uid, int? lid) async {
-    await _client.from(DbTable.streakTable).insert({
-      'user_id': uid,
-      'language_id': lid,
-      'max_streak': 0,
-    });
+    await _client
+        .from(DbTable.streakTable)
+        .upsert(
+          {'user_id': uid, 'language_id': lid, 'max_streak': 0},
+          onConflict: 'user_id,language_id',
+          ignoreDuplicates: true,
+        );
   }
 
   Future<void> resetPhrase(int id, int studenId) async {
