@@ -43,7 +43,7 @@ class ResultProvider extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = 85;
+    score = speechEvaluationModel?.result?.overall ?? 0;
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
       (val) => val.language?.id == language.id,
     );

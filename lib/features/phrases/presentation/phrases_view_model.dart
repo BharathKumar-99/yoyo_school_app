@@ -43,7 +43,7 @@ class PhrasesViewModel extends ChangeNotifier {
     classes.language?.phrase?.forEach((val) => ids.add(val.id ?? 0));
     schoolResult = await _repo.getAllUserResults(ids);
     streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
-    if ((streakNumber ?? 0) > 0) {
+    if ((streakNumber ?? 0) <= 0) {
       await _repo.insertStreak(userId, classes.language?.id);
     }
     learned = [];

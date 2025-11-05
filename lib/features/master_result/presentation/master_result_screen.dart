@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart' hide LinearGradient, Image;
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -427,8 +427,8 @@ class MasterResultScreen extends StatelessWidget {
                           SizedBox(
                             height: MediaQuery.sizeOf(context).height / 5,
                             width: double.infinity,
-                            child: Lottie.asset(
-                              'assets/animation/success.json',
+                            child: RiveAnimation.asset(
+                              'assets/animation/confetti.riv',
                               fit: BoxFit.cover,
                             ),
                           ),
