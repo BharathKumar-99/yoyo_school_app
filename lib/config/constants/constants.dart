@@ -1,6 +1,7 @@
 class UrlConstants {
   static const String superSpeachApi = "api.speechsuper.com";
-}
+  static const String openAiUrl='https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/openai';
+  }
 
 class ImageConstants {
   static const String assetsLoc = "assets/images/";

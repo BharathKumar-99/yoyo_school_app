@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
-import 'package:yoyo_school_app/config/constants/feedback_constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/features/common/data/global_repo.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
@@ -19,8 +19,9 @@ class ResultProvider extends ChangeNotifier {
   late UserResult? result;
   late RemoteConfig apiCred;
   SchoolLanguage? slanguage;
+  ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;
-  FeedbackResult? resultText;
+  final GlobalRepo _globalRepo = GlobalRepo();
   String audioPath;
   int score = 0;
   Student? userClases;
@@ -38,24 +39,20 @@ class ResultProvider extends ChangeNotifier {
 
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     userClases = await _repo.getClasses();
-    speechEvaluationModel = await _repo.callSuperSpeechApi(
+    speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
       audioPath: audioPath,
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
     score = speechEvaluationModel?.result?.overall ?? 0;
+    gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
       (val) => val.language?.id == language.id,
     );
     levels = await _repo.getLevel();
 
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
-    if ((result?.attempt ?? 0) >= 0) {
-      resultText = ScoreFeedback.getFeedback(
-        mode: ModeType.friendly,
-        score: score,
-      );
-    }
+    if ((result?.attempt ?? 0) >= 0) {}
     notifyListeners();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }

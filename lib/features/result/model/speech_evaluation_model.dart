@@ -19,6 +19,19 @@ class SpeechEvaluationModel {
     this.tokenId,
   });
 
+  static Map<String, dynamic> extractScores(SpeechEvaluationModel model) {
+    final overallScore = model.result?.overall ?? 0;
+
+    final wordsList =
+        model.result?.words?.map((word) {
+          final score = word.scores?.overall ?? 0;
+          return {"word": word.word ?? "", "score": score};
+        }).toList() ??
+        [];
+
+    return {"overall": overallScore, "words": wordsList};
+  }
+
   factory SpeechEvaluationModel.fromJson(Map<String, dynamic> json) =>
       SpeechEvaluationModel(
         applicationId: json["applicationId"],
@@ -51,7 +64,7 @@ class Result {
   final int? integrity;
   final double? numericDuration;
   final String? rearTone;
-  final int? overall;
+  int? overall;
   final String? resourceVersion;
   final int? rhythm;
   final int? speed;
@@ -314,4 +327,19 @@ class Audio {
     "channel": channel,
     "sampleBytes": sampleBytes,
   };
+}
+
+class ChatGptResponse {
+  String? title;
+  String? body;
+  String? microDrill;
+
+  ChatGptResponse({this.title, this.body, this.microDrill});
+
+  factory ChatGptResponse.fromJson(Map<String, dynamic> json) =>
+      ChatGptResponse(
+        title: json["title"],
+        body: json['body'],
+        microDrill: json['micro_drill'],
+      );
 }

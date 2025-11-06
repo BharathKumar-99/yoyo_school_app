@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
-import 'package:yoyo_school_app/config/constants/feedback_constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/features/common/data/global_repo.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
@@ -21,10 +21,11 @@ class MasterResultProvider extends ChangeNotifier {
   SchoolLanguage? slanguage;
   late RemoteConfig apiCred;
   SpeechEvaluationModel? speechEvaluationModel;
-  FeedbackResult? resultText;
+  ChatGptResponse? gptResponse;
   String audioPath;
   int score = 0;
   List<Level>? levels = [];
+  final GlobalRepo _globalRepo = GlobalRepo();
   Student? userClases;
   final MasterResultsRepo _repo = MasterResultsRepo();
   bool showRivePopup = false;
@@ -37,20 +38,16 @@ class MasterResultProvider extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
-    speechEvaluationModel = await _repo.callSuperSpeechApi(
+    speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
       audioPath: audioPath,
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
     score = speechEvaluationModel?.result?.overall ?? 0;
-
+    gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
-    if ((result?.attempt ?? 0) >= 0) {
-      resultText = ScoreFeedback.getFeedback(
-        mode: ModeType.friendly,
-        score: score,
-      );
-    }
+
+    if ((result?.attempt ?? 0) >= 0) {}
     if (score > Constants.minimumSubmitScore) {
       userClases = await _repo.getClasses();
       levels = await _repo.getLevel();

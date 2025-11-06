@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -59,9 +58,8 @@ class RememberRecorderProvider extends ChangeNotifier {
         if (recordingPath != null) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
-          if (streak != null) {
-            ctx!.pop();
 
+          if (streak != null) {
             showModalBottomSheet(
               elevation: 1,
               context: ct,
@@ -75,15 +73,16 @@ class RememberRecorderProvider extends ChangeNotifier {
                 form: "learned",
               ),
             );
+          } else {
+            NavigationHelper.push(
+              RouteNames.masterResult,
+              extra: {
+                'phraseModel': phraseModel,
+                'path': recordingPath,
+                'language': language,
+              },
+            );
           }
-          NavigationHelper.pushReplacement(
-            RouteNames.masterResult,
-            extra: {
-              'phraseModel': phraseModel,
-              'path': recordingPath,
-              'language': language,
-            },
-          );
         }
         notifyListeners();
       } else {

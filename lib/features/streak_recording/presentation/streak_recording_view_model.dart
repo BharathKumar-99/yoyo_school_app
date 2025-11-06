@@ -3,6 +3,7 @@ import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
+import 'package:yoyo_school_app/features/common/data/global_repo.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
@@ -27,6 +28,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   int score = 0;
   SpeechEvaluationModel? speechEvaluationModel;
   final ResultsRepo _repo = ResultsRepo();
+  final GlobalRepo _globalRepo = GlobalRepo();
   StreakRecordingViewModel(
     this.phraseModel,
     this.audioPath,
@@ -42,7 +44,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
     notifyListeners();
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     userClases = await _repo.getClasses();
-    speechEvaluationModel = await _repo.callSuperSpeechApi(
+    speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
       audioPath: audioPath,
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",

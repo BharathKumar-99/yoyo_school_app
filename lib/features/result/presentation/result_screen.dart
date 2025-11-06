@@ -185,7 +185,7 @@ class ResultScreen extends StatelessWidget {
                                     children: [
                                       SizedBox(height: h(0.01)),
                                       Text(
-                                        value.resultText?.title ?? "",
+                                        value.gptResponse?.title ?? "",
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -194,35 +194,12 @@ class ResultScreen extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 20.0,
                                         ),
-                                        child: RichText(
-                                          text: TextSpan(
-                                            text: value.resultText?.feedback,
-                                            style: AppTextStyles
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(color: Colors.black),
-                                            children: [
-                                              if (value
-                                                      .result
-                                                      ?.badWords
-                                                      ?.isNotEmpty ??
-                                                  false)
-                                                TextSpan(
-                                                  text:
-                                                      ' ${text.especially_in} ${value.result?.badWords?.map((val) => val)}'
-                                                          .replaceAll('(', '')
-                                                          .replaceAll(')', ''),
-                                                  style: AppTextStyles
-                                                      .textTheme
-                                                      .bodyMedium!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black,
-                                                      ),
-                                                ),
-                                            ],
-                                          ),
+                                        child: Text(
+                                          value.gptResponse?.body ?? '',
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(color: Colors.black),
                                         ),
                                       ),
                                       Padding(
@@ -273,7 +250,7 @@ class ResultScreen extends StatelessWidget {
                                                     children: [
                                                       TextSpan(
                                                         text: value
-                                                            .resultText
+                                                            .gptResponse
                                                             ?.microDrill,
                                                         style: AppTextStyles
                                                             .textTheme
@@ -321,7 +298,7 @@ class ResultScreen extends StatelessWidget {
                                     children: [
                                       Spacer(flex: 2),
                                       Text(
-                                        text.congratulations,
+                                        value.gptResponse?.title ?? '',
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -334,9 +311,7 @@ class ResultScreen extends StatelessWidget {
                                             .headlineMedium,
                                       ),
                                       Spacer(),
-                                      Text(
-                                        "${text.withAScoreOf} ${value.score.toString()}% ${text.youRocked}",
-                                      ),
+                                      Text(value.gptResponse?.body ?? ''),
                                       Spacer(),
                                       SizedBox(
                                         width: double.infinity,

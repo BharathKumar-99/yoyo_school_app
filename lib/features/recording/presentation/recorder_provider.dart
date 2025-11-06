@@ -60,9 +60,8 @@ class RecordingProvider extends ChangeNotifier {
         if (recordingPath != null) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
+          ctx!.pop();
           if (streak != null) {
-            ctx!.pop();
-
             showModalBottomSheet(
               elevation: 1,
               context: ct,
@@ -77,7 +76,7 @@ class RecordingProvider extends ChangeNotifier {
               ),
             );
           } else {
-            NavigationHelper.pushReplacement(
+            NavigationHelper.push(
               RouteNames.result,
               extra: {
                 'phraseModel': phraseModel,

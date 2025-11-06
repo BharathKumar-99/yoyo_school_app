@@ -35,6 +35,7 @@ class PhrasesViewModel extends ChangeNotifier {
   int? streakNumber;
   late VoidCallback _userResultListener;
   BuildContext? ctx;
+  bool isStreakLoading = false;
 
   PhrasesViewModel(
     this.classes,
@@ -44,6 +45,8 @@ class PhrasesViewModel extends ChangeNotifier {
     this.from,
     this.ctx,
   ) {
+    isStreakLoading = streak != null;
+    notifyListeners();
     init();
   }
   @override
@@ -156,7 +159,7 @@ class PhrasesViewModel extends ChangeNotifier {
     if (isGoToNextPhrase &&
         ((from == 'new' && newPhrases.isNotEmpty) ||
             (from == 'learned' && learned.isNotEmpty))) {
-      ctx!.pushReplacement(
+      ctx!.push(
         from == 'new' ? RouteNames.tryPhrases : RouteNames.masterPhrases,
         extra: {
           "phrase": from == 'new' ? newPhrases.first : learned.first,
@@ -164,6 +167,8 @@ class PhrasesViewModel extends ChangeNotifier {
         },
       );
     }
+    isStreakLoading = false;
+    notifyListeners();
   }
 
   playAudio(PhraseModel phraseModel) async {

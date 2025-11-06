@@ -49,323 +49,356 @@ class PhrasesDetails extends StatelessWidget {
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
-          return DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              body: CustomScrollView(
-                slivers: [
-                  // Hero Header
-                  SliverToBoxAdapter(
-                    child: Hero(
-                      tag: language.language?.language ?? "",
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          gradient: LinearGradient(
-                            colors: provider.classes.language?.gradient ?? [],
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(70),
-                              spreadRadius: 5,
-                              blurRadius: 4,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(height: 100),
-                                SizedBox(
-                                  height: 250,
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        bottomRight: Radius.circular(16),
-                                      ),
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            provider.classes.language?.image ??
-                                            "",
-                                      ),
-                                    ),
+          return provider.isStreakLoading
+              ? Container(color: Colors.white)
+              : DefaultTabController(
+                  length: 3,
+                  child: Scaffold(
+                    body: CustomScrollView(
+                      slivers: [
+                        // Hero Header
+                        SliverToBoxAdapter(
+                          child: Hero(
+                            tag: language.language?.language ?? "",
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                gradient: LinearGradient(
+                                  colors:
+                                      provider.classes.language?.gradient ?? [],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(70),
+                                    spreadRadius: 5,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 3),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: 120,
-                                  child: getAppBar(context),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                ],
+                              ),
+                              child: Stack(
+                                children: [
+                                  Column(
                                     children: [
-                                      SizedBox(height: 20),
-                                      Text(
-                                        provider.classes.language?.language ??
-                                            "",
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(color: Colors.white),
+                                      SizedBox(height: 100),
+                                      SizedBox(
+                                        height: 250,
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(16),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  provider
+                                                      .classes
+                                                      .language
+                                                      ?.image ??
+                                                  "",
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      Text(
-                                        className,
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(color: Colors.white),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 120,
+                                        child: getAppBar(context),
                                       ),
-                                      Text(
-                                        "${text.level}${UsefullFunctions.returnLevel(provider.classes.language?.level ?? 0, levels)}",
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(color: Colors.white),
-                                      ),
-                                      SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                text.classText,
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .headlineSmall!
-                                                    .copyWith(
-                                                      color: Colors.white,
-                                                    ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  Container(
-                                                    height: 60,
-                                                    width: 60,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            100,
-                                                          ),
-                                                      color: Colors.white,
-                                                    ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              provider
+                                                      .classes
+                                                      .language
+                                                      ?.language ??
+                                                  "",
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .headlineSmall!
+                                                  .copyWith(
+                                                    color: Colors.white,
                                                   ),
-                                                  Container(
-                                                    height: 55,
-                                                    width: 55,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            100,
+                                            ),
+                                            Text(
+                                              className,
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .headlineSmall!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                            Text(
+                                              "${text.level}${UsefullFunctions.returnLevel(provider.classes.language?.level ?? 0, levels)}",
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .headlineSmall!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      text.classText,
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .headlineSmall!
+                                                          .copyWith(
+                                                            color: Colors.white,
                                                           ),
-                                                      image: DecorationImage(
-                                                        image: AssetImage(
-                                                          ImageConstants
-                                                              .loginBg,
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    Stack(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      children: [
+                                                        Container(
+                                                          height: 60,
+                                                          width: 60,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  100,
+                                                                ),
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          height: 55,
+                                                          width: 55,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  100,
+                                                                ),
+                                                            image: DecorationImage(
+                                                              image: AssetImage(
+                                                                ImageConstants
+                                                                    .loginBg,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              '${provider.classPercentage}%',
+                                                              style: AppTextStyles
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      text.you,
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .headlineSmall!
+                                                          .copyWith(
+                                                            color: Colors.white,
+                                                          ),
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    Container(
+                                                      height: 55,
+                                                      width: 55,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              100,
+                                                            ),
+                                                        color: Colors.white,
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          '${provider.userPercentage}%',
+                                                          style: AppTextStyles
+                                                              .textTheme
+                                                              .bodyLarge!
+                                                              .copyWith(
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
                                                         ),
                                                       ),
                                                     ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${provider.classPercentage}%',
-                                                        style: AppTextStyles
-                                                            .textTheme
-                                                            .bodyLarge!
-                                                            .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                text.you,
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .headlineSmall!
-                                                    .copyWith(
-                                                      color: Colors.white,
-                                                    ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Container(
-                                                height: 55,
-                                                width: 55,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        100,
-                                                      ),
-                                                  color: Colors.white,
+                                                  ],
                                                 ),
-                                                child: Center(
+                                              ],
+                                            ),
+                                            SizedBox(height: 20),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if ((provider.streakNumber ?? 0) > 0)
+                                    Positioned(
+                                      bottom: 0,
+                                      right:
+                                          MediaQuery.sizeOf(context).width /
+                                          3.5,
+                                      left:
+                                          MediaQuery.sizeOf(context).width /
+                                          3.1,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            text.streak,
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.deepPurple,
+                                                  fontFamily: 'Sansita',
+                                                ),
+                                          ),
+                                          Container(
+                                            height: 100,
+                                            width: 130,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  ImageConstants.star,
+                                                ),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                        bottom: 16.0,
+                                                      ),
                                                   child: Text(
-                                                    '${provider.userPercentage}%',
+                                                    provider.streakNumber
+                                                        .toString(),
                                                     style: AppTextStyles
                                                         .textTheme
-                                                        .bodyLarge!
-                                                        .copyWith(
-                                                          color: Colors.black,
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily: 'Sansita',
+                                                          color:
+                                                              Colors.deepPurple,
                                                         ),
                                                   ),
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 20),
-                                    ],
-                                  ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(child: SizedBox(height: 30)),
+
+                        // TabBar
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _SliverAppBarDelegate(
+                            TabBar(
+                              labelColor: Colors.white,
+                              unselectedLabelColor: Colors.black,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicatorPadding: EdgeInsetsGeometry.symmetric(
+                                horizontal: 10,
+                              ),
+                              indicator: BoxDecoration(
+                                color:
+                                    provider
+                                        .classes
+                                        .language
+                                        ?.gradient
+                                        ?.first ??
+                                    Colors.amberAccent,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              dividerColor: Colors.transparent,
+                              tabs: [
+                                Tab(
+                                  text:
+                                      "${text.newText} (${provider.newPhrases.length})",
+                                ),
+                                Tab(
+                                  text:
+                                      "${text.learned} (${provider.learned.length})",
+                                ),
+                                Tab(
+                                  text:
+                                      "${text.mastered} (${provider.mastered.length})",
                                 ),
                               ],
                             ),
-                            if ((provider.streakNumber ?? 0) > 0)
-                              Positioned(
-                                bottom: 0,
-                                right: MediaQuery.sizeOf(context).width / 3.5,
-                                left: MediaQuery.sizeOf(context).width / 3.1,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      text.streak,
-                                      style: AppTextStyles.textTheme.bodyLarge
-                                          ?.copyWith(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.deepPurple,
-                                            fontFamily: 'Sansita',
-                                          ),
-                                    ),
-                                    Container(
-                                      height: 100,
-                                      width: 130,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                            ImageConstants.star,
-                                          ),
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              bottom: 16.0,
-                                            ),
-                                            child: Text(
-                                              provider.streakNumber.toString(),
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.copyWith(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Sansita',
-                                                    color: Colors.deepPurple,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          ),
+                        ),
+
+                        // TabBarView inside SliverFillRemaining
+                        SliverFillRemaining(
+                          child: TabBarView(
+                            children: [
+                              _buildPhrasesList(
+                                provider.newPhrases,
+                                provider,
+                                context,
+                                RouteNames.tryPhrases,
                               ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(child: SizedBox(height: 30)),
-
-                  // TabBar
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: _SliverAppBarDelegate(
-                      TabBar(
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Colors.black,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorPadding: EdgeInsetsGeometry.symmetric(
-                          horizontal: 10,
-                        ),
-                        indicator: BoxDecoration(
-                          color:
-                              provider.classes.language?.gradient?.first ??
-                              Colors.amberAccent,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        dividerColor: Colors.transparent,
-                        tabs: [
-                          Tab(
-                            text:
-                                "${text.newText} (${provider.newPhrases.length})",
+                              _buildPhrasesList(
+                                provider.learned,
+                                provider,
+                                context,
+                                RouteNames.masterPhrases,
+                                showPercentage: true,
+                              ),
+                              _buildPhrasesList(
+                                provider.mastered,
+                                provider,
+                                context,
+                                RouteNames.masterPhrases,
+                                showPercentage: true,
+                              ),
+                            ],
                           ),
-                          Tab(
-                            text:
-                                "${text.learned} (${provider.learned.length})",
-                          ),
-                          Tab(
-                            text:
-                                "${text.mastered} (${provider.mastered.length})",
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // TabBarView inside SliverFillRemaining
-                  SliverFillRemaining(
-                    child: TabBarView(
-                      children: [
-                        _buildPhrasesList(
-                          provider.newPhrases,
-                          provider,
-                          context,
-                          RouteNames.tryPhrases,
-                        ),
-                        _buildPhrasesList(
-                          provider.learned,
-                          provider,
-                          context,
-                          RouteNames.masterPhrases,
-                          showPercentage: true,
-                        ),
-                        _buildPhrasesList(
-                          provider.mastered,
-                          provider,
-                          context,
-                          RouteNames.masterPhrases,
-                          showPercentage: true,
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          );
+                );
         },
       ),
     );

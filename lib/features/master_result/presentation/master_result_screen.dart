@@ -148,7 +148,7 @@ class MasterResultScreen extends StatelessWidget {
                                     children: [
                                       SizedBox(height: h(0.01)),
                                       Text(
-                                        value.resultText?.title ?? "",
+                                        value.gptResponse?.title ?? "",
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -159,7 +159,7 @@ class MasterResultScreen extends StatelessWidget {
                                         ),
                                         child: RichText(
                                           text: TextSpan(
-                                            text: value.resultText?.feedback,
+                                            text: value.gptResponse?.body,
                                             style: AppTextStyles
                                                 .textTheme
                                                 .bodyMedium!
@@ -215,39 +215,17 @@ class MasterResultScreen extends StatelessWidget {
                                                       BorderRadius.circular(16),
                                                   color: Colors.grey.shade300,
                                                 ),
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    text:
-                                                        ' ${text.repeat_slowly} ${value.result?.badWords?.map((val) => val)} '
-                                                            .replaceAll('(', '')
-                                                            .replaceAll(
-                                                              ')',
-                                                              '',
-                                                            ),
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black,
-                                                        ),
-
-                                                    children: [
-                                                      TextSpan(
-                                                        text: value
-                                                            .resultText
-                                                            ?.microDrill,
-                                                        style: AppTextStyles
-                                                            .textTheme
-                                                            .bodyMedium!
-                                                            .copyWith(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
+                                                child: Text(
+                                                  value
+                                                          .gptResponse
+                                                          ?.microDrill ??
+                                                      "",
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                        color: Colors.black,
                                                       ),
-                                                    ],
-                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -258,11 +236,7 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () =>
-                                              context.pushReplacement(
-                                                RouteNames.masterPhrases,
-                                                extra: phraseModel,
-                                              ),
+                                          onPressed: () => context.pop(),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value
@@ -288,7 +262,7 @@ class MasterResultScreen extends StatelessWidget {
                                     children: [
                                       Spacer(),
                                       Text(
-                                        text.wow,
+                                        value.gptResponse?.title ?? '',
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -300,35 +274,12 @@ class MasterResultScreen extends StatelessWidget {
                                             .headlineLarge,
                                       ),
                                       Spacer(),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: text.your_score,
-                                          style: AppTextStyles
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.black),
-                                          children: [
-                                            TextSpan(
-                                              text: ' ${value.score}! ',
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                  ),
-                                            ),
-                                            TextSpan(
-                                              text: text.master_more,
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .copyWith(
-                                                    color: Colors.black,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                                      Text(
+                                        value.gptResponse?.body ?? '',
+                                        style: AppTextStyles
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(color: Colors.black),
                                       ),
 
                                       Spacer(),

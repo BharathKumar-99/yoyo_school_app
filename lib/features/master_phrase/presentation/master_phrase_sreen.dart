@@ -101,7 +101,7 @@ class MasterPhraseSreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -141,7 +141,7 @@ class MasterPhraseSreen extends StatelessWidget {
                         ),
                         if (streak != null)
                           Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.only(top: 16.0, left: 29),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -151,11 +151,12 @@ class MasterPhraseSreen extends StatelessWidget {
                                       ?.copyWith(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.deepPurple,
+                                        color: Colors.white,
                                         fontFamily: 'Sansita',
                                       ),
                                 ),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
                                       "X$streak ",
@@ -167,10 +168,15 @@ class MasterPhraseSreen extends StatelessWidget {
                                             fontFamily: 'Sansita',
                                           ),
                                     ),
-                                    Image.asset(
-                                      ImageConstants.streak,
-                                      height: 80,
-                                      width: 80,
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 8.0,
+                                      ),
+                                      child: Image.asset(
+                                        ImageConstants.streak,
+                                        height: 60,
+                                        width: 60,
+                                      ),
                                     ),
                                   ],
                                 ),
