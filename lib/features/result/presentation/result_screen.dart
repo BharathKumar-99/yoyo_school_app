@@ -317,7 +317,7 @@ class ResultScreen extends StatelessWidget {
                                         width: double.infinity,
                                         child: ElevatedButton(
                                           onPressed: () =>
-                                              context.pushReplacement(
+                                              context.go(
                                                 RouteNames.phrasesDetails,
                                                 extra: {
                                                   'language': value.slanguage,

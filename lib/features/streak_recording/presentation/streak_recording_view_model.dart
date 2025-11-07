@@ -62,7 +62,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
 
     Future.delayed(Duration(seconds: 3), () {
       if (score > Constants.minimumSubmitScore) {
-        NavigationHelper.pushReplacement(
+        NavigationHelper.go(
           RouteNames.phrasesDetails,
           extra: {
             'language': slanguage,
@@ -116,6 +116,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
     result?.attempt = (result?.attempt ?? 0) + 1;
     result?.vocab = goodWords.length;
     result = await _repo.upsertResult(result!);
+    await _globalRepo.updateStreak(language.id, userId, streak);
   }
 
   Color getWordColor(int score) {

@@ -236,7 +236,7 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () => context.pop(),
+                                          onPressed: () =>  context.pop(),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value
@@ -286,24 +286,23 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () =>
-                                              context.pushReplacement(
-                                                RouteNames.phrasesDetails,
-                                                extra: {
-                                                  'language': value.slanguage,
-                                                  "className":
-                                                      value
-                                                          .userClases
-                                                          ?.classes
-                                                          ?.className ??
-                                                      "",
-                                                  "level": value.levels ?? [],
-                                                  'student': value.userClases,
-                                                  'next': true,
-                                                  "streak": 1,
-                                                  "from": "learned",
-                                                },
-                                              ),
+                                          onPressed: () => context.go(
+                                            RouteNames.phrasesDetails,
+                                            extra: {
+                                              'language': value.slanguage,
+                                              "className":
+                                                  value
+                                                      .userClases
+                                                      ?.classes
+                                                      ?.className ??
+                                                  "",
+                                              "level": value.levels ?? [],
+                                              'student': value.userClases,
+                                              'next': true,
+                                              "streak": 1,
+                                              "from": "learned",
+                                            },
+                                          ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value

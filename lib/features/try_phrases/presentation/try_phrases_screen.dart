@@ -158,7 +158,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                       ?.copyWith(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.deepPurple,
+                                        color: Colors.white,
                                         fontFamily: 'Sansita',
                                       ),
                                 ),

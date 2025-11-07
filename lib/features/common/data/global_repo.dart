@@ -194,4 +194,23 @@ class GlobalRepo {
       _userResultChannel = null;
     }
   }
+
+  updateStreak(int? lid, String uid, int streak) async {
+    final response = await _client
+        .from(DbTable.streakTable)
+        .select('max_streak')
+        .eq('user_id', uid)
+        .eq('language_id', lid ?? 0)
+        .maybeSingle();
+
+    int currentStreak = response?['max_streak'] ?? 0;
+
+    if (currentStreak < streak) {
+      await _client
+          .from(DbTable.streakTable)
+          .update({'max_streak': streak})
+          .eq('user_id', uid)
+          .eq('language_id', lid ?? 0);
+    }
+  }
 }
