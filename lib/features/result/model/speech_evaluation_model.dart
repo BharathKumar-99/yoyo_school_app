@@ -19,17 +19,35 @@ class SpeechEvaluationModel {
     this.tokenId,
   });
 
-  static Map<String, dynamic> extractScores(SpeechEvaluationModel model) {
-    final overallScore = model.result?.overall ?? 0;
+  static Map<String, dynamic> extractScores(
+    Map<String, dynamic> rawResult, {
+    int threshold = 60,
+  }) {
+    final words = (rawResult['words'] as List?)
+        ?.map(
+          (word) => {
+            'word': word['word'],
+            'scores': {
+              'overall': word['scores']?['overall'] ?? 0,
+              'pronunciation': word['scores']?['pronunciation'] ?? 0,
+              'prominence': word['scores']?['prominence'] ?? 0,
+            },
+          },
+        )
+        .toList();
 
-    final wordsList =
-        model.result?.words?.map((word) {
-          final score = word.scores?.overall ?? 0;
-          return {"word": word.word ?? "", "score": score};
-        }).toList() ??
-        [];
+    final extractedData = {
+      'rhythm': rawResult['rhythm'] ?? 0,
+      'speed': rawResult['speed'] ?? 0,
+      'words': words ?? [],
+      'duration': rawResult['duration'] ?? '',
+      'fluency': rawResult['fluency'] ?? 0,
+      'pronunciation': rawResult['pronunciation'] ?? 0,
+      'rear_tone': rawResult['rear_tone'] ?? '',
+      'overall': rawResult['overall'] ?? 0,
+    };
 
-    return {"overall": overallScore, "words": wordsList};
+    return {'extractedData': extractedData, 'threshold': threshold};
   }
 
   factory SpeechEvaluationModel.fromJson(Map<String, dynamic> json) =>

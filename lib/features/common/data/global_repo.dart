@@ -169,7 +169,7 @@ class GlobalRepo {
   }
 
   Future<ChatGptResponse?> getSpeechFeedback(SpeechEvaluationModel data) async {
-    final scoreData = SpeechEvaluationModel.extractScores(data);
+    final scoreData = SpeechEvaluationModel.extractScores(data.toJson());
     final response = await http.post(
       Uri.parse(UrlConstants.openAiUrl),
       headers: {'Content-Type': 'application/json'},
