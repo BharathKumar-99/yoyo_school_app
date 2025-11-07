@@ -434,7 +434,7 @@ class PhrasesDetails extends StatelessWidget {
             GestureDetector(
               onTap: () => context.push(
                 routeName,
-                extra: {"phrase": model, "streak": streak},
+                extra: {"phrase": model, "streak": provider.streak},
               ),
               child: PhrasesWidget(
                 title: model.phrase ?? "",

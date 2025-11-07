@@ -60,7 +60,10 @@ class MasterPhraseSreen extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: w(0.07)),
                           child: Align(
                             alignment: Alignment.topLeft,
-                            child: backBtn(),
+                            child: backBtn(
+                              streak: streak != null,
+                              context: context,
+                            ),
                           ),
                         ),
                         SizedBox(height: h(0.02)),

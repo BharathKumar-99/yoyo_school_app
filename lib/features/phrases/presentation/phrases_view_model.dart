@@ -17,8 +17,8 @@ import '../../phrases/data/phrases_deatils_repo.dart';
 class PhrasesViewModel extends ChangeNotifier {
   final SchoolLanguage classes;
   final Student? student;
-  final bool isGoToNextPhrase;
-  final int? streak;
+  bool isGoToNextPhrase;
+  int? streak;
   final String? from;
   final AudioManager audioManager = AudioManager();
   List<UserResult> schoolResult = [];
@@ -95,7 +95,7 @@ class PhrasesViewModel extends ChangeNotifier {
     userResultProvider.addListener(_userResultListener);
   }
 
-  void _processResults(String userId, List<int> ids) {
+  void _processResults(String userId, List<int> ids) async {
     if (_isDisposed || ctx == null || !ctx!.mounted) return;
 
     learned = [];
@@ -159,13 +159,19 @@ class PhrasesViewModel extends ChangeNotifier {
     if (isGoToNextPhrase &&
         ((from == 'new' && newPhrases.isNotEmpty) ||
             (from == 'learned' && learned.isNotEmpty))) {
-      ctx!.push(
+      final val = await ctx!.push(
         from == 'new' ? RouteNames.tryPhrases : RouteNames.masterPhrases,
         extra: {
           "phrase": from == 'new' ? newPhrases.first : learned.first,
           "streak": streak,
         },
       );
+
+      if (val is bool && val == false) {
+        isGoToNextPhrase = val;
+        streak = null;
+        notifyListeners();
+      }
     }
     isStreakLoading = false;
     notifyListeners();

@@ -19,7 +19,10 @@ class TryPhrasesScreen extends StatelessWidget {
       create: (_) => TryPhrasesProvider(phraseModel, streak),
       child: Consumer<TryPhrasesProvider>(
         builder: (context, value, child) => Scaffold(
-          appBar: AppBar(leadingWidth: 80, leading: backBtn()),
+          appBar: AppBar(
+            leadingWidth: 80,
+            leading: backBtn(streak: streak != null, context: context),
+          ),
           body: value.isLoading
               ? Container()
               : AnimatedSwitcher(
