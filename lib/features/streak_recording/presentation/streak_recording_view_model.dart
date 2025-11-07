@@ -62,7 +62,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
 
     Future.delayed(Duration(seconds: 3), () {
       if (score > Constants.minimumSubmitScore) {
-        NavigationHelper.go(
+        NavigationHelper.pushReplacement(
           RouteNames.phrasesDetails,
           extra: {
             'language': slanguage,
