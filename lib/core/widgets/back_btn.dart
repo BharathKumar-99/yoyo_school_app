@@ -25,27 +25,11 @@ Widget backBtn({
             ),
             actions: [
               TextButton(
-                onPressed: () => NavigationHelper.go(
-                  RouteNames.phrasesDetails,
-                  extra: {
-                    'language': slanguage,
-                    "className": className ?? "",
-                    "level": levels ?? [],
-                    'student': student,
-                  },
-                ),
+                onPressed: () => NavigationHelper.pop(false),
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () => NavigationHelper.go(
-                  RouteNames.phrasesDetails,
-                  extra: {
-                    'language': slanguage,
-                    "className": className ?? "",
-                    "level": levels ?? [],
-                    'student': student,
-                  },
-                ),
+                onPressed: () => NavigationHelper.pop(true),
                 child: const Text('Yes, Leave'),
               ),
             ],
@@ -53,10 +37,26 @@ Widget backBtn({
         );
 
         if (confirmed == true) {
-          NavigationHelper.pop(false);
+          NavigationHelper.go(
+            RouteNames.phrasesDetails,
+            extra: {
+              'language': slanguage,
+              "className": className ?? "",
+              "level": levels ?? [],
+              'student': student,
+            },
+          );
         }
       } else {
-        NavigationHelper.pop();
+        NavigationHelper.go(
+          RouteNames.phrasesDetails,
+          extra: {
+            'language': slanguage,
+            "className": className ?? "",
+            "level": levels ?? [],
+            'student': student,
+          },
+        );
       }
     },
     icon: const Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.black),
