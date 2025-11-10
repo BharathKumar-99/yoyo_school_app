@@ -340,42 +340,44 @@ class ResultScreen extends StatelessWidget {
                                       Spacer(),
                                       Text(value.gptResponse?.body ?? ''),
                                       Spacer(),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                          onPressed: () => context.go(
-                                            RouteNames.phrasesDetails,
-                                            extra: {
-                                              'language': value.slanguage,
-                                              "className":
+                                      if (value.globalProvider.apiCred.streak ==
+                                          true)
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            onPressed: () => context.go(
+                                              RouteNames.phrasesDetails,
+                                              extra: {
+                                                'language': value.slanguage,
+                                                "className":
+                                                    value
+                                                        .userClases
+                                                        ?.classes
+                                                        ?.className ??
+                                                    "",
+                                                "level": value.levels ?? [],
+                                                'student': value.userClases,
+                                                'next': true,
+                                                'from': 'new',
+                                                "streak": 1,
+                                              },
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
                                                   value
-                                                      .userClases
-                                                      ?.classes
-                                                      ?.className ??
-                                                  "",
-                                              "level": value.levels ?? [],
-                                              'student': value.userClases,
-                                              'next': true,
-                                              'from': 'new',
-                                              "streak": 1,
-                                            },
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                value
-                                                    .language
-                                                    .gradient
-                                                    ?.first ??
-                                                Colors.blue,
-                                          ),
-                                          child: Text(
-                                            text.goOnAStreak,
-                                            style: AppTextStyles
-                                                .textTheme
-                                                .titleMedium,
+                                                      .language
+                                                      .gradient
+                                                      ?.first ??
+                                                  Colors.blue,
+                                            ),
+                                            child: Text(
+                                              text.goOnAStreak,
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
                                           ),
                                         ),
-                                      ),
 
                                       SizedBox(height: 5),
                                       Center(

@@ -3,12 +3,14 @@ class RemoteConfig {
   final DateTime createdAt;
   final String apiKey;
   final String apiSecretKey;
+  final bool streak;
 
   const RemoteConfig({
     required this.id,
     required this.createdAt,
     required this.apiKey,
     required this.apiSecretKey,
+    required this.streak,
   });
 
   factory RemoteConfig.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class RemoteConfig {
       createdAt: parsedCreatedAt,
       apiKey: json['api_key'] as String,
       apiSecretKey: json['api_secret_key'] as String,
+      streak: json['streak'] as bool,
     );
   }
 
@@ -36,5 +39,6 @@ class RemoteConfig {
     'created_at': createdAt.toUtc().toIso8601String(),
     'api_key': apiKey,
     'api_secret_key': apiSecretKey,
+    'streak': streak,
   };
 }

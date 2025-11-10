@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/data/global_repo.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
@@ -26,11 +29,13 @@ class ResultProvider extends ChangeNotifier {
   int score = 0;
   Student? userClases;
   List<Level>? levels = [];
+  late GlobalProvider globalProvider;
 
   final ResultsRepo _repo = ResultsRepo();
   bool showRivePopup = false;
 
   ResultProvider(this.phraseModel, this.audioPath, this.language) {
+    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     init();
   }
 
