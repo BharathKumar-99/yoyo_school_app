@@ -46,6 +46,7 @@ class PhrasesDetails extends StatelessWidget {
         streak,
         from,
         context,
+        className,
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
@@ -409,6 +410,7 @@ class PhrasesDetails extends StatelessWidget {
     List<PhraseModel> phrases,
     PhrasesViewModel provider,
     BuildContext context,
+
     String routeName, {
     bool showPercentage = false,
   }) {
@@ -434,7 +436,13 @@ class PhrasesDetails extends StatelessWidget {
             GestureDetector(
               onTap: () => context.push(
                 routeName,
-                extra: {"phrase": model, "streak": provider.streak},
+                extra: {
+                  "phrase": model,
+                  "streak": provider.streak,
+                  "schoolLanguage": provider.classes,
+                  "className": className,
+                  "student": provider.student,
+                },
               ),
               child: PhrasesWidget(
                 title: model.phrase ?? "",

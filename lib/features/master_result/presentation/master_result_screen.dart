@@ -236,7 +236,7 @@ class MasterResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () =>  context.pop(),
+                                          onPressed: () => context.pop(),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value

@@ -82,6 +82,9 @@ class AppRoutes {
           return TryPhrasesScreen(
             phraseModel: data['phrase'] as PhraseModel,
             streak: data['streak'],
+            schoolLanguage: data['schoolLanguage'],
+            className: data['className'],
+            student: data['student'],
           );
         },
       ),
@@ -92,6 +95,9 @@ class AppRoutes {
           return MasterPhraseSreen(
             model: data['phrase'] as PhraseModel,
             streak: data['streak'],
+            schoolLanguage: data['schoolLanguage'],
+            className: data['className'],
+            student: data['student'],
           );
         },
       ),

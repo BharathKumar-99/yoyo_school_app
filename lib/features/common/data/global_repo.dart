@@ -147,7 +147,9 @@ class GlobalRepo {
         ..files.add(await http.MultipartFile.fromPath("audio", wavPath))
         ..headers["Request-Index"] = "0";
 
-      final streamedResponse = await request.send();
+      final streamedResponse = await request.send().timeout(
+        Duration(seconds: 10),
+      );
       final responseString = await streamedResponse.stream.bytesToString();
 
       if (streamedResponse.statusCode != 200) {
@@ -169,21 +171,38 @@ class GlobalRepo {
   }
 
   Future<ChatGptResponse?> getSpeechFeedback(SpeechEvaluationModel data) async {
-    final scoreData = SpeechEvaluationModel.extractScores(data.toJson());
-    final response = await http.post(
-      Uri.parse(UrlConstants.openAiUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'data': scoreData,
-        'threshold': Constants.minimumSubmitScore,
-      }),
-    );
+    try {
+      final scoreData = SpeechEvaluationModel.extractScores(data.toJson());
 
-    if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      return ChatGptResponse.fromJson(body);
-    } else {
-      log("Error: ${response.body}");
+      final response = await http
+          .post(
+            Uri.parse(UrlConstants.openAiUrl),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'data': scoreData,
+              'threshold': Constants.minimumSubmitScore,
+            }),
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              log("Chat Gpt Error: Request timed out after 10 seconds");
+              throw TimeoutException("Chat Gpt API timeout");
+            },
+          );
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        return ChatGptResponse.fromJson(body);
+      } else {
+        log("Chat Gpt Error: HTTP ${response.statusCode} - ${response.body}");
+        return null;
+      }
+    } on TimeoutException catch (_) {
+      log("Chat Gpt Error: Request timed out");
+      return null;
+    } catch (e, st) {
+      log("Chat Gpt Error: $e\n$st");
       return null;
     }
   }

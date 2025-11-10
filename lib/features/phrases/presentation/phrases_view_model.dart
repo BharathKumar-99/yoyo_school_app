@@ -36,6 +36,7 @@ class PhrasesViewModel extends ChangeNotifier {
   late VoidCallback _userResultListener;
   BuildContext? ctx;
   bool isStreakLoading = false;
+  String? className;
 
   PhrasesViewModel(
     this.classes,
@@ -44,6 +45,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.streak,
     this.from,
     this.ctx,
+    this.className,
   ) {
     isStreakLoading = streak != null;
     notifyListeners();
@@ -164,6 +166,9 @@ class PhrasesViewModel extends ChangeNotifier {
         extra: {
           "phrase": from == 'new' ? newPhrases.first : learned.first,
           "streak": streak,
+          "schoolLanguage": classes,
+          "className": className,
+          "student": student,
         },
       );
 

@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
+import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 
@@ -11,7 +13,17 @@ import '../../../config/router/navigation_helper.dart';
 class TryPhrasesScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final int? streak;
-  const TryPhrasesScreen({super.key, required this.phraseModel, this.streak});
+  final SchoolLanguage schoolLanguage;
+  final String className;
+  final Student student;
+  const TryPhrasesScreen({
+    super.key,
+    required this.phraseModel,
+    this.streak,
+    required this.schoolLanguage,
+    required this.className,
+    required this.student,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +33,13 @@ class TryPhrasesScreen extends StatelessWidget {
         builder: (context, value, child) => Scaffold(
           appBar: AppBar(
             leadingWidth: 80,
-            leading: backBtn(streak: streak != null, context: context),
+            leading: backBtn(
+              streak: streak != null,
+              context: context,
+              slanguage: schoolLanguage,
+              className: className,
+              student: student,
+            ),
           ),
           body: value.isLoading
               ? Container()
