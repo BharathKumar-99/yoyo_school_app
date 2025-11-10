@@ -16,23 +16,22 @@ class MasterResultsRepo {
         .select('*')
         .eq('user_id', userId)
         .eq('phrases_id', pid)
-        .eq('type', Constants.mastered)
-        .maybeSingle();
-    if (data == null) {
+        .eq('type', Constants.mastered);
+
+    if (data.isEmpty) {
       return null;
     }
-    return UserResult.fromJson(data);
+    return UserResult.fromJson(data.last);
   }
 
   Future<UserResult> upsertResult(UserResult result) async {
-    PostgrestMap? data;
+    PostgrestList? data;
     if (result.id != null) {
       data = await _client
           .from(DbTable.userResult)
           .update(result.toJson())
           .eq('id', result.id ?? 0)
-          .select("*")
-          .maybeSingle();
+          .select("*");
     } else {
       data = await _client
           .from(DbTable.userResult)
@@ -42,10 +41,9 @@ class MasterResultsRepo {
             'type': result.type,
             'listen': 1,
           })
-          .select("*")
-          .maybeSingle();
+          .select("*");
     }
-    return UserResult.fromJson(data!);
+    return UserResult.fromJson(data.last);
   }
 
   Future<List<Level>>? getLevel() async {

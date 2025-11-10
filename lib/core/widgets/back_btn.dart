@@ -25,7 +25,15 @@ Widget backBtn({
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
+                onPressed: () => NavigationHelper.go(
+                  RouteNames.phrasesDetails,
+                  extra: {
+                    'language': slanguage,
+                    "className": className ?? "",
+                    "level": levels ?? [],
+                    'student': student,
+                  },
+                ),
                 child: const Text('Cancel'),
               ),
               ElevatedButton(

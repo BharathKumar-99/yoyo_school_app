@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:yoyo_school_app/config/utils/get_user_details.dart';
-import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../../config/constants/constants.dart';
-import '../../recording/presentation/read_and_practise_screen.dart';
+import '../../../config/utils/get_user_details.dart';
+import '../../../config/utils/global_loader.dart';
+import '../../recording/presentation/read_and_practise_screen.dart'
+    show ReadAndPractiseScreen;
 import '../data/try_phrases_repo.dart';
 
 class TryPhrasesProvider extends ChangeNotifier {
@@ -17,14 +18,26 @@ class TryPhrasesProvider extends ChangeNotifier {
   int? streak;
   final TryPhrasesRepo _repo = TryPhrasesRepo();
   final AudioPlayer audioManager = AudioPlayer();
-  late UserResult? result;
+  UserResult? result;
   bool isLoading = true;
+  bool _disposed = false;
 
   TryPhrasesProvider(this.phraseModel, this.streak) {
     initAudio();
   }
 
-  initAudio() async {
+  @override
+  void dispose() {
+    _disposed = true;
+    audioManager.dispose();
+    super.dispose();
+  }
+
+  void safeNotify() {
+    if (!_disposed) notifyListeners();
+  }
+
+  Future<void> initAudio() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
     language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
     await audioManager.setUrl(phraseModel.recording ?? "");
@@ -32,17 +45,17 @@ class TryPhrasesProvider extends ChangeNotifier {
     await audioManager.setVolume(1);
     await upsertResult(listen: false);
     isLoading = false;
-    notifyListeners();
+    safeNotify();
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
     await playAudio();
   }
 
-  togglePhrase() {
+  void togglePhrase() {
     showPhrase = !showPhrase;
-    notifyListeners();
+    safeNotify();
   }
 
-  playAudio() async {
+  Future<void> playAudio() async {
     try {
       final player = audioManager;
       if (player.playerState.processingState == ProcessingState.completed) {
@@ -51,7 +64,7 @@ class TryPhrasesProvider extends ChangeNotifier {
       await player.play();
       await upsertResult();
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("playAudio error: $e");
     }
   }
 
@@ -62,20 +75,24 @@ class TryPhrasesProvider extends ChangeNotifier {
       phrasesId: phraseModel.id,
       type: Constants.learned,
     );
+
     if (listen) {
       result?.listen = (result?.listen ?? 0) + 1;
     }
+
     result = await _repo.upsertResult(result!);
   }
 
-  showReadBottomPopup(BuildContext context) => showModalBottomSheet(
-    elevation: 1,
-    context: context,
-    backgroundColor: Colors.transparent,
-    builder: (_) => ReadAndPractiseScreen(
-      model: phraseModel,
-      launguage: language!,
-      streak: streak,
-    ),
-  );
+  void showReadBottomPopup(BuildContext context) {
+    showModalBottomSheet(
+      elevation: 1,
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) => ReadAndPractiseScreen(
+        model: phraseModel,
+        launguage: language!,
+        streak: streak,
+      ),
+    );
+  }
 }

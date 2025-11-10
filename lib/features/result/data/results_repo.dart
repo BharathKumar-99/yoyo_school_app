@@ -16,23 +16,22 @@ class ResultsRepo {
         .select('*')
         .eq('user_id', userId)
         .eq('phrases_id', pid)
-        .eq('type', Constants.learned)
-        .maybeSingle();
-    if (data == null) {
+        .eq('type', Constants.learned);
+
+    if (data.isEmpty) {
       return null;
     }
-    return UserResult.fromJson(data);
+    return UserResult.fromJson(data.last);
   }
 
   Future<UserResult> upsertResult(UserResult result) async {
-    PostgrestMap? data;
+    final PostgrestList data;
     if (result.id != null) {
       data = await _client
           .from(DbTable.userResult)
           .update(result.toJson())
           .eq('id', result.id ?? 0)
-          .select("*")
-          .maybeSingle();
+          .select("*");
     } else {
       data = await _client
           .from(DbTable.userResult)
@@ -41,10 +40,9 @@ class ResultsRepo {
             'phrases_id': result.phrasesId,
             'type': result.type,
           })
-          .select("*")
-          .maybeSingle();
+          .select("*");
     }
-    return UserResult.fromJson(data!);
+    return UserResult.fromJson(data.last);
   }
 
   Future<Student> getClasses() async {

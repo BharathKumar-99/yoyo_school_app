@@ -1,13 +1,13 @@
-import 'dart:async'; 
+import 'dart:async';
+import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
-import 'package:yoyo_school_app/core/supabase/supabase_client.dart'; 
+import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 
 import '../../../config/utils/get_user_details.dart';
 
 class PhrasesDeatilsRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
-
 
   Future<int>? getStreakValue(String uid, int? lid) async {
     final response = await _client
@@ -31,15 +31,19 @@ class PhrasesDeatilsRepo {
 
   Future<void> resetPhrase(int id, int studenId) async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
-    await _client
-        .from(DbTable.userResult)
-        .delete()
-        .eq('phrases_id', id)
-        .eq('user_id', userId);
-    await _client
-        .from(DbTable.attemptedPhrases)
-        .delete()
-        .eq('phrases_id', id)
-        .eq('student_id', studenId);
+    try {
+      await _client
+          .from(DbTable.userResult)
+          .delete()
+          .eq('phrases_id', id)
+          .eq('user_id', userId);
+      await _client
+          .from(DbTable.attemptedPhrases)
+          .delete()
+          .eq('phrases_id', id)
+          .eq('student_id', studenId);
+    } catch (e) {
+      log("issue here");
+    }
   }
 }

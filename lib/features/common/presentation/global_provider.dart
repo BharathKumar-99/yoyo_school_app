@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import '../../result/model/remote_config_model.dart';
 import '../../result/model/user_result_model.dart';
 import '../data/global_repo.dart';
 
 class GlobalProvider with ChangeNotifier {
   final GlobalRepo _repo = GlobalRepo();
-
+  late RemoteConfig apiCred;
   List<UserResult> _results = [];
   List<UserResult> get results => _results;
 
@@ -16,11 +17,17 @@ class GlobalProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  /// Start listening to realtime updates for the given phrase IDs
+  GlobalProvider() {
+    init();
+  }
+
+  init() async {
+    apiCred = await _repo.getRemoteCred();
+  }
+
   Future<void> initRealtimeResults(List<int> phraseIds) async {
     if (phraseIds.isEmpty) return;
 
-    // If already subscribed, cancel previous subscription
     await _resultSub?.cancel();
     _repo.disposeStream();
 
@@ -47,7 +54,6 @@ class GlobalProvider with ChangeNotifier {
     }
   }
 
-  /// Dispose realtime subscription and Supabase channel
   @override
   void dispose() {
     _resultSub?.cancel();

@@ -7,7 +7,6 @@ import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_provider.dart';
@@ -73,7 +72,35 @@ class ResultScreen extends StatelessWidget {
                                 children: [
                                   Align(
                                     alignment: Alignment.topLeft,
-                                    child: backBtn(),
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        NavigationHelper.pop();
+                                      },
+                                      icon: const Icon(
+                                        Icons.arrow_back_ios_new,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                              Colors.transparent,
+                                            ),
+                                        shape: WidgetStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            side: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                        fixedSize: WidgetStateProperty.all(
+                                          const Size(40, 40),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   Spacer(),
 
@@ -316,24 +343,23 @@ class ResultScreen extends StatelessWidget {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () =>
-                                              context.go(
-                                                RouteNames.phrasesDetails,
-                                                extra: {
-                                                  'language': value.slanguage,
-                                                  "className":
-                                                      value
-                                                          .userClases
-                                                          ?.classes
-                                                          ?.className ??
-                                                      "",
-                                                  "level": value.levels ?? [],
-                                                  'student': value.userClases,
-                                                  'next': true,
-                                                  'from': 'new',
-                                                  "streak": 1,
-                                                },
-                                              ),
+                                          onPressed: () => context.go(
+                                            RouteNames.phrasesDetails,
+                                            extra: {
+                                              'language': value.slanguage,
+                                              "className":
+                                                  value
+                                                      .userClases
+                                                      ?.classes
+                                                      ?.className ??
+                                                  "",
+                                              "level": value.levels ?? [],
+                                              'student': value.userClases,
+                                              'next': true,
+                                              'from': 'new',
+                                              "streak": 1,
+                                            },
+                                          ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 value

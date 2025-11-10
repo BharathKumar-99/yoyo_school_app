@@ -49,7 +49,7 @@ class PhrasesViewModel extends ChangeNotifier {
   ) {
     isStreakLoading = streak != null;
     notifyListeners();
-    init();
+    init(true);
   }
   @override
   void dispose() {
@@ -69,13 +69,12 @@ class PhrasesViewModel extends ChangeNotifier {
     if (!_isDisposed) super.notifyListeners();
   }
 
-  Future<void> init() async {
+  Future<void> init(bool isFirst) async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final ids = classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
 
-    // Initialize streak only once
     streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
     if ((streakNumber ?? 0) <= 0) {
       await _repo.insertStreak(userId, classes.language?.id);
@@ -84,7 +83,6 @@ class PhrasesViewModel extends ChangeNotifier {
 
     await userResultProvider.initRealtimeResults(ids);
 
-    // remove old listener if exists
     try {
       userResultProvider.removeListener(_userResultListener);
     } catch (_) {}
@@ -92,12 +90,12 @@ class PhrasesViewModel extends ChangeNotifier {
     _userResultListener = () {
       if (_isDisposed) return;
       schoolResult = userResultProvider.results;
-      _processResults(userId, ids);
+      _processResults(userId, ids, isFirst);
     };
     userResultProvider.addListener(_userResultListener);
   }
 
-  void _processResults(String userId, List<int> ids) async {
+  void _processResults(String userId, List<int> ids, bool isFirst) async {
     if (_isDisposed || ctx == null || !ctx!.mounted) return;
 
     learned = [];
@@ -157,11 +155,15 @@ class PhrasesViewModel extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isDisposed) GlobalLoader.hide();
     });
+    if (isFirst) await goToNextScreen();
+    notifyListeners();
+  }
 
+  goToNextScreen() async {
     if (isGoToNextPhrase &&
         ((from == 'new' && newPhrases.isNotEmpty) ||
             (from == 'learned' && learned.isNotEmpty))) {
-      final val = await ctx!.push(
+      ctx!.go(
         from == 'new' ? RouteNames.tryPhrases : RouteNames.masterPhrases,
         extra: {
           "phrase": from == 'new' ? newPhrases.first : learned.first,
@@ -171,15 +173,8 @@ class PhrasesViewModel extends ChangeNotifier {
           "student": student,
         },
       );
-
-      if (val is bool && val == false) {
-        isGoToNextPhrase = val;
-        streak = null;
-        notifyListeners();
-      }
     }
     isStreakLoading = false;
-    notifyListeners();
   }
 
   playAudio(PhraseModel phraseModel) async {
@@ -213,6 +208,6 @@ class PhrasesViewModel extends ChangeNotifier {
     userScore = [];
     await _repo.resetPhrase(id ?? 0, student?.id ?? 0);
     GlobalLoader.hide();
-    await init();
+    init(false);
   }
 }

@@ -4,8 +4,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/speech_evaluation_model.dart';
 
@@ -67,7 +70,7 @@ class GlobalRepo {
     yield* controller.stream;
   }
 
-  Future<RemoteConfig> getSuperSpeachCred() async {
+  Future<RemoteConfig> getRemoteCred() async {
     final data = await _client
         .from(DbTable.remoteConfig)
         .select()
@@ -82,13 +85,16 @@ class GlobalRepo {
     required String phrase,
   }) async {
     try {
-      RemoteConfig apiCred = await getSuperSpeachCred();
       final wavPath = await UsefullFunctions.convertToWav(audioPath);
       if (wavPath == null || !File(wavPath).existsSync()) {
         log("WAV file not found or conversion failed: $wavPath");
         return null;
       }
-
+      GlobalProvider provider = Provider.of<GlobalProvider>(
+        ctx!,
+        listen: false,
+      );
+      RemoteConfig apiCred = provider.apiCred;
       const userId = "123456789";
       final coreType = "sent.eval.$audioCode";
       const audioType = "wav";
@@ -136,6 +142,7 @@ class GlobalRepo {
               "refText": phrase,
               "coreType": coreType,
               "tokenId": tokenId,
+              "slack": audioCode == "fr" ? 0.25 : 0,
             },
           },
         },

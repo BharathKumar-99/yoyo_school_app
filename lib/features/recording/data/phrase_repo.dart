@@ -23,23 +23,21 @@ class PhraseRepo {
         .from(DbTable.userResult)
         .select('*')
         .eq('user_id', userId)
-        .eq('phrases_id', pid)
-        .maybeSingle();
-    if (data == null) {
+        .eq('phrases_id', pid);
+    if (data.isEmpty) {
       return null;
     }
-    return UserResult.fromJson(data);
+    return UserResult.fromJson(data.last);
   }
 
   Future<UserResult> upsertResult(UserResult result) async {
-    PostgrestMap? data;
+    PostgrestList? data;
     if (result.id != null) {
       data = await _client
           .from(DbTable.userResult)
           .update({'listens': result.listen})
           .eq('id', result.id ?? 0)
-          .select("*")
-          .maybeSingle();
+          .select("*");
     } else {
       data = await _client
           .from(DbTable.userResult)
@@ -48,9 +46,8 @@ class PhraseRepo {
             'phrases_id': result.phrasesId,
             'listens': 1,
           })
-          .select("*")
-          .maybeSingle();
+          .select("*");
     }
-    return UserResult.fromJson(data!);
+    return UserResult.fromJson(data.last);
   }
 }

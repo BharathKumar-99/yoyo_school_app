@@ -32,14 +32,13 @@ class MasterPhraseRepo {
   }
 
   Future<UserResult> upsertResult(UserResult result) async {
-    PostgrestMap? data;
+    PostgrestList? data;
     if (result.id != null) {
       data = await _client
           .from(DbTable.userResult)
           .update({'listens': result.listen})
           .eq('id', result.id ?? 0)
-          .select("*")
-          .maybeSingle();
+          .select("*");
     } else {
       data = await _client
           .from(DbTable.userResult)
@@ -49,9 +48,8 @@ class MasterPhraseRepo {
             'listens': 1,
             'type': result.type,
           })
-          .select("*")
-          .maybeSingle();
+          .select("*");
     }
-    return UserResult.fromJson(data!);
+    return UserResult.fromJson(data.last);
   }
 }

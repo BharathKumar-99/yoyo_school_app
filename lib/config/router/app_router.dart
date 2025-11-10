@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
@@ -11,6 +12,7 @@ import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.da
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
+import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 
 import '../../features/try_phrases/presentation/try_phrases_screen.dart';
 
@@ -42,6 +44,7 @@ class AppRoutes {
         builder: (context, state) {
           Map data = state.extra as Map;
           return PhrasesDetails(
+            key: UniqueKey(),
             language: data['language'],
             className: data['className'],
             levels: data['level'],
@@ -79,12 +82,19 @@ class AppRoutes {
         path: RouteNames.tryPhrases,
         builder: (context, state) {
           Map data = state.extra as Map;
-          return TryPhrasesScreen(
-            phraseModel: data['phrase'] as PhraseModel,
-            streak: data['streak'],
-            schoolLanguage: data['schoolLanguage'],
-            className: data['className'],
-            student: data['student'],
+          return ChangeNotifierProvider<TryPhrasesProvider>(
+            create: (context) => TryPhrasesProvider(
+              data['phrase'] as PhraseModel,
+              data['streak'],
+            ),
+            child: TryPhrasesScreen(
+              key: UniqueKey(),
+              phraseModel: data['phrase'] as PhraseModel,
+              streak: data['streak'],
+              schoolLanguage: data['schoolLanguage'],
+              className: data['className'],
+              student: data['student'],
+            ),
           );
         },
       ),

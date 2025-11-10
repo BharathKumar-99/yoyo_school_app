@@ -51,7 +51,7 @@ class PhrasesDetails extends StatelessWidget {
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return provider.isStreakLoading
-              ? Container(color: Colors.white)
+              ? Container(color: Colors.red)
               : DefaultTabController(
                   length: 3,
                   child: Scaffold(
@@ -434,7 +434,7 @@ class PhrasesDetails extends StatelessWidget {
         return Column(
           children: [
             GestureDetector(
-              onTap: () => context.push(
+              onTap: () => context.go(
                 routeName,
                 extra: {
                   "phrase": model,
