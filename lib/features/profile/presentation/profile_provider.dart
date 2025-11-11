@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
+
+import '../../common/presentation/global_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
   final ProfileRepository profileRepository;
@@ -26,6 +29,7 @@ class ProfileProvider extends ChangeNotifier {
   void initialize({bool fromOtp = false}) {
     isFromOtp = fromOtp;
     _subscribeToUserData();
+    Provider.of<GlobalProvider>(ctx!, listen: false);
   }
 
   void _subscribeToUserData() {

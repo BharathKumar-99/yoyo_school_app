@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
@@ -190,8 +191,8 @@ class TryPhrasesScreen extends StatelessWidget {
                                           fontFamily: 'Sansita',
                                         ),
                                   ),
-                                  Image.asset(
-                                    ImageConstants.streak,
+                                  Lottie.asset(
+                                    AnimationAsset.streakAnimation,
                                     height: 80,
                                     width: 80,
                                   ),

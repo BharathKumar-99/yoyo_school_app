@@ -688,6 +688,24 @@ abstract class AppLocalizations {
   /// **'Repeat slowly:'**
   String get repeat_slowly;
 
+  /// No description provided for @enableStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Streak'**
+  String get enableStreak;
+
+  /// No description provided for @frenchSlack.
+  ///
+  /// In en, this message translates to:
+  /// **'French Slack'**
+  String get frenchSlack;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
   /// No description provided for @congratulations.
   ///
   /// In en, this message translates to:

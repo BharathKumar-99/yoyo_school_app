@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
@@ -46,9 +47,11 @@ class StreakRecordingPopup extends StatelessWidget {
                   children: [
                     Spacer(),
                     SizedBox(
-                      width: double.infinity,
-                      height: 100,
-                      child: BouncingText(),
+                      height: 200,
+                      child: Lottie.asset(
+                        AnimationAsset.yoyoWaitingText,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                     CheckingDots(),
                     Spacer(),
@@ -66,11 +69,10 @@ class StreakRecordingPopup extends StatelessWidget {
                 child: Column(
                   children: [
                     Spacer(),
-                    Image.asset(
-                      ImageConstants.correct,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.fill,
+                    Lottie.asset(
+                      AnimationAsset.streakTick,
+                      fit: BoxFit.cover,
+                      height: 120,
                     ),
 
                     Text(

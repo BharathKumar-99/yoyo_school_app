@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
-import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/data/global_repo.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
@@ -40,8 +39,6 @@ class ResultProvider extends ChangeNotifier {
   }
 
   init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     userClases = await _repo.getClasses();
     speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
@@ -49,7 +46,7 @@ class ResultProvider extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = speechEvaluationModel?.result?.overall ?? 0;
+    score = 85; // speechEvaluationModel?.result?.overall ?? 0;
     gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
       (val) => val.language?.id == language.id,
@@ -59,7 +56,6 @@ class ResultProvider extends ChangeNotifier {
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
     if ((result?.attempt ?? 0) >= 0) {}
     notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
   void showAnimationPopup() {

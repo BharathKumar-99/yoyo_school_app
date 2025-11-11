@@ -12,6 +12,7 @@ import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.da
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
+import 'package:yoyo_school_app/features/settings/presentation/settings_screen.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 
 import '../../features/try_phrases/presentation/try_phrases_screen.dart';
@@ -38,6 +39,10 @@ class AppRoutes {
       GoRoute(
         path: RouteNames.home,
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.settings,
+        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
         path: RouteNames.phrasesDetails,
@@ -103,6 +108,7 @@ class AppRoutes {
         builder: (context, state) {
           Map data = state.extra as Map;
           return MasterPhraseSreen(
+            key: UniqueKey(),
             model: data['phrase'] as PhraseModel,
             streak: data['streak'],
             schoolLanguage: data['schoolLanguage'],

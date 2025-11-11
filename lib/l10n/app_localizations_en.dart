@@ -327,6 +327,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get repeat_slowly => 'Repeat slowly:';
 
   @override
+  String get enableStreak => 'Enable Streak';
+
+  @override
+  String get frenchSlack => 'French Slack';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
   String get congratulations => 'Congratulations!';
 
   @override

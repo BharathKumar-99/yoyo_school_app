@@ -1,7 +1,8 @@
 class UrlConstants {
   static const String superSpeachApi = "api.speechsuper.com";
-  static const String openAiUrl='https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/openai';
-  }
+  static const String openAiUrl =
+      'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/openai';
+}
 
 class ImageConstants {
   static const String assetsLoc = "assets/images/";
@@ -23,6 +24,15 @@ class IconConstants {
   static const String emailIcon = "${iconLoc}mail.png";
   static const String vertIcon = "${iconLoc}vert-more.png";
   static const String logOutIcon = "${iconLoc}Logout.png";
+}
+
+class AnimationAsset {
+  static const String animationLoc = "assets/animation/";
+  static const String streakAnimation = "${animationLoc}blazing_streak.json";
+  static const String learnedSuccess = "${animationLoc}learned_success.json";
+  static const String masteredSuccess = "${animationLoc}mastered_success.json";
+  static const String streakTick = "${animationLoc}streak_tick.json";
+  static const String yoyoWaitingText = "${animationLoc}yoyo_waiting_text.json";
 }
 
 class DbTable {

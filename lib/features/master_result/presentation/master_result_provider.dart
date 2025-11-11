@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
-import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/data/global_repo.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
@@ -29,14 +31,13 @@ class MasterResultProvider extends ChangeNotifier {
   Student? userClases;
   final MasterResultsRepo _repo = MasterResultsRepo();
   bool showRivePopup = false;
-
+  late GlobalProvider globalProvider;
   MasterResultProvider(this.phraseModel, this.audioPath, this.language) {
+    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     init();
   }
 
   init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
       audioPath: audioPath,
@@ -56,7 +57,6 @@ class MasterResultProvider extends ChangeNotifier {
       );
     }
     notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
   void showAnimationPopup() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -75,7 +76,8 @@ class StreakRecordingViewModel extends ChangeNotifier {
           },
         );
       } else {
-        NavigationHelper.pushReplacement(
+        ctx!.pop();
+        NavigationHelper.push(
           form == 'new' ? RouteNames.result : RouteNames.masterResult,
           extra: {
             'phraseModel': phraseModel,

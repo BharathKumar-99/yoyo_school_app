@@ -8,4 +8,5 @@ class RouteNames {
   static const masterResult = '/masterResult';
   static const tryPhrases = '/tryPhrases';
   static const masterPhrases = '/masterPhrases';
+  static const settings = '/settings';
 }

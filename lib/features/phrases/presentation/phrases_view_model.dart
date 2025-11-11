@@ -141,13 +141,12 @@ class PhrasesViewModel extends ChangeNotifier {
     final totalUserScore = userScore.isNotEmpty
         ? userScore.reduce((a, b) => a + b)
         : 0;
-    final phraseLength = classes.language?.phrase?.length ?? 0;
 
     if (classStrength > 0) {
       classPercentage = (totalClassScore / classStrength).round();
     }
-    if (phraseLength > 0) {
-      userPercentage = (totalUserScore / phraseLength).round();
+    if (userScore.isNotEmpty) {
+      userPercentage = (totalUserScore / userScore.length).round();
     }
 
     notifyListeners();
@@ -173,6 +172,8 @@ class PhrasesViewModel extends ChangeNotifier {
           "student": student,
         },
       );
+    } else {
+      streak = null;
     }
     isStreakLoading = false;
   }

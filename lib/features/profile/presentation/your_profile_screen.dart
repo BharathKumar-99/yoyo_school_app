@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
 class YourProfile extends StatefulWidget {
@@ -38,10 +39,52 @@ class _YourProfileState extends State<YourProfile> {
             : Scaffold(
                 appBar: AppBar(
                   leadingWidth: 80,
-                  leading: backBtn(),
+                  leading: IconButton(
+                    onPressed: () => context.pop(),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        Colors.transparent,
+                      ),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: Colors.grey),
+                        ),
+                      ),
+                      fixedSize: WidgetStateProperty.all(const Size(40, 40)),
+                    ),
+                  ),
                   actionsPadding: const EdgeInsets.symmetric(horizontal: 20),
                   actions: [
-                    Image.asset(IconConstants.vertIcon, height: 24, width: 24),
+                    PopupMenuButton<int>(
+                      offset: const Offset(0, -380),
+                      enableFeedback: false,
+                      itemBuilder: (context) => [
+                        PopupMenuItem<int>(
+                          value: 0,
+                          child: Text(text.settings),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        switch (value) {
+                          case 0:
+                            context.push(RouteNames.settings);
+                            break;
+                          default:
+                        }
+                      },
+                      child: Image.asset(
+                        IconConstants.vertIcon,
+                        height: 24,
+                        width: 24,
+                      ),
+                    ),
+
                     const SizedBox(width: 10),
                     (widget.isFromOtp ?? false)
                         ? const SizedBox.shrink()

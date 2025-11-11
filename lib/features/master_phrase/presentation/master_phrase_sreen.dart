@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
@@ -189,8 +190,8 @@ class MasterPhraseSreen extends StatelessWidget {
                                       padding: const EdgeInsets.only(
                                         bottom: 8.0,
                                       ),
-                                      child: Image.asset(
-                                        ImageConstants.streak,
+                                      child: Lottie.asset(
+                                        AnimationAsset.streakAnimation,
                                         height: 60,
                                         width: 60,
                                       ),

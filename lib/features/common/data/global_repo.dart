@@ -142,7 +142,7 @@ class GlobalRepo {
               "refText": phrase,
               "coreType": coreType,
               "tokenId": tokenId,
-              "slack": audioCode == "fr" ? 0.25 : 0,
+              "slack": audioCode == "fr" ? apiCred.frSlack : 0,
             },
           },
         },
@@ -238,5 +238,25 @@ class GlobalRepo {
           .eq('user_id', uid)
           .eq('language_id', lid ?? 0);
     }
+  }
+
+  Future<RemoteConfig> updateStreakEnabled(bool value) async {
+    final data = await _client
+        .from(DbTable.remoteConfig)
+        .update({"streak": value})
+        .eq('id', 1)
+        .select()
+        .single();
+    return RemoteConfig.fromJson(data);
+  }
+
+  Future<RemoteConfig> updateSlack(double frenchSlackNum) async {
+    final data = await _client
+        .from(DbTable.remoteConfig)
+        .update({"fr_slack": frenchSlackNum})
+        .eq('id', 1)
+        .select()
+        .single();
+    return RemoteConfig.fromJson(data);
   }
 }

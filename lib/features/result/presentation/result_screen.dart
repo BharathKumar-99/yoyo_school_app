@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:rive/rive.dart' hide LinearGradient;
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -35,7 +35,22 @@ class ResultScreen extends StatelessWidget {
       child: Consumer<ResultProvider>(
         builder: (context, value, child) => Scaffold(
           body: value.speechEvaluationModel == null
-              ? Container()
+              ? Container(
+                  height: MediaQuery.sizeOf(context).height,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: language.gradient?.first ?? Colors.white,
+                  ),
+                  child: Center(
+                    child: SizedBox(
+                      height: 200,
+                      child: Lottie.asset(
+                        AnimationAsset.yoyoWaitingText,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                )
               : Stack(
                   children: [
                     Column(
@@ -408,16 +423,16 @@ class ResultScreen extends StatelessWidget {
                     if (value.score > Constants.minimumSubmitScore)
                       Column(
                         children: [
-                          Spacer(),
+                          Spacer(flex: 1),
                           SizedBox(
                             height: MediaQuery.sizeOf(context).height / 5,
                             width: double.infinity,
-                            child: RiveAnimation.asset(
-                              'assets/animation/confetti.riv',
+                            child: Lottie.asset(
+                              AnimationAsset.learnedSuccess,
                               fit: BoxFit.cover,
                             ),
                           ),
-                          Spacer(),
+                          Spacer(flex: 2),
                         ],
                       ),
                   ],

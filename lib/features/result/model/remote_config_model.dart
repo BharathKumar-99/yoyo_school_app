@@ -4,6 +4,7 @@ class RemoteConfig {
   final String apiKey;
   final String apiSecretKey;
   final bool streak;
+  final num frSlack;
 
   const RemoteConfig({
     required this.id,
@@ -11,6 +12,7 @@ class RemoteConfig {
     required this.apiKey,
     required this.apiSecretKey,
     required this.streak,
+    required this.frSlack,
   });
 
   factory RemoteConfig.fromJson(Map<String, dynamic> json) {
@@ -31,6 +33,7 @@ class RemoteConfig {
       apiKey: json['api_key'] as String,
       apiSecretKey: json['api_secret_key'] as String,
       streak: json['streak'] as bool,
+      frSlack: json['fr_slack'] as num,
     );
   }
 
@@ -40,5 +43,6 @@ class RemoteConfig {
     'api_key': apiKey,
     'api_secret_key': apiSecretKey,
     'streak': streak,
+    'fr_slack': frSlack,
   };
 }
