@@ -111,5 +111,7 @@
     "your_score": "Your score was",
     "master_more": "Master more phrases and you will get your Alicante Badge! ",
     "next_phrase": "Next Phrase..",
-    "retry": "Retry"
+    "retry": "Retry",
+    "lastLearned": "You've finished learning this language!",
+    "lastMastered": "You've mastered all phrases in this language!"
 }

@@ -19,6 +19,7 @@ class MasterPhraseSreen extends StatelessWidget {
   final SchoolLanguage schoolLanguage;
   final String className;
   final Student student;
+  final bool isLast;
   const MasterPhraseSreen({
     super.key,
     required this.model,
@@ -26,6 +27,7 @@ class MasterPhraseSreen extends StatelessWidget {
     required this.schoolLanguage,
     required this.className,
     required this.student,
+    required this.isLast,
   });
 
   @override
@@ -224,6 +226,7 @@ class MasterPhraseSreen extends StatelessWidget {
                   model: model,
                   launguage: value.language!,
                   streak: streak,
+                  isLast: isLast,
                 )
               : Container(),
         ),

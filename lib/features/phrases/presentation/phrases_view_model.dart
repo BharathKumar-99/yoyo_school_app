@@ -37,6 +37,7 @@ class PhrasesViewModel extends ChangeNotifier {
   BuildContext? ctx;
   bool isStreakLoading = false;
   String? className;
+  late GlobalProvider globalProvider;
 
   PhrasesViewModel(
     this.classes,
@@ -47,6 +48,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.ctx,
     this.className,
   ) {
+    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     isStreakLoading = streak != null;
     notifyListeners();
     init(true);
@@ -170,6 +172,9 @@ class PhrasesViewModel extends ChangeNotifier {
           "schoolLanguage": classes,
           "className": className,
           "student": student,
+          "isLast": from == 'new'
+              ? newPhrases.length == 1
+              : learned.length == 1,
         },
       );
     } else {

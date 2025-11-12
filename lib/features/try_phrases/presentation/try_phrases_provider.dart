@@ -21,8 +21,8 @@ class TryPhrasesProvider extends ChangeNotifier {
   UserResult? result;
   bool isLoading = true;
   bool _disposed = false;
-
-  TryPhrasesProvider(this.phraseModel, this.streak) {
+  bool isLast;
+  TryPhrasesProvider(this.phraseModel, this.streak, this.isLast) {
     initAudio();
   }
 
@@ -92,6 +92,7 @@ class TryPhrasesProvider extends ChangeNotifier {
         model: phraseModel,
         launguage: language!,
         streak: streak,
+        isLast: isLast,
       ),
     );
   }

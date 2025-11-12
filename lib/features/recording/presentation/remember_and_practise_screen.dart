@@ -11,17 +11,20 @@ class RememberAndPractiseScreen extends StatelessWidget {
   final PhraseModel model;
   final Language launguage;
   final int? streak;
+  final bool isLast;
   const RememberAndPractiseScreen({
     super.key,
     required this.model,
     required this.launguage,
     required this.streak,
+    required this.isLast,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RememberRecorderProvider>(
-      create: (context) => RememberRecorderProvider(model, launguage, streak),
+      create: (context) =>
+          RememberRecorderProvider(model, launguage, streak, isLast),
       child: Consumer<RememberRecorderProvider>(
         builder: (context, value, wid) {
           return Container(

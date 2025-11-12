@@ -771,6 +771,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// No description provided for @lastLearned.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve finished learning this language!'**
+  String get lastLearned;
+
+  /// No description provided for @lastMastered.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve mastered all phrases in this language!'**
+  String get lastMastered;
 }
 
 class _AppLocalizationsDelegate

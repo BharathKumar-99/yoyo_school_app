@@ -15,11 +15,13 @@ class MasterResultScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final Language language;
   final String audioPath;
+  final bool isLast;
   const MasterResultScreen({
     super.key,
     required this.phraseModel,
     required this.audioPath,
     required this.language,
+    required this.isLast,
   });
 
   @override
@@ -325,44 +327,91 @@ class MasterResultScreen extends StatelessWidget {
                                       ),
 
                                       Spacer(),
-                                      if (value.globalProvider.apiCred.streak ==
-                                          true)
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            onPressed: () => context.go(
-                                              RouteNames.phrasesDetails,
-                                              extra: {
-                                                'language': value.slanguage,
-                                                "className":
-                                                    value
-                                                        .userClases
-                                                        ?.classes
-                                                        ?.className ??
-                                                    "",
-                                                "level": value.levels ?? [],
-                                                'student': value.userClases,
-                                                'next': true,
-                                                "streak": 1,
-                                                "from": "learned",
-                                              },
+                                      isLast
+                                          ? SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                text.lastMastered,
+                                                textAlign: TextAlign.center,
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .titleSmall,
+                                              ),
+                                            )
+                                          : (value
+                                                    .globalProvider
+                                                    .apiCred
+                                                    .streak ==
+                                                true)
+                                          ? SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.go(
+                                                  RouteNames.phrasesDetails,
+                                                  extra: {
+                                                    'language': value.slanguage,
+                                                    "className":
+                                                        value
+                                                            .userClases
+                                                            ?.classes
+                                                            ?.className ??
+                                                        "",
+                                                    "level": value.levels ?? [],
+                                                    'student': value.userClases,
+                                                    'next': true,
+                                                    "streak": 1,
+                                                    "from": "learned",
+                                                  },
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                ),
+                                                child: Text(
+                                                  text.goOnAStreak,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.go(
+                                                  RouteNames.phrasesDetails,
+                                                  extra: {
+                                                    'language': value.slanguage,
+                                                    "className":
+                                                        value
+                                                            .userClases
+                                                            ?.classes
+                                                            ?.className ??
+                                                        "",
+                                                    "level": value.levels ?? [],
+                                                    'student': value.userClases,
+                                                  },
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                ),
+                                                child: Text(
+                                                  text.next_phrase,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ),
                                             ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  value
-                                                      .language
-                                                      .gradient
-                                                      ?.first ??
-                                                  Colors.blue,
-                                            ),
-                                            child: Text(
-                                              text.goOnAStreak,
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                          ),
-                                        ),
                                       SizedBox(height: 5),
                                       Center(
                                         child: TextButton(

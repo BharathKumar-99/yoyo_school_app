@@ -10,17 +10,19 @@ class ReadAndPractiseScreen extends StatelessWidget {
   final PhraseModel model;
   final Language launguage;
   final int? streak;
+  final bool isLast;
   const ReadAndPractiseScreen({
     super.key,
     required this.model,
     required this.launguage,
     this.streak,
+    required this.isLast,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecordingProvider>(
-      create: (context) => RecordingProvider(model, launguage, streak),
+      create: (context) => RecordingProvider(model, launguage, streak, isLast),
       child: Consumer<RecordingProvider>(
         builder: (context, value, wid) {
           return Container(

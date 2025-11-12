@@ -257,7 +257,8 @@ class PhrasesDetails extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  if ((provider.streakNumber ?? 0) > 0)
+                                  if (((provider.streakNumber ?? 0) > 0) &&
+                                      provider.globalProvider.apiCred.streak)
                                     Positioned(
                                       bottom: 0,
                                       right:
@@ -442,6 +443,7 @@ class PhrasesDetails extends StatelessWidget {
                   "schoolLanguage": provider.classes,
                   "className": className,
                   "student": provider.student,
+                  "isLast": phrases.length == 1,
                 },
               ),
               child: PhrasesWidget(

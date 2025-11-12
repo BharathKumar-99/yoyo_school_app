@@ -24,6 +24,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   List<Level>? levels = [];
   int streak;
   String form;
+  bool isLast;
   SchoolLanguage? slanguage;
   bool loading = true;
   int score = 0;
@@ -36,6 +37,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
     this.language,
     this.streak,
     this.form,
+    this.isLast,
   ) {
     init();
   }
@@ -62,7 +64,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
     notifyListeners();
 
     Future.delayed(Duration(seconds: 3), () {
-      if (score > Constants.minimumSubmitScore) {
+      if (score > Constants.minimumSubmitScore && !isLast) {
         NavigationHelper.pushReplacement(
           RouteNames.phrasesDetails,
           extra: {
@@ -83,6 +85,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
             'phraseModel': phraseModel,
             'path': audioPath,
             'language': language,
+            'isLast': isLast,
           },
         );
       }

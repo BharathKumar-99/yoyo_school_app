@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,11 +17,13 @@ class ResultScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final Language language;
   final String audioPath;
+  final bool isLast;
   const ResultScreen({
     super.key,
     required this.phraseModel,
     required this.audioPath,
     required this.language,
+    required this.isLast,
   });
 
   @override
@@ -198,15 +202,34 @@ class ResultScreen extends StatelessWidget {
                                             height: h(0.18),
 
                                             child: Center(
-                                              child: Text(
-                                                '${value.score.toString()} %',
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .headlineLarge!
-                                                    .copyWith(
-                                                      color: Colors.white,
-                                                      fontSize: w(0.12),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                child: BackdropFilter(
+                                                  filter: ImageFilter.blur(
+                                                    sigmaX: 10,
+                                                    sigmaY: 10,
+                                                  ),
+                                                  child: Container(
+                                                    color: Colors.black
+                                                        .withValues(alpha: 0.1),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          horizontal: 12,
+                                                          vertical: 6,
+                                                        ),
+                                                    child: Text(
+                                                      '${value.score.toString()} %',
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .headlineLarge!
+                                                          .copyWith(
+                                                            color: Colors.white,
+                                                            fontSize: w(0.12),
+                                                          ),
                                                     ),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -355,44 +378,94 @@ class ResultScreen extends StatelessWidget {
                                       Spacer(),
                                       Text(value.gptResponse?.body ?? ''),
                                       Spacer(),
-                                      if (value.globalProvider.apiCred.streak ==
-                                          true)
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            onPressed: () => context.go(
-                                              RouteNames.phrasesDetails,
-                                              extra: {
-                                                'language': value.slanguage,
-                                                "className":
-                                                    value
-                                                        .userClases
-                                                        ?.classes
-                                                        ?.className ??
-                                                    "",
-                                                "level": value.levels ?? [],
-                                                'student': value.userClases,
-                                                'next': true,
-                                                'from': 'new',
-                                                "streak": 1,
-                                              },
+                                      isLast
+                                          ? SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                text.lastLearned,
+                                                textAlign: TextAlign.center,
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .titleSmall,
+                                              ),
+                                            )
+                                          : (value
+                                                    .globalProvider
+                                                    .apiCred
+                                                    .streak ==
+                                                true)
+                                          ? SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.go(
+                                                  RouteNames.phrasesDetails,
+                                                  extra: {
+                                                    'language': value.slanguage,
+                                                    "className":
+                                                        value
+                                                            .userClases
+                                                            ?.classes
+                                                            ?.className ??
+                                                        "",
+                                                    "level": value.levels ?? [],
+                                                    'student': value.userClases,
+                                                    'next': true,
+                                                    'from': 'new',
+                                                    "streak": 1,
+                                                  },
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                ),
+                                                child: Text(
+                                                  text.goOnAStreak,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.go(
+                                                  RouteNames.masterPhrases,
+                                                  extra: {
+                                                    'student': value.userClases,
+                                                    "phrase": value.phraseModel,
+                                                    "streak": null,
+                                                    "schoolLanguage":
+                                                        value.slanguage,
+                                                    "className":
+                                                        value
+                                                            .userClases
+                                                            ?.classes
+                                                            ?.className ??
+                                                        "",
+                                                    "isLast": false,
+                                                  },
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                ),
+                                                child: Text(
+                                                  text.tryToMaster,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ),
                                             ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  value
-                                                      .language
-                                                      .gradient
-                                                      ?.first ??
-                                                  Colors.blue,
-                                            ),
-                                            child: Text(
-                                              text.goOnAStreak,
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                          ),
-                                        ),
 
                                       SizedBox(height: 5),
                                       Center(

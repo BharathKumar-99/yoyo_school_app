@@ -68,6 +68,7 @@ class AppRoutes {
             phraseModel: data['phraseModel'],
             language: data['language'],
             audioPath: data['path'],
+            isLast: data['isLast'],
           );
         },
       ),
@@ -79,6 +80,7 @@ class AppRoutes {
             phraseModel: data['phraseModel'],
             language: data['language'],
             audioPath: data['path'],
+            isLast: data['isLast'],
           );
         },
       ),
@@ -91,6 +93,7 @@ class AppRoutes {
             create: (context) => TryPhrasesProvider(
               data['phrase'] as PhraseModel,
               data['streak'],
+              data['isLast'],
             ),
             child: TryPhrasesScreen(
               key: UniqueKey(),
@@ -99,6 +102,7 @@ class AppRoutes {
               schoolLanguage: data['schoolLanguage'],
               className: data['className'],
               student: data['student'],
+              isLast: data['isLast'],
             ),
           );
         },
@@ -114,6 +118,7 @@ class AppRoutes {
             schoolLanguage: data['schoolLanguage'],
             className: data['className'],
             student: data['student'],
+            isLast: data['isLast'],
           );
         },
       ),

@@ -22,7 +22,14 @@ class RecordingProvider extends ChangeNotifier {
   String? recordingPath;
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
-  RecordingProvider(this.phraseModel, this.launguage, this.streak) {
+  bool isLast;
+
+  RecordingProvider(
+    this.phraseModel,
+    this.launguage,
+    this.streak,
+    this.isLast,
+  ) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
       ..androidOutputFormat = AndroidOutputFormat.mpeg4
@@ -73,6 +80,7 @@ class RecordingProvider extends ChangeNotifier {
                 streak: streak!,
                 audioPath: recordingPath!,
                 form: "new",
+                isLast: isLast,
               ),
             );
           } else {
@@ -82,6 +90,7 @@ class RecordingProvider extends ChangeNotifier {
                 'phraseModel': phraseModel,
                 'path': recordingPath,
                 'language': launguage,
+                'isLast': isLast,
               },
             );
           }

@@ -17,6 +17,7 @@ class TryPhrasesScreen extends StatelessWidget {
   final SchoolLanguage schoolLanguage;
   final String className;
   final Student student;
+  final bool isLast;
   const TryPhrasesScreen({
     super.key,
     required this.phraseModel,
@@ -24,6 +25,7 @@ class TryPhrasesScreen extends StatelessWidget {
     required this.schoolLanguage,
     required this.className,
     required this.student,
+    required this.isLast,
   });
 
   @override
