@@ -783,6 +783,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You\'ve mastered all phrases in this language!'**
   String get lastMastered;
+
+  /// No description provided for @whoops.
+  ///
+  /// In en, this message translates to:
+  /// **'Whoops!'**
+  String get whoops;
+
+  /// No description provided for @itseemslikesomethingwentwrong.
+  ///
+  /// In en, this message translates to:
+  /// **'It seems like something went wrong with the recording'**
+  String get itseemslikesomethingwentwrong;
+
+  /// No description provided for @check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get check;
+
+  /// No description provided for @noBgNoise.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no background noise'**
+  String get noBgNoise;
+
+  /// No description provided for @holdingRec.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re holding the record button for the duration of your phrase'**
+  String get holdingRec;
+
+  /// No description provided for @micPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'The app has permission to use your microphone'**
+  String get micPermission;
+
+  /// No description provided for @checkMark.
+  ///
+  /// In en, this message translates to:
+  /// **'✔️'**
+  String get checkMark;
+
+  /// No description provided for @threeTryNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Three tries done — maybe take a break with another phrase?'**
+  String get threeTryNext;
 }
 
 class _AppLocalizationsDelegate

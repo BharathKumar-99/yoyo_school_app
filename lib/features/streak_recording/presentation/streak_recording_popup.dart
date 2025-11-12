@@ -74,7 +74,7 @@ class StreakRecordingPopup extends StatelessWidget {
                     Spacer(),
                     Lottie.asset(
                       AnimationAsset.streakTick,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.cover,repeat: false,
                       height: 120,
                     ),
 

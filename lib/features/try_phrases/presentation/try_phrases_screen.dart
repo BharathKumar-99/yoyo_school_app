@@ -10,6 +10,7 @@ import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_pr
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
 
 import '../../../config/router/navigation_helper.dart';
+import '../../recording/presentation/read_and_practise_screen.dart';
 
 class TryPhrasesScreen extends StatelessWidget {
   final PhraseModel phraseModel;
@@ -195,6 +196,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                   ),
                                   Lottie.asset(
                                     AnimationAsset.streakAnimation,
+                                    repeat: false,
                                     height: 80,
                                     width: 80,
                                   ),
@@ -207,35 +209,14 @@ class TryPhrasesScreen extends StatelessWidget {
                   ),
                 ),
               ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 25),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => value.showReadBottomPopup(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    value.language?.gradient?.first ?? Colors.white,
-                elevation: 6,
-                shadowColor: Colors.black26,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: Text(
-                  text.tryThisPhrase,
-                  key: ValueKey(value.showPhrase),
-                  style: AppTextStyles.textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+        bottomNavigationBar: value.language != null
+            ? ReadAndPractiseScreen(
+                model: phraseModel,
+                launguage: value.language!,
+                streak: streak,
+                isLast: isLast,
+              )
+            : Container(),
       ),
     );
   }

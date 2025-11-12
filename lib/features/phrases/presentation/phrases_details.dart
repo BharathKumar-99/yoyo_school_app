@@ -444,6 +444,7 @@ class PhrasesDetails extends StatelessWidget {
                   "className": className,
                   "student": provider.student,
                   "isLast": phrases.length == 1,
+                  "language": provider.classes.language,
                 },
               ),
               child: PhrasesWidget(

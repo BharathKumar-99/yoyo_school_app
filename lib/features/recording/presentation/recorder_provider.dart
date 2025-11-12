@@ -23,6 +23,7 @@ class RecordingProvider extends ChangeNotifier {
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
   bool isLast;
+  int retryNumber = 1;
 
   RecordingProvider(
     this.phraseModel,
@@ -67,7 +68,6 @@ class RecordingProvider extends ChangeNotifier {
         if (recordingPath != null) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
-          ctx!.pop();
           if (streak != null) {
             showModalBottomSheet(
               elevation: 1,
@@ -84,15 +84,20 @@ class RecordingProvider extends ChangeNotifier {
               ),
             );
           } else {
-            NavigationHelper.push(
-              RouteNames.result,
-              extra: {
-                'phraseModel': phraseModel,
-                'path': recordingPath,
-                'language': launguage,
-                'isLast': isLast,
-              },
-            );
+            ctx!
+                .push(
+                  RouteNames.result,
+                  extra: {
+                    'phraseModel': phraseModel,
+                    'path': recordingPath,
+                    'language': launguage,
+                    'isLast': isLast,
+                    'retry': retryNumber,
+                  },
+                )
+                .then((val) {
+                  retryNumber = val is int ? val : 0;
+                });
           }
         }
         notifyListeners();

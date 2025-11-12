@@ -17,6 +17,7 @@ class ImageConstants {
   static const String star = "${assetsLoc}star.png";
   static const String streak = "${assetsLoc}streak.png";
   static const String correct = "${assetsLoc}corect.png";
+  static const String noMic = "${assetsLoc}no_mic.png";
 }
 
 class IconConstants {
@@ -62,4 +63,8 @@ class Constants {
   static const int minimumSubmitScore = 80;
   static const String learned = 'Learned';
   static const String mastered = 'Mastered';
+
+  static const int lowScreenScore = 10;
+
+  static const int retryAttempts = 3;
 }

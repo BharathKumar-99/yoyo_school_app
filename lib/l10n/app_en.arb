@@ -113,5 +113,13 @@
     "next_phrase": "Next Phrase..",
     "retry": "Retry",
     "lastLearned": "You've finished learning this language!",
-    "lastMastered": "You've mastered all phrases in this language!"
+    "lastMastered": "You've mastered all phrases in this language!",
+    "whoops": "Whoops!",
+    "itseemslikesomethingwentwrong": "It seems like something went wrong with the recording",
+    "check": "Check",
+    "noBgNoise": "There is no background noise",
+    "holdingRec": "You're holding the record button for the duration of your phrase",
+    "micPermission": "The app has permission to use your microphone",
+    "checkMark": "✔️",
+    "threeTryNext": "Three tries done — maybe take a break with another phrase?"
 }

@@ -172,6 +172,7 @@ class PhrasesViewModel extends ChangeNotifier {
           "schoolLanguage": classes,
           "className": className,
           "student": student,
+          "language": classes.language,
           "isLast": from == 'new'
               ? newPhrases.length == 1
               : learned.length == 1,

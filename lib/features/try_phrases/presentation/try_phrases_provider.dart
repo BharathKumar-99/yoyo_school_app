@@ -7,8 +7,6 @@ import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import '../../../config/constants/constants.dart';
 import '../../../config/utils/get_user_details.dart';
 import '../../../config/utils/global_loader.dart';
-import '../../recording/presentation/read_and_practise_screen.dart'
-    show ReadAndPractiseScreen;
 import '../data/try_phrases_repo.dart';
 
 class TryPhrasesProvider extends ChangeNotifier {
@@ -81,19 +79,5 @@ class TryPhrasesProvider extends ChangeNotifier {
     }
 
     result = await _repo.upsertResult(result!);
-  }
-
-  void showReadBottomPopup(BuildContext context) {
-    showModalBottomSheet(
-      elevation: 1,
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) => ReadAndPractiseScreen(
-        model: phraseModel,
-        launguage: language!,
-        streak: streak,
-        isLast: isLast,
-      ),
-    );
   }
 }

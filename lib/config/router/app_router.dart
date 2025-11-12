@@ -7,14 +7,17 @@ import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
+import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
+import 'package:yoyo_school_app/features/recording/presentation/remember_recorder_provider.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
 import 'package:yoyo_school_app/features/settings/presentation/settings_screen.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 
+import '../../features/recording/presentation/recorder_provider.dart';
 import '../../features/try_phrases/presentation/try_phrases_screen.dart';
 
 class AppRoutes {
@@ -69,6 +72,7 @@ class AppRoutes {
             language: data['language'],
             audioPath: data['path'],
             isLast: data['isLast'],
+            retryNumber: data['retry'] ?? 0,
           );
         },
       ),
@@ -81,6 +85,7 @@ class AppRoutes {
             language: data['language'],
             audioPath: data['path'],
             isLast: data['isLast'],
+            retryNumber: data['retry'] ?? 0,
           );
         },
       ),
@@ -95,14 +100,22 @@ class AppRoutes {
               data['streak'],
               data['isLast'],
             ),
-            child: TryPhrasesScreen(
-              key: UniqueKey(),
-              phraseModel: data['phrase'] as PhraseModel,
-              streak: data['streak'],
-              schoolLanguage: data['schoolLanguage'],
-              className: data['className'],
-              student: data['student'],
-              isLast: data['isLast'],
+            child: ChangeNotifierProvider<RecordingProvider>(
+              create: (context) => RecordingProvider(
+                data['phrase'] as PhraseModel,
+                data['language'],
+                data['streak'],
+                data['isLast'],
+              ),
+              child: TryPhrasesScreen(
+                key: UniqueKey(),
+                phraseModel: data['phrase'] as PhraseModel,
+                streak: data['streak'],
+                schoolLanguage: data['schoolLanguage'],
+                className: data['className'],
+                student: data['student'],
+                isLast: data['isLast'],
+              ),
             ),
           );
         },
@@ -111,14 +124,25 @@ class AppRoutes {
         path: RouteNames.masterPhrases,
         builder: (context, state) {
           Map data = state.extra as Map;
-          return MasterPhraseSreen(
-            key: UniqueKey(),
-            model: data['phrase'] as PhraseModel,
-            streak: data['streak'],
-            schoolLanguage: data['schoolLanguage'],
-            className: data['className'],
-            student: data['student'],
-            isLast: data['isLast'],
+          return ChangeNotifierProvider<MasterPhraseProvider>(
+            create: (_) => MasterPhraseProvider(data['phrase'] as PhraseModel),
+            child: ChangeNotifierProvider<RememberRecorderProvider>(
+              create: (_) => RememberRecorderProvider(
+                data['phrase'] as PhraseModel,
+                data['language'],
+                data['streak'],
+                data['isLast'],
+              ),
+              child: MasterPhraseSreen(
+                key: UniqueKey(),
+                model: data['phrase'] as PhraseModel,
+                streak: data['streak'],
+                schoolLanguage: data['schoolLanguage'],
+                className: data['className'],
+                student: data['student'],
+                isLast: data['isLast'],
+              ),
+            ),
           );
         },
       ),

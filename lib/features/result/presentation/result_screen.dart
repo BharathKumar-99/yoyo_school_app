@@ -18,12 +18,14 @@ class ResultScreen extends StatelessWidget {
   final Language language;
   final String audioPath;
   final bool isLast;
+  final int retryNumber;
   const ResultScreen({
     super.key,
     required this.phraseModel,
     required this.audioPath,
     required this.language,
     required this.isLast,
+    required this.retryNumber,
   });
 
   @override
@@ -51,6 +53,131 @@ class ResultScreen extends StatelessWidget {
                       child: Lottie.asset(
                         AnimationAsset.yoyoWaitingText,
                         fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                )
+              : value.score <= Constants.lowScreenScore
+              ? SafeArea(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 26,
+                        top: 80,
+                        right: 26,
+                      ),
+                      child: Column(
+                        spacing: 10,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            text.whoops,
+                            style: AppTextStyles.textTheme.headlineLarge,
+                          ),
+                          Text(
+                            text.itseemslikesomethingwentwrong,
+                            style: AppTextStyles.textTheme.bodyMedium,
+                          ),
+                          Image.asset(ImageConstants.noMic),
+                          Text(
+                            text.check,
+                            style: AppTextStyles.textTheme.titleLarge,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
+                            child: Column(
+                              spacing: 10,
+                              children: [
+                                Row(
+                                  spacing: 6,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(text.checkMark),
+                                    Expanded(
+                                      child: Text(
+                                        text.noBgNoise,
+                                        style:
+                                            AppTextStyles.textTheme.bodyMedium,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  spacing: 6,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(text.checkMark),
+                                    Expanded(
+                                      child: Text(
+                                        text.holdingRec,
+                                        style:
+                                            AppTextStyles.textTheme.bodyMedium,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  spacing: 6,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(text.checkMark),
+                                    Expanded(
+                                      child: Text(
+                                        text.micPermission,
+                                        style:
+                                            AppTextStyles.textTheme.bodyMedium,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          retryNumber >= Constants.retryAttempts
+                              ? Column(
+                                  spacing: 5,
+                                  children: [
+                                    Text(
+                                      text.threeTryNext,
+                                      style: AppTextStyles.textTheme.bodyMedium,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () => context.go(
+                                          RouteNames.phrasesDetails,
+                                          extra: {
+                                            'language': value.slanguage,
+                                            "className":
+                                                value
+                                                    .userClases
+                                                    ?.classes
+                                                    ?.className ??
+                                                "",
+                                            "level": value.levels ?? [],
+                                            'student': value.userClases,
+                                          },
+                                        ),
+
+                                        child: Text(text.next_phrase),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () =>
+                                        context.pop(retryNumber + 1),
+                                    child: Text(text.tryAgain),
+                                  ),
+                                ),
+                          SizedBox(height: 10),
+                        ],
                       ),
                     ),
                   ),
@@ -185,14 +312,38 @@ class ResultScreen extends StatelessWidget {
                                                   padding: const EdgeInsets.all(
                                                     12.0,
                                                   ),
-                                                  child: Text(
-                                                    "${text.youareJust} ${Constants.minimumSubmitScore - value.score}% ${text.off}",
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .headlineMedium!
-                                                        .copyWith(
-                                                          color: Colors.white,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
                                                         ),
+                                                    child: BackdropFilter(
+                                                      filter: ImageFilter.blur(
+                                                        sigmaX: 10,
+                                                        sigmaY: 10,
+                                                      ),
+                                                      child: Container(
+                                                        color: Colors.black
+                                                            .withValues(
+                                                              alpha: 0.1,
+                                                            ),
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 6,
+                                                            ),
+                                                        child: Text(
+                                                          "${text.youareJust} ${Constants.minimumSubmitScore - value.score}% ${text.off}",
+                                                          style: AppTextStyles
+                                                              .textTheme
+                                                              .headlineMedium!
+                                                              .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                             ],
@@ -334,26 +485,50 @@ class ResultScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Spacer(),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                          onPressed: () => context.pop(),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                value
-                                                    .language
-                                                    .gradient
-                                                    ?.first ??
-                                                Colors.blue,
-                                          ),
-                                          child: Text(
-                                            text.tryAgain,
-                                            style: AppTextStyles
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        ),
-                                      ),
+                                      retryNumber >= Constants.retryAttempts
+                                          ? SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.go(
+                                                  RouteNames.phrasesDetails,
+                                                  extra: {
+                                                    'language': value.slanguage,
+                                                    "className":
+                                                        value
+                                                            .userClases
+                                                            ?.classes
+                                                            ?.className ??
+                                                        "",
+                                                    "level": value.levels ?? [],
+                                                    'student': value.userClases,
+                                                  },
+                                                ),
+
+                                                child: Text(text.next_phrase),
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.pop(
+                                                  retryNumber + 1,
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                ),
+                                                child: Text(
+                                                  text.tryAgain,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ),
+                                            ),
                                       Spacer(),
                                     ],
                                   )
@@ -502,7 +677,7 @@ class ResultScreen extends StatelessWidget {
                             width: double.infinity,
                             child: Lottie.asset(
                               AnimationAsset.learnedSuccess,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.cover,repeat: false,
                             ),
                           ),
                           Spacer(flex: 2),

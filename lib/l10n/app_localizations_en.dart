@@ -375,4 +375,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lastMastered => 'You\'ve mastered all phrases in this language!';
+
+  @override
+  String get whoops => 'Whoops!';
+
+  @override
+  String get itseemslikesomethingwentwrong =>
+      'It seems like something went wrong with the recording';
+
+  @override
+  String get check => 'Check';
+
+  @override
+  String get noBgNoise => 'There is no background noise';
+
+  @override
+  String get holdingRec =>
+      'You\'re holding the record button for the duration of your phrase';
+
+  @override
+  String get micPermission => 'The app has permission to use your microphone';
+
+  @override
+  String get checkMark => '✔️';
+
+  @override
+  String get threeTryNext =>
+      'Three tries done — maybe take a break with another phrase?';
 }

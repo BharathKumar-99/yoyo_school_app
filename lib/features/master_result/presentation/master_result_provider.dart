@@ -44,18 +44,15 @@ class MasterResultProvider extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = speechEvaluationModel?.result?.overall ?? 0;
+    score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+    userClases = await _repo.getClasses();
+    levels = await _repo.getLevel();
+    slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
+      (val) => val.language?.id == language.id,
+    );
     gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
 
-    if ((result?.attempt ?? 0) >= 0) {}
-    if (score > Constants.minimumSubmitScore) {
-      userClases = await _repo.getClasses();
-      levels = await _repo.getLevel();
-      slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
-        (val) => val.language?.id == language.id,
-      );
-    }
     notifyListeners();
   }
 

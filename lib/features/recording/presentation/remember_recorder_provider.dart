@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -21,6 +22,7 @@ class RememberRecorderProvider extends ChangeNotifier {
   final bool isLast;
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
+  int retryNumber = 1;
   RememberRecorderProvider(
     this.phraseModel,
     this.language,
@@ -81,15 +83,20 @@ class RememberRecorderProvider extends ChangeNotifier {
               ),
             );
           } else {
-            NavigationHelper.push(
-              RouteNames.masterResult,
-              extra: {
-                'phraseModel': phraseModel,
-                'path': recordingPath,
-                'language': language,
-                'isLast': isLast,
-              },
-            );
+            ctx!
+                .push(
+                  RouteNames.masterResult,
+                  extra: {
+                    'phraseModel': phraseModel,
+                    'path': recordingPath,
+                    'language': language,
+                    'isLast': isLast,
+                    'retry': retryNumber,
+                  },
+                )
+                .then((val) {
+                  retryNumber = val is int ? val : 0;
+                });
           }
         }
         notifyListeners();

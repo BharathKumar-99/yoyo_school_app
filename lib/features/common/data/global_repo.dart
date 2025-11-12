@@ -158,7 +158,7 @@ class GlobalRepo {
         Duration(seconds: 10),
       );
       final responseString = await streamedResponse.stream.bytesToString();
-
+      log(responseString);
       if (streamedResponse.statusCode != 200) {
         log("HTTP ${streamedResponse.statusCode}: $responseString");
         return null;
