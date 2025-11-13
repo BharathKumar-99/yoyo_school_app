@@ -121,5 +121,13 @@
     "holdingRec": "You're holding the record button for the duration of your phrase",
     "micPermission": "The app has permission to use your microphone",
     "checkMark": "✔️",
-    "threeTryNext": "Three tries done — maybe take a break with another phrase?"
+    "threeTryNext": "Three tries done — maybe take a break with another phrase?",
+    "onboarding1Title": "Find a quiet spot",
+    "onBoarding1Subtitle": "Yoyo works best with no background noise",
+    "onboarding2Title": "Grab your headphones & microphone",
+    "onBoarding2Subtitle": "The clearer you hear and speak, the better the result",
+    "onboarding3Title": "Don’t despair",
+    "onBoarding3Subtitle": "Even AI can get it wrong sometimes. Keep going!",
+    "next": "Next",
+    "letsGo": "Let's Go!"
 }

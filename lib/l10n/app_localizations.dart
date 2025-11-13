@@ -831,6 +831,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Three tries done — maybe take a break with another phrase?'**
   String get threeTryNext;
+
+  /// No description provided for @onboarding1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a quiet spot'**
+  String get onboarding1Title;
+
+  /// No description provided for @onBoarding1Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Yoyo works best with no background noise'**
+  String get onBoarding1Subtitle;
+
+  /// No description provided for @onboarding2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Grab your headphones & microphone'**
+  String get onboarding2Title;
+
+  /// No description provided for @onBoarding2Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The clearer you hear and speak, the better the result'**
+  String get onBoarding2Subtitle;
+
+  /// No description provided for @onboarding3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t despair'**
+  String get onboarding3Title;
+
+  /// No description provided for @onBoarding3Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Even AI can get it wrong sometimes. Keep going!'**
+  String get onBoarding3Subtitle;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @letsGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Go!'**
+  String get letsGo;
 }
 
 class _AppLocalizationsDelegate

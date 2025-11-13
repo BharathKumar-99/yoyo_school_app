@@ -57,6 +57,7 @@ class ProfileProvider extends ChangeNotifier {
 
         email.text = user?.email ?? "";
         isLoading = false;
+
         WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
       },
       onError: (error) {
@@ -108,7 +109,12 @@ class ProfileProvider extends ChangeNotifier {
         UsefullFunctions.showSnackBar(ctx!, text.profileUpdated);
       }
     }
-    NavigationHelper.go(RouteNames.home);
+    if (isFromOtp) {
+      NavigationHelper.go(RouteNames.splash);
+      
+    } else {
+      NavigationHelper.go(RouteNames.home);
+    }
   }
 
   logout() async {

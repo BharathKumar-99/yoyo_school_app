@@ -7,6 +7,7 @@ class UserModel {
   int? school;
   String? image;
   DateTime? lastLogin;
+  bool? onboarding;
 
   UserModel({
     required this.userId,
@@ -17,6 +18,7 @@ class UserModel {
     this.school,
     this.image,
     this.lastLogin,
+    this.onboarding,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class UserModel {
           ? DateTime.parse(json['last_login'])
           : null,
       image: json['image'] as String?,
+      onboarding: json['onboarding'],
       school: json['school'] is int
           ? json['school'] as int
           : int.tryParse(json['school']?.toString() ?? ''),
@@ -46,6 +49,7 @@ class UserModel {
       'school': school,
       'image': image,
       'last_login': lastLogin?.toIso8601String(),
+      'onboarding': onboarding,
     };
   }
 }

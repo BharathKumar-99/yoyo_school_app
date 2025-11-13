@@ -9,12 +9,14 @@ import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
+import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboarding_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
 import 'package:yoyo_school_app/features/recording/presentation/remember_recorder_provider.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
 import 'package:yoyo_school_app/features/settings/presentation/settings_screen.dart';
+import 'package:yoyo_school_app/features/splash/presentation/splash_screen.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 
 import '../../features/recording/presentation/recorder_provider.dart';
@@ -26,7 +28,7 @@ class AppRoutes {
 
   static final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: RouteNames.home,
+    initialLocation: RouteNames.splash,
     initialExtra: true,
     debugLogDiagnostics: false,
 
@@ -38,6 +40,14 @@ class AppRoutes {
       GoRoute(
         path: RouteNames.otp,
         builder: (context, state) => OtpScreen(email: state.extra as String),
+      ),
+      GoRoute(
+        path: RouteNames.onboarding,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.splash,
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: RouteNames.home,
@@ -165,7 +175,7 @@ class AppRoutes {
         return RouteNames.login;
       }
       if (currentUser != null && goingToLogin) {
-        return RouteNames.home;
+        return RouteNames.splash;
       }
       return null;
     },

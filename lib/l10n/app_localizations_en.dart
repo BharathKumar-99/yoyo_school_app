@@ -402,4 +402,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get threeTryNext =>
       'Three tries done — maybe take a break with another phrase?';
+
+  @override
+  String get onboarding1Title => 'Find a quiet spot';
+
+  @override
+  String get onBoarding1Subtitle => 'Yoyo works best with no background noise';
+
+  @override
+  String get onboarding2Title => 'Grab your headphones & microphone';
+
+  @override
+  String get onBoarding2Subtitle =>
+      'The clearer you hear and speak, the better the result';
+
+  @override
+  String get onboarding3Title => 'Don’t despair';
+
+  @override
+  String get onBoarding3Subtitle =>
+      'Even AI can get it wrong sometimes. Keep going!';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get letsGo => 'Let\'s Go!';
 }

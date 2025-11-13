@@ -4,6 +4,7 @@ class RemoteConfig {
   final String apiKey;
   final String apiSecretKey;
   final bool streak;
+  final bool onboarding;
   LanguageSlack slack;
 
   RemoteConfig({
@@ -12,6 +13,7 @@ class RemoteConfig {
     required this.apiKey,
     required this.apiSecretKey,
     required this.streak,
+    required this.onboarding,
     required this.slack,
   });
 
@@ -32,6 +34,7 @@ class RemoteConfig {
       apiKey: json['api_key'] as String,
       apiSecretKey: json['api_secret_key'] as String,
       streak: json['streak'] as bool,
+      onboarding: json['onboarding'] as bool,
       slack: LanguageSlack.fromJson(json['language_slack']),
     );
   }
@@ -42,6 +45,7 @@ class RemoteConfig {
     'api_key': apiKey,
     'api_secret_key': apiSecretKey,
     'streak': streak,
+    'onboarding': onboarding,
     'language_slack': slack.toJson(),
   };
 }
