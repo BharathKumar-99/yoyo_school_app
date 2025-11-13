@@ -229,20 +229,23 @@ class MasterPhraseSreen extends StatelessWidget {
                 : Container(),
           ),
           if (streak != null && !value.isLoading)
-            Lottie.asset(
-              AnimationAsset.streakAnimation,
-              repeat: false,
-              fit: BoxFit.cover,
-              width: MediaQuery.sizeOf(context).width * 2,
-              height: MediaQuery.sizeOf(context).height * 2,
-              onLoaded: (composition) {
-                Future.delayed(
-                  Duration(seconds: composition.duration.inSeconds - 2),
-                  () {
-                    value.showStreak();
-                  },
-                );
-              },
+            IgnorePointer(
+              ignoring: true,
+              child: Lottie.asset(
+                AnimationAsset.streakAnimation,
+                repeat: false,
+                fit: BoxFit.cover,
+                width: MediaQuery.sizeOf(context).width * 2,
+                height: MediaQuery.sizeOf(context).height * 2,
+                onLoaded: (composition) {
+                  Future.delayed(
+                    Duration(seconds: composition.duration.inSeconds - 2),
+                    () {
+                      value.showStreak();
+                    },
+                  );
+                },
+              ),
             ),
         ],
       ),

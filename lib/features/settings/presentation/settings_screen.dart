@@ -37,26 +37,31 @@ class SettingsScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        ListTile(
-                          title: Text(
-                            text.frenchSlack,
-                            style: AppTextStyles.textTheme.titleLarge,
-                          ),
-                          subtitle: TextField(
-                            controller: provider.frenchSlackController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                              signed: true,
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "French",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Slider(
+                                  value: provider.apiCred.slack.fr.toDouble(),
+                                  min: 0,
+                                  max: 100,
+                                  divisions: 100,
+                                  label: provider.apiCred.slack.fr
+                                      .toDouble()
+                                      .toStringAsFixed(0),
+                                  onChanged: (value) {},
+                                ),
+                              ],
                             ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d*\.?\d*$'),
-                              ),
-                            ],
-                          ),
-                          trailing: ElevatedButton(
-                            onPressed: () => provider.updateFrenchSlack(),
-                            child: Text('Update'),
                           ),
                         ),
                       ],
