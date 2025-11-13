@@ -44,7 +44,7 @@ class MasterResultProvider extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+    score =  speechEvaluationModel?.result?.overall ?? 0;
     userClases = await _repo.getClasses();
     levels = await _repo.getLevel();
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(

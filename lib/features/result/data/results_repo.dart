@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
@@ -24,25 +26,30 @@ class ResultsRepo {
     return UserResult.fromJson(data.last);
   }
 
-  Future<UserResult> upsertResult(UserResult result) async {
+  Future<UserResult?>? upsertResult(UserResult result) async {
     final PostgrestList data;
-    if (result.id != null) {
-      data = await _client
-          .from(DbTable.userResult)
-          .update(result.toJson())
-          .eq('id', result.id ?? 0)
-          .select("*");
-    } else {
-      data = await _client
-          .from(DbTable.userResult)
-          .insert({
-            'user_id': result.userId,
-            'phrases_id': result.phrasesId,
-            'type': result.type,
-          })
-          .select("*");
+    try {
+      if (result.id != null) {
+        data = await _client
+            .from(DbTable.userResult)
+            .update(result.toJson())
+            .eq('id', result.id ?? 0)
+            .select("*");
+      } else {
+        data = await _client
+            .from(DbTable.userResult)
+            .insert({
+              'user_id': result.userId,
+              'phrases_id': result.phrasesId,
+              'type': result.type,
+            })
+            .select("*");
+      }
+      return UserResult.fromJson(data.last);
+    } catch (e) {
+      log(e.toString());
+      return null;
     }
-    return UserResult.fromJson(data.last);
   }
 
   Future<Student> getClasses() async {

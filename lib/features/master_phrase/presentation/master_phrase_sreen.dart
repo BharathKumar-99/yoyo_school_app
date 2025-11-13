@@ -38,193 +38,213 @@ class MasterPhraseSreen extends StatelessWidget {
     double w(double factor) => width * factor;
     double h(double factor) => height * factor;
     return Consumer<MasterPhraseProvider>(
-      builder: (context, value, child) => Scaffold(
-        extendBody: true,
-        resizeToAvoidBottomInset: false,
-        body: value.isLoading
-            ? Container()
-            : Container(
-                height: height,
-                width: width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    colors: value.language?.gradient ?? [],
-                    begin: AlignmentGeometry.topLeft,
-                    end: AlignmentGeometry.bottomRight,
-                  ),
+      builder: (context, value, child) => Stack(
+        children: [
+          Scaffold(
+            extendBody: true,
+            resizeToAvoidBottomInset: false,
+            body: value.isLoading
+                ? Container()
+                : Container(
+                    height: height,
+                    width: width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: value.language?.gradient ?? [],
+                        begin: AlignmentGeometry.topLeft,
+                        end: AlignmentGeometry.bottomRight,
+                      ),
 
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(70),
-                      spreadRadius: 5,
-                      blurRadius: 4,
-                      offset: Offset(0, 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(70),
+                          spreadRadius: 5,
+                          blurRadius: 4,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: h(0.03)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: backBtn(
-                            streak: streak != null,
-                            context: context,
-                            slanguage: schoolLanguage,
-                            className: className,
-                            student: student,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: h(0.02)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                        child: Text(
-                          text.canYouMasterIT,
-                          style: AppTextStyles.textTheme.headlineMedium!
-                              .copyWith(color: Colors.white),
-                        ),
-                      ),
-                      SizedBox(height: h(0.02)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 29.0),
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          height: h(0.3),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    value.language?.gradient?.first ??
-                                    Colors.white,
-                                blurRadius: 5,
+                    child: SafeArea(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: h(0.03)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: w(0.07)),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: backBtn(
+                                streak: streak != null,
+                                context: context,
+                                slanguage: schoolLanguage,
+                                className: className,
+                                student: student,
                               ),
-
-                              BoxShadow(
-                                color:
-                                    value.language?.gradient?.last ??
-                                    Colors.white,
-                                blurRadius: 10,
-                              ),
-                            ],
+                            ),
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.translate_rounded),
+                          SizedBox(height: h(0.02)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: w(0.07)),
+                            child: Text(
+                              text.canYouMasterIT,
+                              style: AppTextStyles.textTheme.headlineMedium!
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ),
+                          SizedBox(height: h(0.02)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 29.0,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              height: h(0.3),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        value.language?.gradient?.first ??
+                                        Colors.white,
+                                    blurRadius: 5,
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      value.phraseModel.translation ?? '',
+
+                                  BoxShadow(
+                                    color:
+                                        value.language?.gradient?.last ??
+                                        Colors.white,
+                                    blurRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(Icons.translate_rounded),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          value.phraseModel.translation ?? '',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(50),
+                                      splashColor:
+                                          value.language?.gradient?.first
+                                              .withValues(alpha: 0.2) ??
+                                          Colors.grey.withValues(alpha: 0.2),
+                                      onTap: () async {
+                                        value.playAudio();
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.play_arrow_outlined,
+                                          size: 50,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              Spacer(),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(50),
-                                  splashColor:
-                                      value.language?.gradient?.first
-                                          .withValues(alpha: 0.2) ??
-                                      Colors.grey.withValues(alpha: 0.2),
-                                  onTap: () async {
-                                    value.playAudio();
-                                  },
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      Icons.play_arrow_outlined,
-                                      size: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      if (streak != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0, left: 29),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                text.streak,
-                                style: AppTextStyles.textTheme.bodyLarge
-                                    ?.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: 'Sansita',
-                                    ),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                          if (streak != null && value.showStreakVal)
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "X$streak ",
+                                    text.streak,
                                     style: AppTextStyles.textTheme.bodyLarge
                                         ?.copyWith(
-                                          fontSize: 32,
+                                          fontSize: 24,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.deepPurple,
+                                          color: Colors.purple,
                                           fontFamily: 'Sansita',
                                         ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Lottie.asset(
-                                      AnimationAsset.streakAnimation,repeat: false,
-                                      height: 60,
-                                      width: 60,
-                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "X$streak ",
+                                        style: AppTextStyles.textTheme.bodyLarge
+                                            ?.copyWith(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.deepPurple,
+                                              fontFamily: 'Sansita',
+                                            ),
+                                      ),
+                                      Image.asset(
+                                        ImageConstants.streak,
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
 
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                value.language?.image ?? "",
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    value.language?.image ?? "",
+                                  ),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
-                              fit: BoxFit.fill,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
 
-        bottomNavigationBar: value.language != null
-            ? RememberAndPractiseScreen(
-                model: model,
-                launguage: value.language!,
-                streak: streak,
-                isLast: isLast,
-              )
-            : Container(),
+            bottomNavigationBar: value.language != null
+                ? RememberAndPractiseScreen(
+                    model: model,
+                    launguage: value.language!,
+                    streak: streak,
+                    isLast: isLast,
+                  )
+                : Container(),
+          ),
+          if (streak != null && !value.isLoading)
+            Lottie.asset(
+              AnimationAsset.streakAnimation,
+              repeat: false,
+              fit: BoxFit.cover,
+              width: MediaQuery.sizeOf(context).width * 2,
+              height: MediaQuery.sizeOf(context).height * 2,
+              onLoaded: (composition) {
+                Future.delayed(
+                  Duration(seconds: composition.duration.inSeconds - 2),
+                  () {
+                    value.showStreak();
+                  },
+                );
+              },
+            ),
+        ],
       ),
     );
   }

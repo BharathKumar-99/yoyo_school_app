@@ -24,7 +24,7 @@ class PhrasesDetails extends StatelessWidget {
   final bool? next;
   final int? streak;
   final String? from;
-
+  final int? streakPhraseId;
   const PhrasesDetails({
     super.key,
     required this.language,
@@ -34,6 +34,7 @@ class PhrasesDetails extends StatelessWidget {
     this.next,
     this.streak,
     this.from,
+    this.streakPhraseId,
   });
 
   @override
@@ -46,7 +47,7 @@ class PhrasesDetails extends StatelessWidget {
         streak,
         from,
         context,
-        className,
+        className,streakPhraseId
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {

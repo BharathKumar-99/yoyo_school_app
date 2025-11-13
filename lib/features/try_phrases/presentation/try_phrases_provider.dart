@@ -20,6 +20,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   bool isLoading = true;
   bool _disposed = false;
   bool isLast;
+  bool showStreakVal = false;
   TryPhrasesProvider(this.phraseModel, this.streak, this.isLast) {
     initAudio();
   }
@@ -79,5 +80,10 @@ class TryPhrasesProvider extends ChangeNotifier {
     }
 
     result = await _repo.upsertResult(result!);
+  }
+
+  void showStreak() {
+    showStreakVal = true;
+    notifyListeners();
   }
 }

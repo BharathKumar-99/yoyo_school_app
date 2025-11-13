@@ -55,7 +55,9 @@ class ReadAndPractiseScreen extends StatelessWidget {
                       backgroundColor:
                           launguage.gradient?.first ?? Colors.white,
                       child: CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: value.isRecording
+                            ? launguage.gradient?.first ?? Colors.white
+                            : Colors.white,
                         radius: 40,
                         child: Icon(
                           value.isRecording
@@ -63,13 +65,13 @@ class ReadAndPractiseScreen extends StatelessWidget {
                               : Icons.mic_none_rounded,
                           size: 45,
                           color: value.isRecording
-                              ? Colors.red
+                              ? Colors.white
                               : Colors.black,
                         ),
                       ),
                     ),
                   ),
-    
+
                   Spacer(),
                   if (value.isRecording)
                     AudioWaveforms(

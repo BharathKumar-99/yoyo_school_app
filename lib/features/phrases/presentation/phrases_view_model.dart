@@ -38,7 +38,7 @@ class PhrasesViewModel extends ChangeNotifier {
   bool isStreakLoading = false;
   String? className;
   late GlobalProvider globalProvider;
-
+  int? streakPhraseId;
   PhrasesViewModel(
     this.classes,
     this.student,
@@ -47,6 +47,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.from,
     this.ctx,
     this.className,
+    this.streakPhraseId,
   ) {
     globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     isStreakLoading = streak != null;
@@ -161,6 +162,11 @@ class PhrasesViewModel extends ChangeNotifier {
   }
 
   goToNextScreen() async {
+    if (streakPhraseId != null) {
+      newPhrases.removeWhere((test) => test.id == streakPhraseId);
+      learned.removeWhere((test) => test.id == streakPhraseId);
+    }
+
     if (isGoToNextPhrase &&
         ((from == 'new' && newPhrases.isNotEmpty) ||
             (from == 'learned' && learned.isNotEmpty))) {

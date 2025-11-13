@@ -75,6 +75,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
             'next': true,
             'from': form,
             "streak": streak + 1,
+            "phraseId": phraseModel.id,
           },
         );
       } else {

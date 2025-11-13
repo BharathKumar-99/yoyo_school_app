@@ -15,6 +15,7 @@ class MasterPhraseProvider extends ChangeNotifier {
   late UserResult? result;
   final AudioPlayer audioManager = AudioPlayer();
   bool isLoading = true;
+  bool showStreakVal = false;
   MasterPhraseProvider(this.phraseModel) {
     init();
   }
@@ -55,5 +56,10 @@ class MasterPhraseProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  void showStreak() {
+    showStreakVal = true;
+    notifyListeners();
   }
 }
