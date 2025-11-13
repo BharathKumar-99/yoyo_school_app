@@ -3,11 +3,21 @@ import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../../config/utils/get_user_details.dart';
 
 class PhrasesDeatilsRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
+
+  Future<List<UserResult>> getUserResults() async {
+    final newResponse = await _client
+        .from(DbTable.userResult)
+        .select()
+        .eq('score_submited', true);
+
+    return newResponse.map<UserResult>((e) => UserResult.fromJson(e)).toList();
+  }
 
   Future<int>? getStreakValue(String uid, int? lid) async {
     final response = await _client

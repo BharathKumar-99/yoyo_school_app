@@ -174,7 +174,27 @@ class PhrasesViewModel extends ChangeNotifier {
       newPhrases.removeWhere((test) => test.id == streakPhraseId);
       learned.removeWhere((test) => test.id == streakPhraseId);
     }
-
+    final data = await _repo.getUserResults();
+    List<UserResult> userResults = [];
+    for (var element in data) {
+      for (var newElement in userResult) {
+        if (newElement.phrasesId == element.phrasesId) {
+          userResults.add(element);
+        }
+      }
+    }
+    userResult = userResults;
+    for (final val in userResult) {
+      for (final phrase in classes.language?.phrase ?? []) {
+        if (val.phrasesId == phrase.id) {
+          if (val.type == Constants.learned) {
+            learned.add(phrase);
+          } else if (val.type == Constants.mastered) {
+            mastered.add(phrase);
+          }
+        }
+      }
+    }
     if (isGoToNextPhrase &&
         ((from == 'new' && newPhrases.isNotEmpty) ||
             (from == 'learned' && learned.isNotEmpty))) {

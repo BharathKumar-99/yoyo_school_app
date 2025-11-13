@@ -490,6 +490,7 @@ class MasterResultScreen extends StatelessWidget {
                                                     'next': true,
                                                     "streak": 1,
                                                     "from": "learned",
+                                                    "phraseId": phraseModel.id,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(

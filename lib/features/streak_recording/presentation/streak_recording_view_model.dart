@@ -52,7 +52,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+    score =  speechEvaluationModel?.result?.overall ?? 0;
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
       (val) => val.language?.id == language.id,
     );
@@ -113,8 +113,11 @@ class StreakRecordingViewModel extends ChangeNotifier {
     result ??= UserResult(
       userId: userId,
       phrasesId: phraseModel.id,
-      type: Constants.learned,
+      type: form != 'learned' ? Constants.learned : Constants.mastered,
     );
+    result?.userId = userId;
+    result?.phrasesId = phraseModel.id;
+    result?.type = form != 'learned' ? Constants.learned : Constants.mastered;
     result?.score = score;
     result?.scoreSubmitted = submit;
     result?.goodWords = goodWords;
