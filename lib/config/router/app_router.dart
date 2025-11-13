@@ -60,6 +60,7 @@ class AppRoutes {
             next: data['next'],
             streak: data['streak'],
             from: data['from'],
+            streakPhraseId: data['phraseId'],
           );
         },
       ),

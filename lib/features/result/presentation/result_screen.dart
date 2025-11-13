@@ -297,39 +297,45 @@ class ResultScreen extends StatelessWidget {
                                                   Constants.minimumSubmitScore -
                                                           value.score >
                                                       0)
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                    12.0,
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          12,
+                                                Center(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          12.0,
                                                         ),
-                                                    child: BackdropFilter(
-                                                      filter: ImageFilter.blur(
-                                                        sigmaX: 10,
-                                                        sigmaY: 10,
-                                                      ),
-                                                      child: Container(
-                                                        color: Colors.black
-                                                            .withValues(
-                                                              alpha: 0.1,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            12,
+                                                          ),
+                                                      child: BackdropFilter(
+                                                        filter:
+                                                            ImageFilter.blur(
+                                                              sigmaX: 10,
+                                                              sigmaY: 10,
                                                             ),
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                              horizontal: 12,
-                                                              vertical: 6,
-                                                            ),
-                                                        child: Text(
-                                                          "${text.youareJust} ${Constants.minimumSubmitScore - value.score}% ${text.off}",
-                                                          style: AppTextStyles
-                                                              .textTheme
-                                                              .headlineMedium!
-                                                              .copyWith(
-                                                                color: Colors
-                                                                    .white,
+                                                        child: Container(
+                                                          color: Colors.black
+                                                              .withValues(
+                                                                alpha: 0.3,
                                                               ),
+                                                          padding:
+                                                              EdgeInsets.symmetric(
+                                                                horizontal: 12,
+                                                                vertical: 6,
+                                                              ),
+                                                          child: Text(
+                                                            "${text.youareJust} ${Constants.minimumSubmitScore - value.score}% ${text.off}",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyles
+                                                                .textTheme
+                                                                .headlineMedium!
+                                                                .copyWith(
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -525,7 +531,7 @@ class ResultScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Spacer(flex: 2),
+                                      Spacer(flex: 3),
                                       Text(
                                         value.gptResponse?.title ?? '',
                                         style: AppTextStyles
@@ -603,6 +609,7 @@ class ResultScreen extends StatelessWidget {
                                                     'student': value.userClases,
                                                     "phrase": value.phraseModel,
                                                     "streak": null,
+                                                    "language":value.language,
                                                     "schoolLanguage":
                                                         value.slanguage,
                                                     "className":
@@ -660,17 +667,13 @@ class ResultScreen extends StatelessWidget {
                     if (value.score > Constants.minimumSubmitScore)
                       Column(
                         children: [
-                          Spacer(flex: 1),
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height / 5,
-                            width: double.infinity,
-                            child: Lottie.asset(
-                              AnimationAsset.learnedSuccess,
-                              fit: BoxFit.cover,
-                              repeat: false,
-                            ),
+                          Spacer(flex: 4),
+                          Lottie.asset(
+                            AnimationAsset.learnedSuccess,
+                            fit: BoxFit.cover,
+                            repeat: false,
                           ),
-                          Spacer(flex: 2),
+                          Spacer(flex: 5),
                         ],
                       ),
                   ],

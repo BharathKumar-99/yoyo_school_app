@@ -4,16 +4,14 @@ class RemoteConfig {
   final String apiKey;
   final String apiSecretKey;
   final bool streak;
-  final num frSlack;
-  final LanguageSlack slack;
+  LanguageSlack slack;
 
-  const RemoteConfig({
+  RemoteConfig({
     required this.id,
     required this.createdAt,
     required this.apiKey,
     required this.apiSecretKey,
     required this.streak,
-    required this.frSlack,
     required this.slack,
   });
 
@@ -34,7 +32,6 @@ class RemoteConfig {
       apiKey: json['api_key'] as String,
       apiSecretKey: json['api_secret_key'] as String,
       streak: json['streak'] as bool,
-      frSlack: json['fr_slack'] as num,
       slack: LanguageSlack.fromJson(json['language_slack']),
     );
   }
@@ -45,20 +42,19 @@ class RemoteConfig {
     'api_key': apiKey,
     'api_secret_key': apiSecretKey,
     'streak': streak,
-    'fr_slack': frSlack,
     'language_slack': slack.toJson(),
   };
 }
 
 class LanguageSlack {
-  final int de;
-  final int fr;
-  final int jp;
-  final int kr;
-  final int ru;
-  final int sp;
-  final int promax;
-  final int promaxCn;
+  num de;
+  num fr;
+  num jp;
+  num kr;
+  num ru;
+  num sp;
+  num promax;
+  num promaxCn;
 
   LanguageSlack({
     required this.de,

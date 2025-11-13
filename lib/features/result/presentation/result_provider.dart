@@ -46,7 +46,7 @@ class ResultProvider extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score =  speechEvaluationModel?.result?.overall ?? 0;
+    score = speechEvaluationModel?.result?.overall ?? 0;
     gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
       (val) => val.language?.id == language.id,

@@ -39,6 +39,7 @@ class PhrasesViewModel extends ChangeNotifier {
   String? className;
   late GlobalProvider globalProvider;
   int? streakPhraseId;
+
   PhrasesViewModel(
     this.classes,
     this.student,
@@ -54,6 +55,7 @@ class PhrasesViewModel extends ChangeNotifier {
     notifyListeners();
     init(true);
   }
+
   @override
   void dispose() {
     _isDisposed = true;
@@ -82,10 +84,11 @@ class PhrasesViewModel extends ChangeNotifier {
     if ((streakNumber ?? 0) <= 0) {
       await _repo.insertStreak(userId, classes.language?.id);
     }
-    final userResultProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
 
+    final userResultProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     await userResultProvider.initRealtimeResults(ids);
 
+    // Always try to remove any old listener before adding a new one
     try {
       userResultProvider.removeListener(_userResultListener);
     } catch (_) {}
@@ -95,12 +98,17 @@ class PhrasesViewModel extends ChangeNotifier {
       schoolResult = userResultProvider.results;
       _processResults(userId, ids, isFirst);
     };
+
     userResultProvider.addListener(_userResultListener);
   }
 
   void _processResults(String userId, List<int> ids, bool isFirst) async {
     if (_isDisposed || ctx == null || !ctx!.mounted) return;
 
+    // ✅ Clear old accumulators so we don't duplicate data
+    classesScore.clear();
+    userScore.clear();
+    userResult.clear();
     learned = [];
     mastered = [];
     newPhrases = [];
@@ -157,8 +165,8 @@ class PhrasesViewModel extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isDisposed) GlobalLoader.hide();
     });
+
     if (isFirst) await goToNextScreen();
-    notifyListeners();
   }
 
   goToNextScreen() async {
@@ -210,6 +218,7 @@ class PhrasesViewModel extends ChangeNotifier {
 
   Future<void> resetPhrase(int? id) async {
     GlobalLoader.show();
+
     schoolResult = [];
     userResult = [];
     newPhrases = [];
@@ -219,10 +228,14 @@ class PhrasesViewModel extends ChangeNotifier {
     userPercentage = 0;
     classesScore = [];
     userScore = [];
+    notifyListeners();
     await _repo.resetPhrase(id ?? 0, student?.id ?? 0);
+
+    final ids = classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
+    final userResultProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
+
+    await userResultProvider.initRealtimeResults(ids);
+
     GlobalLoader.hide();
-    init(false);
   }
 }
-
-

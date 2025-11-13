@@ -47,12 +47,13 @@ class PhrasesDetails extends StatelessWidget {
         streak,
         from,
         context,
-        className,streakPhraseId
+        className,
+        streakPhraseId,
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
           return provider.isStreakLoading
-              ? Container(color: Colors.red)
+              ? Container(color: Colors.white)
               : DefaultTabController(
                   length: 3,
                   child: Scaffold(

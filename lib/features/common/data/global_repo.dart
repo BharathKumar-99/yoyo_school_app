@@ -142,7 +142,6 @@ class GlobalRepo {
               "refText": phrase,
               "coreType": coreType,
               "tokenId": tokenId,
-              "slack": audioCode == "fr" ? apiCred.frSlack : 0,
             },
           },
         },
@@ -170,7 +169,38 @@ class GlobalRepo {
       }
 
       final Map<String, dynamic> respJson = jsonDecode(responseString);
-      return SpeechEvaluationModel.fromJson(respJson);
+      SpeechEvaluationModel data = SpeechEvaluationModel.fromJson(respJson);
+      num bonus = audioCode == 'fr'
+          ? apiCred.slack.fr
+          : audioCode == 'ru'
+          ? apiCred.slack.ru
+          : audioCode == 'sp'
+          ? apiCred.slack.sp
+          : audioCode == 'de'
+          ? apiCred.slack.de
+          : audioCode == 'kr'
+          ? apiCred.slack.kr
+          : audioCode == 'promax.cn'
+          ? apiCred.slack.promaxCn
+          : audioCode == 'jp'
+          ? apiCred.slack.jp
+          : audioCode == 'promax'
+          ? apiCred.slack.promax
+          : 0.0;
+
+      if (data.result?.overall != null) {
+        num overall = data.result!.overall ?? 0;
+
+        if (overall <= 0) {
+          overall = 0;
+        } else {
+          overall = overall * (1 + bonus / 100);
+        }
+
+        data.result!.overall = overall.clamp(0, 100).toInt();
+      }
+
+      return data;
     } catch (e, st) {
       log("callSuperSpeechApi Error: $e\n$st");
       return null;

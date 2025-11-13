@@ -50,7 +50,7 @@ class StreakRecordingPopup extends StatelessWidget {
                   children: [
                     Spacer(),
                     SizedBox(
-                      height: 200,
+                      height: 100,
                       child: Lottie.asset(
                         AnimationAsset.yoyoWaitingText,
                         fit: BoxFit.fill,
@@ -74,7 +74,8 @@ class StreakRecordingPopup extends StatelessWidget {
                     Spacer(),
                     Lottie.asset(
                       AnimationAsset.streakTick,
-                      fit: BoxFit.cover,repeat: false,
+                      fit: BoxFit.cover,
+                      repeat: false,
                       height: 120,
                     ),
 

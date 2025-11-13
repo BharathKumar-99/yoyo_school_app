@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
-import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import '../../result/model/remote_config_model.dart';
 import '../../result/model/user_result_model.dart';
 import '../data/global_repo.dart';
@@ -12,7 +10,6 @@ import '../data/global_repo.dart';
 class GlobalProvider with ChangeNotifier {
   final GlobalRepo _repo = GlobalRepo();
   late RemoteConfig apiCred;
-  TextEditingController frenchSlackController = TextEditingController();
   List<UserResult> _results = [];
   List<UserResult> get results => _results;
   String? version;
@@ -31,9 +28,6 @@ class GlobalProvider with ChangeNotifier {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
     code = packageInfo.buildNumber;
-    frenchSlackController = TextEditingController(
-      text: apiCred.frSlack.toString(),
-    );
   }
 
   Future<void> initRealtimeResults(List<int> phraseIds) async {
@@ -79,20 +73,8 @@ class GlobalProvider with ChangeNotifier {
     super.dispose();
   }
 
-  void updateFrenchSlack() async {
-    if (frenchSlackController.text.isEmpty) {
-      return;
-    }
-    String frenchSlack = frenchSlackController.text.toString().trim();
-    double frenchSlackNum = double.parse(frenchSlack);
-    if (frenchSlackNum < 0 || frenchSlackNum > 1) {
-      UsefullFunctions.showSnackBar(ctx!, 'Please enter between 0 and 1');
-      return;
-    }
-    apiCred = await _repo.updateSlack(frenchSlackNum);
-    frenchSlackController = TextEditingController(
-      text: apiCred.frSlack.toString(),
-    );
+  void updateSlack(LanguageSlack lang) {
+    apiCred.slack = lang;
     notifyListeners();
   }
 }

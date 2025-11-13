@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -269,27 +271,38 @@ class MasterResultScreen extends StatelessWidget {
                                             ),
                                           ),
                                         )
-                                      : Container(
+                                      : SizedBox(
                                           width: w(0.40),
                                           height: h(0.18),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                ImageConstants.loginBg,
-                                              ),
-                                            ),
-                                          ),
+
                                           child: Center(
-                                            child: Text(
-                                              '${value.score.toString()} %',
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .headlineLarge!
-                                                  .copyWith(
-                                                    color: Colors.white,
-                                                    fontSize: w(0.12),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(
+                                                  sigmaX: 10,
+                                                  sigmaY: 10,
+                                                ),
+                                                child: Container(
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.1),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 6,
                                                   ),
+                                                  child: Text(
+                                                    '${value.score.toString()} %',
+                                                    style: AppTextStyles
+                                                        .textTheme
+                                                        .headlineLarge!
+                                                        .copyWith(
+                                                          color: Colors.white,
+                                                          fontSize: w(0.12),
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -420,7 +433,7 @@ class MasterResultScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Spacer(),
+                                      Spacer(flex: 3),
                                       Text(
                                         value.gptResponse?.title ?? '',
                                         style: AppTextStyles
@@ -557,18 +570,14 @@ class MasterResultScreen extends StatelessWidget {
                     if (value.score > Constants.minimumSubmitScore)
                       Column(
                         children: [
-                          Spacer(flex: 1),
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height / 5,
-                            width: double.infinity,
-                            child: Lottie.asset(
-                              AnimationAsset.masteredSuccess,
-                              fit: BoxFit.cover,
-                              repeat: false,
-                            ),
+                          Spacer(flex: 3),
+                          Lottie.asset(
+                            AnimationAsset.masteredSuccess,
+                            fit: BoxFit.cover,
+                            repeat: false,
                           ),
 
-                          Spacer(flex: 3),
+                          Spacer(flex: 5),
                         ],
                       ),
                   ],
