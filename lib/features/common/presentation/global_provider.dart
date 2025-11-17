@@ -9,11 +9,14 @@ import '../data/global_repo.dart';
 
 class GlobalProvider with ChangeNotifier {
   final GlobalRepo _repo = GlobalRepo();
+
   late RemoteConfig apiCred;
   List<UserResult> _results = [];
   List<UserResult> get results => _results;
+
   String? version;
   String? code;
+
   StreamSubscription<List<UserResult>>? _resultSub;
 
   bool _isLoading = false;
@@ -23,30 +26,46 @@ class GlobalProvider with ChangeNotifier {
     init();
   }
 
-  init() async {
-    apiCred = await _repo.getRemoteCred();
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = packageInfo.version;
-    code = packageInfo.buildNumber;
+  Future<void> init() async {
+    try {
+      apiCred = await _repo.getRemoteCred();
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      version = packageInfo.version;
+      code = packageInfo.buildNumber;
+
+      notifyListeners();
+    } catch (e, st) {
+      log("GlobalProvider init error: $e\n$st");
+    }
   }
 
   Future<void> initRealtimeResults(List<int> phraseIds) async {
-    if (phraseIds.isEmpty) return;
-
-    await _resultSub?.cancel();
-    _repo.disposeStream();
-
-    _isLoading = true;
-    notifyListeners();
-
     try {
+      if (phraseIds.isEmpty) return;
+
+      try {
+        await _resultSub?.cancel();
+      } catch (e) {
+        log("Error canceling previous result stream: $e");
+      }
+
+      _repo.disposeStream();
+
+      _isLoading = true;
+      notifyListeners();
+
       final stream = _repo.streamAllUserResults(phraseIds);
+
       _resultSub = stream.listen(
         (data) {
-          log('Realtime data received: ${data.length} results');
-          _results = data;
-          _isLoading = false;
-          notifyListeners();
+          try {
+            log('Realtime data received: ${data.length} results');
+            _results = data;
+            _isLoading = false;
+            notifyListeners();
+          } catch (e) {
+            log("Realtime listener inner error: $e");
+          }
         },
         onError: (err) {
           log('Error in realtime results: $err');
@@ -59,22 +78,41 @@ class GlobalProvider with ChangeNotifier {
     }
   }
 
-  updateStreakEnabled(bool value) async {
-    GlobalLoader.show();
-    apiCred = await _repo.updateStreakEnabled(value);
-    notifyListeners();
-    GlobalLoader.hide();
+  Future<void> updateStreakEnabled(bool value) async {
+    try {
+      GlobalLoader.show();
+      apiCred = await _repo.updateStreakEnabled(value);
+      notifyListeners();
+    } catch (e, st) {
+      log("updateStreakEnabled error: $e\n$st");
+    } finally {
+      GlobalLoader.hide();
+    }
+  }
+
+  void updateSlack(LanguageSlack lang) {
+    try {
+      apiCred.slack = lang;
+      notifyListeners();
+    } catch (e) {
+      log("updateSlack error: $e");
+    }
   }
 
   @override
   void dispose() {
-    _resultSub?.cancel();
-    _repo.disposeStream();
-    super.dispose();
-  }
+    try {
+      _resultSub?.cancel();
+    } catch (e) {
+      log("GlobalProvider dispose cancel error: $e");
+    }
 
-  void updateSlack(LanguageSlack lang) {
-    apiCred.slack = lang;
-    notifyListeners();
+    try {
+      _repo.disposeStream();
+    } catch (e) {
+      log("GlobalProvider dispose stream error: $e");
+    }
+
+    super.dispose();
   }
 }

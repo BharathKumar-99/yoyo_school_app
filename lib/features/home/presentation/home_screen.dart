@@ -123,7 +123,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// 🌟 Fade + Slide-in for section headers
 class _AnimatedSectionTitle extends StatelessWidget {
   final String title;
   const _AnimatedSectionTitle(this.title);
@@ -227,7 +226,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
           onTapDown: _onTapDown,
           onTapUp: _onTapUp,
           onTapCancel: () => setState(() => _scale = 1.0),
-          onTap: () => NavigationHelper.push(
+          onTap: () => NavigationHelper.go(
             RouteNames.phrasesDetails,
             extra: {
               'language': widget.language,

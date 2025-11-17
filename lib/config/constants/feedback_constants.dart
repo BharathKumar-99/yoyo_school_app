@@ -33,7 +33,7 @@ class ScoreFeedback {
     }
   }
 
-  // 🟢 Friendly Mode
+  
   static FeedbackResult _friendlyFeedback(int score) {
     if (score >= 90) {
       return FeedbackResult(
@@ -68,7 +68,7 @@ class ScoreFeedback {
     }
   }
 
-  // 🧮 Exam-Prep Mode
+ 
   static FeedbackResult _examPrepFeedback(int score) {
     if (score >= 90) {
       return FeedbackResult(
@@ -103,7 +103,7 @@ class ScoreFeedback {
     }
   }
 
-  // 🔥 Challenge Mode
+ 
   static FeedbackResult _challengeFeedback(int score) {
     if (score >= 90) {
       return FeedbackResult(

@@ -5,6 +5,7 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
+import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
@@ -57,6 +58,14 @@ class AppRoutes {
         path: RouteNames.settings,
         builder: (context, state) => const SettingsScreen(),
       ),
+      GoRoute(
+        path: RouteNames.error,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return ErrorScreen(message: data['message'], error: data['error']);
+        },
+      ),
+
       GoRoute(
         path: RouteNames.phrasesDetails,
         builder: (context, state) {

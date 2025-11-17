@@ -59,7 +59,6 @@ class PhrasesDetails extends StatelessWidget {
                   child: Scaffold(
                     body: CustomScrollView(
                       slivers: [
-                        // Hero Header
                         SliverToBoxAdapter(
                           child: Hero(
                             tag: language.language?.language ?? "",
@@ -332,7 +331,6 @@ class PhrasesDetails extends StatelessWidget {
                         ),
                         SliverToBoxAdapter(child: SizedBox(height: 30)),
 
-                        // TabBar
                         SliverPersistentHeader(
                           pinned: true,
                           delegate: _SliverAppBarDelegate(
@@ -372,7 +370,6 @@ class PhrasesDetails extends StatelessWidget {
                           ),
                         ),
 
-                        // TabBarView inside SliverFillRemaining
                         SliverFillRemaining(
                           child: TabBarView(
                             children: [
@@ -408,7 +405,6 @@ class PhrasesDetails extends StatelessWidget {
     );
   }
 
-  // Returns regular ListView for TabBarView (not slivers!)
   Widget _buildPhrasesList(
     List<PhraseModel> phrases,
     PhrasesViewModel provider,
@@ -587,7 +583,6 @@ class PhrasesWidget extends StatelessWidget {
   }
 }
 
-// SliverPersistentHeader helper for pinned TabBar
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar _tabBar;
   _SliverAppBarDelegate(this._tabBar);

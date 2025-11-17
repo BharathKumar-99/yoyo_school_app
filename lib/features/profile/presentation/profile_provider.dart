@@ -27,104 +27,140 @@ class ProfileProvider extends ChangeNotifier {
   ProfileProvider(this.profileRepository);
 
   void initialize({bool fromOtp = false}) {
-    isFromOtp = fromOtp;
-    _subscribeToUserData();
-    Provider.of<GlobalProvider>(ctx!, listen: false);
+    try {
+      isFromOtp = fromOtp;
+      _subscribeToUserData();
+      Provider.of<GlobalProvider>(ctx!, listen: false);
+    } catch (e) {
+      debugPrint("ProfileProvider initialize error: $e");
+    }
   }
 
   void _subscribeToUserData() {
-    isLoading = true;
+    try {
+      isLoading = true;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
+      WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
 
-    _userSubscription = profileRepository.getUserDataStream().listen(
-      (userData) async {
-        if (userData == null) return;
+      _userSubscription = profileRepository.getUserDataStream().listen(
+        (userData) async {
+          try {
+            if (userData == null) return;
 
-        user = userData;
+            user = userData;
 
-        if (isFromOtp) {
-          if (user?.lastLogin != null) {
-          } else {
-            profileRepository.updateLastLogin();
+            if (isFromOtp) {
+              if (user?.lastLogin != null) {
+              } else {
+                profileRepository.updateLastLogin();
+              }
+            }
+
+            nameFromUser = [
+              user?.firstName?.isNotEmpty == true ? user!.firstName![0] : '',
+              user?.surName?.isNotEmpty == true ? user!.surName![0] : '',
+            ].join().toUpperCase();
+
+            email.text = user?.email ?? "";
+            isLoading = false;
+
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => notifyListeners(),
+            );
+          } catch (e) {
+            debugPrint("User stream inner error: $e");
           }
-        }
-
-        nameFromUser = [
-          user?.firstName?.isNotEmpty == true ? user!.firstName![0] : '',
-          user?.surName?.isNotEmpty == true ? user!.surName![0] : '',
-        ].join().toUpperCase();
-
-        email.text = user?.email ?? "";
-        isLoading = false;
-
-        WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
-      },
-      onError: (error) {
-        debugPrint('User stream error: $error');
-        isLoading = false;
-        WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
-      },
-    );
+        },
+        onError: (error) {
+          debugPrint('User stream error: $error');
+          isLoading = false;
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => notifyListeners(),
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint("ProfileProvider subscribe error: $e");
+    }
   }
 
   Future<void> pickImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(text.chooseFromGallery),
-              onTap: () => Navigator.pop(context, ImageSource.gallery),
-            ),
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(text.takeAPhoto),
-              onTap: () => Navigator.pop(context, ImageSource.camera),
-            ),
-          ],
+    try {
+      final picker = ImagePicker();
+
+      final source = await showModalBottomSheet<ImageSource>(
+        context: context,
+        builder: (context) => SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(text.chooseFromGallery),
+                onTap: () => Navigator.pop(context, ImageSource.gallery),
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: Text(text.takeAPhoto),
+                onTap: () => Navigator.pop(context, ImageSource.camera),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
-    if (source == null) return;
+      if (source == null) return;
 
-    final pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      localImage = File(pickedFile.path);
-      notifyListeners();
+      final pickedFile = await picker.pickImage(source: source);
+
+      if (pickedFile != null) {
+        localImage = File(pickedFile.path);
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint("pickImage error: $e");
+      UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
     }
   }
 
   Future<void> saveImageButton() async {
-    if (localImage != null) {
-      final result = await profileRepository.saveImage(localImage);
-      if (!result) {
-        UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
-        return;
-      } else {
-        UsefullFunctions.showSnackBar(ctx!, text.profileUpdated);
+    try {
+      if (localImage != null) {
+        final result = await profileRepository.saveImage(localImage);
+        if (!result) {
+          UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
+          return;
+        } else {
+          UsefullFunctions.showSnackBar(ctx!, text.profileUpdated);
+        }
       }
-    }
-    if (isFromOtp) {
-      NavigationHelper.go(RouteNames.splash);
-      
-    } else {
-      NavigationHelper.go(RouteNames.home);
+
+      if (isFromOtp) {
+        NavigationHelper.go(RouteNames.splash);
+      } else {
+        NavigationHelper.go(RouteNames.home);
+      }
+    } catch (e) {
+      debugPrint("saveImageButton error: $e");
+      UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
     }
   }
 
-  logout() async {
-    await profileRepository.logout();
+  Future<void> logout() async {
+    try {
+      await profileRepository.logout();
+    } catch (e) {
+      debugPrint("Logout error: $e");
+    }
   }
 
   @override
   void dispose() {
-    _userSubscription?.cancel();
-    email.dispose();
-    super.dispose();
+    try {
+      _userSubscription?.cancel();
+      email.dispose();
+      super.dispose();
+    } catch (e) {
+      debugPrint("ProfileProvider dispose error: $e");
+    }
   }
 }

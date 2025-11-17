@@ -21,6 +21,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   bool _disposed = false;
   bool isLast;
   bool showStreakVal = false;
+
   TryPhrasesProvider(this.phraseModel, this.streak, this.isLast) {
     initAudio();
   }
@@ -38,52 +39,92 @@ class TryPhrasesProvider extends ChangeNotifier {
 
   Future<void> initAudio() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-    language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
-    await audioManager.setUrl(phraseModel.recording ?? "");
-    result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
-    await audioManager.setVolume(1);
-    await upsertResult(listen: false);
+
+    try {
+      language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+      throw "Failed to load language data";
+    }
+
+    try {
+      result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+      throw "Failed to load attempt result";
+    }
+
+    try {
+      await audioManager.setVolume(1);
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+      throw "Failed to set audio volume";
+    }
+
+    try {
+      await upsertResult(listen: false);
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+      throw "Failed to update listen count";
+    }
+
     isLoading = false;
     safeNotify();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-    await playAudio();
-  }
 
-  void togglePhrase() {
-    showPhrase = !showPhrase;
-    safeNotify();
+    try {
+      await audioManager.setUrl(phraseModel.recording ?? "");
+    } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+      throw "Failed to load audio file";
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+
+    await playAudio();
   }
 
   Future<void> playAudio() async {
     try {
       final player = audioManager;
+
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }
+
       await player.play();
       await upsertResult();
     } catch (e) {
-      debugPrint("playAudio error: $e");
+      throw "Audio playback failed";
     }
   }
 
   Future<void> upsertResult({bool listen = true}) async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
-    result ??= UserResult(
-      userId: userId,
-      phrasesId: phraseModel.id,
-      type: Constants.learned,
-    );
+    try {
+      final userId = GetUserDetails.getCurrentUserId() ?? "";
 
-    if (listen) {
-      result?.listen = (result?.listen ?? 0) + 1;
+      result ??= UserResult(
+        userId: userId,
+        phrasesId: phraseModel.id,
+        type: Constants.learned,
+      );
+
+      if (listen) {
+        result?.listen = (result?.listen ?? 0) + 1;
+      }
+
+      result = await _repo.upsertResult(result!);
+    } catch (e) {
+      throw "Failed to save phrase result";
     }
-
-    result = await _repo.upsertResult(result!);
   }
 
   void showStreak() {
     showStreakVal = true;
     notifyListeners();
+  }
+
+  void togglePhrase() {
+    showPhrase = !showPhrase;
+    safeNotify();
   }
 }

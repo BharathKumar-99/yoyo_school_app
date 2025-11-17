@@ -235,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @empty_list.
   ///
   /// In en, this message translates to:
-  /// **'Nothing to show'**
+  /// **'No Phrases'**
   String get empty_list;
 
   /// No description provided for @holdAndRecord.

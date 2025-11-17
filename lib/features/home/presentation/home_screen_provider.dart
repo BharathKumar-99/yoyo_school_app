@@ -18,6 +18,7 @@ class HomeScreenProvider extends ChangeNotifier {
   int atemptedPhrases = 0;
   StreamSubscription<Student?>? _studentSubscription;
   ProfileProvider? _profileProvider;
+
   HomeScreenProvider(this.homeRepository) {
     _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
     _profileProvider?.initialize(fromOtp: false);
@@ -25,30 +26,58 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-    userClases = await homeRepository.getClasses();
-    levels = await homeRepository.getLevel();
-    _subscribeToStudentData();
-    atemptedPhrases = await homeRepository.getTotalAtemptedPhrases();
-    userClases?.classes?.school?.schoolLanguage?.forEach((val) {
-      totalPhrases += val.language?.phrase?.length ?? 0;
-    });
-    notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+    try {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+
+      userClases = await homeRepository.getClasses();
+      if (userClases == null) {
+        throw "Could not load classes";
+      }
+
+      levels = await homeRepository.getLevel();
+      if (levels == null) {
+        throw "Could not load levels";
+      }
+
+      _subscribeToStudentData();
+
+      atemptedPhrases = await homeRepository.getTotalAtemptedPhrases();
+
+      totalPhrases = 0;
+      userClases?.classes?.school?.schoolLanguage?.forEach((val) {
+        totalPhrases += val.language?.phrase?.length ?? 0;
+      });
+
+      notifyListeners();
+    } catch (e) {
+      throw Exception("Home initialization failed: $e");
+    } finally {
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+    }
   }
 
   void _subscribeToStudentData() {
-    _studentSubscription = homeRepository.getUserDataStream().listen(
-      (studentdata) async {
-        if (studentdata == null) return;
-        student = studentdata;
-        atemptedPhrases = await homeRepository.getTotalAtemptedPhrases();
-        notifyListeners();
-      },
-      onError: (error) {
-        debugPrint('Student stream error: $error');
-      },
-    );
+    try {
+      _studentSubscription = homeRepository.getUserDataStream().listen(
+        (studentdata) async {
+          try {
+            if (studentdata == null) return;
+            student = studentdata;
+
+            atemptedPhrases = await homeRepository.getTotalAtemptedPhrases();
+            notifyListeners();
+          } catch (e) {
+            throw Exception("Failed to update student data: $e");
+          }
+        },
+        onError: (error) {
+          debugPrint("Student stream error: $error");
+          throw Exception("Student stream crashed: $error");
+        },
+      );
+    } catch (e) {
+      throw Exception("Failed to subscribe to student stream: $e");
+    }
   }
 
   @override

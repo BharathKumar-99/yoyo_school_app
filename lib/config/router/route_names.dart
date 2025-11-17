@@ -11,4 +11,5 @@ class RouteNames {
   static const tryPhrases = '/tryPhrases';
   static const masterPhrases = '/masterPhrases';
   static const settings = '/settings';
+  static const error = '/error';
 }

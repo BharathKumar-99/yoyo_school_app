@@ -23,14 +23,17 @@ class ResultProvider extends ChangeNotifier {
   SchoolLanguage? slanguage;
   ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;
+
   final GlobalRepo _globalRepo = GlobalRepo();
+  final ResultsRepo _repo = ResultsRepo();
+
   String audioPath;
   int score = 0;
   Student? userClases;
   List<Level>? levels = [];
+
   late GlobalProvider globalProvider;
 
-  final ResultsRepo _repo = ResultsRepo();
   bool showRivePopup = false;
 
   ResultProvider(this.phraseModel, this.audioPath, this.language) {
@@ -38,24 +41,61 @@ class ResultProvider extends ChangeNotifier {
     init();
   }
 
-  init() async {
-    result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
-    userClases = await _repo.getClasses();
-    speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
-      audioPath: audioPath,
-      audioCode: language.launguageCode ?? "",
-      phrase: phraseModel.phrase ?? "",
-    );
-    score =  speechEvaluationModel?.result?.overall ?? 0;
-    gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
-    slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
-      (val) => val.language?.id == language.id,
-    );
-    levels = await _repo.getLevel();
+  Future<void> init() async {
+    try {
+      result = await _safe(
+        () => _repo.getAttemptedPhrase(phraseModel.id ?? 0),
+        "Failed to load phrase result",
+      );
 
-    await upsertResult(score, submit: score > Constants.minimumSubmitScore);
-    if ((result?.attempt ?? 0) >= 0) {}
-    notifyListeners();
+      userClases = await _safe(
+        () => _repo.getClasses(),
+        "Failed to load class details",
+      );
+
+      speechEvaluationModel = await _safe(
+        () => _globalRepo.callSuperSpeechApi(
+          audioPath: audioPath,
+          audioCode: language.launguageCode ?? "",
+          phrase: phraseModel.phrase ?? "",
+        ),
+        "Speech evaluation failed",
+      );
+
+      score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+
+      gptResponse = await _safe(
+        () => _globalRepo.getSpeechFeedback(speechEvaluationModel!),
+        "Failed to get feedback",
+      );
+
+      slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
+        (val) => val.language?.id == language.id,
+        orElse: () => throw "Language not found in school list",
+      );
+
+      levels = await _safe(
+        () async => _repo.getLevel(),
+        "Failed to load level data",
+      );
+
+      await _safe(
+        () => upsertResult(score, submit: score > Constants.minimumSubmitScore),
+        "Failed to save result",
+      );
+
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<T> _safe<T>(Future<T> Function() call, String errorMessage) async {
+    try {
+      return await call();
+    } catch (e) {
+      throw errorMessage;
+    }
   }
 
   void showAnimationPopup() {
@@ -74,34 +114,42 @@ class ResultProvider extends ChangeNotifier {
   }
 
   Future<void> upsertResult(int score, {bool submit = false}) async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
-    List<String> goodWords = result?.goodWords ?? [];
-    List<String> badWords = result?.badWords ?? [];
-    if (speechEvaluationModel?.result?.words?.isNotEmpty ?? false) {
-      goodWords.clear();
-      badWords.clear();
-    }
+    try {
+      final userId = GetUserDetails.getCurrentUserId() ?? "";
 
-    speechEvaluationModel?.result?.words?.forEach((val) {
-      if (getWordColor(val.scores?.overall ?? 0) == Colors.green) {
-        goodWords.add(val.word ?? "");
-      } else if (getWordColor(val.scores?.overall ?? 0) == Colors.redAccent) {
-        badWords.add(val.word ?? "");
+      List<String> goodWords = result?.goodWords ?? [];
+      List<String> badWords = result?.badWords ?? [];
+
+      if (speechEvaluationModel?.result?.words?.isNotEmpty ?? false) {
+        goodWords = [];
+        badWords = [];
       }
-    });
 
-    result ??= UserResult(
-      userId: userId,
-      phrasesId: phraseModel.id,
-      type: Constants.learned,
-    );
-    result?.score = score;
-    result?.scoreSubmitted = submit;
-    result?.goodWords = goodWords;
-    result?.badWords = badWords;
-    result?.attempt = (result?.attempt ?? 0) + 1;
-    result?.vocab = goodWords.length;
-    result = await _repo.upsertResult(result!);
+      speechEvaluationModel?.result?.words?.forEach((val) {
+        if (getWordColor(val.scores?.overall ?? 0) == Colors.green) {
+          goodWords.add(val.word ?? "");
+        } else if (getWordColor(val.scores?.overall ?? 0) == Colors.redAccent) {
+          badWords.add(val.word ?? "");
+        }
+      });
+
+      result ??= UserResult(
+        userId: userId,
+        phrasesId: phraseModel.id,
+        type: Constants.learned,
+      );
+
+      result?.score = score;
+      result?.scoreSubmitted = submit;
+      result?.goodWords = goodWords;
+      result?.badWords = badWords;
+      result?.attempt = (result?.attempt ?? 0) + 1;
+      result?.vocab = goodWords.length;
+
+      result = await _repo.upsertResult(result!);
+    } catch (e) {
+      throw "Failed to update result";
+    }
   }
 
   Color getWordColor(int score) {

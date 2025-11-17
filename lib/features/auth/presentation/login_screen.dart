@@ -39,12 +39,6 @@ class LoginScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0,
-                                  ),
-                                  child: Image.asset(ImageConstants.schoolLogo),
-                                ),
                                 SizedBox(height: 30),
                                 Text(
                                   text.login_text,

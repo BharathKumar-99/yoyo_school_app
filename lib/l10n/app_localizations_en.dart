@@ -79,7 +79,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get classText => 'Class:';
 
   @override
-  String get empty_list => 'Nothing to show';
+  String get empty_list => 'No Phrases';
 
   @override
   String get holdAndRecord => 'Hold & Speak';

@@ -524,6 +524,8 @@ class MasterResultScreen extends StatelessWidget {
                                                         "",
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
+                                                    "next": true,
+                                                    "from": "learned",
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(

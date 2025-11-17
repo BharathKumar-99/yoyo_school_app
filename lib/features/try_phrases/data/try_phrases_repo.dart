@@ -12,7 +12,6 @@ import '../../result/model/user_result_model.dart';
 class TryPhrasesRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
 
-  // Common timeout duration for all request
   static const Duration _timeoutDuration = Duration(seconds: 10);
 
   Future<UserResult?> getAttemptedPhrase(int pid) async {

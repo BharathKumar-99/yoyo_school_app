@@ -16,14 +16,14 @@ class MasterPhraseRepo {
     return Language.fromJson(data!);
   }
 
-  Future<UserResult?> getAttemptedPhrase(int pid) async {
+  Future<UserResult?> getAttemptedPhrase(int pid, String type) async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final data = await _client
         .from(DbTable.userResult)
         .select('*')
         .eq('user_id', userId)
         .eq('phrases_id', pid)
-        .eq('type', Constants.mastered)
+        .eq('type', type)
         .maybeSingle();
     if (data == null) {
       return null;

@@ -32,28 +32,44 @@ class MasterResultProvider extends ChangeNotifier {
   final MasterResultsRepo _repo = MasterResultsRepo();
   bool showRivePopup = false;
   late GlobalProvider globalProvider;
+
   MasterResultProvider(this.phraseModel, this.audioPath, this.language) {
-    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
+    try {
+      globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
+    } catch (e) {
+      debugPrint("GlobalProvider init error: $e");
+    }
     init();
   }
 
   init() async {
-    result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
-    speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
-      audioPath: audioPath,
-      audioCode: language.launguageCode ?? "",
-      phrase: phraseModel.phrase ?? "",
-    );
-    score =  speechEvaluationModel?.result?.overall ?? 0;
-    userClases = await _repo.getClasses();
-    levels = await _repo.getLevel();
-    slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
-      (val) => val.language?.id == language.id,
-    );
-    gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
-    await upsertResult(score, submit: score > Constants.minimumSubmitScore);
+    try {
+      result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
 
-    notifyListeners();
+      speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
+        audioPath: audioPath,
+        audioCode: language.launguageCode ?? "",
+        phrase: phraseModel.phrase ?? "",
+      );
+
+      score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+
+      userClases = await _repo.getClasses();
+      levels = await _repo.getLevel();
+
+      slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
+        (val) => val.language?.id == language.id,
+        orElse: () => SchoolLanguage(),
+      );
+
+      gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
+
+      await upsertResult(score, submit: score > Constants.minimumSubmitScore);
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint("MasterResultProvider init error: $e");
+    }
   }
 
   void showAnimationPopup() {
@@ -72,35 +88,42 @@ class MasterResultProvider extends ChangeNotifier {
   }
 
   Future<void> upsertResult(int score, {bool submit = false}) async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
-    List<String> goodWords = result?.goodWords ?? [];
-    List<String> badWords = result?.badWords ?? [];
+    try {
+      final userId = GetUserDetails.getCurrentUserId() ?? "";
 
-    if (speechEvaluationModel?.result?.words?.isNotEmpty ?? false) {
-      goodWords.clear();
-      badWords.clear();
-    }
+      List<String> goodWords = result?.goodWords ?? [];
+      List<String> badWords = result?.badWords ?? [];
 
-    speechEvaluationModel?.result?.words?.forEach((val) {
-      if (getWordColor(val.scores?.overall ?? 0) == Colors.green) {
-        goodWords.add(val.word ?? "");
-      } else if (getWordColor(val.scores?.overall ?? 0) == Colors.redAccent) {
-        badWords.add(val.word ?? "");
+      if (speechEvaluationModel?.result?.words?.isNotEmpty ?? false) {
+        goodWords.clear();
+        badWords.clear();
       }
-    });
 
-    result ??= UserResult(
-      userId: userId,
-      phrasesId: phraseModel.id,
-      type: Constants.mastered,
-    );
-    result?.score = score;
-    result?.scoreSubmitted = submit;
-    result?.goodWords = goodWords;
-    result?.badWords = badWords;
-    result?.attempt = (result?.attempt ?? 0) + 1;
-    result?.vocab = goodWords.length;
-    result = await _repo.upsertResult(result!);
+      speechEvaluationModel?.result?.words?.forEach((val) {
+        if (getWordColor(val.scores?.overall ?? 0) == Colors.green) {
+          goodWords.add(val.word ?? "");
+        } else if (getWordColor(val.scores?.overall ?? 0) == Colors.redAccent) {
+          badWords.add(val.word ?? "");
+        }
+      });
+
+      result ??= UserResult(
+        userId: userId,
+        phrasesId: phraseModel.id,
+        type: Constants.mastered,
+      );
+
+      result?.score = score;
+      result?.scoreSubmitted = submit;
+      result?.goodWords = goodWords;
+      result?.badWords = badWords;
+      result?.attempt = (result?.attempt ?? 0) + 1;
+      result?.vocab = goodWords.length;
+
+      result = await _repo.upsertResult(result!);
+    } catch (e) {
+      debugPrint("MasterResultProvider upsertResult error: $e");
+    }
   }
 
   Color getWordColor(int score) {

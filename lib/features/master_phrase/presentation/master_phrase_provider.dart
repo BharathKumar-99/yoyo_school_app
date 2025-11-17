@@ -16,45 +16,84 @@ class MasterPhraseProvider extends ChangeNotifier {
   final AudioPlayer audioManager = AudioPlayer();
   bool isLoading = true;
   bool showStreakVal = false;
+
   MasterPhraseProvider(this.phraseModel) {
     init();
   }
 
-  init() async {
+  Future<void> init() async {
     isLoading = true;
     notifyListeners();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-    language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
-    result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
-    await upsertResult(listen: false);
+
+    try {
+      language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
+    } catch (e) {
+      throw "Failed to load language data";
+    }
+
+    try {
+      result = await _repo.getAttemptedPhrase(
+        phraseModel.id ?? 0,
+        Constants.mastered,
+      );
+    } catch (e) {
+      throw "Failed to load phrase result";
+    }
+
+    try {
+      await upsertResult(listen: false);
+    } catch (e) {
+      throw "Failed to update phrase status";
+    }
+
+    try {
+      await audioManager.setUrl(phraseModel.recording ?? "");
+    } catch (e) {
+      throw "Failed to load audio file";
+    }
+
+    try {
+      await audioManager.setVolume(1);
+    } catch (e) {
+      throw "Failed to set audio volume";
+    }
+
     isLoading = false;
-    await audioManager.setUrl(phraseModel.recording ?? "");
-    await audioManager.setVolume(1);
     notifyListeners();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
   Future<void> upsertResult({bool listen = true}) async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
-    result ??= UserResult(
-      userId: userId,
-      phrasesId: phraseModel.id,
-      type: Constants.mastered,
-    );
+    try {
+      final userId = GetUserDetails.getCurrentUserId() ?? "";
 
-    result = await _repo.upsertResult(result!);
+      result ??= UserResult(
+        userId: userId,
+        phrasesId: phraseModel.id,
+        type: Constants.mastered,
+      );
+
+      result = await _repo.upsertResult(result!);
+    } catch (e) {
+      throw "Failed to save phrase result";
+    }
   }
 
-  playAudio() async {
+  Future<void> playAudio() async {
     try {
       final player = audioManager;
+
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }
+
       await player.play();
       await upsertResult();
     } catch (e) {
-      debugPrint(e.toString());
+      throw "Audio playback failed";
     }
   }
 
