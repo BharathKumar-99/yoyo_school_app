@@ -44,28 +44,28 @@ class TryPhrasesProvider extends ChangeNotifier {
       language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      throw "Failed to load language data";
+      rethrow;
     }
 
     try {
       result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      throw "Failed to load attempt result";
+      rethrow;
     }
 
     try {
       await audioManager.setVolume(1);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      throw "Failed to set audio volume";
+      rethrow;
     }
 
     try {
       await upsertResult(listen: false);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      throw "Failed to update listen count";
+      rethrow;
     }
 
     isLoading = false;
@@ -75,7 +75,7 @@ class TryPhrasesProvider extends ChangeNotifier {
       await audioManager.setUrl(phraseModel.recording ?? "");
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      throw "Failed to load audio file";
+      rethrow;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
@@ -94,7 +94,7 @@ class TryPhrasesProvider extends ChangeNotifier {
       await player.play();
       await upsertResult();
     } catch (e) {
-      throw "Audio playback failed";
+      rethrow;
     }
   }
 
@@ -114,7 +114,7 @@ class TryPhrasesProvider extends ChangeNotifier {
 
       result = await _repo.upsertResult(result!);
     } catch (e) {
-      throw "Failed to save phrase result";
+      rethrow;
     }
   }
 

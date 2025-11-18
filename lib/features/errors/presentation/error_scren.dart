@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class ErrorScreen extends StatefulWidget {
   final String? message;
@@ -54,43 +55,37 @@ class _ErrorScreenState extends State<ErrorScreen> {
 
                   const SizedBox(height: 20),
 
-                  const SizedBox(height: 10),
-
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                    child: SingleChildScrollView(
-                      child: Text(
-                        widget.error.toString(),
-                        style: TextStyle(
-                          color: Colors.grey[800],
-                          fontFamily: "monospace",
-                        ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(16),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey[100],
+                  //     borderRadius: BorderRadius.circular(12),
+                  //     border: Border.all(color: Colors.grey[300]!),
+                  //   ),
+                  //   child: SingleChildScrollView(
+                  //     child: Text(
+                  //       widget.error.toString(),
+                  //       style: TextStyle(
+                  //         color: Colors.grey[800],
+                  //         fontFamily: "monospace",
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  ElevatedButton.icon(
+                    onPressed: () => context.pop(),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text("Retry"),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 24,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 20),
-
-                  if (widget.onRetry != null)
-                    ElevatedButton.icon(
-                      onPressed: widget.onRetry,
-                      icon: const Icon(Icons.refresh),
-                      label: const Text("Retry"),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 24,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
 
                   const SizedBox(height: 12),
 

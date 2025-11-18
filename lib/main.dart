@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
@@ -24,7 +28,21 @@ Future<void> main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    ctx!.push(
+      RouteNames.error,
+      extra: {'message': "Something Went Wrong", "error": details.stack},
+    );
+  };
 
+  PlatformDispatcher.instance.onError = (error, stack) {
+    ctx!.push(
+      RouteNames.error,
+      extra: {'message': "Something Went Wrong", "error": stack},
+    );
+    return true;
+  };
   runApp(const MyApp());
 }
 
