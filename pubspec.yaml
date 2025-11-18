@@ -24,12 +24,10 @@ dependencies:
   lottie: ^3.3.2
   otp_autofill: ^4.1.0
   package_info_plus: ^9.0.0
-  palette_generator: ^0.3.3+7
   path_provider: ^2.1.5
   permission_handler: ^12.0.1
   pin_code_fields: ^8.0.1
-  provider: ^6.1.5+1
-  rive: ^0.13.20
+  provider: ^6.1.5+1 
   supabase_flutter: ^2.10.1
 
 dev_dependencies:
