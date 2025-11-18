@@ -52,7 +52,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
       audioCode: language.launguageCode ?? "",
       phrase: phraseModel.phrase ?? "",
     );
-    score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+    score = speechEvaluationModel?.result?.overall ?? 0;
     slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
       (val) => val.language?.id == language.id,
     );
