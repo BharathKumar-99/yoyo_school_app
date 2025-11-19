@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.yoyospeak.schoolsapp"
+    namespace = "com.yoyospeak.yoyo"
     compileSdk = 36
 
     compileOptions {
@@ -27,7 +27,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.yoyospeak.schoolsapp"
+        applicationId = "com.yoyospeak.yoyo"
         minSdk = 24
         targetSdk = 36
         versionCode = flutter.versionCode
