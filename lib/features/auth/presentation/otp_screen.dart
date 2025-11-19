@@ -8,13 +8,13 @@ import 'package:yoyo_school_app/features/auth/data/auth_repository.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_view_model.dart';
 
 class OtpScreen extends StatelessWidget {
-  final String email;
-  const OtpScreen({super.key, required this.email});
+  final String userName;
+  const OtpScreen({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<OtpViewModel>(
-      create: (context) => OtpViewModel(AuthRepository(), email),
+      create: (context) => OtpViewModel(AuthRepository(), userName),
       child: Consumer<OtpViewModel>(
         builder: (context, vm, wid) {
           return Scaffold(
@@ -59,7 +59,7 @@ class OtpScreen extends StatelessWidget {
                                             .copyWith(color: Colors.grey),
                                       ),
                                       TextSpan(
-                                        text: email,
+                                        text: userName,
                                         style: AppTextStyles
                                             .textTheme
                                             .bodyMedium

@@ -15,7 +15,7 @@ class OnboardingRepo {
     await _client
         .from(DbTable.users)
         .update({'onboarding': true})
-        .eq('user_id', _client.auth.currentUser?.id ?? "");
+        .eq('user_id', _client.auth.currentUser?.userMetadata?['user_id'] ?? "");
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
     ctx!.go(RouteNames.home);
   }

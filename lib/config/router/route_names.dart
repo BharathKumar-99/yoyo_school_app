@@ -1,5 +1,6 @@
 class RouteNames {
   static const login = '/login';
+  static const needActivationCode = '/needActivationCode';
   static const home = '/';
   static const splash = '/splash';
   static const onboarding = '/onboarding';

@@ -1,6 +1,6 @@
+import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -12,13 +12,12 @@ import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 import 'config/router/app_router.dart';
 import 'config/theme/app_theme.dart';
-import 'core/supabase/supabase_client.dart'; 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SupabaseClientService.instance.init(); 
+  await SupabaseClientService.instance.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

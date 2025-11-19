@@ -97,8 +97,32 @@ abstract class AppLocalizations {
   /// No description provided for @login_text.
   ///
   /// In en, this message translates to:
-  /// **'Login'**
+  /// **'Get Started'**
   String get login_text;
+
+  /// No description provided for @login_btn.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login_btn;
+
+  /// No description provided for @user_name.
+  ///
+  /// In en, this message translates to:
+  /// **'User Name'**
+  String get user_name;
+
+  /// No description provided for @activation_code.
+  ///
+  /// In en, this message translates to:
+  /// **'Activation Code'**
+  String get activation_code;
+
+  /// No description provided for @requestNewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'request new activation code'**
+  String get requestNewCode;
 
   /// No description provided for @email_address.
   ///
@@ -111,6 +135,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send OTP'**
   String get send_otp;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User Not Found!'**
+  String get userNotFound;
+
+  /// No description provided for @invalidActivationToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Activation Code'**
+  String get invalidActivationToken;
+
+  /// No description provided for @userFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User Found'**
+  String get userFound;
 
   /// No description provided for @your_profile.
   ///
@@ -879,6 +921,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Let\'s Go!'**
   String get letsGo;
+
+  /// No description provided for @areYouSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure ?'**
+  String get areYouSure;
+
+  /// No description provided for @logoutMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'If you log out you will need a new activation code to log in again.'**
+  String get logoutMsg;
+
+  /// No description provided for @loggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay logged in'**
+  String get loggedIn;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'log out'**
+  String get logout;
+
+  /// No description provided for @needActivationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Need a new activation code?'**
+  String get needActivationCode;
+
+  /// No description provided for @requestActivationcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Activation Code'**
+  String get requestActivationcode;
 }
 
 class _AppLocalizationsDelegate

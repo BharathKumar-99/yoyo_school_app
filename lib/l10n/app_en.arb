@@ -1,7 +1,14 @@
 {
-    "login_text": "Login",
+    "login_text": "Get Started",
+    "login_btn": "Login",
+    "user_name": "User Name",
+    "activation_code": "Activation Code",
+    "requestNewCode": "request new activation code",
     "email_address": "Email Address",
     "send_otp": "Send OTP",
+    "userNotFound": "User Not Found!",
+    "invalidActivationToken": "Invalid Activation Code",
+    "userFound": "User Found",
     "your_profile": "Your Profile",
     "your_metrics": "Your metrics",
     "phrases": "Phrases",
@@ -129,5 +136,11 @@
     "onboarding3Title": "Don’t despair",
     "onBoarding3Subtitle": "Even AI can get it wrong sometimes. Keep going!",
     "next": "Next",
-    "letsGo": "Let's Go!"
+    "letsGo": "Let's Go!",
+    "areYouSure": "Are you sure ?",
+    "logoutMsg": "If you log out you will need a new activation code to log in again.",
+    "loggedIn": "Stay logged in",
+    "logout": "log out",
+    "needActivationCode": "Need a new activation code?",
+    "requestActivationcode": "Request Activation Code"
 }

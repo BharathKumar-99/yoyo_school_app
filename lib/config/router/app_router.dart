@@ -5,6 +5,7 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
+import 'package:yoyo_school_app/features/auth/presentation/request_activation_screen.dart';
 import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
@@ -39,8 +40,12 @@ class AppRoutes {
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
+        path: RouteNames.needActivationCode,
+        builder: (context, state) => const RequestActivationScreen(),
+      ),
+      GoRoute(
         path: RouteNames.otp,
-        builder: (context, state) => OtpScreen(email: state.extra as String),
+        builder: (context, state) => OtpScreen(userName: state.extra as String),
       ),
       GoRoute(
         path: RouteNames.onboarding,
@@ -174,13 +179,13 @@ class AppRoutes {
     ],
     redirect: (context, state) {
       final supabase = SupabaseClientService.instance.client;
-      final currentUser = supabase.auth.currentUser;
+      final currentUser = supabase.auth.currentUser?.userMetadata?['user_id'];
       final goingToLogin = state.fullPath == RouteNames.login;
-      final goingToOtp = state.fullPath == RouteNames.otp;
+      final goingToActivationCode = state.fullPath == RouteNames.needActivationCode;
       if (supabase.auth.currentSession == null &&
           currentUser == null &&
           !goingToLogin &&
-          !goingToOtp) {
+          !goingToActivationCode) {
         return RouteNames.login;
       }
       if (currentUser != null && goingToLogin) {

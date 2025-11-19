@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart'; 
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 
+import '../../../core/supabase/supabase_client.dart';
 import '../../common/presentation/global_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -145,9 +149,58 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> logoutUser() async {
+    ctx!.pop();
+    try {
+      await SupabaseClientService.instance.client.auth.signOut();
+    } catch (e) {}
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    ctx!.go(RouteNames.login);
+  }
+
   Future<void> logout() async {
     try {
-      await profileRepository.logout();
+      showDialog(
+        context: ctx!,
+        builder: (context) => AlertDialog.adaptive(
+          title: Text(text.areYouSure),
+          content: Text(text.logoutMsg),
+          scrollable: true,
+          actionsOverflowDirection: VerticalDirection.up,
+          actionsAlignment: MainAxisAlignment.center,
+          alignment: Alignment.center,
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () async {
+                  await logoutUser();
+                },
+                child: Text(
+                  text.logout,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.textTheme.titleSmall!.copyWith(
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  ctx!.pop();
+                },
+                child: Text(
+                  text.loggedIn,
+                  style: AppTextStyles.textTheme.titleMedium,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     } catch (e) {
       debugPrint("Logout error: $e");
     }

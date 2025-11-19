@@ -5,14 +5,13 @@ import '../data/auth_repository.dart';
 
 class OtpViewModel extends ChangeNotifier {
   final AuthRepository _repository;
-  final String email;
+  final String userName;
   TextEditingController pinCodeController = TextEditingController();
   bool isLoading = false;
   String? errorMessage;
   late OTPTextEditController controller;
 
-  OtpViewModel(this._repository, this.email) {
-    login();
+  OtpViewModel(this._repository, this.userName) {
     pinCodeController = TextEditingController();
 
     if (Platform.isAndroid) {
@@ -39,23 +38,13 @@ class OtpViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> login() async {
-    try {
-      isLoading = true;
-      notifyListeners();
-      _repository.login(email);
-    } catch (e) {
-      errorMessage = e.toString();
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
   Future<void> verifyOtp() async {
     isLoading = true;
     notifyListeners();
-    _repository.verifyOtp(pinCodeController.text.trim().toString(), email);
+    _repository.loginWithActivationCode(
+      userName,
+      pinCodeController.text.trim().toString(),
+    );
     isLoading = false;
     notifyListeners();
   }

@@ -9,7 +9,7 @@ class SplashRepo {
     final data = await _client
         .from(DbTable.users)
         .select('*')
-        .eq('user_id', _client.auth.currentUser?.id ?? "")
+        .eq('user_id', _client.auth.currentUser?.userMetadata?['user_id'] ?? "")
         .single();
 
     return UserModel.fromJson(data);

@@ -9,13 +9,34 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get login_text => 'Login';
+  String get login_text => 'Get Started';
+
+  @override
+  String get login_btn => 'Login';
+
+  @override
+  String get user_name => 'User Name';
+
+  @override
+  String get activation_code => 'Activation Code';
+
+  @override
+  String get requestNewCode => 'request new activation code';
 
   @override
   String get email_address => 'Email Address';
 
   @override
   String get send_otp => 'Send OTP';
+
+  @override
+  String get userNotFound => 'User Not Found!';
+
+  @override
+  String get invalidActivationToken => 'Invalid Activation Code';
+
+  @override
+  String get userFound => 'User Found';
 
   @override
   String get your_profile => 'Your Profile';
@@ -428,4 +449,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get letsGo => 'Let\'s Go!';
+
+  @override
+  String get areYouSure => 'Are you sure ?';
+
+  @override
+  String get logoutMsg =>
+      'If you log out you will need a new activation code to log in again.';
+
+  @override
+  String get loggedIn => 'Stay logged in';
+
+  @override
+  String get logout => 'log out';
+
+  @override
+  String get needActivationCode => 'Need a new activation code?';
+
+  @override
+  String get requestActivationcode => 'Request Activation Code';
 }

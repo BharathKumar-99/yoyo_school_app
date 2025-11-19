@@ -11,7 +11,7 @@ class GetUserDetails {
 
       final User? currentUser = client.auth.currentUser;
 
-      return currentUser?.id;
+      return currentUser?.userMetadata?['user_id'];
     } catch (e) {
       log('Error getting user ID: $e');
       return null;

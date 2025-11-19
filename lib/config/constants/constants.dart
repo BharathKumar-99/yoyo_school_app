@@ -28,6 +28,7 @@ class IconConstants {
   static const String emailIcon = "${iconLoc}mail.png";
   static const String vertIcon = "${iconLoc}vert-more.png";
   static const String logOutIcon = "${iconLoc}Logout.png";
+  static const String lockIcon = "${iconLoc}Lock.png";
 }
 
 class AnimationAsset {
@@ -54,6 +55,7 @@ class DbTable {
   static const String remoteConfig = 'remote_config';
   static const String userResult = 'user_results';
   static const String streakTable = 'streak_table';
+  static const String activationRequests = 'activation_requests';
 }
 
 class Stroage {
