@@ -5,8 +5,7 @@ class Student {
   int? id;
   DateTime? createdAt;
   String? userId;
-  int? classId;
-  int? languageLevel;
+  int? classId; 
   int? vocab;
   int? effort;
   int? score;
@@ -17,8 +16,7 @@ class Student {
     this.id,
     this.createdAt,
     this.userId,
-    this.classId,
-    this.languageLevel,
+    this.classId, 
     this.vocab,
     this.effort,
     this.score,
@@ -33,8 +31,7 @@ class Student {
           ? DateTime.parse(json['created_at'])
           : null,
       userId: json['user_id'],
-      classId: json['class'],
-      languageLevel: json['language_level'],
+      classId: json['class'], 
       vocab: json['vocab'],
       effort: json['effort'],
       score: json['score'],
@@ -52,8 +49,7 @@ class Student {
       'id': id,
       'created_at': createdAt?.toIso8601String(),
       'user_id': userId,
-      'class': classId,
-      'language_level': languageLevel,
+      'class': classId, 
       'vocab': vocab,
       'effort': effort,
       'score': score,

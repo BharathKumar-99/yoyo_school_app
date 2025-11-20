@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -10,8 +9,7 @@ import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 
-import '../../../core/supabase/supabase_client.dart';
-import '../../common/presentation/global_provider.dart';
+import '../../../core/supabase/supabase_client.dart'; 
 
 class ProfileProvider extends ChangeNotifier {
   final ProfileRepository profileRepository;
@@ -27,15 +25,23 @@ class ProfileProvider extends ChangeNotifier {
   void initialize() {
     try {
       _subscribeToUserData();
-      Provider.of<GlobalProvider>(ctx!, listen: false);
     } catch (e) {
       debugPrint("ProfileProvider initialize error: $e");
     }
   }
 
   String extractCaps(String text) {
-    final caps = RegExp(r'[A-Z]');
-    return caps.allMatches(text).map((m) => m.group(0)!).join();
+    final matches = RegExp(r'(^[A-Za-z])|-(\s*[A-Za-z])').allMatches(text);
+
+    // Extract the actual letters, remove '-', trim spaces
+    final letters = matches.map((m) {
+      return (m.group(1) ?? m.group(2))!
+          .replaceAll('-', '')
+          .trim()
+          .toUpperCase();
+    }).join();
+
+    return letters;
   }
 
   void _subscribeToUserData() {
@@ -52,10 +58,7 @@ class ProfileProvider extends ChangeNotifier {
             user = userData;
 
             school = await profileRepository.getSchoolData(user?.school ?? 0);
-            nameFromUser = [
-              user?.firstName?.isNotEmpty == true ? user!.firstName![0] : '',
-              user?.surName?.isNotEmpty == true ? user!.surName![0] : '',
-            ].join().toUpperCase();
+            nameFromUser = extractCaps(user?.username ?? '');
 
             email.text = user?.email ?? "";
             isLoading = false;

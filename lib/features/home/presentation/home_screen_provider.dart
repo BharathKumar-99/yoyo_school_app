@@ -7,6 +7,7 @@ import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
 import '../../../config/router/navigation_helper.dart';
+import '../../common/presentation/global_provider.dart';
 import '../model/level_model.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
@@ -28,7 +29,7 @@ class HomeScreenProvider extends ChangeNotifier {
   Future<void> init() async {
     try {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
-
+      Provider.of<GlobalProvider>(ctx!, listen: false);
       userClases = await homeRepository.getClasses();
       if (userClases == null) {
         throw "Could not load classes";

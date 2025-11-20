@@ -247,7 +247,7 @@ class PhraseCategories extends StatelessWidget {
                             "className": className,
                             "level": levels,
                             'student': student,
-                            'categories': 0,
+                            'categories': -1,
                           },
                         ),
                         child: Container(
@@ -288,7 +288,7 @@ class PhraseCategories extends StatelessWidget {
                             "className": className,
                             "level": levels,
                             'student': student,
-                            'categories': -1,
+                            'categories': 0,
                           },
                         ),
                         child: Container(

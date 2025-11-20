@@ -72,7 +72,7 @@ class GlobalRepo {
   }
 
   Future<RemoteConfig> getRemoteCred() async {
-    final id = GetUserDetails.getCurrentUserId() ?? "";
+    final id = GetUserDetails.getCurrentSchool() ?? "";
     final data = await _client
         .from(DbTable.remoteConfig)
         .select()
