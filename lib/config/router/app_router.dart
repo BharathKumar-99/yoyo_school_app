@@ -12,6 +12,7 @@ import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboarding_screen.dart';
+import 'package:yoyo_school_app/features/phrases/presentation/phrase_categories.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
@@ -20,6 +21,7 @@ import 'package:yoyo_school_app/features/result/presentation/result_screen.dart'
 import 'package:yoyo_school_app/features/settings/presentation/settings_screen.dart';
 import 'package:yoyo_school_app/features/splash/presentation/splash_screen.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
+import 'package:yoyo_school_app/features/webview/presentation/webview_screen.dart';
 
 import '../../features/recording/presentation/recorder_provider.dart';
 import '../../features/try_phrases/presentation/try_phrases_screen.dart';
@@ -60,6 +62,10 @@ class AppRoutes {
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
+        path: RouteNames.webview,
+        builder: (context, state) => WebViewScreen(url: state.extra as String),
+      ),
+      GoRoute(
         path: RouteNames.settings,
         builder: (context, state) => const SettingsScreen(),
       ),
@@ -85,6 +91,19 @@ class AppRoutes {
             streak: data['streak'],
             from: data['from'],
             streakPhraseId: data['phraseId'],
+            categories: data['categories'],
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.phraseCategories,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return PhraseCategories(
+            language: data['language'],
+            className: data['className'],
+            levels: data['level'],
+            student: data['student'],
           );
         },
       ),
@@ -98,6 +117,7 @@ class AppRoutes {
             audioPath: data['path'],
             isLast: data['isLast'],
             retryNumber: data['retry'] ?? 0,
+            categories: data['categories'],
           );
         },
       ),
@@ -111,6 +131,7 @@ class AppRoutes {
             audioPath: data['path'],
             isLast: data['isLast'],
             retryNumber: data['retry'] ?? 0,
+            categories: data['categories'],
           );
         },
       ),
@@ -124,6 +145,7 @@ class AppRoutes {
               data['phrase'] as PhraseModel,
               data['streak'],
               data['isLast'],
+              data['categories'],
             ),
             child: ChangeNotifierProvider<RecordingProvider>(
               create: (context) => RecordingProvider(
@@ -131,6 +153,7 @@ class AppRoutes {
                 data['language'],
                 data['streak'],
                 data['isLast'],
+                data['categories'],
               ),
               child: TryPhrasesScreen(
                 key: UniqueKey(),
@@ -150,13 +173,17 @@ class AppRoutes {
         builder: (context, state) {
           Map data = state.extra as Map;
           return ChangeNotifierProvider<MasterPhraseProvider>(
-            create: (_) => MasterPhraseProvider(data['phrase'] as PhraseModel),
+            create: (_) => MasterPhraseProvider(
+              data['phrase'] as PhraseModel,
+              data['categories'],
+            ),
             child: ChangeNotifierProvider<RememberRecorderProvider>(
               create: (_) => RememberRecorderProvider(
                 data['phrase'] as PhraseModel,
                 data['language'],
                 data['streak'],
                 data['isLast'],
+                data['categories'],
               ),
               child: MasterPhraseSreen(
                 key: UniqueKey(),
@@ -173,15 +200,15 @@ class AppRoutes {
       ),
       GoRoute(
         path: RouteNames.profile,
-        builder: (context, state) =>
-            YourProfile(isFromOtp: state.extra as bool? ?? false),
+        builder: (context, state) => YourProfile(),
       ),
     ],
     redirect: (context, state) {
       final supabase = SupabaseClientService.instance.client;
       final currentUser = supabase.auth.currentUser?.userMetadata?['user_id'];
       final goingToLogin = state.fullPath == RouteNames.login;
-      final goingToActivationCode = state.fullPath == RouteNames.needActivationCode;
+      final goingToActivationCode =
+          state.fullPath == RouteNames.needActivationCode;
       if (supabase.auth.currentSession == null &&
           currentUser == null &&
           !goingToLogin &&

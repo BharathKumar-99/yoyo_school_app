@@ -227,7 +227,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
           onTapUp: _onTapUp,
           onTapCancel: () => setState(() => _scale = 1.0),
           onTap: () => NavigationHelper.go(
-            RouteNames.phrasesDetails,
+            RouteNames.phraseCategories,
             extra: {
               'language': widget.language,
               "className": widget.className,

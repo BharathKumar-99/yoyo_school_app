@@ -5,18 +5,18 @@ class UserModel {
   String? surName;
   String? email;
   int? school;
-  String? image;
+  String? username;
   DateTime? lastLogin;
   bool? onboarding;
 
   UserModel({
     required this.userId,
     required this.createdAt,
-    this.firstName,
-    this.surName,
     this.email,
     this.school,
-    this.image,
+    this.firstName,
+    this.surName,
+    this.username,
     this.lastLogin,
     this.onboarding,
   });
@@ -31,7 +31,7 @@ class UserModel {
       lastLogin: json['last_login'] != null
           ? DateTime.parse(json['last_login'])
           : null,
-      image: json['image'] as String?,
+      username: json['username'] as String?,
       onboarding: json['onboarding'],
       school: json['school'] is int
           ? json['school'] as int
@@ -43,11 +43,10 @@ class UserModel {
     return {
       'user_id': userId,
       'created_at': createdAt.toIso8601String(),
-      'first_name': firstName,
-      'sur_name': surName,
       'email': email,
       'school': school,
-      'image': image,
+      'first_name': firstName,
+      'sur_name': surName,
       'last_login': lastLogin?.toIso8601String(),
       'onboarding': onboarding,
     };

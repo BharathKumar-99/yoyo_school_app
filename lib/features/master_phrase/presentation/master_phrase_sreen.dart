@@ -80,6 +80,7 @@ class MasterPhraseSreen extends StatelessWidget {
                                 slanguage: schoolLanguage,
                                 className: className,
                                 student: student,
+                                categories: value.categories,
                               ),
                             ),
                           ),

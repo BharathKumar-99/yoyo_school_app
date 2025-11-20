@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-
 import 'request_activation_view_model.dart';
 
 class RequestActivationScreen extends StatelessWidget {
@@ -20,6 +20,7 @@ class RequestActivationScreen extends StatelessWidget {
             body: Stack(
               children: [
                 Image.asset(ImageConstants.loginBg),
+
                 SafeArea(
                   child: Column(
                     children: [
@@ -95,6 +96,29 @@ class RequestActivationScreen extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: IconButton(
+                    onPressed: () => context.pop(),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        Colors.transparent,
+                      ),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: Colors.grey),
+                        ),
+                      ),
+                      fixedSize: WidgetStateProperty.all(const Size(40, 40)),
+                    ),
                   ),
                 ),
               ],

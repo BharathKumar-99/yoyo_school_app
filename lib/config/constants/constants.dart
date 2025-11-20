@@ -2,6 +2,8 @@ class UrlConstants {
   static const String superSpeachApi = "api.speechsuper.com";
   static const String openAiUrl =
       'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/openai';
+  static const String terms = 'https://support.yoyospeak.com/terms/';
+  static const String privacy = 'https://support.yoyospeak.com/privacy/';
 }
 
 class ImageConstants {
@@ -21,6 +23,7 @@ class ImageConstants {
   static const String onboarding1 = "${assetsLoc}onboarding1.png";
   static const String onboarding2 = "${assetsLoc}onboarding2.png";
   static const String onboarding3 = "${assetsLoc}onboarding3.png";
+  static const String warmup = "${assetsLoc}warmup.png";
 }
 
 class IconConstants {
@@ -56,6 +59,7 @@ class DbTable {
   static const String userResult = 'user_results';
   static const String streakTable = 'streak_table';
   static const String activationRequests = 'activation_requests';
+  static const String phraseCategories = 'phrase_categories';
 }
 
 class Stroage {

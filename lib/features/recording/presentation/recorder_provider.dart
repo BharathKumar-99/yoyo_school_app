@@ -24,12 +24,14 @@ class RecordingProvider extends ChangeNotifier {
   late final StreamSubscription<Duration> _durationSubscription;
   bool isLast;
   int retryNumber = 1;
+  int categories;
 
   RecordingProvider(
     this.phraseModel,
     this.launguage,
     this.streak,
     this.isLast,
+    this.categories,
   ) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
@@ -80,7 +82,7 @@ class RecordingProvider extends ChangeNotifier {
                 streak: streak!,
                 audioPath: recordingPath!,
                 form: "new",
-                isLast: isLast,
+                isLast: isLast,categories: categories,
               ),
             );
           } else {
@@ -93,6 +95,7 @@ class RecordingProvider extends ChangeNotifier {
                     'language': launguage,
                     'isLast': isLast,
                     'retry': retryNumber,
+                    'categories': categories,
                   },
                 )
                 .then((val) {

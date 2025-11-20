@@ -21,7 +21,7 @@ class HomeScreenProvider extends ChangeNotifier {
 
   HomeScreenProvider(this.homeRepository) {
     _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
-    _profileProvider?.initialize(fromOtp: false);
+    _profileProvider?.initialize();
     init();
   }
 

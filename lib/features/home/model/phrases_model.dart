@@ -9,6 +9,10 @@ class PhraseModel {
   DateTime? createdAt;
   String? translation;
   int? score;
+  bool? warmup;
+  String? questions;
+  String? questionRecording;
+  int? categories;
 
   PhraseModel({
     this.id,
@@ -21,6 +25,10 @@ class PhraseModel {
     this.createdAt,
     this.translation,
     this.score,
+    this.questionRecording,
+    this.warmup,
+    this.questions,
+    this.categories,
   });
 
   factory PhraseModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +44,10 @@ class PhraseModel {
           ? DateTime.tryParse(json['created_at'])
           : null,
       translation: json['translation'] as String?,
+      questionRecording: json['question_recording'] as String?,
+      warmup: json['warmup'],
+      questions: json['question'],
+      categories: json['categories'],
     );
   }
 
@@ -50,6 +62,10 @@ class PhraseModel {
       'recording': recording,
       'created_at': createdAt?.toIso8601String(),
       'translation': translation,
+      'warmup': warmup,
+      'questions': questions,
+      'question_recording': questionRecording,
+      'categories': categories,
     };
   }
 }

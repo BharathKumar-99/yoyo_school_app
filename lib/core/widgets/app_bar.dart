@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -46,23 +45,19 @@ AppBar getAppBar(BuildContext context) {
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image:
-                          (provider.user?.image == null ||
-                              provider.user!.image!.isEmpty)
-                          ? const AssetImage(ImageConstants.loginBg)
-                          : CachedNetworkImageProvider(provider.user!.image!)
-                                as ImageProvider,
+                          const AssetImage(ImageConstants.loginBg)
+                              as ImageProvider,
                     ),
                   ),
 
-                  child: (provider.user?.image?.isEmpty ?? true)
-                      ? Center(
-                          child: Text(
-                            provider.nameFromUser ?? "",
-                            style: AppTextStyles.textTheme.headlineLarge!
-                                .copyWith(color: Colors.white),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                  child: Center(
+                    child: Text(
+                      provider.nameFromUser ?? "",
+                      style: AppTextStyles.textTheme.headlineLarge!.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

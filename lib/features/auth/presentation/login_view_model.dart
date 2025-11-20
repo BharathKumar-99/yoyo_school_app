@@ -29,7 +29,7 @@ class AuthViewModel extends ChangeNotifier {
         activationCode,
       );
       if (data['success']) {
-        NavigationHelper.push(RouteNames.profile, extra: true);
+        NavigationHelper.push(RouteNames.splash);
       } else {
         UsefullFunctions.showSnackBar(ctx!, data['message']);
       }

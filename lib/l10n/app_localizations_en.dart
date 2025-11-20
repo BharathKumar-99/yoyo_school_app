@@ -15,10 +15,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_btn => 'Login';
 
   @override
-  String get user_name => 'User Name';
+  String get user_name => 'Username - e.g Urban-Signal-247';
 
   @override
-  String get activation_code => 'Activation Code';
+  String get activation_code => 'Activation Code - e.g. HYT-UL7';
 
   @override
   String get requestNewCode => 'request new activation code';
@@ -42,6 +42,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get your_profile => 'Your Profile';
 
   @override
+  String get your_school => 'Your School';
+
+  @override
   String get your_metrics => 'Your metrics';
 
   @override
@@ -55,6 +58,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effort => 'Effort';
+
+  @override
+  String get terms => 'Terms and Condition';
+
+  @override
+  String get privacy => 'Privacy and Policy';
 
   @override
   String get score => 'Score';
@@ -101,6 +110,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty_list => 'No Phrases';
+
+  @override
+  String get warmUp => 'Warm Up';
 
   @override
   String get holdAndRecord => 'Hold & Speak';

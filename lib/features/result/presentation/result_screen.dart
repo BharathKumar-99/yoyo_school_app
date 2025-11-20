@@ -19,6 +19,7 @@ class ResultScreen extends StatelessWidget {
   final String audioPath;
   final bool isLast;
   final int retryNumber;
+  final int categories;
   const ResultScreen({
     super.key,
     required this.phraseModel,
@@ -26,6 +27,7 @@ class ResultScreen extends StatelessWidget {
     required this.language,
     required this.isLast,
     required this.retryNumber,
+    required this.categories,
   });
 
   @override
@@ -150,7 +152,7 @@ class ResultScreen extends StatelessWidget {
                                                   ?.className ??
                                               "",
                                           "level": value.levels ?? [],
-                                          'student': value.userClases,
+                                          'student': value.userClases, 'categories': categories,
                                         },
                                       ),
 
@@ -495,7 +497,7 @@ class ResultScreen extends StatelessWidget {
                                                             ?.className ??
                                                         "",
                                                     "level": value.levels ?? [],
-                                                    'student': value.userClases,
+                                                    'student': value.userClases, 'categories': categories,
                                                   },
                                                 ),
 
@@ -581,7 +583,7 @@ class ResultScreen extends StatelessWidget {
                                                     'student': value.userClases,
                                                     'next': true,
                                                     'from': 'new',
-                                                    "streak": 1,
+                                                    "streak": 1, 'categories': categories,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -609,7 +611,7 @@ class ResultScreen extends StatelessWidget {
                                                     'student': value.userClases,
                                                     "phrase": value.phraseModel,
                                                     "streak": null,
-                                                    "language":value.language,
+                                                    "language": value.language,
                                                     "schoolLanguage":
                                                         value.slanguage,
                                                     "className":

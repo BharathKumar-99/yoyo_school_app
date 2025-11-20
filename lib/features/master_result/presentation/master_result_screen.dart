@@ -19,6 +19,7 @@ class MasterResultScreen extends StatelessWidget {
   final String audioPath;
   final bool isLast;
   final int retryNumber;
+  final int categories;
   const MasterResultScreen({
     super.key,
     required this.phraseModel,
@@ -26,6 +27,7 @@ class MasterResultScreen extends StatelessWidget {
     required this.language,
     required this.isLast,
     required this.retryNumber,
+    required this.categories,
   });
 
   @override
@@ -151,6 +153,7 @@ class MasterResultScreen extends StatelessWidget {
                                               "",
                                           "level": value.levels ?? [],
                                           'student': value.userClases,
+                                          'categories': categories,
                                         },
                                       ),
 
@@ -490,7 +493,7 @@ class MasterResultScreen extends StatelessWidget {
                                                     'next': true,
                                                     "streak": 1,
                                                     "from": "learned",
-                                                    "phraseId": phraseModel.id,
+                                                    "phraseId": phraseModel.id, 'categories': categories,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -525,7 +528,7 @@ class MasterResultScreen extends StatelessWidget {
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     "next": true,
-                                                    "from": "learned",
+                                                    "from": "learned", 'categories': categories,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(

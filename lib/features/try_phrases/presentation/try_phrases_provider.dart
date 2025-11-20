@@ -21,8 +21,14 @@ class TryPhrasesProvider extends ChangeNotifier {
   bool _disposed = false;
   bool isLast;
   bool showStreakVal = false;
+  final int categories;
 
-  TryPhrasesProvider(this.phraseModel, this.streak, this.isLast) {
+  TryPhrasesProvider(
+    this.phraseModel,
+    this.streak,
+    this.isLast,
+    this.categories,
+  ) {
     initAudio();
   }
 

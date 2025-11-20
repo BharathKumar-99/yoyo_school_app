@@ -109,13 +109,13 @@ abstract class AppLocalizations {
   /// No description provided for @user_name.
   ///
   /// In en, this message translates to:
-  /// **'User Name'**
+  /// **'Username - e.g Urban-Signal-247'**
   String get user_name;
 
   /// No description provided for @activation_code.
   ///
   /// In en, this message translates to:
-  /// **'Activation Code'**
+  /// **'Activation Code - e.g. HYT-UL7'**
   String get activation_code;
 
   /// No description provided for @requestNewCode.
@@ -160,6 +160,12 @@ abstract class AppLocalizations {
   /// **'Your Profile'**
   String get your_profile;
 
+  /// No description provided for @your_school.
+  ///
+  /// In en, this message translates to:
+  /// **'Your School'**
+  String get your_school;
+
   /// No description provided for @your_metrics.
   ///
   /// In en, this message translates to:
@@ -189,6 +195,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Effort'**
   String get effort;
+
+  /// No description provided for @terms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Condition'**
+  String get terms;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and Policy'**
+  String get privacy;
 
   /// No description provided for @score.
   ///
@@ -279,6 +297,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Phrases'**
   String get empty_list;
+
+  /// No description provided for @warmUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm Up'**
+  String get warmUp;
 
   /// No description provided for @holdAndRecord.
   ///

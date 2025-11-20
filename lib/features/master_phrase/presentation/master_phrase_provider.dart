@@ -16,8 +16,8 @@ class MasterPhraseProvider extends ChangeNotifier {
   final AudioPlayer audioManager = AudioPlayer();
   bool isLoading = true;
   bool showStreakVal = false;
-
-  MasterPhraseProvider(this.phraseModel) {
+  int categories;
+  MasterPhraseProvider(this.phraseModel, this.categories) {
     init();
   }
 

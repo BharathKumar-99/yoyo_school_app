@@ -17,4 +17,17 @@ class GetUserDetails {
       return null;
     }
   }
+
+  static int? getCurrentSchool() {
+    try {
+      final client = SupabaseClientService.instance.client;
+
+      final User? currentUser = client.auth.currentUser;
+
+      return currentUser?.userMetadata?['school'];
+    } catch (e) {
+      log('Error getting user ID: $e');
+      return null;
+    }
+  }
 }

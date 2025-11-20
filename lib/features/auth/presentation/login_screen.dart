@@ -40,12 +40,12 @@ class LoginScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 30),
+                                SizedBox(height: 15),
                                 Text(
                                   text.login_text,
                                   style: AppTextStyles.textTheme.headlineLarge,
                                 ),
-                                SizedBox(height: 40),
+                                SizedBox(height: 20),
                                 TextField(
                                   controller: vm.userNameTextEditingCtrl,
                                   style: AppTextStyles.textTheme.bodySmall,
@@ -76,7 +76,7 @@ class LoginScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 30),
+                                SizedBox(height: 20),
                                 TextField(
                                   controller: vm.activationTextEditingCtrl,
                                   style: AppTextStyles.textTheme.bodySmall,
@@ -107,7 +107,7 @@ class LoginScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 30),
+                                SizedBox(height: 20),
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(

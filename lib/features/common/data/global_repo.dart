@@ -13,6 +13,7 @@ import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/speech_evaluation_model.dart';
 
 import '../../../config/constants/constants.dart';
+import '../../../config/utils/get_user_details.dart';
 import '../../../config/utils/usefull_functions.dart';
 import '../../result/model/user_result_model.dart';
 
@@ -71,9 +72,11 @@ class GlobalRepo {
   }
 
   Future<RemoteConfig> getRemoteCred() async {
+    final id = GetUserDetails.getCurrentUserId() ?? "";
     final data = await _client
         .from(DbTable.remoteConfig)
         .select()
+        .eq('school', id)
         .limit(1)
         .maybeSingle();
     return RemoteConfig.fromJson(data!);

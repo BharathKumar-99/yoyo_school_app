@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
+import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 
@@ -17,27 +15,27 @@ import '../../common/presentation/global_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
   final ProfileRepository profileRepository;
-
   final TextEditingController email = TextEditingController();
-
   UserModel? user;
   bool isLoading = true;
-  bool isFromOtp = false;
-  File? localImage;
   String? nameFromUser;
-
   StreamSubscription<UserModel?>? _userSubscription;
+  School? school;
 
   ProfileProvider(this.profileRepository);
 
-  void initialize({bool fromOtp = false}) {
+  void initialize() {
     try {
-      isFromOtp = fromOtp;
       _subscribeToUserData();
       Provider.of<GlobalProvider>(ctx!, listen: false);
     } catch (e) {
       debugPrint("ProfileProvider initialize error: $e");
     }
+  }
+
+  String extractCaps(String text) {
+    final caps = RegExp(r'[A-Z]');
+    return caps.allMatches(text).map((m) => m.group(0)!).join();
   }
 
   void _subscribeToUserData() {
@@ -53,13 +51,7 @@ class ProfileProvider extends ChangeNotifier {
 
             user = userData;
 
-            if (isFromOtp) {
-              if (user?.lastLogin != null) {
-              } else {
-                profileRepository.updateLastLogin();
-              }
-            }
-
+            school = await profileRepository.getSchoolData(user?.school ?? 0);
             nameFromUser = [
               user?.firstName?.isNotEmpty == true ? user!.firstName![0] : '',
               user?.surName?.isNotEmpty == true ? user!.surName![0] : '',
@@ -88,67 +80,6 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> pickImage(BuildContext context) async {
-    try {
-      final picker = ImagePicker();
-
-      final source = await showModalBottomSheet<ImageSource>(
-        context: context,
-        builder: (context) => SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: Text(text.chooseFromGallery),
-                onTap: () => Navigator.pop(context, ImageSource.gallery),
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: Text(text.takeAPhoto),
-                onTap: () => Navigator.pop(context, ImageSource.camera),
-              ),
-            ],
-          ),
-        ),
-      );
-
-      if (source == null) return;
-
-      final pickedFile = await picker.pickImage(source: source);
-
-      if (pickedFile != null) {
-        localImage = File(pickedFile.path);
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint("pickImage error: $e");
-      UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
-    }
-  }
-
-  Future<void> saveImageButton() async {
-    try {
-      if (localImage != null) {
-        final result = await profileRepository.saveImage(localImage);
-        if (!result) {
-          UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
-          return;
-        } else {
-          UsefullFunctions.showSnackBar(ctx!, text.profileUpdated);
-        }
-      }
-
-      if (isFromOtp) {
-        NavigationHelper.go(RouteNames.splash);
-      } else {
-        NavigationHelper.go(RouteNames.home);
-      }
-    } catch (e) {
-      debugPrint("saveImageButton error: $e");
-      UsefullFunctions.showSnackBar(ctx!, text.somethingWentWrong);
-    }
-  }
-
   Future<void> logoutUser() async {
     ctx!.pop();
     try {
@@ -164,7 +95,7 @@ class ProfileProvider extends ChangeNotifier {
     try {
       showDialog(
         context: ctx!,
-        builder: (context) => AlertDialog.adaptive(
+        builder: (context) => AlertDialog(
           title: Text(text.areYouSure),
           content: Text(text.logoutMsg),
           scrollable: true,

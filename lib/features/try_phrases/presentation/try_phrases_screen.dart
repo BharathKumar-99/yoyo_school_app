@@ -43,6 +43,7 @@ class TryPhrasesScreen extends StatelessWidget {
                 slanguage: schoolLanguage,
                 className: className,
                 student: student,
+                categories: value.categories,
               ),
             ),
             body: value.isLoading

@@ -9,8 +9,7 @@ import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
 class YourProfile extends StatefulWidget {
-  final bool? isFromOtp;
-  const YourProfile({super.key, this.isFromOtp = false});
+  const YourProfile({super.key});
 
   @override
   State<YourProfile> createState() => _YourProfileState();
@@ -23,7 +22,7 @@ class _YourProfileState extends State<YourProfile> {
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<ProfileProvider>(context, listen: false);
-      provider.initialize(fromOtp: widget.isFromOtp ?? false);
+      provider.initialize();
     });
     super.didChangeDependencies();
   }
@@ -65,15 +64,22 @@ class _YourProfileState extends State<YourProfile> {
                       offset: const Offset(0, -380),
                       enableFeedback: false,
                       itemBuilder: (context) => [
-                        PopupMenuItem<int>(
-                          value: 0,
-                          child: Text(text.settings),
-                        ),
+                        PopupMenuItem<int>(value: 0, child: Text(text.terms)),
+                        PopupMenuItem<int>(value: 1, child: Text(text.privacy)),
                       ],
                       onSelected: (value) {
                         switch (value) {
                           case 0:
-                            context.push(RouteNames.settings);
+                            context.push(
+                              RouteNames.webview,
+                              extra: UrlConstants.terms,
+                            );
+                            break;
+                          case 1:
+                            context.push(
+                              RouteNames.webview,
+                              extra: UrlConstants.privacy,
+                            );
                             break;
                           default:
                         }
@@ -86,16 +92,14 @@ class _YourProfileState extends State<YourProfile> {
                     ),
 
                     const SizedBox(width: 10),
-                    (widget.isFromOtp ?? false)
-                        ? const SizedBox.shrink()
-                        : GestureDetector(
-                            onTap: () => provider.logout(),
-                            child: Image.asset(
-                              IconConstants.logOutIcon,
-                              height: 31,
-                              width: 31,
-                            ),
-                          ),
+                    GestureDetector(
+                      onTap: () => provider.logout(),
+                      child: Image.asset(
+                        IconConstants.logOutIcon,
+                        height: 31,
+                        width: 31,
+                      ),
+                    ),
                   ],
                 ),
                 body: Padding(
@@ -114,83 +118,43 @@ class _YourProfileState extends State<YourProfile> {
                           color: const Color.fromRGBO(14, 14, 23, 0.42),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () => provider.pickImage(context),
-                        child: Center(
-                          child: Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              image: DecorationImage(
-                                image: provider.localImage != null
-                                    ? FileImage(provider.localImage!)
-                                    : provider.user?.image?.isNotEmpty == true
-                                    ? CachedNetworkImageProvider(
-                                        provider.user?.image ?? '',
-                                      )
-                                    : const AssetImage(ImageConstants.loginBg)
-                                          as ImageProvider,
-                                fit: BoxFit.fill,
-                              ),
+                      Center(
+                        child: Container(
+                          height: 150,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            image: DecorationImage(
+                              image:
+                                  const AssetImage(ImageConstants.loginBg)
+                                      as ImageProvider,
+                              fit: BoxFit.fill,
                             ),
-                            child:
-                                (provider.localImage == null &&
-                                    (provider.user?.image?.isEmpty ?? true))
-                                ? Center(
-                                    child: Text(
-                                      provider.nameFromUser ?? "",
-                                      style: AppTextStyles
-                                          .textTheme
-                                          .headlineLarge!
-                                          .copyWith(color: Colors.white),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
+                          ),
+                          child: Center(
+                            child: Text(
+                              provider.nameFromUser ?? "",
+                              style: AppTextStyles.textTheme.headlineLarge!
+                                  .copyWith(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                      TextField(
-                        controller: provider.email,
-                        style: AppTextStyles.textTheme.bodySmall,
-                        enabled: false,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(16),
-                          hintText: text.email_address,
-                          hintStyle: AppTextStyles.textTheme.bodySmall!
-                              .copyWith(color: Colors.grey),
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0,
-                            ),
-                            child: Image.asset(IconConstants.emailIcon),
-                          ),
-                          prefixIconConstraints: const BoxConstraints(
-                            maxHeight: 40,
-                            maxWidth: 40,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
+                      Center(
+                        child: Text(
+                          provider.user?.username ?? '',
+                          style: AppTextStyles.textTheme.titleLarge,
                         ),
                       ),
+                      Text(
+                        text.your_school,
+                        style: AppTextStyles.textTheme.headlineLarge,
+                      ),
+                      if (provider.school?.image != null)
+                        CachedNetworkImage(
+                          imageUrl: provider.school?.image ?? '',
+                        ),
                     ],
-                  ),
-                ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => provider.saveImageButton(),
-                      child: Text(
-                        text.save,
-                        style: AppTextStyles.textTheme.titleMedium,
-                      ),
-                    ),
                   ),
                 ),
               );

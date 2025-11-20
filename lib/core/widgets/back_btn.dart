@@ -12,6 +12,7 @@ Widget backBtn({
   String? className,
   List<Level>? levels,
   Student? student,
+  int? categories,
 }) {
   return IconButton(
     onPressed: () async {
@@ -44,6 +45,7 @@ Widget backBtn({
               "className": className ?? "",
               "level": levels ?? [],
               'student': student,
+              'categories': categories,
             },
           );
         }
@@ -55,6 +57,7 @@ Widget backBtn({
             "className": className ?? "",
             "level": levels ?? [],
             'student': student,
+            'categories': categories,
           },
         );
       }

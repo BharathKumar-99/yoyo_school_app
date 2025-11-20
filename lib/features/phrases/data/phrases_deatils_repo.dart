@@ -6,6 +6,7 @@ import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../../config/utils/get_user_details.dart';
+import '../model/phrase_categories_model.dart';
 
 class PhrasesDeatilsRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
@@ -27,6 +28,26 @@ class PhrasesDeatilsRepo {
         .eq('language_id', lid ?? 0)
         .maybeSingle();
     return response?['max_streak'] ?? 0;
+  }
+
+  Future<List<PhraseCategoriesModel>> getAllPhraseCategories(int id) async {
+    final response = await _client
+        .from(DbTable.phraseCategories)
+        .select('*')
+        .eq('language', id);
+    return response
+        .map<PhraseCategoriesModel>((e) => PhraseCategoriesModel.fromJson(e))
+        .toList();
+  }
+
+  Future<List<UserResult>> getUserResult(List<int> ids) async {
+    final response = await _client
+        .from(DbTable.userResult)
+        .select()
+        .eq('score_submited', true)
+        .inFilter('phrases_id', ids);
+
+    return response.map<UserResult>((e) => UserResult.fromJson(e)).toList();
   }
 
   Future<void> insertStreak(String uid, int? lid) async {

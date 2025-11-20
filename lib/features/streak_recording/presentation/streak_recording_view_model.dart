@@ -31,6 +31,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   SpeechEvaluationModel? speechEvaluationModel;
   final ResultsRepo _repo = ResultsRepo();
   final GlobalRepo _globalRepo = GlobalRepo();
+  int categories;
   StreakRecordingViewModel(
     this.phraseModel,
     this.audioPath,
@@ -38,6 +39,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
     this.streak,
     this.form,
     this.isLast,
+    this.categories,
   ) {
     init();
   }
@@ -76,6 +78,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
             'from': form,
             "streak": streak + 1,
             "phraseId": phraseModel.id,
+            'categories': categories,
           },
         );
       } else {
@@ -87,6 +90,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
             'path': audioPath,
             'language': language,
             'isLast': isLast,
+            'categories': categories,
           },
         );
       }

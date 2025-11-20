@@ -40,6 +40,7 @@ class PhrasesViewModel extends ChangeNotifier {
   String? className;
   late GlobalProvider globalProvider;
   int? streakPhraseId;
+  int categories;
 
   PhrasesViewModel(
     this.classes,
@@ -50,6 +51,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.ctx,
     this.className,
     this.streakPhraseId,
+    this.categories,
   ) {
     try {
       globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
@@ -161,8 +163,18 @@ class PhrasesViewModel extends ChangeNotifier {
         }
       }
 
+      final phraseList = classes.language?.phrase?.where((val) {
+        if (categories == -1) {
+          return val.warmup == true;
+        } else if (categories == 0) {
+          return val.categories == null;
+        } else {
+          return val.categories == categories;
+        }
+      }).toList();
+
       for (final val in userResult) {
-        for (final phrase in classes.language?.phrase ?? []) {
+        for (final phrase in phraseList ?? []) {
           if (val.phrasesId == phrase.id) {
             if (val.type == Constants.learned) {
               learned.add(phrase);
@@ -257,6 +269,7 @@ class PhrasesViewModel extends ChangeNotifier {
             "className": className,
             "student": student,
             "language": classes.language,
+            'categories': categories,
             "isLast": from == 'new'
                 ? newPhrases.length == 1
                 : learned.length == 1,
