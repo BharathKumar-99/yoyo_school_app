@@ -29,6 +29,10 @@ class AuthRepository {
       client.auth.updateUser(
         UserAttributes(data: {'user_id': userid, 'school': id}),
       );
+      final res = await client.auth.getUser();
+
+      final user = res.user;
+      print("Updated metadata: ${user?.userMetadata}");
       try {
         await client
             .from(DbTable.users)

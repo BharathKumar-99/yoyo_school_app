@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
@@ -79,6 +80,7 @@ class LoginScreen extends StatelessWidget {
                                 SizedBox(height: 20),
                                 TextField(
                                   controller: vm.activationTextEditingCtrl,
+                                  inputFormatters: [ActivationCodeFormatter()],
                                   style: AppTextStyles.textTheme.bodySmall,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(16),
@@ -151,6 +153,33 @@ class LoginScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class ActivationCodeFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String text = newValue.text.toUpperCase().replaceAll(
+      RegExp(r'[^A-Z0-9]'),
+      '',
+    );
+
+    if (text.length > 3) {
+      text = '${text.substring(0, 3)}-${text.substring(3)}';
+    }
+
+    // Limit maximum length to HYT-UL7 → 3 + 1 + 3 = 7 chars
+    if (text.length > 7) {
+      text = text.substring(0, 7);
+    }
+
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
     );
   }
 }
