@@ -35,7 +35,7 @@ class PhraseCategories extends StatelessWidget {
           builder: (context, provider, child) => Column(
             children: [
               SizedBox(
-                height: MediaQuery.sizeOf(context).height / 3,
+                height: MediaQuery.sizeOf(context).height / 2.4,
                 child: Hero(
                   tag: language.language?.language ?? "",
                   child: Container(
@@ -56,7 +56,7 @@ class PhraseCategories extends StatelessWidget {
                     child: Stack(
                       children: [
                         SizedBox(
-                          height: MediaQuery.sizeOf(context).height / 3,
+                          height: MediaQuery.sizeOf(context).height / 2.4,
                           child: Column(
                             children: [
                               SizedBox(height: 100),

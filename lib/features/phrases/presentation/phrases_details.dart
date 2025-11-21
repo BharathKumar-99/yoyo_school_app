@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -592,15 +593,16 @@ class PhrasesWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
+                  AutoSizeText(
                     title,
-                    maxLines: 2,
+                    maxLines: 3,
                     style: AppTextStyles.textTheme.titleLarge,
                   ),
-                  Text(
+                  AutoSizeText(
                     subTitle,
                     maxLines: 2,
                     style: AppTextStyles.textTheme.bodyMedium,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

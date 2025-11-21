@@ -48,6 +48,7 @@ class ProfileRepository {
             }
             return null;
           });
+          
     } catch (e, st) {
       log('Realtime UserData Error: $e\n$st');
       return const Stream.empty();

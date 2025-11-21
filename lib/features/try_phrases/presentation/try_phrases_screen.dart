@@ -8,7 +8,7 @@ import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../config/router/navigation_helper.dart';
 import '../../recording/presentation/read_and_practise_screen.dart';
 
@@ -98,7 +98,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                         milliseconds: 400,
                                       ),
                                       curve: Curves.easeOut,
-                                      child: Text(
+                                      child: AutoSizeText(
                                         value.phraseModel.phrase ?? "",
                                         maxLines: 3,
                                         textAlign: TextAlign.left,
