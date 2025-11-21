@@ -119,15 +119,15 @@ class PhrasesDetails extends StatelessWidget {
                                     SizedBox(
                                       height:
                                           MediaQuery.sizeOf(context).height /
-                                          2.4,
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 120,
-                                              child: getAppBar(context),
-                                            ),
-                                            Padding(
+                                          2.6,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 120,
+                                            child: getAppBar(context),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
                                               padding: const EdgeInsets.all(
                                                 16.0,
                                               ),
@@ -135,8 +135,7 @@ class PhrasesDetails extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(height: 80),
-
+                                                  Spacer(),
                                                   Text(
                                                     className,
                                                     style: AppTextStyles
@@ -150,8 +149,7 @@ class PhrasesDetails extends StatelessWidget {
                                                           fontFamily: 'Sansita',
                                                         ),
                                                   ),
-
-                                                  SizedBox(height: 80),
+                                                  Spacer(),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -264,8 +262,8 @@ class PhrasesDetails extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     if (((provider.streakNumber ?? 0) > 0) &&
@@ -520,12 +518,11 @@ class PhrasesWidget extends StatelessWidget {
       children: [
         if (question != null)
           Container(
-            height: 70,
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: 26),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
+              color: Color(0xEBE8EBFC),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),

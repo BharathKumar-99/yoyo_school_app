@@ -91,8 +91,11 @@ class TryPhrasesProvider extends ChangeNotifier {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-
-    await playAudio();
+    if (phraseModel.questions != null) {
+      await playQuestionAudio();
+    } else {
+      await playAudio();
+    }
   }
 
   Future<void> playAudio() async {

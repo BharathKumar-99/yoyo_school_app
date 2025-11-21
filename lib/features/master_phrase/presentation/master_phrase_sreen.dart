@@ -143,7 +143,7 @@ class MasterPhraseSreen extends StatelessWidget {
                                             child: const Padding(
                                               padding: EdgeInsets.all(8.0),
                                               child: Icon(
-                                                Icons.play_arrow_rounded,
+                                                Icons.play_arrow_outlined,
                                                 size: 50,
                                               ),
                                             ),

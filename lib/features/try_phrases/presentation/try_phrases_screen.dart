@@ -111,7 +111,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                             child: const Padding(
                                               padding: EdgeInsets.all(8.0),
                                               child: Icon(
-                                                Icons.play_arrow_rounded,
+                                                Icons.play_arrow_outlined,
                                                 size: 50,
                                               ),
                                             ),
@@ -197,7 +197,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                       curve: Curves.easeOut,
                                       child: AutoSizeText(
                                         value.phraseModel.phrase ?? "",
-                                        maxLines: 3,
+                                        maxLines: 6,
                                         textAlign: TextAlign.left,
                                         style: AppTextStyles
                                             .textTheme
@@ -241,7 +241,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                         child: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
-                                            Icons.play_arrow_rounded,
+                                            Icons.play_arrow_outlined,
                                             size: 50,
                                           ),
                                         ),
