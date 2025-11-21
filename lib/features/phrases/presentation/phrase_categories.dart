@@ -38,194 +38,197 @@ class PhraseCategories extends StatelessWidget {
                 height: MediaQuery.sizeOf(context).height / 2.4,
                 child: Hero(
                   tag: language.language?.language ?? "",
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        colors: provider.classes.language?.gradient ?? [],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(70),
-                          spreadRadius: 5,
-                          blurRadius: 4,
-                          offset: Offset(0, 3),
+                  child: DefaultTextStyle(
+                    style: const TextStyle(decoration: TextDecoration.none),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          colors: provider.classes.language?.gradient ?? [],
                         ),
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.sizeOf(context).height / 2.4,
-                          child: Column(
-                            children: [
-                              SizedBox(height: 100),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      bottomRight: Radius.circular(16),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          provider.classes.language?.image ??
-                                          "",
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(70),
+                            spreadRadius: 5,
+                            blurRadius: 4,
+                            offset: Offset(0, 3),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.sizeOf(context).height / 2.4,
-                          child: SingleChildScrollView(
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.sizeOf(context).height / 2.4,
                             child: Column(
                               children: [
-                                SizedBox(
-                                  height: 120,
-                                  child: getAppBar(context),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 20),
-                                      Text(
-                                        provider.classes.language?.language ??
+                                SizedBox(height: 100),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(16),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            provider.classes.language?.image ??
                                             "",
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(color: Colors.white),
                                       ),
-                                      Text(
-                                        className,
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(color: Colors.white),
-                                      ),
-                                      Text(
-                                        "${text.level}${UsefullFunctions.returnLevel(provider.classes.language?.level ?? 0, levels)}",
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(color: Colors.white),
-                                      ),
-                                      SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                text.classText,
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .headlineSmall!
-                                                    .copyWith(
-                                                      color: Colors.white,
-                                                    ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  Container(
-                                                    height: 60,
-                                                    width: 60,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            100,
-                                                          ),
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    height: 55,
-                                                    width: 55,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            100,
-                                                          ),
-                                                      image: DecorationImage(
-                                                        image: AssetImage(
-                                                          ImageConstants
-                                                              .loginBg,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${provider.classPercentage}%',
-                                                        style: AppTextStyles
-                                                            .textTheme
-                                                            .bodyLarge!
-                                                            .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                text.you,
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .headlineSmall!
-                                                    .copyWith(
-                                                      color: Colors.white,
-                                                    ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Container(
-                                                height: 55,
-                                                width: 55,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        100,
-                                                      ),
-                                                  color: Colors.white,
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    '${provider.userPercentage}%',
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .bodyLarge!
-                                                        .copyWith(
-                                                          color: Colors.black,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 20),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: MediaQuery.sizeOf(context).height / 2.4,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 120,
+                                    child: getAppBar(context),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 20),
+                                        Text(
+                                          provider.classes.language?.language ??
+                                              "",
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .headlineSmall!
+                                              .copyWith(color: Colors.white),
+                                        ),
+                                        Text(
+                                          className,
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .headlineSmall!
+                                              .copyWith(color: Colors.white),
+                                        ),
+                                        Text(
+                                          "${text.level}${UsefullFunctions.returnLevel(provider.classes.language?.level ?? 0, levels)}",
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .headlineSmall!
+                                              .copyWith(color: Colors.white),
+                                        ),
+                                        SizedBox(height: 20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  text.classText,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .headlineSmall!
+                                                      .copyWith(
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Stack(
+                                                  alignment: Alignment.center,
+                                                  children: [
+                                                    Container(
+                                                      height: 60,
+                                                      width: 60,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              100,
+                                                            ),
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 55,
+                                                      width: 55,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              100,
+                                                            ),
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                            ImageConstants
+                                                                .loginBg,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          '${provider.classPercentage}%',
+                                                          style: AppTextStyles
+                                                              .textTheme
+                                                              .bodyLarge!
+                                                              .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  text.you,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .headlineSmall!
+                                                      .copyWith(
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Container(
+                                                  height: 55,
+                                                  width: 55,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          100,
+                                                        ),
+                                                    color: Colors.white,
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      '${provider.userPercentage}%',
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .bodyLarge!
+                                                          .copyWith(
+                                                            color: Colors.black,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 20),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -450,6 +453,31 @@ class PhraseCategories extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(ImageConstants.koreanWarmup),
+                Text(
+                  text.warmUp,
+                  style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      case 1:
+        return Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xFF99223C),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(ImageConstants.russiaWarmup),
                 Text(
                   text.warmUp,
                   style: AppTextStyles.textTheme.headlineMedium!.copyWith(

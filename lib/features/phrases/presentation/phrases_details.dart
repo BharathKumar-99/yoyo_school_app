@@ -67,265 +67,53 @@ class PhrasesDetails extends StatelessWidget {
                             height: MediaQuery.sizeOf(context).height / 2.4,
                             child: Hero(
                               tag: language.language?.language ?? "",
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  gradient: LinearGradient(
-                                    colors:
-                                        provider.classes.language?.gradient ??
-                                        [],
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withAlpha(70),
-                                      spreadRadius: 5,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 3),
-                                    ),
-                                  ],
+                              child: DefaultTextStyle(
+                                style: const TextStyle(
+                                  decoration: TextDecoration.none,
                                 ),
-                                child: Stack(
-                                  children: [
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.sizeOf(context).height /
-                                          2.4,
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 100),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                  bottomRight: Radius.circular(
-                                                    16,
-                                                  ),
-                                                ),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      provider
-                                                          .classes
-                                                          .language
-                                                          ?.image ??
-                                                      "",
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    gradient: LinearGradient(
+                                      colors:
+                                          provider.classes.language?.gradient ??
+                                          [],
                                     ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.sizeOf(context).height /
-                                          2.6,
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 120,
-                                            child: getAppBar(context),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(
-                                                16.0,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Spacer(),
-                                                  Text(
-                                                    className,
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .bodyLarge
-                                                        ?.copyWith(
-                                                          fontSize: 24,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
-                                                          fontFamily: 'Sansita',
-                                                        ),
-                                                  ),
-                                                  Spacer(),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                            text.classText,
-                                                            style: AppTextStyles
-                                                                .textTheme
-                                                                .headlineSmall!
-                                                                .copyWith(
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                          ),
-                                                          SizedBox(width: 5),
-                                                          Stack(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            children: [
-                                                              Container(
-                                                                height: 60,
-                                                                width: 60,
-                                                                decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                        100,
-                                                                      ),
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                height: 55,
-                                                                width: 55,
-                                                                decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                        100,
-                                                                      ),
-                                                                  image: DecorationImage(
-                                                                    image: AssetImage(
-                                                                      ImageConstants
-                                                                          .loginBg,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    '${provider.classPercentage}%',
-                                                                    style: AppTextStyles
-                                                                        .textTheme
-                                                                        .bodyLarge!
-                                                                        .copyWith(
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                            text.you,
-                                                            style: AppTextStyles
-                                                                .textTheme
-                                                                .headlineSmall!
-                                                                .copyWith(
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                          ),
-                                                          SizedBox(width: 5),
-                                                          Container(
-                                                            height: 55,
-                                                            width: 55,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                        100,
-                                                                      ),
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${provider.userPercentage}%',
-                                                                style: AppTextStyles
-                                                                    .textTheme
-                                                                    .bodyLarge!
-                                                                    .copyWith(
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 20),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withAlpha(70),
+                                        spreadRadius: 5,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 3),
                                       ),
-                                    ),
-                                    if (((provider.streakNumber ?? 0) > 0) &&
-                                        provider.globalProvider.apiCred.streak)
-                                      Positioned(
-                                        bottom: 0,
-                                        right:
-                                            MediaQuery.sizeOf(context).width /
-                                            3.5,
-                                        left:
-                                            MediaQuery.sizeOf(context).width /
-                                            3.1,
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.sizeOf(context).height /
+                                            2.4,
                                         child: Column(
                                           children: [
-                                            Text(
-                                              text.streak,
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.copyWith(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
-                                                    fontFamily: 'Sansita',
-                                                  ),
-                                            ),
-                                            Container(
-                                              height: 100,
-                                              width: 130,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                    ImageConstants.star,
-                                                  ),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                              child: Center(
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          bottom: 16.0,
-                                                        ),
-                                                    child: Text(
-                                                      provider.streakNumber
-                                                          .toString(),
-                                                      style: AppTextStyles
-                                                          .textTheme
-                                                          .bodyLarge
-                                                          ?.copyWith(
-                                                            fontSize: 24,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                'Sansita',
-                                                            color: Colors
-                                                                .deepPurple,
-                                                          ),
-                                                    ),
+                                            SizedBox(height: 100),
+                                            Expanded(
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                        bottomRight:
+                                                            Radius.circular(16),
+                                                      ),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        provider
+                                                            .classes
+                                                            .language
+                                                            ?.image ??
+                                                        "",
                                                   ),
                                                 ),
                                               ),
@@ -333,7 +121,232 @@ class PhrasesDetails extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                  ],
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.sizeOf(context).height /
+                                            2.6,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 120,
+                                              child: getAppBar(context),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  16.0,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Spacer(),
+                                                    Text(
+                                                      className,
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .bodyLarge
+                                                          ?.copyWith(
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                'Sansita',
+                                                          ),
+                                                    ),
+                                                    Spacer(),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              text.classText,
+                                                              style: AppTextStyles
+                                                                  .textTheme
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                            ),
+                                                            SizedBox(width: 5),
+                                                            Stack(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              children: [
+                                                                Container(
+                                                                  height: 60,
+                                                                  width: 60,
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          100,
+                                                                        ),
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: 55,
+                                                                  width: 55,
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          100,
+                                                                        ),
+                                                                    image: DecorationImage(
+                                                                      image: AssetImage(
+                                                                        ImageConstants
+                                                                            .loginBg,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      '${provider.classPercentage}%',
+                                                                      style: AppTextStyles
+                                                                          .textTheme
+                                                                          .bodyLarge!
+                                                                          .copyWith(
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              text.you,
+                                                              style: AppTextStyles
+                                                                  .textTheme
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                            ),
+                                                            SizedBox(width: 5),
+                                                            Container(
+                                                              height: 55,
+                                                              width: 55,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          100,
+                                                                        ),
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  '${provider.userPercentage}%',
+                                                                  style: AppTextStyles
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .copyWith(
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (((provider.streakNumber ?? 0) > 0) &&
+                                          provider
+                                              .globalProvider
+                                              .apiCred
+                                              .streak)
+                                        Positioned(
+                                          bottom: 0,
+                                          right:
+                                              MediaQuery.sizeOf(context).width /
+                                              3.5,
+                                          left:
+                                              MediaQuery.sizeOf(context).width /
+                                              3.1,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                text.streak,
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                      fontFamily: 'Sansita',
+                                                    ),
+                                              ),
+                                              Container(
+                                                height: 100,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                      ImageConstants.star,
+                                                    ),
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                            bottom: 16.0,
+                                                          ),
+                                                      child: Text(
+                                                        provider.streakNumber
+                                                            .toString(),
+                                                        style: AppTextStyles
+                                                            .textTheme
+                                                            .bodyLarge
+                                                            ?.copyWith(
+                                                              fontSize: 24,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Sansita',
+                                                              color: Colors
+                                                                  .deepPurple,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

@@ -27,6 +27,7 @@ class ImageConstants {
   static const String frenchWarmup = "${assetsLoc}french_warmUp.png";
   static const String germanWarmup = "${assetsLoc}german_warmup.png";
   static const String koreanWarmup = "${assetsLoc}korean_warmup.png";
+  static const String russiaWarmup = "${assetsLoc}russia_warmup.png";
 }
 
 class IconConstants {

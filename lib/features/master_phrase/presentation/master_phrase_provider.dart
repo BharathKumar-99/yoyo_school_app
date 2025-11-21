@@ -14,6 +14,7 @@ class MasterPhraseProvider extends ChangeNotifier {
   Language? language;
   late UserResult? result;
   final AudioPlayer audioManager = AudioPlayer();
+  final AudioPlayer audioManagerQuestion = AudioPlayer();
   bool isLoading = true;
   bool showStreakVal = false;
   int categories;
@@ -50,12 +51,16 @@ class MasterPhraseProvider extends ChangeNotifier {
 
     try {
       await audioManager.setUrl(phraseModel.recording ?? "");
+      if (phraseModel.questionRecording != null) {
+        await audioManagerQuestion.setUrl(phraseModel.questionRecording ?? "");
+      }
     } catch (e) {
       throw "Failed to load audio file";
     }
 
     try {
       await audioManager.setVolume(1);
+      await audioManagerQuestion.setVolume(1);
     } catch (e) {
       throw "Failed to set audio volume";
     }
@@ -64,6 +69,9 @@ class MasterPhraseProvider extends ChangeNotifier {
     notifyListeners();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+    if (phraseModel.questions != null) {
+      await playQuestionAudio();
+    }
   }
 
   Future<void> upsertResult({bool listen = true}) async {
@@ -102,5 +110,18 @@ class MasterPhraseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> playQuestionAudio() async {}
+  Future<void> playQuestionAudio() async {
+    try {
+      final player = audioManagerQuestion;
+
+      if (player.playerState.processingState == ProcessingState.completed) {
+        await player.seek(Duration.zero);
+      }
+
+      await player.play();
+      await upsertResult();
+    } catch (e) {
+      throw "Audio playback failed";
+    }
+  }
 }
