@@ -230,106 +230,88 @@ class PhraseCategories extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsGeometry.symmetric(
-                  horizontal: 23,
-                  vertical: 16,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    spacing: 20,
-                    children: [
-                      GestureDetector(
-                        onTap: () => NavigationHelper.go(
-                          RouteNames.phrasesDetails,
-                          extra: {
-                            'language': language,
-                            "className": className,
-                            "level": levels,
-                            'student': student,
-                            'categories': -1,
-                          },
-                        ),
-                        child: Container(
-                          height: 150,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color:
-                                provider.classes.language?.gradient?.first ??
-                                Colors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  text.warmUp,
-                                  style: AppTextStyles.textTheme.headlineMedium!
-                                      .copyWith(
-                                        color: Colors.white,
-                                        fontFamily: 'Sansita',
-                                      ),
-                                ),
-                                Image.asset(ImageConstants.warmup),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => NavigationHelper.go(
-                          RouteNames.phrasesDetails,
-                          extra: {
-                            'language': language,
-                            "className": className,
-                            "level": levels,
-                            'student': student,
-                            'categories': 0,
-                          },
-                        ),
-                        child: Container(
-                          height: 150,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: LinearGradient(
-                              colors: provider.classes.language?.gradient ?? [],
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  text.phrases,
-                                  style: AppTextStyles.textTheme.headlineMedium!
-                                      .copyWith(
-                                        color: Colors.white,
-                                        fontFamily: 'Sansita',
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      ...provider.phraseCategories.map(
-                        (val) => GestureDetector(
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsGeometry.only(left: 23, right: 23),
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      spacing: 20,
+                      children: [
+                        SizedBox(height: 5),
+                        GestureDetector(
                           onTap: () => NavigationHelper.go(
                             RouteNames.phrasesDetails,
                             extra: {
                               'language': language,
-                              "className": className,
+                              "className": text.warmUp,
                               "level": levels,
                               'student': student,
-                              'categories': val.id,
+                              'categories': -1,
+                            },
+                          ),
+                          child: getWarmUpCard(language),
+                        ),
+
+                        ...provider.phraseCategories.map(
+                          (val) => GestureDetector(
+                            onTap: () {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                NavigationHelper.go(
+                                  RouteNames.phrasesDetails,
+                                  extra: {
+                                    'language': language,
+                                    "className": val.name ?? '',
+                                    "level": levels,
+                                    'student': student,
+                                    'categories': val.id,
+                                  },
+                                );
+                              });
+                            },
+                            child: Container(
+                              height: 150,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                gradient: LinearGradient(
+                                  colors:
+                                      provider.classes.language?.gradient ?? [],
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      val.name ?? '',
+                                      style: AppTextStyles
+                                          .textTheme
+                                          .headlineMedium!
+                                          .copyWith(
+                                            color: Colors.white,
+                                            fontFamily: 'Sansita',
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => NavigationHelper.go(
+                            RouteNames.phrasesDetails,
+                            extra: {
+                              'language': language,
+                              "className": text.phrases,
+                              "level": levels,
+                              'student': student,
+                              'categories': 0,
                             },
                           ),
                           child: Container(
@@ -351,7 +333,7 @@ class PhraseCategories extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    val.name ?? '',
+                                    text.phrases,
                                     style: AppTextStyles
                                         .textTheme
                                         .headlineMedium!
@@ -365,8 +347,8 @@ class PhraseCategories extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -375,5 +357,135 @@ class PhraseCategories extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  getWarmUpCard(SchoolLanguage val) {
+    switch (val.language?.id) {
+      case 2:
+        return Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xFFF2614B),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  text.warmUp,
+                  style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+                Image.asset(ImageConstants.spanishWarmup),
+              ],
+            ),
+          ),
+        );
+      case 3:
+        return Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xFFA15F98),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(ImageConstants.frenchWarmup),
+                Text(
+                  text.warmUp,
+                  style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      case 4:
+        return Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xFF962F4A),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  text.warmUp,
+                  style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+                Image.asset(ImageConstants.germanWarmup),
+              ],
+            ),
+          ),
+        );
+      case 5:
+        return Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xFF99223C),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(ImageConstants.koreanWarmup),
+                Text(
+                  text.warmUp,
+                  style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      default:
+        return Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: val.language?.gradient?.first ?? Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(),
+                Text(
+                  text.warmUp,
+                  style: AppTextStyles.textTheme.headlineMedium!.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+    }
   }
 }

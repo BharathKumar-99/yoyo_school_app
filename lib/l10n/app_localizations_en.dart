@@ -136,7 +136,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get off => 'off';
 
   @override
-  String get canYouMasterIT => 'Can you Master it?';
+  String get canYouMasterIT => 'Master it!';
+
+  @override
+  String get sayTheAnswer => 'Say the answer...';
 
   @override
   String get streak => 'Streak';

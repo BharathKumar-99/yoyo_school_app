@@ -23,7 +23,10 @@ class ImageConstants {
   static const String onboarding1 = "${assetsLoc}onboarding1.png";
   static const String onboarding2 = "${assetsLoc}onboarding2.png";
   static const String onboarding3 = "${assetsLoc}onboarding3.png";
-  static const String warmup = "${assetsLoc}warmup.png";
+  static const String spanishWarmup = "${assetsLoc}spanish_warmup.png";
+  static const String frenchWarmup = "${assetsLoc}french_warmUp.png";
+  static const String germanWarmup = "${assetsLoc}german_warmup.png";
+  static const String koreanWarmup = "${assetsLoc}korean_warmup.png";
 }
 
 class IconConstants {

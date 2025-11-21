@@ -11,6 +11,7 @@ class PhraseModel {
   int? score;
   bool? warmup;
   String? questions;
+  String? questionTranslation;
   String? questionRecording;
   int? categories;
 
@@ -26,6 +27,7 @@ class PhraseModel {
     this.translation,
     this.score,
     this.questionRecording,
+    this.questionTranslation,
     this.warmup,
     this.questions,
     this.categories,
@@ -47,6 +49,7 @@ class PhraseModel {
       questionRecording: json['question_recording'] as String?,
       warmup: json['warmup'],
       questions: json['question'],
+      questionTranslation: json['question_translation'],
       categories: json['categories'],
     );
   }
@@ -64,6 +67,7 @@ class PhraseModel {
       'translation': translation,
       'warmup': warmup,
       'questions': questions,
+      'question_translation': questionTranslation,
       'question_recording': questionRecording,
       'categories': categories,
     };

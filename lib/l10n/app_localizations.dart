@@ -349,8 +349,14 @@ abstract class AppLocalizations {
   /// No description provided for @canYouMasterIT.
   ///
   /// In en, this message translates to:
-  /// **'Can you Master it?'**
+  /// **'Master it!'**
   String get canYouMasterIT;
+
+  /// No description provided for @sayTheAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Say the answer...'**
+  String get sayTheAnswer;
 
   /// No description provided for @streak.
   ///

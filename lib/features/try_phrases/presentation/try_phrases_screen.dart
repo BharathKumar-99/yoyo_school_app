@@ -55,6 +55,103 @@ class TryPhrasesScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 28.0),
                       child: Column(
                         children: [
+                          if (phraseModel.questions != null)
+                            Column(
+                              spacing: 20,
+                              children: [
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 600),
+                                  curve: Curves.easeInOut,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            (value.language?.gradient?.first ??
+                                                    Colors.black)
+                                                .withValues(alpha: 0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                    color: Colors.grey.shade300,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 28.0,
+                                      vertical: 20,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AutoSizeText(
+                                          value.phraseModel.questions ?? "",
+                                          maxLines: 3,
+                                          textAlign: TextAlign.left,
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.circular(
+                                              50,
+                                            ),
+                                            splashColor:
+                                                value.language?.gradient?.first
+                                                    .withValues(alpha: 0.2) ??
+                                                Colors.grey.withValues(
+                                                  alpha: 0.2,
+                                                ),
+                                            onTap: () async =>
+                                                await value.playQuestionAudio(),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Icon(
+                                                Icons.play_arrow_rounded,
+                                                size: 50,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                AnimatedOpacity(
+                                  opacity: 1.0,
+                                  duration: const Duration(milliseconds: 600),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Icon(Icons.translate_rounded),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            value
+                                                    .phraseModel
+                                                    .questionTranslation ??
+                                                '',
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(height: 1.5),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 600),
                             curve: Curves.easeInOut,

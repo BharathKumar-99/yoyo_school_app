@@ -16,6 +16,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   int? streak;
   final TryPhrasesRepo _repo = TryPhrasesRepo();
   final AudioPlayer audioManager = AudioPlayer();
+  final AudioPlayer audioManagerQuestion = AudioPlayer();
   UserResult? result;
   bool isLoading = true;
   bool _disposed = false;
@@ -36,6 +37,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     audioManager.dispose();
+    audioManagerQuestion.dispose();
     super.dispose();
   }
 
@@ -62,6 +64,7 @@ class TryPhrasesProvider extends ChangeNotifier {
 
     try {
       await audioManager.setVolume(1);
+      await audioManagerQuestion.setVolume(1);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
       rethrow;
@@ -79,6 +82,9 @@ class TryPhrasesProvider extends ChangeNotifier {
 
     try {
       await audioManager.setUrl(phraseModel.recording ?? "");
+      if (phraseModel.questionRecording != null) {
+        await audioManagerQuestion.setUrl(phraseModel.questionRecording ?? "");
+      }
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
       rethrow;
@@ -92,6 +98,21 @@ class TryPhrasesProvider extends ChangeNotifier {
   Future<void> playAudio() async {
     try {
       final player = audioManager;
+
+      if (player.playerState.processingState == ProcessingState.completed) {
+        await player.seek(Duration.zero);
+      }
+
+      await player.play();
+      await upsertResult();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> playQuestionAudio() async {
+    try {
+      final player = audioManagerQuestion;
 
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);

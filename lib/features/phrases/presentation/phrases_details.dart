@@ -7,7 +7,6 @@ import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
-import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/core/widgets/app_bar.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
@@ -136,39 +135,23 @@ class PhrasesDetails extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(height: 20),
-                                                  Text(
-                                                    provider
-                                                            .classes
-                                                            .language
-                                                            ?.language ??
-                                                        "",
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .headlineSmall!
-                                                        .copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                  ),
+                                                  SizedBox(height: 80),
+
                                                   Text(
                                                     className,
                                                     style: AppTextStyles
                                                         .textTheme
-                                                        .headlineSmall!
-                                                        .copyWith(
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           color: Colors.white,
+                                                          fontFamily: 'Sansita',
                                                         ),
                                                   ),
-                                                  Text(
-                                                    "${text.level}${UsefullFunctions.returnLevel(provider.classes.language?.level ?? 0, levels)}",
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .headlineSmall!
-                                                        .copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                  ),
-                                                  SizedBox(height: 20),
+
+                                                  SizedBox(height: 80),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -483,6 +466,7 @@ class PhrasesDetails extends StatelessWidget {
                 onIconTap: () {
                   provider.playAudio(model);
                 },
+                question: model.questions,
               ),
             ),
             if (showPercentage == true)
@@ -518,6 +502,7 @@ class PhrasesWidget extends StatelessWidget {
   final String? precentage;
   final Language? launguage;
   final VoidCallback onIconTap;
+  final String? question;
 
   const PhrasesWidget({
     super.key,
@@ -526,90 +511,115 @@ class PhrasesWidget extends StatelessWidget {
     this.precentage,
     this.launguage,
     required this.onIconTap,
+    this.question,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 132,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFFFC3FE)),
-      ),
-      child: Row(
-        children: [
+    return Column(
+      children: [
+        if (question != null)
           Container(
-            width: 76,
+            height: 70,
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: 26),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                colors: launguage?.gradient ?? [Colors.white],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                if (precentage != null)
-                  Container(
-                    height: 55,
-                    width: 55,
-                    margin: EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.white,
-                    ),
-                    child: Center(
-                      child: Text(
-                        precentage!,
-                        style: AppTextStyles.textTheme.bodyLarge!.copyWith(
-                          color: Colors.black,
+            child: AutoSizeText(
+              question ?? '',
+              maxLines: 3,
+              style: AppTextStyles.textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        Container(
+          height: 132,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Color(0xFFFFC3FE)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 76,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: LinearGradient(
+                    colors: launguage?.gradient ?? [Colors.white],
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    if (precentage != null)
+                      Container(
+                        height: 55,
+                        width: 55,
+                        margin: EdgeInsets.only(top: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Text(
+                            precentage!,
+                            style: AppTextStyles.textTheme.bodyLarge!.copyWith(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    GestureDetector(
+                      onTap: () {
+                        onIconTap();
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: AbsorbPointer(
+                        absorbing: false,
+                        child: Icon(
+                          Icons.play_arrow_outlined,
+                          size: 35,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                  ),
-                GestureDetector(
-                  onTap: () {
-                    onIconTap();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: AbsorbPointer(
-                    absorbing: false,
-                    child: Icon(
-                      Icons.play_arrow_outlined,
-                      size: 35,
-                      color: Colors.white,
-                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AutoSizeText(
+                        title,
+                        maxLines: 3,
+                        style: AppTextStyles.textTheme.titleLarge,
+                      ),
+                      AutoSizeText(
+                        subTitle,
+                        maxLines: 2,
+                        style: AppTextStyles.textTheme.bodyMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 26.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  AutoSizeText(
-                    title,
-                    maxLines: 3,
-                    style: AppTextStyles.textTheme.titleLarge,
-                  ),
-                  AutoSizeText(
-                    subTitle,
-                    maxLines: 2,
-                    style: AppTextStyles.textTheme.bodyMedium,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

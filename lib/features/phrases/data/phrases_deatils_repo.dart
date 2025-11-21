@@ -34,7 +34,8 @@ class PhrasesDeatilsRepo {
     final response = await _client
         .from(DbTable.phraseCategories)
         .select('*')
-        .eq('language', id);
+        .eq('language', id)
+        .order('item_index', ascending: true);
     return response
         .map<PhraseCategoriesModel>((e) => PhraseCategoriesModel.fromJson(e))
         .toList();

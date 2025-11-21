@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -85,12 +86,92 @@ class MasterPhraseSreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: h(0.02)),
+                          if (model.questions != null)
+                            Column(
+                              spacing: 20,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 29.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            (value.language?.gradient?.first ??
+                                                    Colors.black)
+                                                .withValues(alpha: 0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                    color: Colors.grey.shade300,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 28.0,
+                                      vertical: 20,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AutoSizeText(
+                                          value.phraseModel.questions ?? "",
+                                          maxLines: 3,
+                                          textAlign: TextAlign.left,
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.circular(
+                                              50,
+                                            ),
+                                            splashColor:
+                                                value.language?.gradient?.first
+                                                    .withValues(alpha: 0.2) ??
+                                                Colors.grey.withValues(
+                                                  alpha: 0.2,
+                                                ),
+                                            onTap: () async =>
+                                                await value.playQuestionAudio(),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Icon(
+                                                Icons.play_arrow_rounded,
+                                                size: 50,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          SizedBox(height: h(0.02)),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                            child: Text(
-                              text.canYouMasterIT,
-                              style: AppTextStyles.textTheme.headlineMedium!
-                                  .copyWith(color: Colors.white),
+                            child: Row(
+                              spacing: 10,
+                              children: [
+                                Text(
+                                  text.canYouMasterIT,
+                                  style: AppTextStyles.textTheme.headlineMedium!
+                                      .copyWith(color: Colors.white),
+                                ),
+                                Text(
+                                  text.sayTheAnswer,
+                                  style: AppTextStyles.textTheme.titleSmall!
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(height: h(0.02)),
@@ -100,7 +181,7 @@ class MasterPhraseSreen extends StatelessWidget {
                             ),
                             child: Container(
                               padding: EdgeInsets.all(15),
-                              height: h(0.3),
+                              height: h(0.2),
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -127,6 +208,20 @@ class MasterPhraseSreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
+                                      Text(
+                                        'A',
+                                        style: AppTextStyles
+                                            .textTheme
+                                            .headlineLarge!
+                                            .copyWith(
+                                              color:
+                                                  value
+                                                      .language
+                                                      ?.gradient
+                                                      ?.first ??
+                                                  Colors.white,
+                                            ),
+                                      ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Icon(Icons.translate_rounded),
@@ -175,7 +270,7 @@ class MasterPhraseSreen extends StatelessWidget {
                                         ?.copyWith(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.purple,
+                                          color: Colors.white,
                                           fontFamily: 'Sansita',
                                         ),
                                   ),
@@ -188,7 +283,7 @@ class MasterPhraseSreen extends StatelessWidget {
                                             ?.copyWith(
                                               fontSize: 32,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.deepPurple,
+                                              color: Colors.white,
                                               fontFamily: 'Sansita',
                                             ),
                                       ),

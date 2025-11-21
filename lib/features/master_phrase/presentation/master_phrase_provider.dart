@@ -101,4 +101,6 @@ class MasterPhraseProvider extends ChangeNotifier {
     showStreakVal = true;
     notifyListeners();
   }
+
+  Future<void> playQuestionAudio() async {}
 }
