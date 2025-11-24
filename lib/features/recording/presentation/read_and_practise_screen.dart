@@ -24,11 +24,10 @@ class ReadAndPractiseScreen extends StatelessWidget {
     return Consumer<RecordingProvider>(
       builder: (context, value, wid) {
         return SizedBox(
-          height: MediaQuery.sizeOf(context).height / 3,
+          height: MediaQuery.sizeOf(context).height / 5,
           width: double.infinity,
           child: Column(
             children: [
-              Spacer(),
               Row(
                 children: [
                   Spacer(),

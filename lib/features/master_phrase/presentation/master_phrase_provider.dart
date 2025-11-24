@@ -51,7 +51,7 @@ class MasterPhraseProvider extends ChangeNotifier {
 
     try {
       await audioManager.setUrl(phraseModel.recording ?? "");
-      if (phraseModel.questionRecording != null) {
+      if (phraseModel.questionRecording != null&&phraseModel.questionRecording!="") {
         await audioManagerQuestion.setUrl(phraseModel.questionRecording ?? "");
       }
     } catch (e) {

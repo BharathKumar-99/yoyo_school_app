@@ -41,7 +41,8 @@
     "tryAgain": "Try Again",
     "youareJust": "You were just",
     "off": "off",
-    "canYouMasterIT": "Master it!","sayTheAnswer":"Say the answer...",
+    "canYouMasterIT": "Master it!",
+    "sayTheAnswer": "Say the answer...",
     "streak": "Streak",
     "you": "You:",
     "newText": "New",
@@ -146,5 +147,7 @@
     "loggedIn": "Stay logged in",
     "logout": "log out",
     "needActivationCode": "Need a new activation code?",
-    "requestActivationcode": "Request Activation Code"
+    "requestActivationcode": "Request Activation Code",
+    "showMore": "Show More",
+    "showLess": "Show Less"
 }

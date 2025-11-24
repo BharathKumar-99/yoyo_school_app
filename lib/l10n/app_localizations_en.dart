@@ -483,4 +483,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestActivationcode => 'Request Activation Code';
+
+  @override
+  String get showMore => 'Show More';
+
+  @override
+  String get showLess => 'Show Less';
 }

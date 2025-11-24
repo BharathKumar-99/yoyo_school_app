@@ -48,55 +48,214 @@ class TryPhrasesScreen extends StatelessWidget {
             ),
             body: value.isLoading
                 ? Container()
-                : AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 400),
-                    child: Padding(
-                      key: ValueKey(value.showPhrase),
-                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                      child: Column(
-                        children: [
-                          if (phraseModel.questions != null)
-                            Column(
-                              spacing: 20,
-                              children: [
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 600),
-                                  curve: Curves.easeInOut,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
+                : SingleChildScrollView(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      child: Padding(
+                        key: ValueKey(value.showPhrase),
+                        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                        child: Column(
+                          children: [
+                            if (phraseModel.questions != null)
+                              Column(
+                                spacing: 20,
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 600),
+                                    curve: Curves.easeInOut,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
 
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            (value.language?.gradient?.first ??
-                                                    Colors.black)
-                                                .withValues(alpha: 0.1),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                    color: Colors.grey.shade300,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 28.0,
-                                      vertical: 20,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        AutoSizeText(
-                                          value.phraseModel.questions ?? "",
-                                          maxLines: 3,
-                                          textAlign: TextAlign.left,
-                                          style: AppTextStyles
-                                              .textTheme
-                                              .titleMedium,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              (value
+                                                          .language
+                                                          ?.gradient
+                                                          ?.first ??
+                                                      Colors.black)
+                                                  .withValues(alpha: 0.1),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
                                         ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: InkWell(
+                                      ],
+                                      color: Colors.grey.shade300,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 28.0,
+                                        vertical: 20,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: AutoSizeText(
+                                              value.phraseModel.questions ?? "",
+                                              maxLines: 3,
+                                              textAlign: TextAlign.left,
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 50,
+                                            height: 50,
+                                            child: InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              splashColor:
+                                                  value
+                                                      .language
+                                                      ?.gradient
+                                                      ?.first
+                                                      .withValues(alpha: 0.2) ??
+                                                  Colors.grey.withValues(
+                                                    alpha: 0.2,
+                                                  ),
+                                              onTap: () async => await value
+                                                  .playQuestionAudio(),
+                                              child: const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Icon(
+                                                  Icons.play_arrow_outlined,
+                                                  size: 50,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  AnimatedOpacity(
+                                    opacity: 1.0,
+                                    duration: const Duration(milliseconds: 600),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.translate_rounded,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              value
+                                                      .phraseModel
+                                                      .questionTranslation ??
+                                                  '',
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(height: 1.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 600),
+                              curve: Curves.easeInOut,
+                              constraints: BoxConstraints(
+                                maxHeight: 200,
+                                minHeight: 100,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color:
+                                      value.language?.gradient?.first
+                                          .withValues(alpha: 0.4) ??
+                                      Colors.white,
+                                  width: 3,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        (value.language?.gradient?.first ??
+                                                Colors.black)
+                                            .withValues(alpha: 0.1),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 28.0,
+                                  vertical: 20,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: AnimatedOpacity(
+                                        opacity: value.showPhrase ? 1.0 : 0.0,
+                                        duration: const Duration(
+                                          milliseconds: 400,
+                                        ),
+                                        child: AnimatedSlide(
+                                          offset: value.showPhrase
+                                              ? Offset.zero
+                                              : const Offset(0, 0.2),
+                                          duration: const Duration(
+                                            milliseconds: 400,
+                                          ),
+                                          curve: Curves.easeOut,
+                                          child: AutoSizeText(
+                                            value.phraseModel.phrase ?? "",
+                                            maxLines: 5,
+                                            minFontSize: 4,
+                                            textAlign: TextAlign.left,
+                                            style: AppTextStyles
+                                                .textTheme
+                                                .headlineLarge,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          AnimatedScale(
+                                            scale: value.showPhrase ? 1.0 : 0.9,
+                                            duration: const Duration(
+                                              milliseconds: 200,
+                                            ),
+                                            child: IconButton(
+                                              onPressed: value.togglePhrase,
+                                              icon: Icon(
+                                                value.showPhrase
+                                                    ? Icons.visibility_rounded
+                                                    : Icons
+                                                          .visibility_off_rounded,
+                                                size: 45,
+                                                color: value.showPhrase
+                                                    ? value
+                                                          .language
+                                                          ?.gradient
+                                                          ?.first
+                                                    : Colors.grey,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          InkWell(
                                             borderRadius: BorderRadius.circular(
                                               50,
                                             ),
@@ -107,7 +266,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                   alpha: 0.2,
                                                 ),
                                             onTap: () async =>
-                                                await value.playQuestionAudio(),
+                                                await value.playAudio(),
                                             child: const Padding(
                                               padding: EdgeInsets.all(8.0),
                                               child: Icon(
@@ -116,29 +275,37 @@ class TryPhrasesScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
 
-                                AnimatedOpacity(
-                                  opacity: 1.0,
-                                  duration: const Duration(milliseconds: 600),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
+                            AnimatedSize(
+                              duration: const Duration(milliseconds: 600),
+                              alignment: Alignment.topCenter,
+                              curve: Curves.decelerate,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
                                       children: [
                                         const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(Icons.translate_rounded),
                                         ),
                                         Expanded(
-                                          child: Text(
-                                            value
-                                                    .phraseModel
-                                                    .questionTranslation ??
-                                                '',
+                                          child: AutoSizeText(
+                                            value.phraseModel.translation ?? '',
+
+                                            maxLines: value.showMoreTranslation
+                                                ? 4
+                                                : 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: AppTextStyles
                                                 .textTheme
                                                 .titleMedium
@@ -147,174 +314,67 @@ class TryPhrasesScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.easeInOut,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color:
-                                    value.language?.gradient?.first.withValues(
-                                      alpha: 0.4,
-                                    ) ??
-                                    Colors.white,
-                                width: 3,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      (value.language?.gradient?.first ??
-                                              Colors.black)
-                                          .withValues(alpha: 0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 28.0,
-                                vertical: 20,
-                              ),
-                              child: Column(
-                                children: [
-                                  AnimatedOpacity(
-                                    opacity: value.showPhrase ? 1.0 : 0.0,
-                                    duration: const Duration(milliseconds: 400),
-                                    child: AnimatedSlide(
-                                      offset: value.showPhrase
-                                          ? Offset.zero
-                                          : const Offset(0, 0.2),
-                                      duration: const Duration(
-                                        milliseconds: 400,
-                                      ),
-                                      curve: Curves.easeOut,
-                                      child: AutoSizeText(
-                                        value.phraseModel.phrase ?? "",
-                                        maxLines: 6,
-                                        textAlign: TextAlign.left,
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineLarge,
+
+                                    const SizedBox(height: 10),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: GestureDetector(
+                                        onTap: () => value.toggleTranslation(),
+                                        child: Text(
+                                          value.showMoreTranslation
+                                              ? text.showLess
+                                              : text.showMore,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      AnimatedScale(
-                                        scale: value.showPhrase ? 1.0 : 0.9,
-                                        duration: const Duration(
-                                          milliseconds: 200,
-                                        ),
-                                        child: IconButton(
-                                          onPressed: value.togglePhrase,
-                                          icon: Icon(
-                                            value.showPhrase
-                                                ? Icons.visibility_rounded
-                                                : Icons.visibility_off_rounded,
-                                            size: 45,
-                                            color: value.showPhrase
-                                                ? value
-                                                      .language
-                                                      ?.gradient
-                                                      ?.first
-                                                : Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      InkWell(
-                                        borderRadius: BorderRadius.circular(50),
-                                        splashColor:
-                                            value.language?.gradient?.first
-                                                .withValues(alpha: 0.2) ??
-                                            Colors.grey.withValues(alpha: 0.2),
-                                        onTap: () async =>
-                                            await value.playAudio(),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Icon(
-                                            Icons.play_arrow_outlined,
-                                            size: 50,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          AnimatedOpacity(
-                            opacity: 1.0,
-                            duration: const Duration(milliseconds: 600),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(Icons.translate_rounded),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      value.phraseModel.translation ?? '',
-                                      style: AppTextStyles.textTheme.titleMedium
-                                          ?.copyWith(height: 1.5),
+                            if (streak != null && value.showStreakVal)
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      text.streak,
+                                      style: AppTextStyles.textTheme.bodyLarge
+                                          ?.copyWith(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.purple,
+                                            fontFamily: 'Sansita',
+                                          ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (streak != null && value.showStreakVal)
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    text.streak,
-                                    style: AppTextStyles.textTheme.bodyLarge
-                                        ?.copyWith(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.purple,
-                                          fontFamily: 'Sansita',
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "X$streak ",
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.deepPurple,
+                                                fontFamily: 'Sansita',
+                                              ),
                                         ),
-                                  ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "X$streak ",
-                                        style: AppTextStyles.textTheme.bodyLarge
-                                            ?.copyWith(
-                                              fontSize: 32,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.deepPurple,
-                                              fontFamily: 'Sansita',
-                                            ),
-                                      ),
-                                      Image.asset(
-                                        ImageConstants.streak,
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        Image.asset(
+                                          ImageConstants.streak,
+                                          height: 50,
+                                          width: 50,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

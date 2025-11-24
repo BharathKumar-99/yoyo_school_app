@@ -17,11 +17,11 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   List<int> userScore = [];
   List<PhraseCategoriesModel> phraseCategories = [];
   final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
+  bool isLoading = true;
+
   PhraseCategoriesViewModel(this.classes, this.student) {
     try {
-      Future.delayed(Duration.zero, () {
-        init();
-      });
+      init();
     } catch (e) {
       throw Exception("Failed to initialize PhrasesViewModel");
     }
@@ -58,7 +58,11 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     phraseCategories = await _repo.getAllPhraseCategories(
       classes.language?.id ?? 0,
     );
-    notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      GlobalLoader.hide();
+      isLoading = false;
+      notifyListeners();
+    });
   }
 }

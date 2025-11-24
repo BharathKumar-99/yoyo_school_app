@@ -23,6 +23,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   bool isLast;
   bool showStreakVal = false;
   final int categories;
+  bool showMoreTranslation = false;
 
   TryPhrasesProvider(
     this.phraseModel,
@@ -82,7 +83,8 @@ class TryPhrasesProvider extends ChangeNotifier {
 
     try {
       await audioManager.setUrl(phraseModel.recording ?? "");
-      if (phraseModel.questionRecording != null) {
+      if (phraseModel.questionRecording != null &&
+          phraseModel.questionRecording != '') {
         await audioManagerQuestion.setUrl(phraseModel.questionRecording ?? "");
       }
     } catch (e) {
@@ -155,6 +157,11 @@ class TryPhrasesProvider extends ChangeNotifier {
 
   void togglePhrase() {
     showPhrase = !showPhrase;
+    safeNotify();
+  }
+
+  void toggleTranslation() {
+    showMoreTranslation = !showMoreTranslation;
     safeNotify();
   }
 }

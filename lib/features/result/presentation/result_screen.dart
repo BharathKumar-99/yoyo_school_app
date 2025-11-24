@@ -152,7 +152,8 @@ class ResultScreen extends StatelessWidget {
                                                   ?.className ??
                                               "",
                                           "level": value.levels ?? [],
-                                          'student': value.userClases, 'categories': categories,
+                                          'student': value.userClases,
+                                          'categories': categories,
                                         },
                                       ),
 
@@ -497,7 +498,8 @@ class ResultScreen extends StatelessWidget {
                                                             ?.className ??
                                                         "",
                                                     "level": value.levels ?? [],
-                                                    'student': value.userClases, 'categories': categories,
+                                                    'student': value.userClases,
+                                                    'categories': categories,
                                                   },
                                                 ),
 
@@ -583,7 +585,8 @@ class ResultScreen extends StatelessWidget {
                                                     'student': value.userClases,
                                                     'next': true,
                                                     'from': 'new',
-                                                    "streak": 1, 'categories': categories,
+                                                    "streak": 1,
+                                                    'categories': categories,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -620,6 +623,7 @@ class ResultScreen extends StatelessWidget {
                                                             ?.classes
                                                             ?.className ??
                                                         "",
+                                                    'categories': categories,
                                                     "isLast": false,
                                                   },
                                                 ),
