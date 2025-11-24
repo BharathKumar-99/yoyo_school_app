@@ -62,7 +62,7 @@ class ResultProvider extends ChangeNotifier {
         "Speech evaluation failed",
       );
 
-      score = 85; // speechEvaluationModel?.result?.overall ?? 0;
+      score = speechEvaluationModel?.result?.overall ?? 0;
 
       gptResponse = await _safe(
         () => _globalRepo.getSpeechFeedback(speechEvaluationModel!),
