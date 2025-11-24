@@ -549,7 +549,7 @@ class PhrasesWidget extends StatelessWidget {
             ),
           ),
         Container(
-          height: 132,
+          height: 140,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
@@ -610,15 +610,18 @@ class PhrasesWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 26.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
                         title,
                         maxLines: 3,
+                        textAlign: TextAlign.start,
                         style: AppTextStyles.textTheme.titleLarge,
                       ),
                       AutoSizeText(
                         subTitle,
                         maxLines: 2,
+                        textAlign: TextAlign.start,
                         style: AppTextStyles.textTheme.bodyMedium,
                         overflow: TextOverflow.ellipsis,
                       ),
