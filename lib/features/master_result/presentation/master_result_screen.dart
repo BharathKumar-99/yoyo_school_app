@@ -493,7 +493,8 @@ class MasterResultScreen extends StatelessWidget {
                                                     'next': true,
                                                     "streak": 1,
                                                     "from": "learned",
-                                                    "phraseId": phraseModel.id, 'categories': categories,
+                                                    "phraseId": phraseModel.id,
+                                                    'categories': categories,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -528,7 +529,8 @@ class MasterResultScreen extends StatelessWidget {
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     "next": true,
-                                                    "from": "learned", 'categories': categories,
+                                                    "from": "new",
+                                                    'categories': categories,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
