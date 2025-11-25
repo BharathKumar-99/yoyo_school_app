@@ -27,6 +27,18 @@ Future<void> main() async {
   );
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
+
+    final isUIError =
+        details.exception is FlutterError &&
+            details.exceptionAsString().contains("Render") ||
+        details.exceptionAsString().contains("Layout") ||
+        details.exceptionAsString().contains("paint") ||
+        details.exceptionAsString().contains("overflow");
+
+    if (isUIError) {
+      return;
+    }
+
     ctx!.push(
       RouteNames.error,
       extra: {'message': "Something Went Wrong", "error": details.stack},

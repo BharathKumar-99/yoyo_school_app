@@ -137,6 +137,7 @@ class PhrasesViewModel extends ChangeNotifier {
       };
 
       userResultProvider.addListener(_userResultListener);
+      isStreakLoading = false;
     } catch (e) {
       throw Exception("Failed initializing phrase data");
     }
