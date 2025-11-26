@@ -62,12 +62,12 @@ class RecordingProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> toggleRecording(BuildContext ct) async {
+  Future<void> toggleRecording(BuildContext ct, {bool cancel = false}) async {
     try {
       if (isRecording) {
         recordingPath = await recorderController.stop();
         isRecording = false;
-        if (recordingPath != null) {
+        if (recordingPath != null && !cancel) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
           if (streak != null) {
@@ -82,7 +82,8 @@ class RecordingProvider extends ChangeNotifier {
                 streak: streak!,
                 audioPath: recordingPath!,
                 form: "new",
-                isLast: isLast,categories: categories,
+                isLast: isLast,
+                categories: categories,
               ),
             );
           } else {

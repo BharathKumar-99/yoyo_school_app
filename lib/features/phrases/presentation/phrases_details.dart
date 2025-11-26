@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class PhrasesDetails extends StatelessWidget {
   final String? from;
   final int? streakPhraseId;
   final int categories;
+
   const PhrasesDetails({
     super.key,
     required this.language,
@@ -39,8 +41,250 @@ class PhrasesDetails extends StatelessWidget {
     required this.categories,
   });
 
+  // Extracted Header Widget for cleaner build method
+  Widget _buildHeader(
+    BuildContext context,
+    PhrasesViewModel provider,
+    double headerHeight,
+  ) {
+    return SliverAppBar(
+      automaticallyImplyLeading: false,
+      expandedHeight: headerHeight,
+      pinned: false,
+      elevation: 0,
+      backgroundColor: Colors.transparent, // To show gradient below
+      flexibleSpace: Hero(
+        tag: language.language?.language ?? "",
+        child: DefaultTextStyle(
+          style: const TextStyle(decoration: TextDecoration.none),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                colors: provider.classes.language?.gradient ?? [],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(70),
+                  spreadRadius: 5,
+                  blurRadius: 4,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                // Background Image
+                SizedBox(
+                  height: headerHeight,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 100,
+                      ), // Space for app bar and padding
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(16),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: provider.classes.language?.image ?? "",
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Foreground Content
+                SizedBox(
+                  height: headerHeight,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 120, child: getAppBar(context)),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Spacer(),
+                              Text(
+                                className,
+                                style: AppTextStyles.textTheme.bodyLarge
+                                    ?.copyWith(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Sansita',
+                                    ),
+                              ),
+                              const Spacer(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Class Percentage
+                                  _buildPercentageBadge(
+                                    context,
+                                    text.classText,
+                                    '${provider.classPercentage}%',
+                                    isClass: true,
+                                  ),
+                                  // User Percentage
+                                  _buildPercentageBadge(
+                                    context,
+                                    text.you,
+                                    '${provider.userPercentage}%',
+                                    isClass: false,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Streak Widget
+                if (((provider.streakNumber ?? 0) > 0) &&
+                    provider.globalProvider.apiCred.streak)
+                  Positioned(
+                    bottom: 0,
+                    right: MediaQuery.sizeOf(context).width / 3.5,
+                    left: MediaQuery.sizeOf(context).width / 3.1,
+                    child: Column(
+                      children: [
+                        Text(
+                          text.streak,
+                          style: AppTextStyles.textTheme.bodyLarge?.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'Sansita',
+                          ),
+                        ),
+                        Container(
+                          height: 100,
+                          width: 130,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(ImageConstants.star),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  provider.streakNumber.toString(),
+                                  style: AppTextStyles.textTheme.bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Sansita',
+                                        color: Colors.deepPurple,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Extracted Percentage Badge Widget
+  Widget _buildPercentageBadge(
+    BuildContext context,
+    String label,
+    String percentage, {
+    required bool isClass,
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.textTheme.headlineSmall!.copyWith(
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(width: 5),
+        // For the class badge, the design requires a Stack with an outer white ring
+        if (isClass)
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                height: 55,
+                width: 55,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  image: const DecorationImage(
+                    image: AssetImage(ImageConstants.loginBg),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    percentage,
+                    style: AppTextStyles.textTheme.bodyLarge!.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        // For the user badge, it's a simple white background
+        else
+          Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: Colors.white,
+            ),
+            child: Center(
+              child: Text(
+                percentage,
+                style: AppTextStyles.textTheme.bodyLarge!.copyWith(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Determine the height of the custom header section
+    final double headerHeight = MediaQuery.sizeOf(context).height / 2.4;
+
     return ChangeNotifierProvider<PhrasesViewModel>(
       create: (_) => PhrasesViewModel(
         language,
@@ -55,420 +299,145 @@ class PhrasesDetails extends StatelessWidget {
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
-          return provider.isStreakLoading
-              ? Container(color: Colors.white)
-              : DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                    body: CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: MediaQuery.sizeOf(context).height / 2.4,
-                            child: Hero(
-                              tag: language.language?.language ?? "",
-                              child: DefaultTextStyle(
-                                style: const TextStyle(
-                                  decoration: TextDecoration.none,
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    gradient: LinearGradient(
-                                      colors:
-                                          provider.classes.language?.gradient ??
-                                          [],
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withAlpha(70),
-                                        spreadRadius: 5,
-                                        blurRadius: 4,
-                                        offset: Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.sizeOf(context).height /
-                                            2.4,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(height: 100),
-                                            Expanded(
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                        bottomRight:
-                                                            Radius.circular(16),
-                                                      ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        provider
-                                                            .classes
-                                                            .language
-                                                            ?.image ??
-                                                        "",
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height:
-                                            MediaQuery.sizeOf(context).height /
-                                            2.6,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 120,
-                                              child: getAppBar(context),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                  16.0,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Spacer(),
-                                                    Text(
-                                                      className,
-                                                      style: AppTextStyles
-                                                          .textTheme
-                                                          .bodyLarge
-                                                          ?.copyWith(
-                                                            fontSize: 24,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                'Sansita',
-                                                          ),
-                                                    ),
-                                                    Spacer(),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              text.classText,
-                                                              style: AppTextStyles
-                                                                  .textTheme
-                                                                  .headlineSmall!
-                                                                  .copyWith(
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                            ),
-                                                            SizedBox(width: 5),
-                                                            Stack(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              children: [
-                                                                Container(
-                                                                  height: 60,
-                                                                  width: 60,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          100,
-                                                                        ),
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                ),
-                                                                Container(
-                                                                  height: 55,
-                                                                  width: 55,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          100,
-                                                                        ),
-                                                                    image: DecorationImage(
-                                                                      image: AssetImage(
-                                                                        ImageConstants
-                                                                            .loginBg,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      '${provider.classPercentage}%',
-                                                                      style: AppTextStyles
-                                                                          .textTheme
-                                                                          .bodyLarge!
-                                                                          .copyWith(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              text.you,
-                                                              style: AppTextStyles
-                                                                  .textTheme
-                                                                  .headlineSmall!
-                                                                  .copyWith(
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                            ),
-                                                            SizedBox(width: 5),
-                                                            Container(
-                                                              height: 55,
-                                                              width: 55,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          100,
-                                                                        ),
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  '${provider.userPercentage}%',
-                                                                  style: AppTextStyles
-                                                                      .textTheme
-                                                                      .bodyLarge!
-                                                                      .copyWith(
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: 20),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if (((provider.streakNumber ?? 0) > 0) &&
-                                          provider
-                                              .globalProvider
-                                              .apiCred
-                                              .streak)
-                                        Positioned(
-                                          bottom: 0,
-                                          right:
-                                              MediaQuery.sizeOf(context).width /
-                                              3.5,
-                                          left:
-                                              MediaQuery.sizeOf(context).width /
-                                              3.1,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                text.streak,
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .bodyLarge
-                                                    ?.copyWith(
-                                                      fontSize: 24,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white,
-                                                      fontFamily: 'Sansita',
-                                                    ),
-                                              ),
-                                              Container(
-                                                height: 100,
-                                                width: 130,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: AssetImage(
-                                                      ImageConstants.star,
-                                                    ),
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                ),
-                                                child: Center(
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.bottomCenter,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                            bottom: 16.0,
-                                                          ),
-                                                      child: Text(
-                                                        provider.streakNumber
-                                                            .toString(),
-                                                        style: AppTextStyles
-                                                            .textTheme
-                                                            .bodyLarge
-                                                            ?.copyWith(
-                                                              fontSize: 24,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  'Sansita',
-                                                              color: Colors
-                                                                  .deepPurple,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SliverToBoxAdapter(child: SizedBox(height: 30)),
+          if (provider.isStreakLoading) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-                        SliverPersistentHeader(
-                          pinned: true,
-                          delegate: _SliverAppBarDelegate(
-                            TabBar(
-                              labelColor: Colors.white,
-                              unselectedLabelColor: Colors.black,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              indicatorPadding: EdgeInsetsGeometry.symmetric(
-                                horizontal: 10,
-                              ),
-                              indicator: BoxDecoration(
-                                color:
-                                    provider
-                                        .classes
-                                        .language
-                                        ?.gradient
-                                        ?.first ??
-                                    Colors.amberAccent,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              dividerColor: Colors.transparent,
-                              tabs: [
-                                Tab(
-                                  text:
-                                      "${text.newText} (${provider.newPhrases.length})",
-                                ),
-                                Tab(
-                                  text:
-                                      "${text.learned} (${provider.learned.length})",
-                                ),
-                                Tab(
-                                  text:
-                                      "${text.mastered} (${provider.mastered.length})",
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+          return DefaultTabController(
+            length: provider.isMasteryEnabled ? 3 : 2,
+            child: Scaffold(
+              body: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    _buildHeader(context, provider, headerHeight),
 
-                        SliverFillRemaining(
-                          child: TabBarView(
-                            children: [
-                              _buildPhrasesList(
-                                provider.newPhrases,
-                                provider,
-                                context,
-                                RouteNames.tryPhrases,
-                              ),
-                              _buildPhrasesList(
-                                provider.learned,
-                                provider,
-                                context,
-                                RouteNames.masterPhrases,
-                                showPercentage: true,
-                              ),
-                              _buildPhrasesList(
-                                provider.mastered,
-                                provider,
-                                context,
-                                RouteNames.masterPhrases,
-                                showPercentage: true,
-                              ),
-                            ],
+                    SliverToBoxAdapter(child: const SizedBox(height: 30)),
+
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _SliverAppBarDelegate(
+                        TabBar(
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorPadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
                           ),
+                          indicator: BoxDecoration(
+                            color:
+                                provider.classes.language?.gradient?.first ??
+                                Colors.amberAccent,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          dividerColor: Colors.transparent,
+                          tabs: [
+                            Tab(
+                              text:
+                                  "${text.newText} (${provider.newPhrases.length})",
+                            ),
+                            Tab(
+                              text:
+                                  "${text.learned} (${provider.learned.length})",
+                            ),
+                            if (provider.isMasteryEnabled)
+                              Tab(
+                                text:
+                                    "${text.mastered} (${provider.mastered.length})",
+                              ),
+                          ],
                         ),
-                      ],
+                        backgroundColor: Theme.of(
+                          context,
+                        ).scaffoldBackgroundColor,
+                      ),
                     ),
-                  ),
-                );
+                  ];
+                },
+                // The body is the TabBarView, which scrolls independently beneath the header
+                body: TabBarView(
+                  children: [
+                    _buildPhrasesList(
+                      provider.newPhrases,
+                      provider,
+                      context,
+                      RouteNames.tryPhrases,
+                    ),
+                    _buildPhrasesList(
+                      provider.learned,
+                      provider,
+                      context,
+                      RouteNames.masterPhrases,
+                      showPercentage: true,
+                      haltNextScreen: !provider.isMasteryEnabled,
+                    ),
+                    if (provider.isMasteryEnabled)
+                      _buildPhrasesList(
+                        provider.mastered,
+                        provider,
+                        context,
+                        RouteNames.masterPhrases,
+                        showPercentage: true,
+                        haltNextScreen: true,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
+  // Phrases List Builder (Unchanged)
   Widget _buildPhrasesList(
     List<PhraseModel> phrases,
     PhrasesViewModel provider,
     BuildContext context,
-
     String routeName, {
     bool showPercentage = false,
+    bool haltNextScreen = false,
   }) {
     if (phrases.isEmpty) {
       return Center(child: Text(text.empty_list));
     }
 
     return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 20),
-      physics: BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 20),
+      physics: const BouncingScrollPhysics(),
       itemCount: phrases.length,
       itemBuilder: (context, index) {
         final model = phrases[index];
         String? percentage;
         if (showPercentage) {
-          final result = provider.userResult.firstWhere(
+          // Use firstWhereOrNull for safer access (requires 'package:collection')
+          final result = provider.userResult.firstWhereOrNull(
             (val) => val.phrasesId == model.id,
           );
-          percentage = "${result.score}%";
+          percentage = (result != null) ? "${result.score}%" : null;
         }
         return Column(
           children: [
             GestureDetector(
-              onTap: () => context.go(
-                routeName,
-                extra: {
-                  "phrase": model,
-                  "streak": provider.streak,
-                  "schoolLanguage": provider.classes,
-                  "className": className,
-                  "student": provider.student,
-                  "isLast": phrases.length == 1,
-                  "language": provider.classes.language,
-                  'categories': categories,
-                },
-              ),
+              onTap: () {
+                if (!haltNextScreen) {
+                  context.go(
+                    routeName,
+                    extra: {
+                      "phrase": model,
+                      "streak": provider.streak,
+                      "schoolLanguage": provider.classes,
+                      "className": className,
+                      "student": provider.student,
+                      "isLast": phrases.length == 1,
+                      "language": provider.classes.language,
+                      'categories': categories,
+                    },
+                  );
+                }
+              },
               child: PhrasesWidget(
                 title: model.phrase ?? "",
                 subTitle: model.translation ?? "",
@@ -490,7 +459,7 @@ class PhrasesDetails extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(Icons.refresh_rounded),
+                      const Icon(Icons.refresh_rounded),
                       Text(
                         text.learnAgain,
                         style: AppTextStyles.textTheme.labelSmall,
@@ -502,11 +471,12 @@ class PhrasesDetails extends StatelessWidget {
           ],
         );
       },
-      separatorBuilder: (_, __) => SizedBox(height: 20),
+      separatorBuilder: (_, __) => const SizedBox(height: 20),
     );
   }
 }
 
+// PhrasesWidget (Unchanged, good structure)
 class PhrasesWidget extends StatelessWidget {
   final String title;
   final String subTitle;
@@ -532,9 +502,9 @@ class PhrasesWidget extends StatelessWidget {
         if (question != null)
           Container(
             width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: 26),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
+            margin: const EdgeInsets.symmetric(horizontal: 26),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: const BoxDecoration(
               color: Color(0xEBE8EBFC),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -542,7 +512,7 @@ class PhrasesWidget extends StatelessWidget {
               ),
             ),
             child: AutoSizeText(
-              question ?? '',
+              question!,
               maxLines: 3,
               style: AppTextStyles.textTheme.bodyMedium,
               overflow: TextOverflow.ellipsis,
@@ -552,15 +522,29 @@ class PhrasesWidget extends StatelessWidget {
           height: 140,
           width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Color(0xFFFFC3FE)),
+            border: Border.all(color: const Color(0xFFFFC3FE)),
+
+            borderRadius: question == null
+                ? BorderRadius.circular(16)
+                : const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
+                  ),
           ),
           child: Row(
             children: [
               Container(
                 width: 76,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  // Update borderRadius to match container's
+                  borderRadius: question == null
+                      ? BorderRadius.circular(16)
+                      : const BorderRadius.only(
+                          bottomLeft: Radius.circular(16),
+                          topLeft: Radius.circular(0),
+                        ),
                   gradient: LinearGradient(
                     colors: launguage?.gradient ?? [Colors.white],
                     begin: Alignment.bottomLeft,
@@ -574,7 +558,7 @@ class PhrasesWidget extends StatelessWidget {
                       Container(
                         height: 55,
                         width: 55,
-                        margin: EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(top: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
                           color: Colors.white,
@@ -589,11 +573,9 @@ class PhrasesWidget extends StatelessWidget {
                         ),
                       ),
                     GestureDetector(
-                      onTap: () {
-                        onIconTap();
-                      },
+                      onTap: onIconTap,
                       behavior: HitTestBehavior.opaque,
-                      child: AbsorbPointer(
+                      child: const AbsorbPointer(
                         absorbing: false,
                         child: Icon(
                           Icons.play_arrow_outlined,
@@ -637,9 +619,12 @@ class PhrasesWidget extends StatelessWidget {
   }
 }
 
+// Sliver Persistent Header Delegate (Updated to accept background color)
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar _tabBar;
-  _SliverAppBarDelegate(this._tabBar);
+  final Color backgroundColor;
+
+  const _SliverAppBarDelegate(this._tabBar, {required this.backgroundColor});
 
   @override
   double get minExtent => _tabBar.preferredSize.height;
@@ -652,9 +637,14 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return Container(child: _tabBar);
+    return Container(
+      color: backgroundColor, // Apply background color for visibility
+      child: _tabBar,
+    );
   }
 
   @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) => true;
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) =>
+      oldDelegate.backgroundColor != backgroundColor ||
+      oldDelegate._tabBar != _tabBar;
 }

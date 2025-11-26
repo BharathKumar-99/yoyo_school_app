@@ -292,40 +292,84 @@ class TryPhrasesScreen extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Row(
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Icon(Icons.translate_rounded),
-                                        ),
-                                        Expanded(
-                                          child: AutoSizeText(
-                                            value.phraseModel.translation ?? '',
-
-                                            maxLines: value.showMoreTranslation
-                                                ? 4
-                                                : 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppTextStyles
-                                                .textTheme
-                                                .titleMedium
-                                                ?.copyWith(height: 1.5),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
                                     const SizedBox(height: 10),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: GestureDetector(
-                                        onTap: () => value.toggleTranslation(),
-                                        child: Text(
-                                          value.showMoreTranslation
-                                              ? text.showLess
-                                              : text.showMore,
-                                        ),
-                                      ),
+
+                                    LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        final String translationText =
+                                            value.phraseModel.translation ?? '';
+                                        final TextStyle style = AppTextStyles
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith();
+                                        final textPainter =
+                                            TextPainter(
+                                              text: TextSpan(
+                                                text: translationText,
+                                                style: style,
+                                              ),
+                                              maxLines: 1,
+                                              textDirection: TextDirection.ltr,
+                                            )..layout(
+                                              maxWidth: constraints.maxWidth,
+                                            );
+
+                                        final bool isMultiLine =
+                                            textPainter.didExceedMaxLines;
+
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Icon(
+                                                    Icons.translate_rounded,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: AutoSizeText(
+                                                    value
+                                                            .phraseModel
+                                                            .translation ??
+                                                        '',
+
+                                                    maxLines:
+                                                        value
+                                                            .showMoreTranslation
+                                                        ? 4
+                                                        : 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: AppTextStyles
+                                                        .textTheme
+                                                        .titleMedium
+                                                        ?.copyWith(height: 1.5),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                            if (isMultiLine)
+                                              Align(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: GestureDetector(
+                                                  onTap: () =>
+                                                      value.toggleTranslation(),
+                                                  child: Text(
+                                                    value.showMoreTranslation
+                                                        ? text.showLess
+                                                        : text.showMore,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -384,6 +428,8 @@ class TryPhrasesScreen extends StatelessWidget {
                     launguage: value.language!,
                     streak: streak,
                     isLast: isLast,
+                    audioManager: value.audioManager,
+                    audioManagerQuestion: value.audioManagerQuestion,
                   )
                 : Container(),
           ),

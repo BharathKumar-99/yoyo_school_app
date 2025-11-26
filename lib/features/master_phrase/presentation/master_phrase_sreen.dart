@@ -321,6 +321,8 @@ class MasterPhraseSreen extends StatelessWidget {
                     launguage: value.language!,
                     streak: streak,
                     isLast: isLast,
+                    audioManager: value.audioManager,
+                    audioManagerQuestion: value.audioManagerQuestion,
                   )
                 : Container(),
           ),

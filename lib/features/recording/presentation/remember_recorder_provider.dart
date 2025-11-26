@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
@@ -14,7 +13,6 @@ import 'package:yoyo_school_app/features/streak_recording/presentation/streak_re
 class RememberRecorderProvider extends ChangeNotifier {
   late final RecorderController recorderController;
   PhraseModel phraseModel;
-  final player = AudioPlayer();
   Language language;
   int? streak;
   bool isRecording = false;
@@ -56,20 +54,19 @@ class RememberRecorderProvider extends ChangeNotifier {
   void dispose() {
     _durationSubscription.cancel();
     recorderController.dispose();
-    player.dispose();
+
     super.dispose();
   }
 
-  Future<void> toggleRecording(BuildContext ct) async {
+  Future<void> toggleRecording(BuildContext ct, {bool cancel = false}) async {
     try {
       if (isRecording) {
         recordingPath = await recorderController.stop();
         isRecording = false;
         if (recordingPath != null) {
           recordingTime = "00:00";
-          await player.setFilePath(recordingPath!);
 
-          if (streak != null) {
+          if (streak != null && !cancel) {
             showModalBottomSheet(
               elevation: 1,
               context: ct,
