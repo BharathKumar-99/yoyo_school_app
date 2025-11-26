@@ -409,6 +409,7 @@ class PhrasesDetails extends StatelessWidget {
                                 context,
                                 RouteNames.masterPhrases,
                                 showPercentage: true,
+                                goToNext: provider.isMasteryEnabled,
                               ),
                               if (provider.isMasteryEnabled)
                                 _buildPhrasesList(
@@ -417,6 +418,7 @@ class PhrasesDetails extends StatelessWidget {
                                   context,
                                   RouteNames.masterPhrases,
                                   showPercentage: true,
+                                  goToNext: false,
                                 ),
                             ],
                           ),
@@ -437,6 +439,7 @@ class PhrasesDetails extends StatelessWidget {
 
     String routeName, {
     bool showPercentage = false,
+    bool goToNext = true,
   }) {
     if (phrases.isEmpty) {
       return Center(child: Text(text.empty_list));
@@ -458,19 +461,23 @@ class PhrasesDetails extends StatelessWidget {
         return Column(
           children: [
             GestureDetector(
-              onTap: () => context.go(
-                routeName,
-                extra: {
-                  "phrase": model,
-                  "streak": provider.streak,
-                  "schoolLanguage": provider.classes,
-                  "className": className,
-                  "student": provider.student,
-                  "isLast": phrases.length == 1,
-                  "language": provider.classes.language,
-                  'categories': categories,
-                },
-              ),
+              onTap: () {
+                if (goToNext) {
+                  context.go(
+                    routeName,
+                    extra: {
+                      "phrase": model,
+                      "streak": provider.streak,
+                      "schoolLanguage": provider.classes,
+                      "className": className,
+                      "student": provider.student,
+                      "isLast": phrases.length == 1,
+                      "language": provider.classes.language,
+                      'categories': categories,
+                    },
+                  );
+                }
+              },
               child: PhrasesWidget(
                 title: model.phrase ?? "",
                 subTitle: model.translation ?? "",

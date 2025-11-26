@@ -174,7 +174,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                         '',
                                                     style: AppTextStyles
                                                         .textTheme
-                                                        .titleMedium
+                                                        .bodyMedium
                                                         ?.copyWith(height: 1.5),
                                                   ),
                                                 ),
@@ -182,7 +182,6 @@ class TryPhrasesScreen extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
                                       ],
                                     ),
                                   AnimatedContainer(
