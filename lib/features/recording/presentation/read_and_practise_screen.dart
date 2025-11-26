@@ -30,8 +30,9 @@ class ReadAndPractiseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<RecordingProvider>(
       builder: (context, value, wid) {
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height / 3.8,
+        return Container(
+          color: Colors.transparent,
+          height: MediaQuery.sizeOf(context).height / 4.99,
           width: double.infinity,
           child: Column(
             children: [
@@ -44,7 +45,7 @@ class ReadAndPractiseScreen extends StatelessWidget {
                   extendWaveform: true,
                   showMiddleLine: false,
                 ),
-                size: Size(MediaQuery.sizeOf(context).width - 100, 50),
+                size: Size(MediaQuery.sizeOf(context).width - 100, 30),
                 recorderController: value.recorderController,
               ),
               AudioControlWidget(
@@ -80,14 +81,14 @@ class ReadAndPractiseScreen extends StatelessWidget {
                 onRightDeleteTap: () =>
                     value.toggleRecording(context, cancel: true),
               ),
-              SizedBox(height: 20),
+              Spacer(flex: 2),
               Text(
                 (value.isRecording) ? text.recording : text.learnIt,
                 style: TextStyle(color: Colors.black),
               ),
-              SizedBox(height: 5),
+              Spacer(flex: 1),
               Text(text.holdAndRecord, style: TextStyle(color: Colors.black)),
-              SizedBox(height: 5),
+              Spacer(flex: 1),
               if (value.isRecording)
                 Text(
                   value.recordingTime,

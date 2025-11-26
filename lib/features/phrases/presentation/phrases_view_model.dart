@@ -8,7 +8,6 @@ import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
-import 'package:collection/collection.dart';
 import '../../common/presentation/global_provider.dart';
 import '../../home/model/phrases_model.dart';
 import '../../home/model/school_launguage.dart';
@@ -19,32 +18,30 @@ import '../../phrases/data/phrases_deatils_repo.dart';
 class PhrasesViewModel extends ChangeNotifier {
   final SchoolLanguage classes;
   final Student? student;
-  final bool isGoToNextPhrase;
+  bool isGoToNextPhrase;
   int? streak;
   final String? from;
   final AudioManager audioManager = AudioManager();
-
-  // State variables
+  List<UserResult> schoolResult = [];
   List<UserResult> userResult = [];
+  final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
+  List<int> classesScore = [];
+  List<int> userScore = [];
   List<PhraseModel> newPhrases = [];
   List<PhraseModel> learned = [];
   List<PhraseModel> mastered = [];
-
+  bool _isDisposed = false;
   int classPercentage = 0;
   int userPercentage = 0;
   int? streakNumber;
-
-  bool _isDisposed = false;
-  bool _isStreakLoading = false;
-
-  final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
   late VoidCallback _userResultListener;
   BuildContext? ctx;
+  bool isStreakLoading = false;
   String? className;
   late GlobalProvider globalProvider;
   int? streakPhraseId;
   int categories;
-  bool isMasteryEnabled = false;
+  bool isMasteryEnabled=false;
 
   PhrasesViewModel(
     this.classes,
@@ -57,26 +54,20 @@ class PhrasesViewModel extends ChangeNotifier {
     this.streakPhraseId,
     this.categories,
   ) {
-    if (ctx == null) {
-      throw Exception(
-        "Context must not be null for PhrasesViewModel initialization.",
-      );
+    try {
+      globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
+      isMasteryEnabled = globalProvider.apiCred.mastery;
+      isStreakLoading = streak != null || isGoToNextPhrase;
+
+      Future.delayed(Duration.zero, () {
+        Future.delayed(Duration.zero, () {
+          init(true);
+        });
+      });
+    } catch (e) {
+      throw Exception("Failed to initialize PhrasesViewModel");
     }
-
-    // Initial setup
-    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
-    isMasteryEnabled = globalProvider.apiCred.mastery;
-
-    _isStreakLoading = streak != null || isGoToNextPhrase;
-
-    // Start initialization immediately
-    init(true).catchError((e) {
-      debugPrint("Error during PhrasesViewModel initialization: $e");
-      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-    });
   }
-
-  bool get isStreakLoading => _isStreakLoading;
 
   @override
   void dispose() {
@@ -104,158 +95,198 @@ class PhrasesViewModel extends ChangeNotifier {
       final ids =
           classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
 
-      // 1. Get/Insert Streak
-      streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
-      if ((streakNumber ?? 0) <= 0) {
-        await _repo.insertStreak(userId, classes.language?.id);
+      try {
+        streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
+      } catch (_) {
+        throw Exception("Failed loading streak data");
       }
 
-      // 2. Initialize Realtime Results
+      if ((streakNumber ?? 0) <= 0) {
+        try {
+          await _repo.insertStreak(userId, classes.language?.id);
+        } catch (_) {
+          throw Exception("Failed saving streak");
+        }
+      }
+
       final userResultProvider = Provider.of<GlobalProvider>(
         ctx!,
         listen: false,
       );
-      await userResultProvider.initRealtimeResults(ids);
 
-      // 3. Set up listener
+      try {
+        await userResultProvider.initRealtimeResults(ids);
+      } catch (_) {
+        throw Exception("Failed starting realtime results");
+      }
+
       try {
         userResultProvider.removeListener(_userResultListener);
-      } catch (_) {}
+      } catch (_) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => GlobalLoader.hide(),
+        );
+      }
 
       _userResultListener = () {
-        if (_isDisposed || ctx == null || !ctx!.mounted) return;
+        if (_isDisposed) return;
         try {
-          _processResults(userId, ids, userResultProvider.results);
-          if (isFirst) {
-            goToNextScreen();
-          }
-        } catch (e) {
-          debugPrint("Error processing user results: $e");
+          schoolResult = userResultProvider.results;
+          _processResults(userId, ids, isFirst);
+        } catch (_) {
+          throw Exception("Failed processing user results");
         }
       };
 
       userResultProvider.addListener(_userResultListener);
-
-      _isStreakLoading = false;
-      notifyListeners();
+      isStreakLoading = false;
     } catch (e) {
-      debugPrint("Failed initializing phrase data: $e");
-      rethrow; // Re-throw to be caught by the constructor's catchError
+      throw Exception("Failed initializing phrase data");
     }
   }
 
-  void _processResults(
-    String userId,
-    List<int> ids,
-    List<UserResult> schoolResults,
-  ) {
-    if (_isDisposed || ctx == null || !ctx!.mounted) return;
+  void _processResults(String userId, List<int> ids, bool isFirst) async {
+    try {
+      if (_isDisposed || ctx == null || !ctx!.mounted) return;
 
-    // Clear and reset lists
-    final List<int> classesScore = [];
-    final List<int> userScore = [];
-    userResult.clear();
-    learned.clear();
-    mastered.clear();
-    newPhrases.clear();
+      classesScore.clear();
+      userScore.clear();
+      userResult.clear();
+      learned = [];
+      mastered = [];
+      newPhrases = [];
 
-    // 1. Filter and process raw results
-    for (final val in schoolResults) {
-      if (ids.contains(val.phrasesId)) {
-        classesScore.add(val.score ?? 0);
-        if (val.userId == userId) {
-          userScore.add(val.score ?? 0);
-          userResult.add(val);
+      for (final val in schoolResult) {
+        if (ids.contains(val.phrasesId)) {
+          classesScore.add(val.score ?? 0);
+          if (val.userId == userId) {
+            userScore.add(val.score ?? 0);
+            userResult.add(val);
+          }
         }
       }
-    }
 
-    // 2. Filter phrases based on category
-    final phraseList = classes.language?.phrase?.where((val) {
-      if (categories == -1) return val.warmup == true;
-      if (categories == 0) return val.categories == null;
-      return val.categories == categories;
-    }).toList();
-
-    // 3. Categorize phrases (New, Learned, Mastered)
-    final availablePhrases = phraseList ?? [];
-    for (final phrase in availablePhrases) {
-      final result = userResult.firstWhereOrNull(
-        (val) => val.phrasesId == phrase.id,
-      );
-
-      if (result != null) {
-        if (result.type == Constants.mastered) {
-          mastered.add(phrase);
-        } else if (result.type == Constants.learned) {
-          learned.add(phrase);
+      final phraseList = classes.language?.phrase?.where((val) {
+        if (categories == -1) {
+          return val.warmup == true;
+        } else if (categories == 0) {
+          return val.categories == null;
+        } else {
+          return val.categories == categories;
         }
-      } else {
-        newPhrases.add(phrase);
+      }).toList();
+
+      for (final val in userResult) {
+        for (final phrase in phraseList ?? []) {
+          if (val.phrasesId == phrase.id) {
+            if (val.type == Constants.learned) {
+              learned.add(phrase);
+            } else if (val.type == Constants.mastered) {
+              mastered.add(phrase);
+            }
+          }
+        }
       }
+
+      learned = learned.toSet().toList();
+      mastered = mastered.toSet().toList();
+      learned.removeWhere((p) => mastered.contains(p));
+
+      for (final phrase in classes.language?.phrase ?? []) {
+        if (!learned.contains(phrase) &&
+            !mastered.contains(phrase) &&
+            (phraseList?.contains(phrase) ?? false)) {
+          newPhrases.add(phrase);
+        }
+      }
+
+      final classStrength = student?.classes?.noOfStudents ?? 0;
+      final totalClassScore = classesScore.isEmpty
+          ? 0
+          : classesScore.reduce((a, b) => a + b);
+      final totalUserScore = userScore.isEmpty
+          ? 0
+          : userScore.reduce((a, b) => a + b);
+
+      if (classStrength > 0) {
+        classPercentage = (totalClassScore / classStrength).round();
+      }
+
+      if (userScore.isNotEmpty) {
+        userPercentage = (totalUserScore / userScore.length).round();
+      }
+
+      notifyListeners();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+
+      if (isFirst) {
+        await goToNextScreen();
+      }
+    } catch (e) {
+      throw Exception("Failed processing class/user data");
     }
-
-    // Ensure uniqueness, though categorization logic should mostly handle this
-    learned = learned.toSet().toList();
-    mastered = mastered.toSet().toList();
-
-    // 4. Calculate percentages
-    final classStrength = student?.classes?.noOfStudents ?? 0;
-    final totalClassScore = classesScore.fold(0, (a, b) => a + b);
-    final totalUserScore = userScore.fold(0, (a, b) => a + b);
-
-    classPercentage = (classStrength > 0)
-        ? (totalClassScore / classStrength).round()
-        : 0;
-
-    userPercentage = (userScore.isNotEmpty)
-        ? (totalUserScore / userScore.length).round()
-        : 0;
-
-    notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
   Future<void> goToNextScreen() async {
-    if (_isDisposed || ctx == null || !ctx!.mounted) return;
-
     try {
-      // Remove the specific streak phrase if it exists in the lists
       if (streakPhraseId != null) {
         newPhrases.removeWhere((p) => p.id == streakPhraseId);
         learned.removeWhere((p) => p.id == streakPhraseId);
       }
 
+      final data = await _repo.getUserResults();
+
+      List<UserResult> merged = [];
+
+      for (var element in data) {
+        for (var newElement in userResult) {
+          if (newElement.phrasesId == element.phrasesId) {
+            merged.add(element);
+          }
+        }
+      }
+
+      userResult = merged;
+
+      for (final val in userResult) {
+        for (final phrase in classes.language?.phrase ?? []) {
+          if (val.phrasesId == phrase.id) {
+            if (val.type == Constants.learned && val.scoreSubmitted == false) {
+              learned.add(phrase);
+            } else if (val.type == Constants.mastered &&
+                val.scoreSubmitted == false) {
+              mastered.add(phrase);
+            }
+          }
+        }
+      }
+
       if (isGoToNextPhrase &&
           ((from == 'new' && newPhrases.isNotEmpty) ||
               (from == 'learned' && learned.isNotEmpty))) {
-        final isNew = from == 'new';
-        final phraseToPass = isNew ? newPhrases.first : learned.first;
-        final route = isNew ? RouteNames.tryPhrases : RouteNames.masterPhrases;
-
         ctx!.go(
-          route,
+          from == 'new' ? RouteNames.tryPhrases : RouteNames.masterPhrases,
           extra: {
-            "phrase": phraseToPass,
+            "phrase": from == 'new' ? newPhrases.first : learned.first,
             "streak": streak,
             "schoolLanguage": classes,
             "className": className,
             "student": student,
             "language": classes.language,
             'categories': categories,
-            "isLast": isNew ? newPhrases.length == 1 : learned.length == 1,
+            "isLast": from == 'new'
+                ? newPhrases.length == 1
+                : learned.length == 1,
           },
         );
       } else {
-        // Clear streak value if no phrase is available for navigation
         streak = null;
       }
 
-      _isStreakLoading = false;
-      notifyListeners();
+      isStreakLoading = false;
     } catch (e) {
-      debugPrint("Failed navigating to next phrase: $e");
-      // Handle navigation error gracefully
+      throw Exception("Failed navigating to next phrase");
     }
   }
 
@@ -264,8 +295,8 @@ class PhrasesViewModel extends ChangeNotifier {
       await audioManager.player.setUrl(phraseModel.recording ?? "");
       await audioManager.setVolume(1);
       await play();
-    } catch (e) {
-      debugPrint("Failed playing audio: $e");
+    } catch (_) {
+      throw Exception("Failed playing audio");
     }
   }
 
@@ -278,31 +309,36 @@ class PhrasesViewModel extends ChangeNotifier {
       }
 
       await player.play();
-    } catch (e) {
-      debugPrint("Failed audio playback: $e");
+    } catch (_) {
+      throw Exception("Failed audio playback");
     }
   }
 
   Future<void> resetPhrase(int? id) async {
-    if (id == null) return;
     try {
       GlobalLoader.show();
 
-      // Clear all state to force a full re-build/re-process when data updates
-      userResult.clear();
-      newPhrases.clear();
-      learned.clear();
-      mastered.clear();
+      schoolResult = [];
+      userResult = [];
+      newPhrases = [];
+      learned = [];
+      mastered = [];
       classPercentage = 0;
       userPercentage = 0;
+      classesScore = [];
+      userScore = [];
       notifyListeners();
 
-      await _repo.resetPhrase(id, student?.id ?? 0);
+      await _repo.resetPhrase(id ?? 0, student?.id ?? 0);
 
-      // The listener will automatically call _processResults when the
-      // GlobalProvider receives the updated results from the repository.
-    } catch (e) {
-      debugPrint("Failed resetting phrase: $e");
+      final ids =
+          classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
+
+      final provider = Provider.of<GlobalProvider>(ctx!, listen: false);
+
+      await provider.initRealtimeResults(ids);
+    } catch (_) {
+      throw Exception("Failed resetting phrase");
     } finally {
       GlobalLoader.hide();
     }
