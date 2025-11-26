@@ -605,7 +605,8 @@ class ResultScreen extends StatelessWidget {
                                                 ),
                                               ),
                                             )
-                                          : SizedBox(
+                                          : value.apiCred.mastery
+                                          ? SizedBox(
                                               width: double.infinity,
                                               child: ElevatedButton(
                                                 onPressed: () => context.go(
@@ -637,6 +638,42 @@ class ResultScreen extends StatelessWidget {
                                                 ),
                                                 child: Text(
                                                   text.tryToMaster,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () => context.go(
+                                                  RouteNames.phrasesDetails,
+                                                  extra: {
+                                                    'language': value.slanguage,
+                                                    "className":
+                                                        value
+                                                            .userClases
+                                                            ?.classes
+                                                            ?.className ??
+                                                        "",
+                                                    "level": value.levels ?? [],
+                                                    'student': value.userClases,
+                                                    "next": true,
+                                                    "from": "new",
+                                                    'categories': categories,
+                                                  },
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                ),
+                                                child: Text(
+                                                  text.next_phrase,
                                                   style: AppTextStyles
                                                       .textTheme
                                                       .titleMedium,
