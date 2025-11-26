@@ -63,10 +63,10 @@ class RememberRecorderProvider extends ChangeNotifier {
       if (isRecording) {
         recordingPath = await recorderController.stop();
         isRecording = false;
-        if (recordingPath != null) {
+        if (recordingPath != null && !cancel) {
           recordingTime = "00:00";
 
-          if (streak != null && !cancel) {
+          if (streak != null) {
             showModalBottomSheet(
               elevation: 1,
               context: ct,

@@ -31,7 +31,7 @@ class RememberAndPractiseScreen extends StatelessWidget {
     return Consumer<RememberRecorderProvider>(
       builder: (context, value, wid) {
         return Container(
-          height: MediaQuery.sizeOf(context).height / 4.8,
+          height: MediaQuery.sizeOf(context).height / 3.6,
           decoration: BoxDecoration(
             color: launguage.gradient?.first ?? Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -42,7 +42,7 @@ class RememberAndPractiseScreen extends StatelessWidget {
               Spacer(),
               AudioWaveforms(
                 waveStyle: WaveStyle(
-                  waveColor: Colors.black,
+                  waveColor: Colors.white,
                   showDurationLabel: false,
                   spacing: 8.0,
                   showBottom: false,
@@ -55,7 +55,8 @@ class RememberAndPractiseScreen extends StatelessWidget {
               AudioControlWidget(
                 color: launguage.gradient?.first ?? Colors.white,
                 isRecording: value.isRecording,
-
+                border: Colors.white,
+                bgColor: Colors.white,
                 onStartHold: () async {
                   if (audioManager.playing) {
                     await audioManager.stop();
@@ -95,7 +96,7 @@ class RememberAndPractiseScreen extends StatelessWidget {
               if (value.isRecording)
                 Text(
                   value.recordingTime,
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               SizedBox(height: 5),
               Spacer(),

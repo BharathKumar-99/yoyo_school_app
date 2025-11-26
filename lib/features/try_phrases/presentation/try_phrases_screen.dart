@@ -423,13 +423,15 @@ class TryPhrasesScreen extends StatelessWidget {
                     ),
                   ),
             bottomNavigationBar: value.language != null
-                ? ReadAndPractiseScreen(
-                    model: phraseModel,
-                    launguage: value.language!,
-                    streak: streak,
-                    isLast: isLast,
-                    audioManager: value.audioManager,
-                    audioManagerQuestion: value.audioManagerQuestion,
+                ? SafeArea(
+                    child: ReadAndPractiseScreen(
+                      model: phraseModel,
+                      launguage: value.language!,
+                      streak: streak,
+                      isLast: isLast,
+                      audioManager: value.audioManager,
+                      audioManagerQuestion: value.audioManagerQuestion,
+                    ),
                   )
                 : Container(),
           ),

@@ -605,7 +605,7 @@ class ResultScreen extends StatelessWidget {
                                                 ),
                                               ),
                                             )
-                                          : value.apiCred.mastery
+                                          : value.globalProvider.apiCred.mastery
                                           ? SizedBox(
                                               width: double.infinity,
                                               child: ElevatedButton(

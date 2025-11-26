@@ -8,7 +8,6 @@ import 'package:yoyo_school_app/features/common/presentation/global_provider.dar
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
-import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import '../../home/model/level_model.dart';
 import '../../home/model/school_launguage.dart';
@@ -19,7 +18,6 @@ class ResultProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   Language language;
   late UserResult? result;
-  late RemoteConfig apiCred;
   SchoolLanguage? slanguage;
   ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;

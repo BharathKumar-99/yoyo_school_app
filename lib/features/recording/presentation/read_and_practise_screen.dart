@@ -31,7 +31,7 @@ class ReadAndPractiseScreen extends StatelessWidget {
     return Consumer<RecordingProvider>(
       builder: (context, value, wid) {
         return SizedBox(
-          height: MediaQuery.sizeOf(context).height / 4.3,
+          height: MediaQuery.sizeOf(context).height / 3.8,
           width: double.infinity,
           child: Column(
             children: [
@@ -44,13 +44,14 @@ class ReadAndPractiseScreen extends StatelessWidget {
                   extendWaveform: true,
                   showMiddleLine: false,
                 ),
-                size: Size(50, 50.0),
+                size: Size(MediaQuery.sizeOf(context).width - 100, 50),
                 recorderController: value.recorderController,
               ),
               AudioControlWidget(
                 color: launguage.gradient?.first ?? Colors.white,
+                bgColor: launguage.gradient?.first ?? Colors.white,
                 isRecording: value.isRecording,
-
+                border: Colors.grey,
                 onStartHold: () async {
                   if (audioManager.playing) {
                     await audioManager.stop();

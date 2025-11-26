@@ -11,6 +11,8 @@ class AudioControlWidget extends StatelessWidget {
   final GestureCallback onRightDeleteTap;
   final Color color;
   final bool isRecording;
+  final Color border;
+  final Color bgColor;
 
   const AudioControlWidget({
     super.key,
@@ -22,6 +24,8 @@ class AudioControlWidget extends StatelessWidget {
     required this.onRightDeleteTap,
     this.isRecording = false,
     required this.color,
+    required this.border,
+    required this.bgColor,
   });
 
   @override
@@ -29,29 +33,25 @@ class AudioControlWidget extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildDeleteButton(
-              onTap: onLeftDeleteTap,
-              icon: const Icon(Icons.close, color: Colors.grey),
-            ),
-            const SizedBox(width: 10),
-
-            _buildSwipeIndicator('<<'),
-
-            const SizedBox(width: 80),
-
-            _buildSwipeIndicator('>>'),
-            const SizedBox(width: 10),
-
-            _buildDeleteButton(
-              onTap: onRightDeleteTap,
-              icon: const Icon(Icons.close, color: Colors.grey),
-            ),
-          ],
-        ),
-
+        if (isRecording)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const SizedBox(width: 20),
+              _buildDeleteButton(
+                onTap: onLeftDeleteTap,
+                icon: Icon(Icons.close, color: border),
+              ),
+              _PulsatingSwipeIndicatorStateful('<<', border: border),
+              const SizedBox(width: 84),
+              _PulsatingSwipeIndicatorStateful('>>', border: border),
+              _buildDeleteButton(
+                onTap: onRightDeleteTap,
+                icon: Icon(Icons.close, color: border),
+              ),
+              const SizedBox(width: 20),
+            ],
+          ),
         _DraggableMicrophoneControl(
           isRecording: isRecording,
           onStartHold: onStartHold,
@@ -59,6 +59,7 @@ class AudioControlWidget extends StatelessWidget {
           onSwipeLeft: onSwipeLeft,
           onSwipeRight: onSwipeRight,
           color: color,
+          bgColor: bgColor,
         ),
       ],
     );
@@ -74,26 +75,72 @@ class AudioControlWidget extends StatelessWidget {
         height: 40,
         width: 40,
         decoration: BoxDecoration(
-          color: Colors.white,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey.shade400),
+          border: Border.all(color: border),
         ),
         child: icon,
       ),
     );
   }
+}
 
-  Widget _buildSwipeIndicator(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.grey.shade600,
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-        ),
-      ),
+class _PulsatingSwipeIndicatorStateful extends StatefulWidget {
+  final String text;
+  final Color border;
+
+  const _PulsatingSwipeIndicatorStateful(this.text, {required this.border});
+
+  @override
+  State<_PulsatingSwipeIndicatorStateful> createState() =>
+      _PulsatingSwipeIndicatorStatefulState();
+}
+
+class _PulsatingSwipeIndicatorStatefulState
+    extends State<_PulsatingSwipeIndicatorStateful>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    )..repeat(reverse: true);
+
+    _opacityAnimation = Tween<double>(
+      begin: 0.4,
+      end: 1.0,
+    ).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _opacityAnimation,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _opacityAnimation.value,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Text(
+              widget.text,
+              style: TextStyle(
+                color: widget.border,
+                fontWeight: FontWeight.w900,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -105,6 +152,7 @@ class _DraggableMicrophoneControl extends StatefulWidget {
   final GestureCallback onSwipeRight;
   final bool isRecording;
   final Color color;
+  final Color bgColor;
   const _DraggableMicrophoneControl({
     required this.isRecording,
     required this.onStartHold,
@@ -112,6 +160,7 @@ class _DraggableMicrophoneControl extends StatefulWidget {
     required this.onSwipeLeft,
     required this.onSwipeRight,
     required this.color,
+    required this.bgColor,
   });
 
   @override
@@ -128,7 +177,7 @@ class __DraggableMicrophoneControlState
     setState(() {
       _dragOffset = details.localOffsetFromOrigin;
 
-      final clampedX = _dragOffset.dx.clamp(-80.0, 80.0);
+      final clampedX = _dragOffset.dx.clamp(-110.0, 110.0);
       _dragOffset = Offset(clampedX, 0);
     });
   }
@@ -168,7 +217,7 @@ class __DraggableMicrophoneControlState
         offset: _dragOffset,
         child: CircleAvatar(
           radius: 42,
-          backgroundColor: widget.color,
+          backgroundColor: widget.bgColor,
           child: CircleAvatar(
             backgroundColor: widget.isRecording ? widget.color : Colors.white,
             radius: 40,

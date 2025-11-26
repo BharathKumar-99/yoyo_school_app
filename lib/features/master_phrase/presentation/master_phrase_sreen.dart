@@ -181,7 +181,7 @@ class MasterPhraseSreen extends StatelessWidget {
                             ),
                             child: Container(
                               padding: EdgeInsets.all(15),
-                              height: h(0.2),
+                              height: h(0.206),
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: Colors.white,
