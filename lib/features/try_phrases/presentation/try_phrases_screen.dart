@@ -174,7 +174,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                         '',
                                                     style: AppTextStyles
                                                         .textTheme
-                                                        .bodyMedium
+                                                        .bodySmall
                                                         ?.copyWith(height: 1.5),
                                                   ),
                                                 ),
