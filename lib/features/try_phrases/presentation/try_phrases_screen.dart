@@ -157,7 +157,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                             milliseconds: 600,
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(4.0),
                                             child: Row(
                                               children: [
                                                 const Padding(
@@ -174,8 +174,12 @@ class TryPhrasesScreen extends StatelessWidget {
                                                         '',
                                                     style: AppTextStyles
                                                         .textTheme
-                                                        .bodySmall
-                                                        ?.copyWith(height: 1.5),
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                   ),
                                                 ),
                                               ],
@@ -338,8 +342,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                               final TextStyle style =
                                                   AppTextStyles
                                                       .textTheme
-                                                      .bodyMedium!
-                                                      .copyWith();
+                                                      .bodyMedium!;
                                               final textPainter =
                                                   TextPainter(
                                                     text: TextSpan(
