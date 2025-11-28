@@ -176,7 +176,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                         .textTheme
                                                         .bodySmall!
                                                         .copyWith(
-                                                          fontSize: 12,
+                                                          fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                         ),

@@ -64,6 +64,7 @@ class DbTable {
   static const String streakTable = 'streak_table';
   static const String activationRequests = 'activation_requests';
   static const String phraseCategories = 'phrase_categories';
+  static const String pronunciationFeedbackTemplates = 'pronunciation_feedback_templates';
 }
 
 class Stroage {

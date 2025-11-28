@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
@@ -16,6 +17,8 @@ class ProfileRepository {
 
   Future<void> logout() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
     await _client.auth.signOut();
     NavigationHelper.go(RouteNames.login);
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
@@ -48,7 +51,6 @@ class ProfileRepository {
             }
             return null;
           });
-          
     } catch (e, st) {
       log('Realtime UserData Error: $e\n$st');
       return const Stream.empty();

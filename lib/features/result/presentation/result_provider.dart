@@ -62,10 +62,12 @@ class ResultProvider extends ChangeNotifier {
 
       score = speechEvaluationModel?.result?.overall ?? 0;
 
-      gptResponse = await _safe(
-        () => _globalRepo.getSpeechFeedback(speechEvaluationModel!),
-        "Failed to get feedback",
-      );
+      gptResponse = score >= 80
+          ? await _globalRepo.getRandomFeedback(score)
+          : await _safe(
+              () => _globalRepo.getSpeechFeedback(speechEvaluationModel!),
+              "Failed to get feedback",
+            );
 
       slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
         (val) => val.language?.id == language.id,

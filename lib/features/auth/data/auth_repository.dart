@@ -67,6 +67,7 @@ class AuthRepository {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('logged_in_user', username);
+      await prefs.setString('user_id', user['user_id']);
       return await ensureAnonymous(user['user_id'], user['school']);
     } on Exception {
       rethrow;

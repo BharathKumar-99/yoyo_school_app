@@ -30,7 +30,7 @@ android {
         applicationId = "com.yoyospeak.yoyo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 25
+        versionCode = 27
         versionName = flutter.versionName
     }
 
@@ -45,8 +45,8 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
 
             signingConfig = signingConfigs.getByName("release")
 

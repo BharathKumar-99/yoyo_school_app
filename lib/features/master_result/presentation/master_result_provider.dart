@@ -62,7 +62,9 @@ class MasterResultProvider extends ChangeNotifier {
         orElse: () => SchoolLanguage(),
       );
 
-      gptResponse = await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
+      gptResponse = score >= 80
+          ? await _globalRepo.getRandomFeedback(score)
+          : await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
 
       await upsertResult(score, submit: score > Constants.minimumSubmitScore);
 

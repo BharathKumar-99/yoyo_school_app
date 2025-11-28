@@ -1,3 +1,4 @@
+import 'package:yoyo_school_app/config/utils/shared_preferences.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'dart:async';
 import 'dart:ui';
@@ -18,6 +19,7 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseClientService.instance.init();
+  await SharedPrefsService.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

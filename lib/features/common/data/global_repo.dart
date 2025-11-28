@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' hide log;
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -213,6 +214,35 @@ class GlobalRepo {
       return data;
     } catch (e, st) {
       log("callSuperSpeechApi Error: $e\n$st");
+      return null;
+    }
+  }
+
+  Future<ChatGptResponse?> getRandomFeedback(int score) async {
+    String? range;
+
+    if (score >= 90 && score <= 100) {
+      range = "90-100";
+    } else if (score >= 80 && score <= 89) {
+      range = "80-89";
+    } else {
+      return null;
+    }
+
+    try {
+      final data = await Supabase.instance.client
+          .from(DbTable.pronunciationFeedbackTemplates)
+          .select()
+          .eq('score_range', range);
+
+      if (data.isEmpty) return null;
+
+      final random = Random();
+      final randomRow = data[random.nextInt(data.length)];
+
+      return ChatGptResponse.fromJson(randomRow);
+    } catch (e) {
+      print("Error fetching feedback: $e");
       return null;
     }
   }
