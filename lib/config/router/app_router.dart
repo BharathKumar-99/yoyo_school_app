@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
@@ -205,7 +206,7 @@ class AppRoutes {
     ],
     redirect: (context, state) {
       final supabase = SupabaseClientService.instance.client;
-      final currentUser = supabase.auth.currentUser?.userMetadata?['user_id'];
+      final currentUser = GetUserDetails.getCurrentUserId();
       final goingToLogin = state.fullPath == RouteNames.login;
       final goingToActivationCode =
           state.fullPath == RouteNames.needActivationCode;
@@ -215,7 +216,7 @@ class AppRoutes {
           !goingToActivationCode) {
         return RouteNames.login;
       }
-      if (currentUser != null && goingToLogin) {
+      if (goingToLogin) {
         return RouteNames.splash;
       }
       return null;
