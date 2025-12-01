@@ -57,6 +57,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     }
     phraseCategories = await _repo.getAllPhraseCategories(
       classes.language?.id ?? 0,
+      classes.schoolId ?? 0,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

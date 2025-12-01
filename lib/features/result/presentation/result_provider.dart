@@ -19,6 +19,7 @@ class ResultProvider extends ChangeNotifier {
   Language language;
   late UserResult? result;
   SchoolLanguage? slanguage;
+  ChatGptResponse? tableResponse;
   ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;
 
@@ -62,12 +63,13 @@ class ResultProvider extends ChangeNotifier {
 
       score = speechEvaluationModel?.result?.overall ?? 0;
 
-      gptResponse = score >= 80
-          ? await _globalRepo.getRandomFeedback(score)
-          : await _safe(
-              () => _globalRepo.getSpeechFeedback(speechEvaluationModel!),
-              "Failed to get feedback",
-            );
+      tableResponse = await _globalRepo.getRandomFeedback(score);
+      if (score >= 80) {
+        gptResponse = await _safe(
+          () => _globalRepo.getSpeechFeedback(speechEvaluationModel!),
+          "Failed to get feedback",
+        );
+      }
 
       slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
         (val) => val.language?.id == language.id,
@@ -85,9 +87,7 @@ class ResultProvider extends ChangeNotifier {
       );
 
       notifyListeners();
-    } catch (e) {
-      rethrow;
-    }
+    } catch (_) {}
   }
 
   Future<T> _safe<T>(Future<T> Function() call, String errorMessage) async {

@@ -399,7 +399,7 @@ class ResultScreen extends StatelessWidget {
                                     children: [
                                       SizedBox(height: h(0.01)),
                                       Text(
-                                        value.gptResponse?.title ?? "",
+                                        value.tableResponse?.title ?? "",
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -409,7 +409,7 @@ class ResultScreen extends StatelessWidget {
                                           vertical: 20.0,
                                         ),
                                         child: Text(
-                                          value.gptResponse?.body ?? '',
+                                          value.tableResponse?.body ?? '',
                                           style: AppTextStyles
                                               .textTheme
                                               .bodyMedium!
@@ -537,7 +537,7 @@ class ResultScreen extends StatelessWidget {
                                     children: [
                                       Spacer(flex: 3),
                                       Text(
-                                        value.gptResponse?.title ?? '',
+                                        value.tableResponse?.title ?? '',
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -550,7 +550,7 @@ class ResultScreen extends StatelessWidget {
                                             .headlineMedium,
                                       ),
                                       Spacer(),
-                                      Text(value.gptResponse?.body ?? ''),
+                                      Text(value.tableResponse?.body ?? ''),
                                       Spacer(),
                                       isLast
                                           ? SizedBox(

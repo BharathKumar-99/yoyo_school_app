@@ -30,11 +30,15 @@ class PhrasesDeatilsRepo {
     return response?['max_streak'] ?? 0;
   }
 
-  Future<List<PhraseCategoriesModel>> getAllPhraseCategories(int id) async {
+  Future<List<PhraseCategoriesModel>> getAllPhraseCategories(
+    int id,
+    int schoolId,
+  ) async {
     final response = await _client
         .from(DbTable.phraseCategories)
         .select('*')
         .eq('language', id)
+        .or('school_id.eq.$schoolId,school_id.is.null')
         .order('item_index', ascending: true);
     return response
         .map<PhraseCategoriesModel>((e) => PhraseCategoriesModel.fromJson(e))

@@ -23,6 +23,7 @@ class MasterResultProvider extends ChangeNotifier {
   SchoolLanguage? slanguage;
   late RemoteConfig apiCred;
   SpeechEvaluationModel? speechEvaluationModel;
+  ChatGptResponse? tableResponse;
   ChatGptResponse? gptResponse;
   String audioPath;
   int score = 0;
@@ -62,9 +63,12 @@ class MasterResultProvider extends ChangeNotifier {
         orElse: () => SchoolLanguage(),
       );
 
-      gptResponse = score >= 80
-          ? await _globalRepo.getRandomFeedback(score)
-          : await _globalRepo.getSpeechFeedback(speechEvaluationModel!);
+      tableResponse = await _globalRepo.getRandomFeedback(score);
+      if (score >= 80) {
+        gptResponse = await _globalRepo.getSpeechFeedback(
+          speechEvaluationModel!,
+        );
+      }
 
       await upsertResult(score, submit: score > Constants.minimumSubmitScore);
 

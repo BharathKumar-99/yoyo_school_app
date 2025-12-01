@@ -218,22 +218,38 @@ class GlobalRepo {
     }
   }
 
-  Future<ChatGptResponse?> getRandomFeedback(int score) async {
-    String? range;
-
+  String? getScoreRange(int score) {
     if (score >= 90 && score <= 100) {
-      range = "90-100";
+      return "90-100";
     } else if (score >= 80 && score <= 89) {
-      range = "80-89";
-    } else {
-      return null;
+      return "80-89";
+    } else if (score >= 70 && score <= 79) {
+      return "70-80";
+    } else if (score >= 60 && score <= 69) {
+      return "60-70";
+    } else if (score >= 50 && score <= 59) {
+      return "50-60";
+    } else if (score >= 40 && score <= 49) {
+      return "40-50";
+    } else if (score >= 30 && score <= 39) {
+      return "30-40";
+    } else if (score >= 20 && score <= 29) {
+      return "20-30";
+    } else if (score >= 10 && score <= 19) {
+      return "10-20";
     }
+
+    return null;
+  }
+
+  Future<ChatGptResponse?> getRandomFeedback(int score) async {
+    String? range = getScoreRange(score);
 
     try {
       final data = await Supabase.instance.client
           .from(DbTable.pronunciationFeedbackTemplates)
           .select()
-          .eq('score_range', range);
+          .eq('score_range', range!);
 
       if (data.isEmpty) return null;
 

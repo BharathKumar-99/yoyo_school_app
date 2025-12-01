@@ -173,16 +173,18 @@ class __DraggableMicrophoneControlState
   Offset _dragOffset = Offset.zero;
   static const double _swipeThreshold = 40.0;
 
-  void _onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+  void _onPanUpdate(DragUpdateDetails details) {
     setState(() {
-      _dragOffset = details.localOffsetFromOrigin;
+      // accumulate drag movement
+      _dragOffset += details.delta;
 
+      // clamp X movement
       final clampedX = _dragOffset.dx.clamp(-110.0, 110.0);
       _dragOffset = Offset(clampedX, 0);
     });
   }
 
-  void _onLongPressEnd(LongPressEndDetails details) {
+  void _onPanEnd(DragEndDetails details) {
     final finalDragX = _dragOffset.dx;
     bool isSwipe = false;
 
@@ -195,9 +197,10 @@ class __DraggableMicrophoneControlState
     }
 
     if (!isSwipe) {
-      widget.onReleaseHold();
+      widget.onReleaseHold(); // user lifted finger without big swipe
     }
 
+    // reset UI
     setState(() {
       _dragOffset = Offset.zero;
     });
@@ -206,13 +209,20 @@ class __DraggableMicrophoneControlState
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPressStart: (_) {
+      onPanStart: (details) {
         _dragOffset = Offset.zero;
-        widget.onStartHold();
+        widget.onStartHold(); // 🔥 fires immediately when finger touches down
       },
-      onLongPressMoveUpdate: _onLongPressMoveUpdate,
-      onLongPressEnd: _onLongPressEnd,
-
+      onPanUpdate: (details) {
+        _onPanUpdate(details); // ← drag left/right handler
+      },
+      onPanEnd: (details) {
+        _onPanEnd(details); // 🔥 fires when finger lifted
+      },
+      onPanCancel: () {
+        widget.onReleaseHold();
+        setState(() => _dragOffset = Offset.zero);
+      },
       child: Transform.translate(
         offset: _dragOffset,
         child: CircleAvatar(

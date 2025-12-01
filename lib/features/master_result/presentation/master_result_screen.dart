@@ -324,7 +324,7 @@ class MasterResultScreen extends StatelessWidget {
                                     children: [
                                       SizedBox(height: h(0.01)),
                                       Text(
-                                        value.gptResponse?.title ?? "",
+                                        value.tableResponse?.title ?? "",
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -335,7 +335,7 @@ class MasterResultScreen extends StatelessWidget {
                                         ),
                                         child: RichText(
                                           text: TextSpan(
-                                            text: value.gptResponse?.body,
+                                            text: value.tableResponse?.body,
                                             style: AppTextStyles
                                                 .textTheme
                                                 .bodyMedium!
@@ -438,7 +438,7 @@ class MasterResultScreen extends StatelessWidget {
                                     children: [
                                       Spacer(flex: 3),
                                       Text(
-                                        value.gptResponse?.title ?? '',
+                                        value.tableResponse?.title ?? '',
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -451,7 +451,7 @@ class MasterResultScreen extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Text(
-                                        value.gptResponse?.body ?? '',
+                                        value.tableResponse?.body ?? '',
                                         style: AppTextStyles
                                             .textTheme
                                             .bodyMedium!
