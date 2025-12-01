@@ -35,12 +35,12 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
 
     for (final val in userResult) {
       classesScore.add(val.score ?? 0);
+
       if (val.userId == userId) {
         userScore.add(val.score ?? 0);
       }
     }
 
-    final classStrength = student?.classes?.noOfStudents ?? 0;
     final totalClassScore = classesScore.isEmpty
         ? 0
         : classesScore.reduce((a, b) => a + b);
@@ -48,8 +48,8 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
         ? 0
         : userScore.reduce((a, b) => a + b);
 
-    if (classStrength > 0) {
-      classPercentage = (totalClassScore / classStrength).round();
+    if (classesScore.isNotEmpty) {
+      classPercentage = (totalClassScore / classesScore.length).round();
     }
 
     if (userScore.isNotEmpty) {

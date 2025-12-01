@@ -6,13 +6,17 @@ import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 
 class SplashRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
-  Future<UserModel> getProfileData() async {
-    final data = await _client
-        .from(DbTable.users)
-        .select('*')
-        .eq('user_id', GetUserDetails.getCurrentUserId() ?? '')
-        .single();
+  Future<UserModel?> getProfileData() async {
+    if (GetUserDetails.getCurrentUserId() != null) {
+      final data = await _client
+          .from(DbTable.users)
+          .select('*')
+          .eq('user_id', GetUserDetails.getCurrentUserId()!)
+          .single();
 
-    return UserModel.fromJson(data);
+      return UserModel.fromJson(data);
+    } else {
+      return null;
+    }
   }
 }

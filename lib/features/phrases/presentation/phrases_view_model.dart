@@ -41,7 +41,7 @@ class PhrasesViewModel extends ChangeNotifier {
   late GlobalProvider globalProvider;
   int? streakPhraseId;
   int categories;
-  bool isMasteryEnabled=false;
+  bool isMasteryEnabled = false;
 
   PhrasesViewModel(
     this.classes,
@@ -200,7 +200,6 @@ class PhrasesViewModel extends ChangeNotifier {
         }
       }
 
-      final classStrength = student?.classes?.noOfStudents ?? 0;
       final totalClassScore = classesScore.isEmpty
           ? 0
           : classesScore.reduce((a, b) => a + b);
@@ -208,8 +207,8 @@ class PhrasesViewModel extends ChangeNotifier {
           ? 0
           : userScore.reduce((a, b) => a + b);
 
-      if (classStrength > 0) {
-        classPercentage = (totalClassScore / classStrength).round();
+      if (classesScore.isNotEmpty) {
+        classPercentage = (totalClassScore / classesScore.length).round();
       }
 
       if (userScore.isNotEmpty) {

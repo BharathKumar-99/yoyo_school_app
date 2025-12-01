@@ -30,7 +30,7 @@ android {
         applicationId = "com.yoyospeak.yoyo"
         minSdk = 24
         targetSdk = 36
-        versionCode = 27
+        versionCode = 29
         versionName = flutter.versionName
     }
 

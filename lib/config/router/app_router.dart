@@ -204,21 +204,31 @@ class AppRoutes {
         builder: (context, state) => YourProfile(),
       ),
     ],
+
     redirect: (context, state) {
       final supabase = SupabaseClientService.instance.client;
-      final currentUser = GetUserDetails.getCurrentUserId();
+      final isAuthenticated =
+          supabase.auth.currentSession != null ||
+          GetUserDetails.getCurrentUserId() != null;
+
       final goingToLogin = state.fullPath == RouteNames.login;
       final goingToActivationCode =
           state.fullPath == RouteNames.needActivationCode;
-      if (supabase.auth.currentSession == null &&
-          currentUser == null &&
-          !goingToLogin &&
-          !goingToActivationCode) {
+
+      // 1. If the user is authenticated and is trying to go to the Login page,
+      //    send them to the main/splash page instead.
+      if (isAuthenticated && goingToLogin) {
+        return RouteNames
+            .splash; // Assuming splash is your post-login entry point
+      }
+
+      // 2. If the user is NOT authenticated and is trying to access a protected page,
+      //    send them to the Login page.
+      if (!isAuthenticated && !goingToLogin && !goingToActivationCode) {
         return RouteNames.login;
       }
-      if (goingToLogin) {
-        return RouteNames.splash;
-      }
+
+      // 3. Otherwise, let them continue to the path they requested.
       return null;
     },
   );
