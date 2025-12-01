@@ -503,7 +503,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yoyospeak.yoyo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "YoYo Schools ios_app_store 1759932950";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Yoyo Language Learning App ios_app_store 1763569703";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -699,7 +699,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yoyospeak.yoyo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "YoYo Schools ios_app_store 1759932950";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Yoyo Language Learning App ios_app_store 1763569703";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -733,7 +733,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yoyospeak.yoyo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "YoYo Schools ios_app_store 1759932950";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Yoyo Language Learning App ios_app_store 1763569703";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
