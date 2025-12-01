@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -16,12 +15,14 @@ class ProfileRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
 
   Future<void> logout() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+    GlobalLoader.show();
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     await _client.auth.signOut();
+
+    GlobalLoader.hide();
     NavigationHelper.go(RouteNames.login);
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
   }
 
   Future<School?> getSchoolData(int id) async {

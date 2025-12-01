@@ -56,9 +56,11 @@ class RecordingProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    _durationSubscription.cancel();
-    recorderController.dispose();
-    player.dispose();
+    try {
+      recorderController.dispose();
+      _durationSubscription.cancel();
+      player.dispose();
+    } catch (_) {}
     super.dispose();
   }
 
@@ -87,21 +89,24 @@ class RecordingProvider extends ChangeNotifier {
               ),
             );
           } else {
-            ctx!
-                .push(
-                  RouteNames.result,
-                  extra: {
-                    'phraseModel': phraseModel,
-                    'path': recordingPath,
-                    'language': launguage,
-                    'isLast': isLast,
-                    'retry': retryNumber,
-                    'categories': categories,
-                  },
-                )
-                .then((val) {
-                  retryNumber = val is int ? val : 0;
-                });
+            try {
+              _durationSubscription.cancel();
+              ctx!
+                  .push(
+                    RouteNames.result,
+                    extra: {
+                      'phraseModel': phraseModel,
+                      'path': recordingPath,
+                      'language': launguage,
+                      'isLast': isLast,
+                      'retry': retryNumber,
+                      'categories': categories,
+                    },
+                  )
+                  .then((val) {
+                    retryNumber = val is int ? val : 0;
+                  });
+            } catch (_) {}
           }
         }
         notifyListeners();

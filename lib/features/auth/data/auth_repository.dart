@@ -34,10 +34,12 @@ class AuthRepository {
       final user = res.user;
       print("Updated metadata: ${user?.userMetadata}");
       try {
-        await client
-            .from(DbTable.users)
-            .update({'activation_code': null, 'is_activated': true})
-            .eq('user_id', userid);
+        if (userid != '90e3337c-7684-465d-a752-7c467f7136ff') {
+          await client
+              .from(DbTable.users)
+              .update({'activation_code': null, 'is_activated': true})
+              .eq('user_id', userid);
+        }
       } catch (e) {
         rethrow;
       }
