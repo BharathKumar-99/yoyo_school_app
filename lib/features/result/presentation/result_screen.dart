@@ -397,7 +397,7 @@ class ResultScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(height: h(0.01)),
+                                      Spacer(),
                                       Text(
                                         value.tableResponse?.title ?? "",
                                         style: AppTextStyles

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/data/home_repository.dart';
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
@@ -42,8 +44,6 @@ class HomeScreenProvider extends ChangeNotifier {
 
       _subscribeToStudentData();
 
-      atemptedPhrases = await homeRepository.getTotalAtemptedPhrases();
-
       totalPhrases = 0;
       userClases?.classes?.school?.schoolLanguage?.forEach((val) {
         totalPhrases += val.language?.phrase?.length ?? 0;
@@ -64,8 +64,17 @@ class HomeScreenProvider extends ChangeNotifier {
           try {
             if (studentdata == null) return;
             student = studentdata;
-
-            atemptedPhrases = await homeRepository.getTotalAtemptedPhrases();
+            List<int> ids = [];
+            for (SchoolLanguage schoolLang
+                in userClases?.classes?.school?.schoolLanguage ?? []) {
+              for (PhraseModel phrase in schoolLang.language?.phrase ?? []) {
+                ids.add(phrase.id ?? 0);
+              }
+            }
+            atemptedPhrases = await homeRepository.getTotalAtemptedPhrases(
+              student?.id ?? 0,
+              ids,
+            );
             notifyListeners();
           } catch (e) {
             throw Exception("Failed to update student data: $e");

@@ -14,6 +14,7 @@ class PhraseModel {
   String? questionTranslation;
   String? questionRecording;
   int? categories;
+  int? itemIndex;
 
   PhraseModel({
     this.id,
@@ -31,6 +32,7 @@ class PhraseModel {
     this.warmup,
     this.questions,
     this.categories,
+    this.itemIndex,
   });
 
   factory PhraseModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +53,7 @@ class PhraseModel {
       questions: json['question'],
       questionTranslation: json['question_translation'],
       categories: json['categories'],
+      itemIndex: json['item_index'],
     );
   }
 
@@ -70,6 +73,7 @@ class PhraseModel {
       'question_translation': questionTranslation,
       'question_recording': questionRecording,
       'categories': categories,
+      'item_index': itemIndex,
     };
   }
 }

@@ -116,13 +116,13 @@ class HomeRepository {
     }
   }
 
-  Future<int> getTotalAtemptedPhrases() async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
+  Future<int> getTotalAtemptedPhrases(int studentId, List<int> ids) async {
     int count = 0;
     final response = await _client
-        .from(DbTable.userResult)
+        .from(DbTable.attemptedPhrases)
         .select('*')
-        .eq('user_id', userId)
+        .eq('student_id', studentId)
+        .inFilter('phrases_id', ids)
         .count(CountOption.exact);
     count = response.count;
     return count;

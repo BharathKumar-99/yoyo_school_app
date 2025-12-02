@@ -30,6 +30,7 @@ class PhrasesViewModel extends ChangeNotifier {
   List<PhraseModel> newPhrases = [];
   List<PhraseModel> learned = [];
   List<PhraseModel> mastered = [];
+  List<Student> classStudents = [];
   bool _isDisposed = false;
   int classPercentage = 0;
   int userPercentage = 0;
@@ -60,9 +61,7 @@ class PhrasesViewModel extends ChangeNotifier {
       isStreakLoading = streak != null || isGoToNextPhrase;
 
       Future.delayed(Duration.zero, () {
-        Future.delayed(Duration.zero, () {
-          init(true);
-        });
+        init(true);
       });
     } catch (e) {
       throw Exception("Failed to initialize PhrasesViewModel");
@@ -155,26 +154,40 @@ class PhrasesViewModel extends ChangeNotifier {
       learned = [];
       mastered = [];
       newPhrases = [];
+      classStudents.clear();
+
+      Map<String, List<int>> individualUser = {};
+
+      classStudents = await _repo.getAllClassStudents(student?.classId ?? 0);
+      List<String> classUsers = [];
+      for (var element in classStudents) {
+        classUsers.add(element.userId ?? '');
+      }
 
       for (final val in schoolResult) {
-        if (ids.contains(val.phrasesId)) {
-          classesScore.add(val.score ?? 0);
+        if (ids.contains(val.phrasesId) && classUsers.contains(val.userId)) {
+          final uid = val.userId!;
+          individualUser.putIfAbsent(uid, () => []);
+          individualUser[uid]!.add(val.score ?? 0);
           if (val.userId == userId) {
             userScore.add(val.score ?? 0);
             userResult.add(val);
           }
         }
       }
+      createClassScore(individualUser);
 
-      final phraseList = classes.language?.phrase?.where((val) {
-        if (categories == -1) {
-          return val.warmup == true;
-        } else if (categories == 0) {
-          return val.categories == null;
-        } else {
-          return val.categories == categories;
-        }
-      }).toList();
+      final phraseList =
+          classes.language?.phrase?.where((val) {
+              if (categories == -1) {
+                return val.warmup == true;
+              } else if (categories == 0) {
+                return val.categories == null;
+              } else {
+                return val.categories == categories;
+              }
+            }).toList()
+            ?..sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
 
       for (final val in userResult) {
         for (final phrase in phraseList ?? []) {
@@ -200,6 +213,10 @@ class PhrasesViewModel extends ChangeNotifier {
         }
       }
 
+      learned.sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
+      mastered.sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
+      newPhrases.sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
+      
       final totalClassScore = classesScore.isEmpty
           ? 0
           : classesScore.reduce((a, b) => a + b);
@@ -225,6 +242,18 @@ class PhrasesViewModel extends ChangeNotifier {
     } catch (e) {
       throw Exception("Failed processing class/user data");
     }
+  }
+
+  createClassScore(Map<String, List<int>> user) {
+    classesScore = [];
+    user.forEach((key, val) {
+      classesScore.add(getAvg(val));
+    });
+  }
+
+  getAvg(List<int> score) {
+    int avg = score.reduce((a, b) => a + b);
+    return (avg / score.length).round();
   }
 
   Future<void> goToNextScreen() async {

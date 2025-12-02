@@ -277,7 +277,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                                 .visibility_rounded
                                                           : Icons
                                                                 .visibility_off_rounded,
-                                                      size: 45,
+                                                      size: 50,
                                                       color: value.showPhrase
                                                           ? value
                                                                 .language
@@ -288,29 +288,35 @@ class TryPhrasesScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(width: 10),
-                                                InkWell(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  splashColor:
-                                                      value
-                                                          .language
-                                                          ?.gradient
-                                                          ?.first
-                                                          .withValues(
-                                                            alpha: 0.2,
-                                                          ) ??
-                                                      Colors.grey.withValues(
-                                                        alpha: 0.2,
+                                                SizedBox(
+                                                  height: 60,
+                                                  child: InkWell(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          50,
+                                                        ),
+                                                    splashColor:
+                                                        value
+                                                            .language
+                                                            ?.gradient
+                                                            ?.first
+                                                            .withValues(
+                                                              alpha: 0.2,
+                                                            ) ??
+                                                        Colors.grey.withValues(
+                                                          alpha: 0.2,
+                                                        ),
+                                                    onTap: () async =>
+                                                        await value.playAudio(),
+                                                    child: const Padding(
+                                                      padding: EdgeInsets.all(
+                                                        8.0,
                                                       ),
-                                                  onTap: () async =>
-                                                      await value.playAudio(),
-                                                  child: const Padding(
-                                                    padding: EdgeInsets.all(
-                                                      8.0,
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.play_arrow_outlined,
-                                                      size: 50,
+                                                      child: Icon(
+                                                        Icons
+                                                            .play_arrow_outlined,
+                                                        size: 50,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

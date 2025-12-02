@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../../config/utils/get_user_details.dart';
@@ -81,5 +82,19 @@ class PhrasesDeatilsRepo {
     } catch (e) {
       log("issue here");
     }
+  }
+
+  Future<List<Student>> getAllClassStudents(int classId) async {
+    List<Student> students = [];
+
+    final data = await _client
+        .from(DbTable.student)
+        .select('*')
+        .eq('class', classId);
+
+    for (var element in data) {
+      students.add(Student.fromJson(element));
+    }
+    return students;
   }
 }

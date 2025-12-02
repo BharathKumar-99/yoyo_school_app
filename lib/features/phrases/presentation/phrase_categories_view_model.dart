@@ -16,6 +16,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   List<int> classesScore = [];
   List<int> userScore = [];
   List<PhraseCategoriesModel> phraseCategories = [];
+  List<Student> classStudents = [];
   final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
   bool isLoading = true;
 
@@ -32,14 +33,28 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final ids = classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
     userResult = await _repo.getUserResult(ids);
+    classStudents.clear();
+
+    Map<String, List<int>> individualUser = {};
+    classStudents = await _repo.getAllClassStudents(student?.classId ?? 0);
+    List<String> classUsers = [];
+    for (var element in classStudents) {
+      classUsers.add(element.userId ?? '');
+    }
 
     for (final val in userResult) {
-      classesScore.add(val.score ?? 0);
+      if (ids.contains(val.phrasesId) && classUsers.contains(val.userId)) {
+        final uid = val.userId!;
+        individualUser.putIfAbsent(uid, () => []);
+        individualUser[uid]!.add(val.score ?? 0);
 
-      if (val.userId == userId) {
-        userScore.add(val.score ?? 0);
+        if (val.userId == userId) {
+          userScore.add(val.score ?? 0);
+        }
       }
     }
+
+    createClassScore(individualUser);
 
     final totalClassScore = classesScore.isEmpty
         ? 0
@@ -65,5 +80,17 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     });
+  }
+
+  createClassScore(Map<String, List<int>> user) {
+    classesScore = [];
+    user.forEach((key, val) {
+      classesScore.add(getAvg(val));
+    });
+  }
+
+  getAvg(List<int> score) {
+    int avg = score.reduce((a, b) => a + b);
+    return (avg / score.length).round();
   }
 }
