@@ -15,6 +15,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_btn => 'Login';
 
   @override
+  String get new_version_available => 'New Version Available';
+
+  @override
+  String get scheduled_maintenance => 'Scheduled Maintenance';
+
+  @override
+  String get back_online => 'We expect to be back online in Sometime';
+
+  @override
+  String get service_unavailable =>
+      'Our services are temporarily unavailable while we perform essential system upgrades. This downtime ensures a faster, more reliable experience for you.';
+
+  @override
+  String get app_update_subtitle =>
+      'We\'ve released a mandatory update with critical security fixes and new features. Please update your app to continue using our services.';
+
+  @override
   String get user_name => 'Username - e.g Urban-Signal-247';
 
   @override

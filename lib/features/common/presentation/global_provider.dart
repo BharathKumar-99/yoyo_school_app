@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/widgets.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/widgets.dart'; 
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import '../../result/model/remote_config_model.dart';
 import '../../result/model/user_result_model.dart';
@@ -29,9 +28,7 @@ class GlobalProvider with ChangeNotifier {
   Future<void> init() async {
     try {
       apiCred = await _repo.getRemoteCred();
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      version = packageInfo.version;
-      code = packageInfo.buildNumber;
+     
 
       notifyListeners();
     } catch (e, st) {
@@ -99,6 +96,8 @@ class GlobalProvider with ChangeNotifier {
     }
   }
 
+  
+
   @override
   void dispose() {
     try {
@@ -115,4 +114,5 @@ class GlobalProvider with ChangeNotifier {
 
     super.dispose();
   }
+
 }

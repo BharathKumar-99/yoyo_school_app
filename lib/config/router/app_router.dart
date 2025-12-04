@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/router/navigation_tracker.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/auth/presentation/login_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/otp_screen.dart';
 import 'package:yoyo_school_app/features/auth/presentation/request_activation_screen.dart';
+import 'package:yoyo_school_app/features/common/presentation/app_update_screen.dart';
+import 'package:yoyo_school_app/features/common/presentation/maintainance_mode.dart';
 import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
@@ -38,6 +41,14 @@ class AppRoutes {
     debugLogDiagnostics: false,
 
     routes: [
+      GoRoute(
+        path: RouteNames.appUpdate,
+        builder: (context, state) => const AppUpdateScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.appMaintenance,
+        builder: (context, state) => const MaintenanceModeScreen(),
+      ),
       GoRoute(
         path: RouteNames.login,
         builder: (context, state) => const LoginScreen(),
@@ -204,7 +215,7 @@ class AppRoutes {
         builder: (context, state) => YourProfile(),
       ),
     ],
-
+    observers: [routeTracker],
     redirect: (context, state) {
       final supabase = SupabaseClientService.instance.client;
       final isAuthenticated =

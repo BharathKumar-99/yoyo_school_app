@@ -4,6 +4,10 @@ class UrlConstants {
       'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/openai';
   static const String terms = 'https://support.yoyospeak.com/terms/';
   static const String privacy = 'https://support.yoyospeak.com/privacy/';
+  static const String playStoreUrl =
+      'https://play.google.com/store/apps/details?id=com.yoyospeak.yoyo';
+  static const String appStoreUrl =
+      'https://apps.apple.com/gb/app/yoyo-speak/id6639612813';
 }
 
 class ImageConstants {
@@ -64,7 +68,10 @@ class DbTable {
   static const String streakTable = 'streak_table';
   static const String activationRequests = 'activation_requests';
   static const String phraseCategories = 'phrase_categories';
-  static const String pronunciationFeedbackTemplates = 'pronunciation_feedback_templates';
+  static const String pronunciationFeedbackTemplates =
+      'pronunciation_feedback_templates';
+  static const String errorLogs = 'error_logs';
+  static const String appConfig = 'app_config';
 }
 
 class Stroage {

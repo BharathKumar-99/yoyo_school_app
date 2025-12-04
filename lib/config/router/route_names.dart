@@ -15,4 +15,6 @@ class RouteNames {
   static const error = '/error';
   static const webview = '/webview';
   static const phraseCategories = '/phraseCategories';
+  static const appUpdate = '/appUpdate';
+  static const appMaintenance = '/appMaintenance';
 }

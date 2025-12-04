@@ -106,6 +106,36 @@ abstract class AppLocalizations {
   /// **'Login'**
   String get login_btn;
 
+  /// No description provided for @new_version_available.
+  ///
+  /// In en, this message translates to:
+  /// **'New Version Available'**
+  String get new_version_available;
+
+  /// No description provided for @scheduled_maintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled Maintenance'**
+  String get scheduled_maintenance;
+
+  /// No description provided for @back_online.
+  ///
+  /// In en, this message translates to:
+  /// **'We expect to be back online in Sometime'**
+  String get back_online;
+
+  /// No description provided for @service_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Our services are temporarily unavailable while we perform essential system upgrades. This downtime ensures a faster, more reliable experience for you.'**
+  String get service_unavailable;
+
+  /// No description provided for @app_update_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve released a mandatory update with critical security fixes and new features. Please update your app to continue using our services.'**
+  String get app_update_subtitle;
+
   /// No description provided for @user_name.
   ///
   /// In en, this message translates to:

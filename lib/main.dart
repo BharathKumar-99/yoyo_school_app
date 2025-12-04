@@ -1,3 +1,4 @@
+import 'package:yoyo_school_app/config/utils/log_error_to_supabase.dart';
 import 'package:yoyo_school_app/config/utils/shared_preferences.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'dart:async';
@@ -27,7 +28,7 @@ Future<void> main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
-  FlutterError.onError = (FlutterErrorDetails details) {
+  FlutterError.onError = (FlutterErrorDetails details) async {
     FlutterError.presentError(details);
 
     final isUIError =
@@ -40,6 +41,11 @@ Future<void> main() async {
     if (isUIError) {
       return;
     }
+    await logService.logError(
+      error: details.exception,
+      stackTrace: details.stack ?? StackTrace.empty,
+      errorCode: 'FRAMEWORK_ERROR',
+    );
 
     ctx!.push(
       RouteNames.error,
@@ -51,6 +57,11 @@ Future<void> main() async {
     ctx!.push(
       RouteNames.error,
       extra: {'message': "Something Went Wrong", "error": stack},
+    );
+    logService.logError(
+      error: error,
+      stackTrace: stack,
+      errorCode: 'ASYNC_ERROR',
     );
     return true;
   };
@@ -71,6 +82,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
+        
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

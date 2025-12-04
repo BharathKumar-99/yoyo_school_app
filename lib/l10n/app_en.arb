@@ -1,6 +1,11 @@
 {
     "login_text": "Get Started",
     "login_btn": "Login",
+    "new_version_available": "New Version Available",
+    "scheduled_maintenance": "Scheduled Maintenance",
+    "back_online": "We expect to be back online in Sometime",
+    "service_unavailable": "Our services are temporarily unavailable while we perform essential system upgrades. This downtime ensures a faster, more reliable experience for you.",
+    "app_update_subtitle": "We've released a mandatory update with critical security fixes and new features. Please update your app to continue using our services.",
     "user_name": "Username - e.g Urban-Signal-247",
     "activation_code": "Activation Code - e.g. HYT-UL7",
     "requestNewCode": "request new activation code",
