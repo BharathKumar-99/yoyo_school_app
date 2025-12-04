@@ -190,6 +190,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                     ),
                                   AnimatedContainer(
                                     duration: const Duration(milliseconds: 600),
+                                    padding: EdgeInsets.only(top: 10),
                                     curve: Curves.easeInOut,
                                     constraints: BoxConstraints(
                                       maxHeight: 200,
@@ -219,14 +220,15 @@ class TryPhrasesScreen extends StatelessWidget {
                                       ],
                                       color: Colors.white,
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 28.0,
-                                        vertical: 10,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Expanded(
+                                    child: Column(
+                                      spacing: 5,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 28,
+                                              right: 28,
+                                            ),
                                             child: AnimatedOpacity(
                                               opacity: value.showPhrase
                                                   ? 1.0
@@ -245,8 +247,6 @@ class TryPhrasesScreen extends StatelessWidget {
                                                 child: AutoSizeText(
                                                   value.phraseModel.phrase ??
                                                       "",
-                                                  maxLines: 5,
-                                                  minFontSize: 4,
                                                   textAlign: TextAlign.left,
                                                   style: AppTextStyles
                                                       .textTheme
@@ -255,29 +255,44 @@ class TryPhrasesScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 60,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                AnimatedScale(
+                                        ),
+                                        Container(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                            left: 28,
+                                            right: 28,
+                                          ),
+
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            spacing: 10,
+                                            children: [
+                                              SizedBox(
+                                                height: 40,
+                                                width: 40,
+                                                child: AnimatedScale(
                                                   scale: value.showPhrase
                                                       ? 1.0
                                                       : 0.9,
-                                                  duration: const Duration(
+                                                  duration: Duration(
                                                     milliseconds: 200,
                                                   ),
                                                   child: IconButton(
                                                     onPressed:
                                                         value.togglePhrase,
+                                                    padding: EdgeInsets.zero,
+                                                    visualDensity:
+                                                        VisualDensity.compact,
                                                     icon: Icon(
                                                       value.showPhrase
                                                           ? Icons
                                                                 .visibility_rounded
                                                           : Icons
                                                                 .visibility_off_rounded,
-                                                      size: 50,
+                                                      size: 45,
                                                       color: value.showPhrase
                                                           ? value
                                                                 .language
@@ -287,44 +302,40 @@ class TryPhrasesScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
-                                                const SizedBox(width: 10),
-                                                SizedBox(
-                                                  height: 60,
-                                                  child: InkWell(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          50,
-                                                        ),
-                                                    splashColor:
-                                                        value
-                                                            .language
-                                                            ?.gradient
-                                                            ?.first
-                                                            .withValues(
-                                                              alpha: 0.2,
-                                                            ) ??
-                                                        Colors.grey.withValues(
-                                                          alpha: 0.2,
-                                                        ),
-                                                    onTap: () async =>
-                                                        await value.playAudio(),
-                                                    child: const Padding(
-                                                      padding: EdgeInsets.all(
-                                                        8.0,
+                                              ),
+
+                                              SizedBox(
+                                                height: 40,
+                                                width: 40,
+                                                child: InkWell(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  splashColor:
+                                                      value
+                                                          .language
+                                                          ?.gradient
+                                                          ?.first
+                                                          .withValues(
+                                                            alpha: 0.2,
+                                                          ) ??
+                                                      Colors.grey.withValues(
+                                                        alpha: 0.2,
                                                       ),
-                                                      child: Icon(
-                                                        Icons
-                                                            .play_arrow_outlined,
-                                                        size: 50,
-                                                      ),
+                                                  onTap: () async =>
+                                                      await value.playAudio(),
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.play_arrow_outlined,
+                                                      size: 45,
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        SizedBox(height: 10),
+                                      ],
                                     ),
                                   ),
 
@@ -392,7 +403,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                           maxLines:
                                                               value
                                                                   .showMoreTranslation
-                                                              ? 4
+                                                              ? 50
                                                               : 1,
                                                           overflow: TextOverflow
                                                               .ellipsis,

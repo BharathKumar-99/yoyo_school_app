@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -326,7 +327,7 @@ Widget getMetricCard(String title, String data, Color bgColor) {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(title, style: AppTextStyles.textTheme.titleMedium),
+          AutoSizeText(title, style: AppTextStyles.textTheme.titleMedium),
           const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
@@ -339,7 +340,7 @@ Widget getMetricCard(String title, String data, Color bgColor) {
                 vertical: 4.0,
               ),
               child: Center(
-                child: Text(
+                child: AutoSizeText(
                   data,
                   maxLines: 1,
                   style: AppTextStyles.textTheme.headlineMedium!.copyWith(
