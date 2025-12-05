@@ -43,7 +43,9 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     }
 
     for (final val in userResult) {
-      if (ids.contains(val.phrasesId) && classUsers.contains(val.userId)) {
+      if (ids.contains(val.phrasesId) &&
+          classUsers.contains(val.userId) &&
+          val.user?.isTester != true) {
         final uid = val.userId!;
         individualUser.putIfAbsent(uid, () => []);
         individualUser[uid]!.add(val.score ?? 0);

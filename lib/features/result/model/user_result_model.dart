@@ -1,3 +1,7 @@
+import 'package:yoyo_school_app/config/constants/constants.dart';
+
+import '../../profile/model/user_model.dart';
+
 class UserResult {
   int? id;
   DateTime? createdAt;
@@ -11,6 +15,7 @@ class UserResult {
   List<String>? badWords;
   int? listen;
   String? type;
+  UserModel? user;
 
   UserResult({
     this.id,
@@ -25,6 +30,7 @@ class UserResult {
     this.badWords,
     this.listen,
     this.type,
+    this.user,
   });
 
   factory UserResult.fromJson(Map<String, dynamic> json) {
@@ -45,6 +51,9 @@ class UserResult {
           .toList(),
       badWords: (json['bad_words'] as List?)?.map((e) => e.toString()).toList(),
       type: json['type'] as String?,
+      user: json[DbTable.users] != null
+          ? UserModel.fromJson(json[DbTable.users])
+          : null,
     );
   }
 

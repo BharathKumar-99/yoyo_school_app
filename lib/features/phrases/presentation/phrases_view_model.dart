@@ -165,7 +165,9 @@ class PhrasesViewModel extends ChangeNotifier {
       }
 
       for (final val in schoolResult) {
-        if (ids.contains(val.phrasesId) && classUsers.contains(val.userId)) {
+        if (ids.contains(val.phrasesId) &&
+            classUsers.contains(val.userId) &&
+            val.user?.isTester != true) {
           final uid = val.userId!;
           individualUser.putIfAbsent(uid, () => []);
           individualUser[uid]!.add(val.score ?? 0);
@@ -216,7 +218,7 @@ class PhrasesViewModel extends ChangeNotifier {
       learned.sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
       mastered.sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
       newPhrases.sort((a, b) => (a.itemIndex ?? 0).compareTo(b.itemIndex ?? 0));
-      
+
       final totalClassScore = classesScore.isEmpty
           ? 0
           : classesScore.reduce((a, b) => a + b);

@@ -37,7 +37,12 @@ class AuthRepository {
         if (userid != '90e3337c-7684-465d-a752-7c467f7136ff') {
           await client
               .from(DbTable.users)
-              .update({'activation_code': null, 'is_activated': true})
+              .update({
+                'activation_code': null,
+                'is_activated': true,
+                'is_logged_in': true,
+                'last_login': DateTime.now().toIso8601String(),
+              })
               .eq('user_id', userid);
         }
       } catch (e) {

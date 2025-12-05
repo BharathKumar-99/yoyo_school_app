@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart'; 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
-
-import '../../../core/supabase/supabase_client.dart'; 
 
 class ProfileProvider extends ChangeNotifier {
   final ProfileRepository profileRepository;
@@ -85,13 +81,8 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<void> logoutUser() async {
     ctx!.pop();
-    try {
-      await SupabaseClientService.instance.client.auth.signOut();
-    } catch (e) {}
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    ctx!.go(RouteNames.login);
+    await profileRepository.logout();
   }
 
   Future<void> logout() async {

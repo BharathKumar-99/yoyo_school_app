@@ -16,7 +16,11 @@ class ProfileRepository {
 
   Future<void> logout() async {
     GlobalLoader.show();
-
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+    _client
+        .from(DbTable.users)
+        .update({'is_activated': false, 'is_logged_in': false})
+        .eq('user_id', userId);
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     await _client.auth.signOut();

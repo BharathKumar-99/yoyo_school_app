@@ -26,22 +26,26 @@ class SplashViewModel extends ChangeNotifier {
     model = await _repo.getAppConfig();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
-    if (model?.isMaintainance ?? false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        GlobalLoader.hide();
-        ctx!.go(RouteNames.appMaintenance);
-      });
-
-      return;
-    }
-    if (model?.appVersion != version) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        GlobalLoader.hide();
-        ctx!.go(RouteNames.appUpdate);
-      });
-      return;
-    }
     _user = await _repo.getProfileData();
+
+    if (!(_user?.isTester ?? false)) {
+      if (model?.isMaintainance ?? false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          GlobalLoader.hide();
+          ctx!.go(RouteNames.appMaintenance);
+        });
+
+        return;
+      }
+      if (model?.appVersion != version) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          GlobalLoader.hide();
+          ctx!.go(RouteNames.appUpdate);
+        });
+        return;
+      }
+    }
+
     if (_user?.onboarding != true &&
         _globalProvider?.apiCred.onboarding == true) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
