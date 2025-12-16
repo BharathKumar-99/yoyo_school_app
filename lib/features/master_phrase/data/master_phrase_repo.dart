@@ -16,14 +16,14 @@ class MasterPhraseRepo {
     return Language.fromJson(data!);
   }
 
-  Future<UserResult?> getAttemptedPhrase(int pid, String type) async {
+  Future<UserResult?> getAttemptedPhrase(int pid) async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final data = await _client
         .from(DbTable.userResult)
         .select('*')
         .eq('user_id', userId)
         .eq('phrases_id', pid)
-        .eq('type', type)
+        .eq('type', Constants.mastered)
         .maybeSingle();
     if (data == null) {
       return null;
@@ -46,7 +46,7 @@ class MasterPhraseRepo {
             'user_id': result.userId,
             'phrases_id': result.phrasesId,
             'listens': 1,
-            'type': result.type,
+            'type': Constants.mastered,
           })
           .select("*");
     }

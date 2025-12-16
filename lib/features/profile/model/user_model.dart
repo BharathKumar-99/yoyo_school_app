@@ -1,6 +1,8 @@
+import 'package:yoyo_school_app/features/home/model/student_model.dart';
+
 class UserModel {
-  String userId;
-  DateTime createdAt;
+  String? userId;
+  DateTime? createdAt;
   String? firstName;
   String? surName;
   String? email;
@@ -9,6 +11,7 @@ class UserModel {
   DateTime? lastLogin;
   bool? onboarding;
   bool? isTester;
+  List<Student>? student;
 
   UserModel({
     required this.userId,
@@ -21,31 +24,39 @@ class UserModel {
     this.lastLogin,
     this.onboarding,
     this.isTester,
+    this.student,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      userId: json['user_id'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      firstName: json['first_name'] as String?,
-      surName: json['sur_name'] as String?,
-      email: json['email'] as String?,
-      lastLogin: json['last_login'] != null
-          ? DateTime.parse(json['last_login'])
-          : null,
-      username: json['username'] as String?,
-      onboarding: json['onboarding'],
-      isTester: json['is_tester'],
-      school: json['school'] is int
-          ? json['school'] as int
-          : int.tryParse(json['school']?.toString() ?? ''),
-    );
+  UserModel.fromJson(Map<String, dynamic> json) {
+    userId = json['user_id'];
+    createdAt = DateTime.tryParse(json['created_at'])!;
+    firstName = json['first_name'];
+    surName = json['sur_name'];
+    email = json['email'];
+    username = json['username'];
+
+    isTester = json['is_tester'];
+
+    school = json['school'] != null && json['school'] is int
+        ? json['school']
+        : null;
+
+    lastLogin = json['last_login'] != null
+        ? DateTime.tryParse(json['last_login'])
+        : null;
+
+    if (json['student'] != null) {
+      student = <Student>[];
+      json['student'].forEach((v) {
+        student!.add(Student.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
       'email': email,
       'school': school,
       'first_name': firstName,

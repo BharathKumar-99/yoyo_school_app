@@ -35,10 +35,7 @@ class MasterPhraseProvider extends ChangeNotifier {
     }
 
     try {
-      result = await _repo.getAttemptedPhrase(
-        phraseModel.id ?? 0,
-        Constants.mastered,
-      );
+      result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     } catch (e) {
       throw "Failed to load phrase result";
     }
@@ -51,7 +48,8 @@ class MasterPhraseProvider extends ChangeNotifier {
 
     try {
       await audioManager.setUrl(phraseModel.recording ?? "");
-      if (phraseModel.questionRecording != null&&phraseModel.questionRecording!="") {
+      if (phraseModel.questionRecording != null &&
+          phraseModel.questionRecording != "") {
         await audioManagerQuestion.setUrl(phraseModel.questionRecording ?? "");
       }
     } catch (e) {

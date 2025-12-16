@@ -384,39 +384,46 @@ class TryPhrasesScreen extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               spacing: 10,
                                               children: [
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: AnimatedScale(
-                                                    scale: value.showPhrase
-                                                        ? 1.0
-                                                        : 0.9,
-                                                    duration: Duration(
-                                                      milliseconds: 200,
-                                                    ),
-                                                    child: IconButton(
-                                                      onPressed:
-                                                          value.togglePhrase,
-                                                      padding: EdgeInsets.zero,
-                                                      visualDensity:
-                                                          VisualDensity.compact,
-                                                      icon: Icon(
-                                                        value.showPhrase
-                                                            ? Icons
-                                                                  .visibility_rounded
-                                                            : Icons
-                                                                  .visibility_off_rounded,
-                                                        size: 45,
-                                                        color: value.showPhrase
-                                                            ? value
-                                                                  .language
-                                                                  ?.gradient
-                                                                  ?.first
-                                                            : Colors.grey,
+                                                if (!(value
+                                                        .phraseModel
+                                                        .readingPhrase ??
+                                                    true))
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: AnimatedScale(
+                                                      scale: value.showPhrase
+                                                          ? 1.0
+                                                          : 0.9,
+                                                      duration: Duration(
+                                                        milliseconds: 200,
+                                                      ),
+                                                      child: IconButton(
+                                                        onPressed:
+                                                            value.togglePhrase,
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        visualDensity:
+                                                            VisualDensity
+                                                                .compact,
+                                                        icon: Icon(
+                                                          value.showPhrase
+                                                              ? Icons
+                                                                    .visibility_rounded
+                                                              : Icons
+                                                                    .visibility_off_rounded,
+                                                          size: 45,
+                                                          color:
+                                                              value.showPhrase
+                                                              ? value
+                                                                    .language
+                                                                    ?.gradient
+                                                                    ?.first
+                                                              : Colors.grey,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
 
                                                 SizedBox(
                                                   height: 40,

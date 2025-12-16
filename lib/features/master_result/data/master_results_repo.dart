@@ -38,7 +38,7 @@ class MasterResultsRepo {
           .insert({
             'user_id': result.userId,
             'phrases_id': result.phrasesId,
-            'type': result.type,
+            'type': Constants.mastered,
             'listen': 1,
           })
           .select("*");

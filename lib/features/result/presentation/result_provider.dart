@@ -82,7 +82,13 @@ class ResultProvider extends ChangeNotifier {
       );
 
       await _safe(
-        () => upsertResult(score, submit: score > Constants.minimumSubmitScore),
+        () => upsertResult(
+          score,
+          submit:
+              (score > Constants.lowScreenScore &&
+              (score > Constants.minimumSubmitScore ||
+                  phraseModel.readingPhrase == true)),
+        ),
         "Failed to save result",
       );
 
@@ -164,5 +170,15 @@ class ResultProvider extends ChangeNotifier {
       default:
         return Colors.grey;
     }
+  }
+
+  String getReadingPhrase() {
+    String text = '';
+    String endText = tableResponse?.body ?? '';
+    String preText = ((result?.highestScore ?? 0) > (result?.score ?? 0))
+        ? 'you have imporoved ${result?.score} is your new best score'
+        : 'You’re only ${(result?.score ?? 0) - (result?.highestScore ?? 0)}% off your previous best score';
+    text = preText + endText;
+    return text;
   }
 }

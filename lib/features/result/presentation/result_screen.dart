@@ -179,7 +179,9 @@ class ResultScreen extends StatelessWidget {
                     Column(
                       children: [
                         Container(
-                          height: h(0.5),
+                          height: (phraseModel.readingPhrase ?? false)
+                              ? h(0.7)
+                              : h(0.5),
                           width: width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
@@ -244,9 +246,94 @@ class ResultScreen extends StatelessWidget {
 
                                   SizedBox(
                                     width: double.infinity,
-                                    child:
-                                        (value.score <
-                                            Constants.minimumSubmitScore)
+                                    child: (phraseModel.readingPhrase ?? false)
+                                        ? Column(
+                                            spacing: 10,
+                                            children: [
+                                              SizedBox(
+                                                child: Center(
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                    child: BackdropFilter(
+                                                      filter: ImageFilter.blur(
+                                                        sigmaX: 10,
+                                                        sigmaY: 10,
+                                                      ),
+                                                      child: Container(
+                                                        color: Colors.black
+                                                            .withValues(
+                                                              alpha: 0.1,
+                                                            ),
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 6,
+                                                            ),
+                                                        child: Text(
+                                                          '${value.score.toString()} %',
+                                                          style: AppTextStyles
+                                                              .textTheme
+                                                              .headlineLarge!
+                                                              .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: w(
+                                                                  0.12,
+                                                                ),
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Card(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(
+                                                    w(0.04),
+                                                  ),
+                                                  child: SizedBox(
+                                                    width: double.infinity,
+                                                    child: Column(
+                                                      children: [
+                                                        Wrap(
+                                                          spacing: w(0.013),
+                                                          children: value
+                                                              .speechEvaluationModel!
+                                                              .result!
+                                                              .words!
+                                                              .map(
+                                                                (word) => Text(
+                                                                  word.word ??
+                                                                      '',
+                                                                  style: AppTextStyles
+                                                                      .textTheme
+                                                                      .titleLarge!
+                                                                      .copyWith(
+                                                                        fontSize: w(
+                                                                          0.06,
+                                                                        ),
+                                                                        color: value.getWordColor(
+                                                                          word.scores?.overall ??
+                                                                              0,
+                                                                        ),
+                                                                      ),
+                                                                ),
+                                                              )
+                                                              .toList(),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : ((value.score <
+                                              Constants.minimumSubmitScore))
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -408,80 +495,103 @@ class ResultScreen extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 20.0,
                                         ),
-                                        child: Text(
-                                          value.tableResponse?.body ?? '',
-                                          style: AppTextStyles
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.black),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 15.0,
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(
-                                                8.0,
-                                              ),
-                                              child: Text(
-                                                '👉🏻',
+                                        child:
+                                            ((phraseModel.readingPhrase ??
+                                                    false) &&
+                                                ((value.result?.highestScore ??
+                                                        0) >
+                                                    0))
+                                            ? Text(
+                                                value.getReadingPhrase(),
                                                 style: AppTextStyles
                                                     .textTheme
-                                                    .headlineLarge,
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      color: Colors.black,
+                                                    ),
+                                              )
+                                            : Text(
+                                                value.tableResponse?.body ?? '',
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      color: Colors.black,
+                                                    ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                  color: Colors.grey.shade300,
+                                      ),
+                                      if (!(phraseModel.readingPhrase ?? false))
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 15.0,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                  8.0,
                                                 ),
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    text:
-                                                        ' ${text.repeat_slowly} ${value.result?.badWords?.map((val) => val)} '
-                                                            .replaceAll('(', '')
-                                                            .replaceAll(
-                                                              ')',
-                                                              '',
-                                                            ),
-                                                    style: AppTextStyles
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black,
+                                                child: Text(
+                                                  '👉🏻',
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .headlineLarge,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16,
                                                         ),
+                                                    color: Colors.grey.shade300,
+                                                  ),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      text:
+                                                          ' ${text.repeat_slowly} ${value.result?.badWords?.map((val) => val)} '
+                                                              .replaceAll(
+                                                                '(',
+                                                                '',
+                                                              )
+                                                              .replaceAll(
+                                                                ')',
+                                                                '',
+                                                              ),
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .bodyMedium!
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.black,
+                                                          ),
 
-                                                    children: [
-                                                      TextSpan(
-                                                        text: value
-                                                            .gptResponse
-                                                            ?.microDrill,
-                                                        style: AppTextStyles
-                                                            .textTheme
-                                                            .bodyMedium!
-                                                            .copyWith(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                      ),
-                                                    ],
+                                                      children: [
+                                                        TextSpan(
+                                                          text: value
+                                                              .gptResponse
+                                                              ?.microDrill,
+                                                          style: AppTextStyles
+                                                              .textTheme
+                                                              .bodyMedium!
+                                                              .copyWith(
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                       Spacer(),
                                       retryNumber >= Constants.retryAttempts
                                           ? SizedBox(
@@ -605,7 +715,12 @@ class ResultScreen extends StatelessWidget {
                                                 ),
                                               ),
                                             )
-                                          : value.globalProvider.apiCred.mastery
+                                          : value
+                                                    .globalProvider
+                                                    .apiCred
+                                                    .mastery &&
+                                                (phraseModel.readingPhrase !=
+                                                    true)
                                           ? SizedBox(
                                               width: double.infinity,
                                               child: ElevatedButton(

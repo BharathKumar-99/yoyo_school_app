@@ -6,7 +6,11 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import '../../../core/supabase/supabase_client.dart';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AuthRepository {
   final client = SupabaseClientService.instance.client;
@@ -18,6 +22,47 @@ class AuthRepository {
       log(e.toString());
       throw Exception(e);
     }
+  }
+
+  Future<Map<String, dynamic>> getUserDeviceAndAppInfo() async {
+    final deviceInfo = DeviceInfoPlugin();
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    Map<String, dynamic> deviceData = {
+      'os': 'unknown',
+      'device_name': 'unknown',
+      'device_model': 'unknown',
+    };
+
+    if (Platform.isAndroid) {
+      final android = await deviceInfo.androidInfo;
+      deviceData = {
+        'os': 'Android ${android.version.release}',
+        'device_name': android.brand,
+        'device_model': android.model,
+        'manufacturer': android.manufacturer,
+        'sdk_int': android.version.sdkInt,
+      };
+    } else if (Platform.isIOS) {
+      final ios = await deviceInfo.iosInfo;
+      deviceData = {
+        'os': 'iOS ${ios.systemVersion}',
+        'device_name': ios.name,
+        'device_model': ios.model,
+        'identifier': ios.identifierForVendor,
+      };
+    }
+
+    return {
+      'app': {
+        'name': packageInfo.appName,
+        'package': packageInfo.packageName,
+        'version': packageInfo.version,
+        'build_number': packageInfo.buildNumber,
+      },
+      'device': deviceData,
+      'timestamp': DateTime.now().toIso8601String(),
+    };
   }
 
   Future<Map> ensureAnonymous(String userid, int id) async {
@@ -42,6 +87,7 @@ class AuthRepository {
                 'is_activated': true,
                 'is_logged_in': true,
                 'last_login': DateTime.now().toIso8601String(),
+                'user_login_info': await getUserDeviceAndAppInfo(),
               })
               .eq('user_id', userid);
         }
@@ -82,9 +128,28 @@ class AuthRepository {
   }
 
   Future<void> requestNewActivationCode(String username) async {
-    await client.from(DbTable.activationRequests).insert({
-      'username': username,
-    });
+    try {
+      final data = await client
+          .from(DbTable.users)
+          .select('''*,${DbTable.student}(*)''')
+          .eq('username', username)
+          .maybeSingle();
+
+      UserModel userModel = UserModel.fromJson(data!);
+
+      int classId = userModel.student?.first.classId ?? 0;
+      await client.from(DbTable.activationRequests).insert({
+        'username': username,
+        'class': classId,
+      });
+
+      await client
+          .from(DbTable.teacher)
+          .update({'notification': true})
+          .eq('classes', classId);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   void verifyOtp(String otp, String email) async {

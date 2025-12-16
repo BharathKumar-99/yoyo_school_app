@@ -30,24 +30,5 @@ class PhraseRepo {
     return UserResult.fromJson(data.last);
   }
 
-  Future<UserResult> upsertResult(UserResult result) async {
-    PostgrestList? data;
-    if (result.id != null) {
-      data = await _client
-          .from(DbTable.userResult)
-          .update({'listens': result.listen})
-          .eq('id', result.id ?? 0)
-          .select("*");
-    } else {
-      data = await _client
-          .from(DbTable.userResult)
-          .insert({
-            'user_id': result.userId,
-            'phrases_id': result.phrasesId,
-            'listens': 1,
-          })
-          .select("*");
-    }
-    return UserResult.fromJson(data.last);
-  }
+ 
 }

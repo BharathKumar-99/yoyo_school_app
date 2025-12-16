@@ -14,6 +14,7 @@ class UserResult {
   List<String>? goodWords;
   List<String>? badWords;
   int? listen;
+  int? highestScore;
   String? type;
   UserModel? user;
 
@@ -31,6 +32,7 @@ class UserResult {
     this.listen,
     this.type,
     this.user,
+    this.highestScore,
   });
 
   factory UserResult.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class UserResult {
       score: json['score'] as int?,
       vocab: json['vocab'] as int?,
       attempt: json['attempt'] as int?,
+      highestScore: json['highest_score'] as int?,
       listen: json['listens'] as int?,
       scoreSubmitted: json['score_submited'] as bool?,
       goodWords: (json['good_words'] as List?)
@@ -71,6 +74,7 @@ class UserResult {
       if (badWords != null) 'bad_words': badWords,
       if (listen != null) 'listens': listen,
       if (type != null) 'type': type,
+      if (highestScore != null) 'highest_score': highestScore,
     };
   }
 }
