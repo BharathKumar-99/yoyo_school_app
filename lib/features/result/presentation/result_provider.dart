@@ -22,7 +22,7 @@ class ResultProvider extends ChangeNotifier {
   ChatGptResponse? tableResponse;
   ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;
-
+  int currentHigest = 0;
   final GlobalRepo _globalRepo = GlobalRepo();
   final ResultsRepo _repo = ResultsRepo();
 
@@ -46,7 +46,7 @@ class ResultProvider extends ChangeNotifier {
         () => _repo.getAttemptedPhrase(phraseModel.id ?? 0),
         "Failed to load phrase result",
       );
-
+      currentHigest = result?.highestScore ?? 0;
       userClases = await _safe(
         () => _repo.getClasses(),
         "Failed to load class details",
@@ -87,7 +87,7 @@ class ResultProvider extends ChangeNotifier {
           submit:
               (score > Constants.lowScreenScore &&
               (score > Constants.minimumSubmitScore ||
-                  phraseModel.readingPhrase == true)),
+                  (phraseModel.readingPhrase == true))),
         ),
         "Failed to save result",
       );
@@ -146,6 +146,9 @@ class ResultProvider extends ChangeNotifier {
       );
 
       result?.score = score;
+      if ((result?.highestScore ?? 0) < score) {
+        result?.highestScore = score;
+      }
       result?.scoreSubmitted = submit;
       result?.goodWords = goodWords;
       result?.badWords = badWords;
@@ -175,9 +178,9 @@ class ResultProvider extends ChangeNotifier {
   String getReadingPhrase() {
     String text = '';
     String endText = tableResponse?.body ?? '';
-    String preText = ((result?.highestScore ?? 0) > (result?.score ?? 0))
+    String preText = ((currentHigest) < (result?.score ?? 0))
         ? 'you have imporoved ${result?.score} is your new best score'
-        : 'You’re only ${(result?.score ?? 0) - (result?.highestScore ?? 0)}% off your previous best score';
+        : 'You’re only ${(result?.score ?? 0) - (currentHigest)}% off your previous best score';
     text = preText + endText;
     return text;
   }

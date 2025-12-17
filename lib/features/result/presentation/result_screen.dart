@@ -477,7 +477,9 @@ class ResultScreen extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                            child: (value.score < Constants.minimumSubmitScore)
+                            child:
+                                (value.score < Constants.minimumSubmitScore ||
+                                    (phraseModel.readingPhrase ?? false))
                                 ? Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -496,9 +498,7 @@ class ResultScreen extends StatelessWidget {
                                         child:
                                             ((phraseModel.readingPhrase ??
                                                     false) &&
-                                                ((value.result?.highestScore ??
-                                                        0) >
-                                                    0))
+                                                ((value.currentHigest) > 0))
                                             ? Text(
                                                 value.getReadingPhrase(),
                                                 style: AppTextStyles
