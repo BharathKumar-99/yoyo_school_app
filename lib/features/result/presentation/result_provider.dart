@@ -40,6 +40,44 @@ class ResultProvider extends ChangeNotifier {
     init();
   }
 
+  double fitFontSize({
+  required List<TextSpan> spans,
+  required double maxWidth,
+  required double maxHeight,
+  double maxFontSize = 40,
+  double minFontSize = 6,
+}) {
+  double fontSize = maxFontSize;
+
+  while (fontSize >= minFontSize) {
+    final painter = TextPainter(
+      text: TextSpan(
+        children: spans.map((s) {
+          return TextSpan(
+            text: s.text,
+            style: s.style?.copyWith(
+              fontSize: fontSize,
+              height: 1.3,
+            ),
+          );
+        }).toList(),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+
+    painter.layout(maxWidth: maxWidth);
+
+    if (painter.height <= maxHeight) {
+      return fontSize; // ✅ fits
+    }
+
+    fontSize -= 1;
+  }
+
+  return minFontSize;
+}
+
+
   Future<void> init() async {
     try {
       result = await _safe(

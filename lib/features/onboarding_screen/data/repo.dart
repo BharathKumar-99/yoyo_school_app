@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -13,11 +15,15 @@ class OnboardingRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
 
   void updateOnboarding() async {
-    await _client
-        .from(DbTable.users)
-        .update({'onboarding': true})
-        .eq('user_id', GetUserDetails.getCurrentUserId() ?? '');
-    WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-    ctx!.go(RouteNames.home);
+    try {
+      await _client
+          .from(DbTable.users)
+          .update({'onboarding': true})
+          .eq('user_id', GetUserDetails.getCurrentUserId() ?? '');
+      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+      ctx!.go(RouteNames.home);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

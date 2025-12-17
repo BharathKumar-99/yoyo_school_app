@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -302,9 +301,9 @@ class ResultScreen extends StatelessWidget {
                                                   child: SizedBox(
                                                     width: double.infinity,
                                                     height: h(0.42),
-                                                    child: RichText(
-                                                      text: TextSpan(
-                                                        children: value
+                                                    child: LayoutBuilder(
+                                                      builder: (context, constraints) {
+                                                        final spans = value
                                                             .speechEvaluationModel!
                                                             .result!
                                                             .words!
@@ -313,8 +312,6 @@ class ResultScreen extends StatelessWidget {
                                                                 text:
                                                                     '${word.word ?? ''} ',
                                                                 style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  height: 1.3,
                                                                   color: value
                                                                       .getWordColor(
                                                                         word.scores?.overall ??
@@ -323,11 +320,41 @@ class ResultScreen extends StatelessWidget {
                                                                 ),
                                                               );
                                                             })
-                                                            .toList(),
-                                                      ),
-                                                      softWrap: true,
-                                                      overflow: TextOverflow
-                                                          .fade, // or ellipsis
+                                                            .toList();
+
+                                                        final fontSize = value
+                                                            .fitFontSize(
+                                                              spans: spans,
+                                                              maxWidth:
+                                                                  constraints
+                                                                      .maxWidth,
+                                                              maxHeight:
+                                                                  constraints
+                                                                      .maxHeight,
+                                                            );
+
+                                                        return RichText(
+                                                          softWrap: true,
+                                                          overflow:
+                                                              TextOverflow.fade,
+                                                          text: TextSpan(
+                                                            children: spans.map((
+                                                              s,
+                                                            ) {
+                                                              return TextSpan(
+                                                                text: s.text,
+                                                                style: s.style
+                                                                    ?.copyWith(
+                                                                      fontSize:
+                                                                          fontSize,
+                                                                      height:
+                                                                          1.3,
+                                                                    ),
+                                                              );
+                                                            }).toList(),
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
                                                   ),
                                                 ),
@@ -488,7 +515,7 @@ class ResultScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Spacer(),
+                                      SizedBox(height: 25),
                                       Text(
                                         value.tableResponse?.title ?? "",
                                         style: AppTextStyles
