@@ -268,20 +268,20 @@ class PhraseCategories extends StatelessWidget {
                             spacing: 20,
                             children: [
                               SizedBox(height: 5),
+                              GestureDetector(
+                                onTap: () => NavigationHelper.go(
+                                  RouteNames.phrasesDetails,
+                                  extra: {
+                                    'language': language,
+                                    "className": text.warmUp,
+                                    "level": levels,
+                                    'student': student,
+                                    'categories': -1,
+                                  },
+                                ),
+                                child: getWarmUpCard(language),
+                              ),
 
-                              // GestureDetector(
-                              //   onTap: () => NavigationHelper.go(
-                              //     RouteNames.phrasesDetails,
-                              //     extra: {
-                              //       'language': language,
-                              //       "className": text.warmUp,
-                              //       "level": levels,
-                              //       'student': student,
-                              //       'categories': -1,
-                              //     },
-                              //   ),
-                              //   child: getWarmUpCard(language),
-                              // ),
                               ...provider.phraseCategories.map(
                                 (val) => GestureDetector(
                                   onTap: () {
