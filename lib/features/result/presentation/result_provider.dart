@@ -41,42 +41,38 @@ class ResultProvider extends ChangeNotifier {
   }
 
   double fitFontSize({
-  required List<TextSpan> spans,
-  required double maxWidth,
-  required double maxHeight,
-  double maxFontSize = 40,
-  double minFontSize = 6,
-}) {
-  double fontSize = maxFontSize;
+    required List<TextSpan> spans,
+    required double maxWidth,
+    required double maxHeight,
+    double maxFontSize = 40,
+    double minFontSize = 6,
+  }) {
+    double fontSize = maxFontSize;
 
-  while (fontSize >= minFontSize) {
-    final painter = TextPainter(
-      text: TextSpan(
-        children: spans.map((s) {
-          return TextSpan(
-            text: s.text,
-            style: s.style?.copyWith(
-              fontSize: fontSize,
-              height: 1.3,
-            ),
-          );
-        }).toList(),
-      ),
-      textDirection: TextDirection.ltr,
-    );
+    while (fontSize >= minFontSize) {
+      final painter = TextPainter(
+        text: TextSpan(
+          children: spans.map((s) {
+            return TextSpan(
+              text: s.text,
+              style: s.style?.copyWith(fontSize: fontSize, height: 1.3),
+            );
+          }).toList(),
+        ),
+        textDirection: TextDirection.ltr,
+      );
 
-    painter.layout(maxWidth: maxWidth);
+      painter.layout(maxWidth: maxWidth);
 
-    if (painter.height <= maxHeight) {
-      return fontSize; // ✅ fits
+      if (painter.height <= maxHeight) {
+        return fontSize; // ✅ fits
+      }
+
+      fontSize -= 1;
     }
 
-    fontSize -= 1;
+    return minFontSize;
   }
-
-  return minFontSize;
-}
-
 
   Future<void> init() async {
     try {
@@ -99,8 +95,7 @@ class ResultProvider extends ChangeNotifier {
         "Speech evaluation failed",
       );
 
-      score = 92;
-      speechEvaluationModel?.result?.overall ?? 0;
+      score = speechEvaluationModel?.result?.overall ?? 0;
 
       tableResponse = await _globalRepo.getRandomFeedback(score);
       if (score >= 80) {
