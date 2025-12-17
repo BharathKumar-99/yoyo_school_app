@@ -1029,6 +1029,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show Less'**
   String get showLess;
+
+  /// No description provided for @listenPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen as many times as you like and enter the phrase below'**
+  String get listenPhrase;
+
+  /// No description provided for @listenTextField.
+  ///
+  /// In en, this message translates to:
+  /// **'*use the correct keyboard for this language so you can input the correct accents'**
+  String get listenTextField;
 }
 
 class _AppLocalizationsDelegate

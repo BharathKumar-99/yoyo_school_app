@@ -14,6 +14,7 @@ import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/listen_and_type/presentation/listen_and_type_screen.dart';
+import 'package:yoyo_school_app/features/listen_and_type_result/presentation/listen_and_type_result_screen.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboarding_screen.dart';
@@ -133,6 +134,16 @@ class AppRoutes {
             isLast: data['isLast'],
             retryNumber: data['retry'] ?? 0,
             categories: data['categories'],
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.listenAndTypeScreenResult,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return ListenAndTypeResultScreen(
+            model: data['phraseModel'],
+            typedString: data['typedPhrase'],
           );
         },
       ),

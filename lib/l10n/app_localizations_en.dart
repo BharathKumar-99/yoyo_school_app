@@ -506,4 +506,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showLess => 'Show Less';
+
+  @override
+  String get listenPhrase =>
+      'Listen as many times as you like and enter the phrase below';
+
+  @override
+  String get listenTextField =>
+      '*use the correct keyboard for this language so you can input the correct accents';
 }

@@ -1,5 +1,9 @@
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 
@@ -7,7 +11,10 @@ import '../../home/model/phrases_model.dart';
 import '../data/listen_repo.dart';
 
 class ListenAndTypeViewModel extends ChangeNotifier {
+  final RecorderController waveController = RecorderController();
+  bool isPlaying = true;
   PhraseModel phraseModel;
+  TextEditingController textEditingController = TextEditingController();
   Language? language;
   final int categories;
   final AudioPlayer audioManager = AudioPlayer();
@@ -32,6 +39,8 @@ class ListenAndTypeViewModel extends ChangeNotifier {
       rethrow;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
+    notifyListeners();
+    await playAudio();
   }
 
   Future<void> playAudio() async {
@@ -41,10 +50,21 @@ class ListenAndTypeViewModel extends ChangeNotifier {
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }
-
-      await player.play();
+      isPlaying = true;
+      await player.play().then((val) => isPlaying = false);
+      notifyListeners();
     } catch (e) {
       rethrow;
     }
+  }
+
+  submit() {
+    ctx!.push(
+      RouteNames.listenAndTypeScreenResult,
+      extra: {
+        'phraseModel': phraseModel,
+        'typedPhrase': textEditingController.text.trim(),
+      },
+    );
   }
 }

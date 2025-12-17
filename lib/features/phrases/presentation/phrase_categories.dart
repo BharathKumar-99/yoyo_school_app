@@ -316,7 +316,6 @@ class PhraseCategories extends StatelessWidget {
                                         horizontal: 16.0,
                                       ),
                                       child: Stack(
-                                        alignment: Alignment.centerRight,
                                         children: [
                                           (val.image != null)
                                               ? Align(
@@ -325,6 +324,7 @@ class PhraseCategories extends StatelessWidget {
                                                   child: CachedNetworkImage(
                                                     imageUrl: val.image ?? '',
                                                     height: 150,
+                                                    width: 120,
                                                   ),
                                                 )
                                               : Container(),

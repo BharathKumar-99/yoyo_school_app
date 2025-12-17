@@ -18,4 +18,5 @@ class RouteNames {
   static const appUpdate = '/appUpdate';
   static const appMaintenance = '/appMaintenance';
   static const listenAndTypeScreen = '/listenAndTypeScreen';
+  static const listenAndTypeScreenResult = '/listenAndTypeScreenResult';
 }

@@ -154,5 +154,7 @@
     "needActivationCode": "Need a new activation code?",
     "requestActivationcode": "Request Activation Code",
     "showMore": "Show More",
-    "showLess": "Show Less"
+    "showLess": "Show Less",
+    "listenPhrase": "Listen as many times as you like and enter the phrase below",
+    "listenTextField": "*use the correct keyboard for this language so you can input the correct accents"
 }
