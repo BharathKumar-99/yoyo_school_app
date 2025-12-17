@@ -64,6 +64,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
       extra: {
         'phraseModel': phraseModel,
         'typedPhrase': textEditingController.text.trim(),
+        'language': language,
       },
     );
   }

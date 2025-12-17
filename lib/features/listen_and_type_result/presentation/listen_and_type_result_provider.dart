@@ -1,13 +1,63 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
+import 'package:yoyo_school_app/features/listen_and_type_result/data/listen_repo.dart';
+import 'package:yoyo_school_app/features/listen_and_type_result/model/listen_model.dart';
 
+import '../../home/model/language_model.dart';
 import '../../home/model/phrases_model.dart';
 
 class ListenAndTypeResultProvider extends ChangeNotifier {
   PhraseModel model;
   String typedString;
-
-  ListenAndTypeResultProvider(this.model, this.typedString) {
+  final ListenRepo _repo = ListenRepo();
+  ListenModel? listenModel;
+  Language language;
+  bool loading = true;
+  ListenAndTypeResultProvider(this.model, this.typedString, this.language) {
     init();
   }
-  init() async {}
+  init() async {
+    listenModel = await _repo.getTextResult(typedString, model.phrase ?? '');
+    loading = false;
+    notifyListeners();
+  }
+
+  Color getWordColor(String score) {
+    if (score == 'red') return Colors.red;
+    if (score == 'green') return Colors.green;
+    return Colors.red;
+  }
+
+  double fitFontSize({
+    required List<TextSpan> spans,
+    required double maxWidth,
+    required double maxHeight,
+    double maxFontSize = 40,
+    double minFontSize = 6,
+  }) {
+    double fontSize = maxFontSize;
+
+    while (fontSize >= minFontSize) {
+      final painter = TextPainter(
+        text: TextSpan(
+          children: spans.map((s) {
+            return TextSpan(
+              text: s.text,
+              style: s.style?.copyWith(fontSize: fontSize, height: 1.3),
+            );
+          }).toList(),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      painter.layout(maxWidth: maxWidth);
+
+      if (painter.height <= maxHeight) {
+        return fontSize; // ✅ fits
+      }
+
+      fontSize -= 1;
+    }
+
+    return minFontSize;
+  }
 }

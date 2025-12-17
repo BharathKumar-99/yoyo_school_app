@@ -95,8 +95,7 @@ class ResultProvider extends ChangeNotifier {
         "Speech evaluation failed",
       );
 
-      score = 56;
-      speechEvaluationModel?.result?.overall ?? 0;
+      score = speechEvaluationModel?.result?.overall ?? 0;
 
       tableResponse = await _globalRepo.getRandomFeedback(score);
       if (score >= 80) {

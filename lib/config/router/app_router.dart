@@ -144,6 +144,7 @@ class AppRoutes {
           return ListenAndTypeResultScreen(
             model: data['phraseModel'],
             typedString: data['typedPhrase'],
+            language: data['language'],
           );
         },
       ),

@@ -78,11 +78,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ProfileProvider(ProfileRepository()),
         ),
-        ChangeNotifierProvider(create: (_) => GlobalProvider()),
+        ChangeNotifierProvider(create: (_) => GlobalProvider()..init()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        
+
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
