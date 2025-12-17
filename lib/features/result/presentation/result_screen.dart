@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -180,8 +181,12 @@ class ResultScreen extends StatelessWidget {
                       children: [
                         Container(
                           height: (phraseModel.readingPhrase ?? false)
-                              ? h(0.7)
+                              ? h(0.75)
                               : h(0.5),
+                          constraints: BoxConstraints(
+                            minHeight: h(0.5),
+                            maxHeight: h(0.75),
+                          ),
                           width: width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
@@ -248,7 +253,7 @@ class ResultScreen extends StatelessWidget {
                                     width: double.infinity,
                                     child: (phraseModel.readingPhrase ?? false)
                                         ? Column(
-                                            spacing: 10,
+                                            spacing: 5,
                                             children: [
                                               SizedBox(
                                                 child: Center(
@@ -297,35 +302,28 @@ class ResultScreen extends StatelessWidget {
                                                   ),
                                                   child: SizedBox(
                                                     width: double.infinity,
-                                                    child: Column(
-                                                      children: [
-                                                        Wrap(
-                                                          spacing: w(0.013),
-                                                          children: value
-                                                              .speechEvaluationModel!
-                                                              .result!
-                                                              .words!
-                                                              .map(
-                                                                (word) => Text(
-                                                                  word.word ??
-                                                                      '',
-                                                                  style: AppTextStyles
-                                                                      .textTheme
-                                                                      .titleLarge!
-                                                                      .copyWith(
-                                                                        fontSize: w(
-                                                                          0.06,
-                                                                        ),
-                                                                        color: value.getWordColor(
-                                                                          word.scores?.overall ??
-                                                                              0,
-                                                                        ),
-                                                                      ),
-                                                                ),
-                                                              )
-                                                              .toList(),
-                                                        ),
-                                                      ],
+                                                    child: Wrap(
+                                                      spacing: w(0.013),
+                                                      children: value
+                                                          .speechEvaluationModel!
+                                                          .result!
+                                                          .words!
+                                                          .map(
+                                                            (
+                                                              word,
+                                                            ) => AutoSizeText(
+                                                              word.word ?? '',
+
+                                                              style: TextStyle(
+                                                                color: value
+                                                                    .getWordColor(
+                                                                      word.scores?.overall ??
+                                                                          0,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                          .toList(),
                                                     ),
                                                   ),
                                                 ),
@@ -652,13 +650,13 @@ class ResultScreen extends StatelessWidget {
                                             .textTheme
                                             .headlineLarge,
                                       ),
-
-                                      Text(
-                                        text.you_did_it,
-                                        style: AppTextStyles
-                                            .textTheme
-                                            .headlineMedium,
-                                      ),
+                                      if (phraseModel.readingPhrase != true)
+                                        Text(
+                                          text.you_did_it,
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .headlineMedium,
+                                        ),
                                       Spacer(),
                                       Text(value.tableResponse?.body ?? ''),
                                       Spacer(),
@@ -822,7 +820,8 @@ class ResultScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (value.score > Constants.minimumSubmitScore)
+                    if (value.score > Constants.minimumSubmitScore &&
+                        phraseModel.readingPhrase != true)
                       Column(
                         children: [
                           Spacer(flex: 4),
