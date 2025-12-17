@@ -1,4 +1,4 @@
-import 'dart:ui'; 
+import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -168,7 +168,7 @@ class ResultScreen extends StatelessWidget {
                                   child: Text(text.tryAgain),
                                 ),
                               ),
-                        Spacer(),
+                        SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -871,7 +871,7 @@ class ResultScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(height: 10),
                                     ],
                                   ),
                           ),

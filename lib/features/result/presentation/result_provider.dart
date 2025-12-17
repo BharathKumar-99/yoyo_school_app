@@ -212,7 +212,7 @@ class ResultProvider extends ChangeNotifier {
   String getReadingPhrase() {
     String text = '';
     String preText = ((currentHigest) < (result?.score ?? 0))
-        ? 'you have imporoved ${result?.score} is your new best score'
+        ? 's${result?.score} is your new best score'
         : 'You’re only ${(result?.score ?? 0) - (currentHigest)}% off your previous best score';
     text = preText;
     return text;
