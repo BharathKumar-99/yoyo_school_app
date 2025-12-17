@@ -463,19 +463,32 @@ class PhrasesDetails extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (goToNext) {
-                  context.go(
-                    routeName,
-                    extra: {
-                      "phrase": model,
-                      "streak": provider.streak,
-                      "schoolLanguage": provider.classes,
-                      "className": className,
-                      "student": provider.student,
-                      "isLast": phrases.length == 1,
-                      "language": provider.classes.language,
-                      'categories': categories,
-                    },
-                  );
+                  if (model.listen ?? false) {
+                    context.go(
+                      RouteNames.listenAndTypeScreen,
+                      extra: {
+                        "phrase": model,
+                        "schoolLanguage": provider.classes,
+                        "className": className,
+                        "student": provider.student,
+                        'categories': categories,
+                      },
+                    );
+                  } else {
+                    context.go(
+                      routeName,
+                      extra: {
+                        "phrase": model,
+                        "streak": provider.streak,
+                        "schoolLanguage": provider.classes,
+                        "className": className,
+                        "student": provider.student,
+                        "isLast": phrases.length == 1,
+                        "language": provider.classes.language,
+                        'categories': categories,
+                      },
+                    );
+                  }
                 }
               },
               child: PhrasesWidget(

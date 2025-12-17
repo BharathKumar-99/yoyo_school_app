@@ -17,4 +17,5 @@ class RouteNames {
   static const phraseCategories = '/phraseCategories';
   static const appUpdate = '/appUpdate';
   static const appMaintenance = '/appMaintenance';
+  static const listenAndTypeScreen = '/listenAndTypeScreen';
 }

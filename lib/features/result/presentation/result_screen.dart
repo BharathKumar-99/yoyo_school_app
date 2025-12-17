@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -181,11 +180,11 @@ class ResultScreen extends StatelessWidget {
                       children: [
                         Container(
                           height: (phraseModel.readingPhrase ?? false)
-                              ? h(0.75)
+                              ? h(0.70)
                               : h(0.5),
                           constraints: BoxConstraints(
                             minHeight: h(0.5),
-                            maxHeight: h(0.75),
+                            maxHeight: h(0.70),
                           ),
                           width: width,
                           decoration: BoxDecoration(
@@ -302,28 +301,33 @@ class ResultScreen extends StatelessWidget {
                                                   ),
                                                   child: SizedBox(
                                                     width: double.infinity,
-                                                    child: Wrap(
-                                                      spacing: w(0.013),
-                                                      children: value
-                                                          .speechEvaluationModel!
-                                                          .result!
-                                                          .words!
-                                                          .map(
-                                                            (
-                                                              word,
-                                                            ) => AutoSizeText(
-                                                              word.word ?? '',
-
-                                                              style: TextStyle(
-                                                                color: value
-                                                                    .getWordColor(
-                                                                      word.scores?.overall ??
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                          .toList(),
+                                                    height: h(0.42),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: value
+                                                            .speechEvaluationModel!
+                                                            .result!
+                                                            .words!
+                                                            .map((word) {
+                                                              return TextSpan(
+                                                                text:
+                                                                    '${word.word ?? ''} ',
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.3,
+                                                                  color: value
+                                                                      .getWordColor(
+                                                                        word.scores?.overall ??
+                                                                            0,
+                                                                      ),
+                                                                ),
+                                                              );
+                                                            })
+                                                            .toList(),
+                                                      ),
+                                                      softWrap: true,
+                                                      overflow: TextOverflow
+                                                          .fade, // or ellipsis
                                                     ),
                                                   ),
                                                 ),
@@ -499,14 +503,40 @@ class ResultScreen extends StatelessWidget {
                                             ((phraseModel.readingPhrase ??
                                                     false) &&
                                                 ((value.currentHigest) > 0))
-                                            ? Text(
-                                                value.getReadingPhrase(),
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                      color: Colors.black,
+                                            ? Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: value
+                                                          .getReadingPhrase(),
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .bodyMedium!
+                                                          .copyWith(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w800,
+                                                          ),
                                                     ),
+                                                    const TextSpan(
+                                                      text: ' ',
+                                                    ), // space between texts
+                                                    TextSpan(
+                                                      text:
+                                                          value
+                                                              .tableResponse
+                                                              ?.body ??
+                                                          '',
+                                                      style: AppTextStyles
+                                                          .textTheme
+                                                          .bodyMedium!
+                                                          .copyWith(
+                                                            color: Colors.black,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                softWrap: true,
                                               )
                                             : Text(
                                                 value.tableResponse?.body ?? '',
@@ -637,6 +667,7 @@ class ResultScreen extends StatelessWidget {
                                               ),
                                             ),
                                       Spacer(),
+                                      SizedBox(height: 15),
                                     ],
                                   )
                                 : Column(

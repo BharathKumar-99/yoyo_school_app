@@ -13,6 +13,7 @@ import 'package:yoyo_school_app/features/common/presentation/maintainance_mode.d
 import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
+import 'package:yoyo_school_app/features/listen_and_type/presentation/listen_and_type_screen.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboarding_screen.dart';
@@ -27,6 +28,7 @@ import 'package:yoyo_school_app/features/splash/presentation/splash_screen.dart'
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 import 'package:yoyo_school_app/features/webview/presentation/webview_screen.dart';
 
+import '../../features/listen_and_type/presentation/listen_and_type_view_model.dart';
 import '../../features/recording/presentation/recorder_provider.dart';
 import '../../features/try_phrases/presentation/try_phrases_screen.dart';
 
@@ -107,6 +109,7 @@ class AppRoutes {
           );
         },
       ),
+
       GoRoute(
         path: RouteNames.phraseCategories,
         builder: (context, state) {
@@ -206,6 +209,26 @@ class AppRoutes {
                 student: data['student'],
                 isLast: data['isLast'],
               ),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.listenAndTypeScreen,
+        builder: (context, state) {
+          Map data = state.extra as Map;
+          return ChangeNotifierProvider<ListenAndTypeViewModel>(
+            create: (context) => ListenAndTypeViewModel(
+              data['phrase'] as PhraseModel,
+              data['categories'],
+            ),
+            child: ListenAndTypeScreen(
+              key: UniqueKey(),
+              model: data['phrase'] as PhraseModel,
+              categories: data['categories'],
+              schoolLanguage: data['schoolLanguage'],
+              className: data['className'],
+              student: data['student'],
             ),
           );
         },

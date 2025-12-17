@@ -16,6 +16,7 @@ class PhraseModel {
   int? categories;
   int? itemIndex;
   bool? readingPhrase;
+  bool? listen;
 
   PhraseModel({
     this.id,
@@ -35,6 +36,7 @@ class PhraseModel {
     this.categories,
     this.itemIndex,
     this.readingPhrase,
+    this.listen,
   });
 
   factory PhraseModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class PhraseModel {
       categories: json['categories'],
       itemIndex: json['item_index'],
       readingPhrase: json['reading_phrase'],
+      listen: json['listen'],
     );
   }
 
@@ -78,6 +81,7 @@ class PhraseModel {
       'categories': categories,
       'item_index': itemIndex,
       'reading_phrase': readingPhrase,
+      'listen': listen,
     };
   }
 }

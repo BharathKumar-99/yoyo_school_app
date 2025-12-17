@@ -316,7 +316,7 @@ class PhraseCategories extends StatelessWidget {
                                         horizontal: 16.0,
                                       ),
                                       child: Stack(
-                                        alignment: Alignment.center,
+                                        alignment: Alignment.centerRight,
                                         children: [
                                           (val.image != null)
                                               ? Align(
