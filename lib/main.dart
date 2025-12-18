@@ -17,6 +17,7 @@ import 'config/theme/app_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
+late final GlobalProvider globalProvider;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseClientService.instance.init();
@@ -28,6 +29,8 @@ Future<void> main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
+  globalProvider = GlobalProvider();
+  await globalProvider.init();
   FlutterError.onError = (FlutterErrorDetails details) async {
     FlutterError.presentError(details);
 
@@ -78,7 +81,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ProfileProvider(ProfileRepository()),
         ),
-        ChangeNotifierProvider(create: (_) => GlobalProvider()..init()),
+        ChangeNotifierProvider.value(value: globalProvider),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -424,37 +425,92 @@ class TryPhrasesScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
+                                                (phraseModel.readingPhrase ==
+                                                        true)
+                                                    ? StreamBuilder<
+                                                        PlayerState
+                                                      >(
+                                                        stream: value
+                                                            .audioManager
+                                                            .playerStateStream,
+                                                        builder: (context, snapshot) {
+                                                          final playing =
+                                                              snapshot
+                                                                  .data
+                                                                  ?.playing ??
+                                                              false;
 
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: InkWell(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          50,
+                                                          return SizedBox(
+                                                            height: 40,
+                                                            width: 40,
+                                                            child: InkWell(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    50,
+                                                                  ),
+                                                              splashColor:
+                                                                  (value.language?.gradient?.first ??
+                                                                          Colors
+                                                                              .grey)
+                                                                      .withValues(
+                                                                        alpha:
+                                                                            0.2,
+                                                                      ),
+                                                              onTap: () async {
+                                                                if (playing) {
+                                                                  await value
+                                                                      .pauseAudio();
+                                                                } else {
+                                                                  await value
+                                                                      .playAudio();
+                                                                }
+                                                              },
+                                                              child: Center(
+                                                                child: Icon(
+                                                                  playing
+                                                                      ? Icons
+                                                                            .pause_circle_outline
+                                                                      : Icons
+                                                                            .play_arrow_outlined,
+                                                                  size: 45,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : SizedBox(
+                                                        height: 40,
+                                                        width: 40,
+                                                        child: InkWell(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                50,
+                                                              ),
+                                                          splashColor:
+                                                              value
+                                                                  .language
+                                                                  ?.gradient
+                                                                  ?.first
+                                                                  .withValues(
+                                                                    alpha: 0.2,
+                                                                  ) ??
+                                                              Colors.grey
+                                                                  .withValues(
+                                                                    alpha: 0.2,
+                                                                  ),
+                                                          onTap: () async =>
+                                                              await value
+                                                                  .playAudio(),
+                                                          child: Center(
+                                                            child: Icon(
+                                                              Icons
+                                                                  .play_arrow_outlined,
+                                                              size: 45,
+                                                            ),
+                                                          ),
                                                         ),
-                                                    splashColor:
-                                                        value
-                                                            .language
-                                                            ?.gradient
-                                                            ?.first
-                                                            .withValues(
-                                                              alpha: 0.2,
-                                                            ) ??
-                                                        Colors.grey.withValues(
-                                                          alpha: 0.2,
-                                                        ),
-                                                    onTap: () async =>
-                                                        await value.playAudio(),
-                                                    child: Center(
-                                                      child: Icon(
-                                                        Icons
-                                                            .play_arrow_outlined,
-                                                        size: 45,
                                                       ),
-                                                    ),
-                                                  ),
-                                                ),
                                               ],
                                             ),
                                           ),

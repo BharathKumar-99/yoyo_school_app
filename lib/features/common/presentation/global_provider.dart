@@ -21,9 +21,7 @@ class GlobalProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  GlobalProvider() {
-    init();
-  }
+
 
   Future<void> init() async {
     try {

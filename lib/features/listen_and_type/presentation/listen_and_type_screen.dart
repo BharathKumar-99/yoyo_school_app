@@ -28,123 +28,132 @@ class ListenAndTypeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ListenAndTypeViewModel>(
       builder: (context, value, wi) {
-        return Scaffold(
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(28.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 20,
-                children: [
-                  backBtn(
-                    streak: false,
-                    context: context,
-                    slanguage: schoolLanguage,
-                    className: className,
-                    student: student,
-                    categories: value.categories,
-                  ),
-                  Card(
-                    elevation: 0,
-                    color: value.language?.gradient?.first.withValues(
-                      alpha: 0.4,
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(28.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 20,
+                  children: [
+                    backBtn(
+                      streak: false,
+                      context: context,
+                      slanguage: schoolLanguage,
+                      className: className,
+                      student: student,
+                      categories: value.categories,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Center(
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(50),
-                            splashColor:
-                                value.language?.gradient?.first.withValues(
-                                  alpha: 0.2,
-                                ) ??
-                                Colors.grey.withValues(alpha: 0.2),
-                            onTap: () async => await value.playAudio(),
-                            child: Center(
-                              child: Icon(
-                                Icons.play_arrow_outlined,
-                                size: 45,
-                                color: Colors.white,
+                    Card(
+                      elevation: 0,
+                      color: value.language?.gradient?.first.withValues(
+                        alpha: 0.4,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(50),
+                              splashColor:
+                                  value.language?.gradient?.first.withValues(
+                                    alpha: 0.2,
+                                  ) ??
+                                  Colors.grey.withValues(alpha: 0.2),
+                              onTap: () async => value.playAudio(),
+                              child: Center(
+                                child: Icon(
+                                  Icons.play_arrow_outlined,
+                                  size: 45,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                    child: Column(
-                      spacing: 10,
-                      children: [
-                        FakeWaveform(
-                          isPlaying: value.isPlaying,
-                          height: 30,
-                          color: Colors.black,
-                        ),
-                        Text(text.listenPhrase),
-                      ],
-                    ),
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 600),
-                    padding: EdgeInsets.only(top: 10),
-                    curve: Curves.easeInOut,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                      child: Column(
+                        spacing: 10,
+                        children: [
+                          FakeWaveform(
+                            isPlaying: value.isPlaying,
+                            height: 30,
+                            color: Colors.black,
+                          ),
 
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color:
-                            value.language?.gradient?.first.withValues(
-                              alpha: 0.4,
-                            ) ??
-                            Colors.white,
-                        width: 3,
+                          Text(text.listenPhrase),
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 600),
+                      padding: EdgeInsets.only(top: 10),
+                      curve: Curves.easeInOut,
+
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
                           color:
-                              (value.language?.gradient?.first ?? Colors.black)
-                                  .withValues(alpha: 0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                              value.language?.gradient?.first.withValues(
+                                alpha: 0.4,
+                              ) ??
+                              Colors.white,
+                          width: 3,
                         ),
-                      ],
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        maxLines: 10,
-                        controller: value.textEditingController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: text.listenTextField,
-                          hintStyle: TextStyle(color: Colors.grey),
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                (value.language?.gradient?.first ??
+                                        Colors.black)
+                                    .withValues(alpha: 0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          maxLines: 10,
+                          controller: value.textEditingController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: text.listenTextField,
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: value.language?.gradient?.first,
+                    Spacer(),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: value.language?.gradient?.first,
+                        ),
+                        onPressed: () {
+                          value.submit();
+                        },
+                        child: Text('Submit'),
                       ),
-                      onPressed: () {
-                        value.submit();
-                      },
-                      child: Text('Submit'),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

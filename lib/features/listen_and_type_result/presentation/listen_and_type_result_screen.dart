@@ -81,54 +81,66 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: w(0.07)),
                           child: Column(
                             children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    NavigationHelper.pop();
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new,
-                                    size: 20,
-                                    color: Colors.black,
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: WidgetStateProperty.all(
-                                      Colors.transparent,
-                                    ),
-                                    shape: WidgetStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        side: const BorderSide(
-                                          color: Colors.grey,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        NavigationHelper.pop();
+                                      },
+                                      icon: const Icon(
+                                        Icons.arrow_back_ios_new,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                              Colors.transparent,
+                                            ),
+                                        shape: WidgetStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            side: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                        fixedSize: WidgetStateProperty.all(
+                                          const Size(40, 40),
                                         ),
                                       ),
                                     ),
-                                    fixedSize: WidgetStateProperty.all(
-                                      const Size(40, 40),
+                                  ),
+
+                                  SizedBox(
+                                    child: Center(
+                                      child: CircleAvatar(
+                                        backgroundColor: language
+                                            .gradient
+                                            ?.first
+                                            .withValues(alpha: 0.7),
+                                        radius: 60,
+                                        child: Text(
+                                          '${value.listenModel?.overallScore?.toString()} %',
+                                          style: AppTextStyles
+                                              .textTheme
+                                              .headlineLarge!
+                                              .copyWith(
+                                                color: Colors.white,
+                                                fontSize: w(0.12),
+                                              ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              Spacer(),
-                              SizedBox(
-                                child: Center(
-                                  child: CircleAvatar(
-                                    backgroundColor: language.gradient?.first
-                                        .withValues(alpha: 0.7),
-                                    radius: 60,
-                                    child: Text(
-                                      '${value.listenModel?.overallScore?.toString()} %',
-                                      style: AppTextStyles
-                                          .textTheme
-                                          .headlineLarge!
-                                          .copyWith(
-                                            color: Colors.white,
-                                            fontSize: w(0.12),
-                                          ),
-                                    ),
-                                  ),
-                                ),
+                                  Container(),
+                                ],
                               ),
                               Spacer(),
                               Container(

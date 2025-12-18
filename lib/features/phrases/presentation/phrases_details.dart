@@ -10,6 +10,7 @@ import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/core/widgets/app_bar.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+import 'package:yoyo_school_app/features/listen_and_type/presentation/widgets/fake_wave.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_view_model.dart';
 
 import '../../home/model/level_model.dart';
@@ -500,6 +501,7 @@ class PhrasesDetails extends StatelessWidget {
                   provider.playAudio(model);
                 },
                 question: model.questions,
+                listen: model.listen,
               ),
             ),
             if (showPercentage == true)
@@ -536,6 +538,7 @@ class PhrasesWidget extends StatelessWidget {
   final Language? launguage;
   final VoidCallback onIconTap;
   final String? question;
+  final bool? listen;
 
   const PhrasesWidget({
     super.key,
@@ -545,116 +548,153 @@ class PhrasesWidget extends StatelessWidget {
     this.launguage,
     required this.onIconTap,
     this.question,
+    this.listen,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (question != null)
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: 26),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              color: Color(0xEBE8EBFC),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: AutoSizeText(
-              question ?? '',
-              maxLines: 3,
-              style: AppTextStyles.textTheme.bodyMedium,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        Container(
-          height: 140,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Color(0xFFFFC3FE)),
-          ),
-          child: Row(
-            children: [
+    return Consumer<PhrasesViewModel>(
+      builder: (context, provider, w) {
+        return Column(
+          children: [
+            if (question != null)
               Container(
-                width: 76,
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(horizontal: 26),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    colors: launguage?.gradient ?? [Colors.white],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
+                  color: Color(0xEBE8EBFC),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    if (precentage != null)
-                      Container(
-                        height: 55,
-                        width: 55,
-                        margin: EdgeInsets.only(top: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.white,
-                        ),
-                        child: Center(
-                          child: Text(
-                            precentage!,
-                            style: AppTextStyles.textTheme.bodyLarge!.copyWith(
-                              color: Colors.black,
+                child: AutoSizeText(
+                  question ?? '',
+                  maxLines: 3,
+                  style: AppTextStyles.textTheme.bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            Container(
+              height: 140,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Color(0xFFFFC3FE)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 76,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: launguage?.gradient ?? [Colors.white],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        if (precentage != null)
+                          Container(
+                            height: 55,
+                            width: 55,
+                            margin: EdgeInsets.only(top: 20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: Text(
+                                precentage!,
+                                style: AppTextStyles.textTheme.bodyLarge!
+                                    .copyWith(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        GestureDetector(
+                          onTap: () {
+                            onIconTap();
+                          },
+                          behavior: HitTestBehavior.opaque,
+                          child: AbsorbPointer(
+                            absorbing: false,
+                            child: Icon(
+                              Icons.play_arrow_outlined,
+                              size: 35,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                      ),
-                    GestureDetector(
-                      onTap: () {
-                        onIconTap();
-                      },
-                      behavior: HitTestBehavior.opaque,
-                      child: AbsorbPointer(
-                        absorbing: false,
-                        child: Icon(
-                          Icons.play_arrow_outlined,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 26.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AutoSizeText(
-                        title,
-                        maxLines: 3,
-                        textAlign: TextAlign.start,
-                        style: AppTextStyles.textTheme.titleLarge,
-                      ),
-                      AutoSizeText(
-                        subTitle,
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        style: AppTextStyles.textTheme.bodyMedium,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
                   ),
-                ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                      child: (listen ?? false)
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AutoSizeText(
+                                      'Mystery Phrase',
+                                      maxLines: 1,
+                                      textAlign: TextAlign.start,
+                                      style: AppTextStyles.textTheme.bodyLarge,
+                                    ),
+                                    AutoSizeText(
+                                      'Listen and type',
+                                      maxLines: 1,
+                                      textAlign: TextAlign.start,
+                                      style: AppTextStyles.textTheme.bodyMedium,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                                FakeWaveform(
+                                  isPlaying:
+                                      provider.currentlyPlaying?.phrase ==
+                                          title &&
+                                      provider.isPlaying,
+                                  height: 30,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AutoSizeText(
+                                  title,
+                                  maxLines: 3,
+                                  textAlign: TextAlign.start,
+                                  style: AppTextStyles.textTheme.titleLarge,
+                                ),
+                                AutoSizeText(
+                                  subTitle,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  style: AppTextStyles.textTheme.bodyMedium,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

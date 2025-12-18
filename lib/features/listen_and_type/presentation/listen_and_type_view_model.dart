@@ -22,6 +22,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
   ListenAndTypeViewModel(this.phraseModel, this.categories) {
     initAudio();
     getData();
+    _listenToPlayerState();
   }
 
   getData() async {
@@ -47,12 +48,14 @@ class ListenAndTypeViewModel extends ChangeNotifier {
     try {
       final player = audioManager;
 
-      if (player.playerState.processingState == ProcessingState.completed) {
+      if (player.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }
+
       isPlaying = true;
-      await player.play().then((val) => isPlaying = false);
       notifyListeners();
+
+      await player.play();
     } catch (e) {
       rethrow;
     }
@@ -67,5 +70,15 @@ class ListenAndTypeViewModel extends ChangeNotifier {
         'language': language,
       },
     );
+  }
+
+  void _listenToPlayerState() {
+    audioManager.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed ||
+          state.processingState == ProcessingState.idle) {
+        isPlaying = false;
+        notifyListeners();
+      }
+    });
   }
 }

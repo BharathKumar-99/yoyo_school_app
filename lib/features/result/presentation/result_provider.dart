@@ -95,7 +95,8 @@ class ResultProvider extends ChangeNotifier {
         "Speech evaluation failed",
       );
 
-      score = speechEvaluationModel?.result?.overall ?? 0;
+      score = 50;
+      speechEvaluationModel?.result?.overall ?? 0;
 
       tableResponse = await _globalRepo.getRandomFeedback(score);
       if (score >= 80) {
@@ -212,7 +213,7 @@ class ResultProvider extends ChangeNotifier {
   String getReadingPhrase() {
     String text = '';
     String preText = ((currentHigest) < (result?.score ?? 0))
-        ? 's${result?.score} is your new best score'
+        ? '${result?.score} is your new best score'
         : 'You’re only ${(result?.score ?? 0) - (currentHigest)}% off your previous best score';
     text = preText;
     return text;

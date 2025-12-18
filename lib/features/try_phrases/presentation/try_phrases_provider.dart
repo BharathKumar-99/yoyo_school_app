@@ -108,8 +108,42 @@ class TryPhrasesProvider extends ChangeNotifier {
         await player.seek(Duration.zero);
       }
 
-      await player.play();
-      await upsertResult();
+      if (!player.playing) {
+        await player.play();
+        await upsertResult();
+      }
+    } catch (e) {
+      rethrow;
+    }
+    notifyListeners();
+  }
+
+  Future<void> pauseAudio() async {
+    try {
+      final player = audioManager;
+
+      if (player.playing) {
+        await player.pause();
+      }
+    } catch (e) {
+      rethrow;
+    }
+    notifyListeners();
+  }
+
+  Future<void> togglePlayPause() async {
+    try {
+      final player = audioManager;
+
+      if (player.playing) {
+        await player.pause();
+      } else {
+        if (player.playerState.processingState == ProcessingState.completed) {
+          await player.seek(Duration.zero);
+        }
+        await player.play();
+        await upsertResult();
+      }
     } catch (e) {
       rethrow;
     }

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -516,8 +517,9 @@ class ResultScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(height: 25),
-                                      Text(
+                                      AutoSizeText(
                                         value.tableResponse?.title ?? "",
+                                        maxLines: 1,
                                         style: AppTextStyles
                                             .textTheme
                                             .headlineLarge,
@@ -530,40 +532,34 @@ class ResultScreen extends StatelessWidget {
                                             ((phraseModel.readingPhrase ??
                                                     false) &&
                                                 ((value.currentHigest) > 0))
-                                            ? Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: value
-                                                          .getReadingPhrase(),
-                                                      style: AppTextStyles
-                                                          .textTheme
-                                                          .bodyMedium!
-                                                          .copyWith(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.w800,
-                                                          ),
-                                                    ),
-                                                    const TextSpan(
-                                                      text: ' ',
-                                                    ), // space between texts
-                                                    TextSpan(
-                                                      text:
-                                                          value
-                                                              .tableResponse
-                                                              ?.body ??
-                                                          '',
-                                                      style: AppTextStyles
-                                                          .textTheme
-                                                          .bodyMedium!
-                                                          .copyWith(
-                                                            color: Colors.black,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                softWrap: true,
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  AutoSizeText(
+                                                    value.getReadingPhrase(),
+                                                    maxLines: 1,
+                                                    style: AppTextStyles
+                                                        .textTheme
+                                                        .bodyMedium!
+                                                        .copyWith(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                        ),
+                                                  ),
+                                                  AutoSizeText(
+                                                    value.tableResponse?.body ??
+                                                        '',
+                                                    maxLines: 3,
+                                                    style: AppTextStyles
+                                                        .textTheme
+                                                        .bodyMedium!
+                                                        .copyWith(
+                                                          color: Colors.black,
+                                                        ),
+                                                  ),
+                                                ],
                                               )
                                             : Text(
                                                 value.tableResponse?.body ?? '',
