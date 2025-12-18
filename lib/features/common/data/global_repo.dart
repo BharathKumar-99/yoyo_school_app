@@ -83,11 +83,12 @@ class GlobalRepo {
 
     final data = await _client
         .from(DbTable.remoteConfig)
-        .select()
+        .select('''*,${DbTable.phraseDisabledSchools}(*)''')
         .eq('school', user?['school'])
         .limit(1)
         .maybeSingle();
-    return RemoteConfig.fromJson(data!);
+    log(data!.toString());
+    return RemoteConfig.fromJson(data);
   }
 
   Future<SpeechEvaluationModel?> callSuperSpeechApi({

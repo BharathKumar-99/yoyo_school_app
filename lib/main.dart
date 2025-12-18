@@ -29,8 +29,8 @@ Future<void> main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
-  globalProvider = GlobalProvider();
-  await globalProvider.init();
+   
+      globalProvider = await GlobalProvider.create();
   FlutterError.onError = (FlutterErrorDetails details) async {
     FlutterError.presentError(details);
 

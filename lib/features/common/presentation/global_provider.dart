@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/widgets.dart'; 
-import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:flutter/widgets.dart';
 import '../../result/model/remote_config_model.dart';
 import '../../result/model/user_result_model.dart';
 import '../data/global_repo.dart';
@@ -9,7 +8,6 @@ import '../data/global_repo.dart';
 class GlobalProvider with ChangeNotifier {
   final GlobalRepo _repo = GlobalRepo();
 
-  late RemoteConfig apiCred;
   List<UserResult> _results = [];
   List<UserResult> get results => _results;
 
@@ -20,18 +18,14 @@ class GlobalProvider with ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  final RemoteConfig apiCred;
 
+  GlobalProvider._(this.apiCred);
 
-
-  Future<void> init() async {
-    try {
-      apiCred = await _repo.getRemoteCred();
-     
-
-      notifyListeners();
-    } catch (e, st) {
-      log("GlobalProvider init error: $e\n$st");
-    }
+  static Future<GlobalProvider> create() async {
+    final repo = GlobalRepo();
+    final config = await repo.getRemoteCred();
+    return GlobalProvider._(config);
   }
 
   Future<void> initRealtimeResults(List<int> phraseIds) async {
@@ -73,18 +67,6 @@ class GlobalProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateStreakEnabled(bool value) async {
-    try {
-      GlobalLoader.show();
-      apiCred = await _repo.updateStreakEnabled(value);
-      notifyListeners();
-    } catch (e, st) {
-      log("updateStreakEnabled error: $e\n$st");
-    } finally {
-      GlobalLoader.hide();
-    }
-  }
-
   void updateSlack(LanguageSlack lang) {
     try {
       apiCred.slack = lang;
@@ -93,8 +75,6 @@ class GlobalProvider with ChangeNotifier {
       log("updateSlack error: $e");
     }
   }
-
-  
 
   @override
   void dispose() {
@@ -112,5 +92,4 @@ class GlobalProvider with ChangeNotifier {
 
     super.dispose();
   }
-
 }

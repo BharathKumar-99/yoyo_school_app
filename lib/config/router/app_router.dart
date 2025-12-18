@@ -24,7 +24,6 @@ import 'package:yoyo_school_app/features/profile/presentation/your_profile_scree
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
 import 'package:yoyo_school_app/features/recording/presentation/remember_recorder_provider.dart';
 import 'package:yoyo_school_app/features/result/presentation/result_screen.dart';
-import 'package:yoyo_school_app/features/settings/presentation/settings_screen.dart';
 import 'package:yoyo_school_app/features/splash/presentation/splash_screen.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 import 'package:yoyo_school_app/features/webview/presentation/webview_screen.dart';
@@ -80,10 +79,7 @@ class AppRoutes {
         path: RouteNames.webview,
         builder: (context, state) => WebViewScreen(url: state.extra as String),
       ),
-      GoRoute(
-        path: RouteNames.settings,
-        builder: (context, state) => const SettingsScreen(),
-      ),
+
       GoRoute(
         path: RouteNames.error,
         builder: (context, state) {

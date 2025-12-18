@@ -44,9 +44,9 @@ class PhrasesViewModel extends ChangeNotifier {
   int categories;
   bool isMasteryEnabled = false;
   PhraseModel? _currentlyPlaying;
-PhraseModel? get currentlyPlaying => _currentlyPlaying;
+  PhraseModel? get currentlyPlaying => _currentlyPlaying;
 
-bool get isPlaying => audioManager.player.playing;
+  bool get isPlaying => audioManager.player.playing;
 
   PhrasesViewModel(
     this.classes,
@@ -324,44 +324,46 @@ bool get isPlaying => audioManager.player.playing;
     }
   }
 
-Future<void> playAudio(PhraseModel phraseModel) async {
-  try {
-     
-    if (_currentlyPlaying?.id != phraseModel.id) {
-      await audioManager.player.stop();
-    }
+  Future<void> playAudio(PhraseModel phraseModel) async {
+    try {
+      if (_currentlyPlaying?.id != phraseModel.id) {
+        await audioManager.player.stop();
+      }
 
-    _currentlyPlaying = phraseModel;
-    notifyListeners();
-
-    await audioManager.player.setUrl(phraseModel.recording ?? "");
-    await audioManager.setVolume(1);
-    await play();
-  } catch (_) {
-    throw Exception("Failed playing audio");
-  }
-}
-Future<void> play() async {
-  try {
-    final player = audioManager.player;
-
-    if (player.playerState.processingState == ProcessingState.completed) {
-      await player.seek(Duration.zero);
-    }
-
-    await player.play();
-
-    // Listen once for completion
-    player.playerStateStream.firstWhere(
-      (state) => state.processingState == ProcessingState.completed,
-    ).then((_) {
-      _currentlyPlaying = null;
+      _currentlyPlaying = phraseModel;
       notifyListeners();
-    });
-  } catch (_) {
-    throw Exception("Failed audio playback");
+
+      await audioManager.player.setUrl(phraseModel.recording ?? "");
+      await audioManager.setVolume(1);
+      await play();
+    } catch (_) {
+      throw Exception("Failed playing audio");
+    }
   }
-}
+
+  Future<void> play() async {
+    try {
+      final player = audioManager.player;
+
+      if (player.playerState.processingState == ProcessingState.completed) {
+        await player.seek(Duration.zero);
+      }
+
+      await player.play();
+
+      // Listen once for completion
+      player.playerStateStream
+          .firstWhere(
+            (state) => state.processingState == ProcessingState.completed,
+          )
+          .then((_) {
+            _currentlyPlaying = null;
+            notifyListeners();
+          });
+    } catch (_) {
+      throw Exception("Failed audio playback");
+    }
+  }
 
   Future<void> resetPhrase(int? id) async {
     try {

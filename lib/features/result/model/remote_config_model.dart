@@ -6,9 +6,10 @@ class RemoteConfig {
   final bool streak;
   final bool onboarding;
   final bool mastery;
-  final bool warmUp;
+  final bool warmup;
   LanguageSlack slack;
   int school;
+  List<PhraseDisabledSchools> phraseDisabledSchools;
 
   RemoteConfig({
     required this.id,
@@ -20,11 +21,13 @@ class RemoteConfig {
     required this.mastery,
     required this.slack,
     required this.school,
-    required this.warmUp,
+    required this.warmup,
+    required this.phraseDisabledSchools,
   });
 
   factory RemoteConfig.fromJson(Map<String, dynamic> json) {
     final createdAtValue = json['created_at'];
+    List<PhraseDisabledSchools> phraseDisabledSchool = [];
     DateTime parsedCreatedAt;
     if (createdAtValue is String) {
       parsedCreatedAt = DateTime.parse(createdAtValue);
@@ -32,6 +35,11 @@ class RemoteConfig {
       parsedCreatedAt = createdAtValue;
     } else {
       parsedCreatedAt = DateTime.fromMillisecondsSinceEpoch(0);
+    }
+    if (json['phrase_disabled_schools'] != null) {
+      json['phrase_disabled_schools'].forEach((v) {
+        phraseDisabledSchool.add(PhraseDisabledSchools.fromJson(v));
+      });
     }
 
     return RemoteConfig(
@@ -44,7 +52,8 @@ class RemoteConfig {
       mastery: json['mastery'] as bool,
       slack: LanguageSlack.fromJson(json['language_slack']),
       school: json['school'],
-      warmUp: json['warmup'],
+      warmup: json['warmup'],
+      phraseDisabledSchools: phraseDisabledSchool,
     );
   }
 
@@ -58,7 +67,7 @@ class RemoteConfig {
     'language_slack': slack.toJson(),
     'mastery': mastery,
     'school': school,
-    'warmup': warmUp,
+    'warmup': warmup,
   };
 }
 
@@ -107,5 +116,35 @@ class LanguageSlack {
       'promax': promax,
       'promax.cn': promaxCn,
     };
+  }
+}
+
+class PhraseDisabledSchools {
+  int? id;
+  int? phraseId;
+  int? remoteId;
+  String? disabledAt;
+
+  PhraseDisabledSchools({
+    this.id,
+    this.phraseId,
+    this.remoteId,
+    this.disabledAt,
+  });
+
+  PhraseDisabledSchools.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    phraseId = json['phrase_id'];
+    remoteId = json['remote_id'];
+    disabledAt = json['disabled_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['phrase_id'] = phraseId;
+    data['remote_id'] = remoteId;
+    data['disabled_at'] = disabledAt;
+    return data;
   }
 }

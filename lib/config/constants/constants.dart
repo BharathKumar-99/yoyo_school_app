@@ -72,6 +72,7 @@ class DbTable {
       'pronunciation_feedback_templates';
   static const String errorLogs = 'error_logs';
   static const String appConfig = 'app_config';
+  static const String phraseDisabledSchools = 'phrase_disabled_schools';
 }
 
 class Stroage {
