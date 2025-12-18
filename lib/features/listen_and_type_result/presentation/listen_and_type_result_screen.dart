@@ -282,7 +282,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  Text('Grammer: '),
+                                  Text('Grammar: '),
                                   Text(
                                     '${value.listenModel?.grammarEndings}%',
                                     style: AppTextStyles.textTheme.titleLarge,
