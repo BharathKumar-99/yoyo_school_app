@@ -6,6 +6,7 @@ class RemoteConfig {
   final bool streak;
   final bool onboarding;
   final bool mastery;
+  final bool warmUp;
   LanguageSlack slack;
   int school;
 
@@ -19,6 +20,7 @@ class RemoteConfig {
     required this.mastery,
     required this.slack,
     required this.school,
+    required this.warmUp,
   });
 
   factory RemoteConfig.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class RemoteConfig {
       mastery: json['mastery'] as bool,
       slack: LanguageSlack.fromJson(json['language_slack']),
       school: json['school'],
+      warmUp: json['warmup'],
     );
   }
 
@@ -55,6 +58,7 @@ class RemoteConfig {
     'language_slack': slack.toJson(),
     'mastery': mastery,
     'school': school,
+    'warmup': warmUp,
   };
 }
 

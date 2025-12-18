@@ -40,6 +40,7 @@ class PhrasesDeatilsRepo {
         .select('*')
         .eq('language', id)
         .or('school_id.eq.$schoolId,school_id.is.null')
+        .eq('Active', true)
         .order('item_index', ascending: true);
     return response
         .map<PhraseCategoriesModel>((e) => PhraseCategoriesModel.fromJson(e))

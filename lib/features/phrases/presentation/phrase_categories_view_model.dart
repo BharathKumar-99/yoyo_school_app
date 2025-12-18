@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/phrases/data/phrases_deatils_repo.dart';
@@ -19,6 +22,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   List<Student> classStudents = [];
   final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
   bool isLoading = true;
+  GlobalProvider? globalProvider;
 
   PhraseCategoriesViewModel(this.classes, this.student) {
     try {
@@ -30,6 +34,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
 
   Future<void> init() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+    globalProvider = Provider.of<GlobalProvider>(ctx!);
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final ids = classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
     userResult = await _repo.getUserResult(ids);
