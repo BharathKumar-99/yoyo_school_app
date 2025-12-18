@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -248,8 +249,9 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 5),
-                          Text(
+                          AutoSizeText(
                             value.listenModel?.title ?? '',
+                            maxLines: 1,
                             style: AppTextStyles.textTheme.headlineLarge,
                           ),
 
@@ -285,7 +287,10 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                             ],
                           ),
 
-                          Text(value.listenModel?.body ?? ''),
+                          AutoSizeText(
+                            value.listenModel?.body ?? '',
+                            maxLines: 3,
+                          ),
 
                           SizedBox(
                             width: width,

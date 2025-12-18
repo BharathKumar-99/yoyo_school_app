@@ -65,7 +65,7 @@ class ResultProvider extends ChangeNotifier {
       painter.layout(maxWidth: maxWidth);
 
       if (painter.height <= maxHeight) {
-        return fontSize; // ✅ fits
+        return fontSize;
       }
 
       fontSize -= 1;
@@ -95,8 +95,7 @@ class ResultProvider extends ChangeNotifier {
         "Speech evaluation failed",
       );
 
-      score = 50;
-      speechEvaluationModel?.result?.overall ?? 0;
+      score = speechEvaluationModel?.result?.overall ?? 0;
 
       tableResponse = await _globalRepo.getRandomFeedback(score);
       if (score >= 80) {
@@ -212,7 +211,9 @@ class ResultProvider extends ChangeNotifier {
 
   String getReadingPhrase() {
     String text = '';
-    String preText = ((currentHigest) < (result?.score ?? 0))
+    String preText = (currentHigest == (result?.score ?? 0))
+        ? "Wow, same score again!"
+        : ((currentHigest) < (result?.score ?? 0))
         ? '${result?.score} is your new best score'
         : 'You’re only ${(result?.score ?? 0) - (currentHigest)}% off your previous best score';
     text = preText;
