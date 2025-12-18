@@ -187,23 +187,19 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                                         height: h(0.08),
                                         child: LayoutBuilder(
                                           builder: (context, constraints) {
-                                            final entries = value
-                                                .listenModel!
-                                                .words!
-                                                .entries
-                                                .toList();
+                                            final taggedWords = value
+                                                .parseTaggedSentence(
+                                                  value.listenModel?.markup ??
+                                                      '',
+                                                );
 
-                                            final spans = entries.map((entry) {
-                                              final word = entry.key;
-                                              final scoreOrColorValue =
-                                                  entry.value;
-
+                                            final spans = taggedWords.map((
+                                              item,
+                                            ) {
                                               return TextSpan(
-                                                text: '$word ',
+                                                text: '${item.word} ',
                                                 style: TextStyle(
-                                                  color: value.getWordColor(
-                                                    scoreOrColorValue,
-                                                  ),
+                                                  color: item.color,
                                                 ),
                                               );
                                             }).toList();

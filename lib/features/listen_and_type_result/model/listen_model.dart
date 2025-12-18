@@ -7,7 +7,7 @@ class ListenModel {
   String? title;
   String? body;
   String? microTip;
-  Map<String, dynamic>? words;
+  String? markup;
 
   ListenModel({
     this.overallScore,
@@ -18,7 +18,7 @@ class ListenModel {
     this.title,
     this.body,
     this.microTip,
-    this.words,
+    this.markup,
   });
 
   ListenModel.fromJson(Map<String, dynamic> json) {
@@ -30,7 +30,7 @@ class ListenModel {
     title = json['title'];
     body = json['body'];
     microTip = json['micro_tip'];
-    words = json['words'];
+    markup = json['markup'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,7 +43,7 @@ class ListenModel {
     data['title'] = title;
     data['body'] = body;
     data['micro_tip'] = microTip;
-    data['words'] = words;
+    data['markup'] = markup;
     return data;
   }
 }
