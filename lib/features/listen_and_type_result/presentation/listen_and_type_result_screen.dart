@@ -54,7 +54,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
               : Column(
                   children: [
                     Container(
-                      height: h(0.6),
+                      height: h(0.59),
 
                       width: width,
                       decoration: BoxDecoration(
@@ -86,60 +86,68 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: IconButton(
-                                      onPressed: () async {
-                                        NavigationHelper.pop();
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_back_ios_new,
-                                        size: 20,
-                                        color: Colors.black,
+                                  IconButton(
+                                    onPressed: () async {
+                                      NavigationHelper.pop();
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios_new,
+                                      size: 20,
+                                      color: Colors.black,
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: WidgetStateProperty.all(
+                                        Colors.transparent,
                                       ),
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            WidgetStateProperty.all(
-                                              Colors.transparent,
-                                            ),
-                                        shape: WidgetStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            side: const BorderSide(
-                                              color: Colors.grey,
-                                            ),
+                                      shape: WidgetStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          side: const BorderSide(
+                                            color: Colors.grey,
                                           ),
                                         ),
-                                        fixedSize: WidgetStateProperty.all(
-                                          const Size(40, 40),
-                                        ),
+                                      ),
+                                      fixedSize: WidgetStateProperty.all(
+                                        const Size(40, 40),
                                       ),
                                     ),
                                   ),
 
                                   SizedBox(
                                     child: Center(
-                                      child: CircleAvatar(
-                                        backgroundColor: language
-                                            .gradient
-                                            ?.first
-                                            .withValues(alpha: 0.7),
-                                        radius: 60,
-                                        child: Text(
-                                          '${value.listenModel?.overallScore?.toString()} %',
-                                          style: AppTextStyles
-                                              .textTheme
-                                              .headlineLarge!
-                                              .copyWith(
-                                                color: Colors.white,
-                                                fontSize: w(0.12),
-                                              ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                            sigmaX: 10,
+                                            sigmaY: 10,
+                                          ),
+                                          child: Container(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.1,
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 6,
+                                            ),
+                                            child: Text(
+                                              '${value.listenModel?.overallScore.toString()} %',
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .headlineLarge!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                    fontSize: w(0.12),
+                                                  ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
+                                  Container(),
                                   Container(),
                                 ],
                               ),
@@ -200,6 +208,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                                                 text: '${item.word} ',
                                                 style: TextStyle(
                                                   color: item.color,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
                                               );
                                             }).toList();
@@ -241,7 +250,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 28.0),
                       child: Column(
-                        spacing: 20,
+                        spacing: 15,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 5),
