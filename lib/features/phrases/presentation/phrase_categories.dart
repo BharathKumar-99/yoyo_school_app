@@ -268,7 +268,7 @@ class PhraseCategories extends StatelessWidget {
                             spacing: 20,
                             children: [
                               SizedBox(height: 5),
-                              if (provider.globalProvider?.apiCred.warmup ??
+                              if (provider.globalProvider?.apiCred?.warmup ??
                                   false)
                                 GestureDetector(
                                   onTap: () => NavigationHelper.go(

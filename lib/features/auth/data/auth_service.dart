@@ -7,8 +7,6 @@ class AuthService {
 
   final SupabaseClient client = Supabase.instance.client;
 
-
-
   Future<void> logoutHard() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('logged_in_user');

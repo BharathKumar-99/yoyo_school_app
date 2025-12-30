@@ -1,16 +1,17 @@
 import 'dart:developer';
 
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; 
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/router/route_names.dart';
-import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
+import 'package:yoyo_school_app/config/utils/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import '../../../core/supabase/supabase_client.dart';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+ 
 
 class AuthRepository {
   final client = SupabaseClientService.instance.client;
@@ -121,8 +122,13 @@ class AuthRepository {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('logged_in_user', username);
       await prefs.setString('user_id', user['user_id']);
+      await setupToken(user['user_id']);
+
       return await ensureAnonymous(user['user_id'], user['school']);
     } on Exception {
+      rethrow;
+    } catch (c) {
+      log(c.toString());
       rethrow;
     }
   }
@@ -152,17 +158,15 @@ class AuthRepository {
     }
   }
 
-  void verifyOtp(String otp, String email) async {
+  Future<void> setupToken(String userId) async {
     try {
-      await client.auth.verifyOTP(
-        type: OtpType.email,
-        token: otp,
-        email: email,
-      );
-      NavigationHelper.push(RouteNames.splash);
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        final notificationService = NotificationService();
+        await notificationService.saveFcmToFireBase(token, userId);
+      }
     } catch (e) {
       log(e.toString());
-      UsefullFunctions.showSnackBar(ctx!, text.otp_expired);
     }
   }
 }

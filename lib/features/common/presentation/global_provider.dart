@@ -18,7 +18,7 @@ class GlobalProvider with ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  final RemoteConfig apiCred;
+  RemoteConfig? apiCred;
 
   GlobalProvider._(this.apiCred);
 
@@ -69,7 +69,7 @@ class GlobalProvider with ChangeNotifier {
 
   void updateSlack(LanguageSlack lang) {
     try {
-      apiCred.slack = lang;
+      apiCred?.slack = lang;
       notifyListeners();
     } catch (e) {
       log("updateSlack error: $e");

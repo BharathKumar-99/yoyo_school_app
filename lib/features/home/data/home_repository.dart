@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:yoyo_school_app/app.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
-import 'package:yoyo_school_app/main.dart';
 
 class HomeRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
@@ -73,14 +73,14 @@ class HomeRepository {
           }
         }
       }
-      final disabledIds = globalProvider.apiCred.phraseDisabledSchools
+      final disabledIds = globalProvider.apiCred?.phraseDisabledSchools
           .map((e) => e.phraseId)
           .whereType<int>()
           .toSet();
 
       student.classes?.school?.schoolLanguage?.forEach((lang) {
         lang.language?.phrase?.removeWhere(
-          (phrase) => disabledIds.contains(phrase.id),
+          (phrase) => disabledIds?.contains(phrase.id)??false,
         );
       });
 

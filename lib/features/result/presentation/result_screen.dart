@@ -728,7 +728,7 @@ class ResultScreen extends StatelessWidget {
                                           : (value
                                                     .globalProvider
                                                     .apiCred
-                                                    .streak ==
+                                                    ?.streak ==
                                                 true)
                                           ? SizedBox(
                                               width: double.infinity,
@@ -767,10 +767,10 @@ class ResultScreen extends StatelessWidget {
                                                 ),
                                               ),
                                             )
-                                          : value
+                                          : (value
                                                     .globalProvider
                                                     .apiCred
-                                                    .mastery &&
+                                                    ?.mastery??false) &&
                                                 (phraseModel.readingPhrase !=
                                                     true)
                                           ? SizedBox(

@@ -473,7 +473,7 @@ class MasterResultScreen extends StatelessWidget {
                                           : (value
                                                     .globalProvider
                                                     .apiCred
-                                                    .streak ==
+                                                    ?.streak ==
                                                 true)
                                           ? SizedBox(
                                               width: double.infinity,

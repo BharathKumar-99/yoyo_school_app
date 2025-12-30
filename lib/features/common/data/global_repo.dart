@@ -72,13 +72,15 @@ class GlobalRepo {
     yield* controller.stream;
   }
 
-  Future<RemoteConfig> getRemoteCred() async {
+  Future<RemoteConfig?> getRemoteCred() async {
     final userId = GetUserDetails.getCurrentUserId();
-
+    if (userId == null) {
+      return null;
+    }
     final user = await _client
         .from(DbTable.users)
         .select('school')
-        .eq('user_id', userId ?? '')
+        .eq('user_id', userId)
         .maybeSingle();
 
     final data = await _client
@@ -106,7 +108,7 @@ class GlobalRepo {
         ctx!,
         listen: false,
       );
-      RemoteConfig apiCred = provider.apiCred;
+      RemoteConfig apiCred = provider.apiCred!;
       const userId = "123456789";
       final coreType = "sent.eval.$audioCode";
       const audioType = "wav";

@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/app.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
@@ -25,10 +26,11 @@ class SplashViewModel extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
     model = await _repo.getAppConfig();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
     _user = await _repo.getProfileData();
-
-    if (!(_user?.isTester ?? false)) {
+    if (_user != null) {
+      globalProvider = await GlobalProvider.create();
+    }
+    if (!(false)) {
       if (model?.isMaintainance ?? false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           GlobalLoader.hide();
@@ -37,7 +39,14 @@ class SplashViewModel extends ChangeNotifier {
 
         return;
       }
-      if (model?.appVersion != version) {
+      final storeVersion = model?.appVersion;
+      final appVersion = packageInfo.version;
+
+      if (storeVersion != null &&
+          isUpdateRequired(
+            storeVersion: storeVersion,
+            appVersion: appVersion,
+          )) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           GlobalLoader.hide();
           ctx!.go(RouteNames.appUpdate);
@@ -47,7 +56,7 @@ class SplashViewModel extends ChangeNotifier {
     }
 
     if (_user?.onboarding != true &&
-        _globalProvider?.apiCred.onboarding == true) {
+        _globalProvider?.apiCred?.onboarding == true) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         GlobalLoader.hide();
         ctx!.go(RouteNames.onboarding);
@@ -58,5 +67,24 @@ class SplashViewModel extends ChangeNotifier {
         ctx!.go(RouteNames.home);
       });
     }
+  }
+
+  bool isUpdateRequired({
+    required String storeVersion,
+    required String appVersion,
+  }) {
+    final store = storeVersion.split('.').map(int.parse).toList();
+    final app = appVersion.split('.').map(int.parse).toList();
+
+    final maxLen = store.length > app.length ? store.length : app.length;
+
+    for (int i = 0; i < maxLen; i++) {
+      final s = i < store.length ? store[i] : 0;
+      final a = i < app.length ? app[i] : 0;
+
+      if (s > a) return true; // update required
+      if (s < a) return false; // app is newer
+    }
+    return false; // same version
   }
 }

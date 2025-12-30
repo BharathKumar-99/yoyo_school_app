@@ -61,7 +61,7 @@ class PhrasesViewModel extends ChangeNotifier {
   ) {
     try {
       globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
-      isMasteryEnabled = globalProvider.apiCred.mastery;
+      isMasteryEnabled = globalProvider.apiCred?.mastery ?? false;
       isStreakLoading = streak != null || isGoToNextPhrase;
 
       Future.delayed(Duration.zero, () {

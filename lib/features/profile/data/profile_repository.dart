@@ -6,6 +6,7 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/config/utils/notification_services.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 
 import '../../home/model/school_model.dart';
@@ -23,6 +24,7 @@ class ProfileRepository {
         .eq('user_id', userId);
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    await NotificationService().deleteFcmFromSupabse(userId);
     await _client.auth.signOut();
 
     GlobalLoader.hide();

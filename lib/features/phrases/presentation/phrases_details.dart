@@ -275,10 +275,11 @@ class PhrasesDetails extends StatelessWidget {
                                         ),
                                       ),
                                       if (((provider.streakNumber ?? 0) > 0) &&
-                                          provider
-                                              .globalProvider
-                                              .apiCred
-                                              .streak)
+                                          (provider
+                                                  .globalProvider
+                                                  .apiCred
+                                                  ?.streak ??
+                                              false))
                                         Positioned(
                                           bottom: 0,
                                           right:

@@ -1,7 +1,7 @@
 name: yoyo_school_app
 description: "A new Flutter project."
 publish_to: "none"
-version: 9.5.47
+version: 9.5.48
 
 environment:
   sdk: ^3.8.1
@@ -35,6 +35,9 @@ dependencies:
   device_info_plus: ^12.3.0
   webview_flutter:
   url_launcher: ^6.3.2
+  firebase_messaging: ^16.1.0
+  flutter_local_notifications: ^19.5.0
+  firebase_core: ^4.3.0
 
 dev_dependencies:
   change_app_package_name: ^1.4.0
