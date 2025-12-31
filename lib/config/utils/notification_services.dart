@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -135,10 +136,14 @@ class NotificationService {
       return;
     }
     deviceIds.add({'deviceId': await _getId(), 'fcmId': fcmToken});
-    await _client
-        .from(DbTable.users)
-        .update({'fcm': deviceIds})
-        .eq('user_id', userId);
+    try {
+      await _client
+          .from(DbTable.users)
+          .update({'fcm': deviceIds})
+          .eq('user_id', userId);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   deleteFcmFromSupabse(String userId) async {
