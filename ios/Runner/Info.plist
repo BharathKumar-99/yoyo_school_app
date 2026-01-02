@@ -53,5 +53,14 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<true/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
+		<key>NSUserTrackingUsageDescription</key>
+		<string>This app uses notifications to update you.</string>
 	</dict>
 </plist>
