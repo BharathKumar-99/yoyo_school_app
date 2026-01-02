@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +15,7 @@ class AppInitializer {
 
     await SupabaseClientService.instance.init();
     await SharedPrefsService.init();
-
+    await Firebase.initializeApp();
     await NotificationService.instance.init();
 
     globalProvider = await GlobalProvider.create();
