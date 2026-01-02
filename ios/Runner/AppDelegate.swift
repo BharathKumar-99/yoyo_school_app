@@ -9,10 +9,10 @@ import Firebase
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        
+        FirebaseApp.configure()
         // 1. Set Notification Delegate to handle banners while app is open
         if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+            UNUserNotificationCenter.current().delegate = self
         }
         
         // 2. Register for remote notifications (triggers APNs token request)

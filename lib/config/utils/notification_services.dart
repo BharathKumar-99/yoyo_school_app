@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -17,6 +18,13 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 final SupabaseClient _client = SupabaseClientService.instance.client;
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services here, call Firebase.initializeApp()
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
 
 class NotificationService {
   NotificationService._internal();
@@ -37,6 +45,7 @@ class NotificationService {
   /// INIT (CALL ONCE AT APP START)
   /// ------------------------------------------------------------
   Future<void> init() async {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await _initLocalNotifications();
     await _initFirebaseMessaging();
   }
@@ -67,7 +76,8 @@ class NotificationService {
     if (Platform.isAndroid) {
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(_channel);
     }
   }
@@ -76,6 +86,17 @@ class NotificationService {
   /// FCM SETUP (iOS DEBUG ENHANCED)
   /// ------------------------------------------------------------
   Future<void> _initFirebaseMessaging() async {
+    if (Platform.isIOS) {
+      String? apnsToken = await _firebaseMessaging.getAPNSToken();
+      if (apnsToken != null) {
+        _showDebugSnack("APNs Token: $apnsToken");
+      } else {
+        _showDebugSnack(
+          "APNs Token is NULL. FCM will not work on this iOS device yet.",
+        );
+        // This usually means you need to wait a bit longer or check Xcode Signing.
+      }
+    }
     // 1. Request Permissions (Crucial for iOS)
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
@@ -91,9 +112,12 @@ class NotificationService {
       // Delay allows Apple servers to register with the physical device
       await Future.delayed(const Duration(seconds: 2));
       String? apnsToken = await _firebaseMessaging.getAPNSToken();
-      
+
       if (apnsToken == null) {
-        _showDebugSnack("ERROR: APNs Token NULL. Check Xcode & .p8 file!", isError: true);
+        _showDebugSnack(
+          "ERROR: APNs Token NULL. Check Xcode & .p8 file!",
+          isError: true,
+        );
       } else {
         _showDebugSnack("SUCCESS: APNs Token found.");
       }
@@ -162,7 +186,7 @@ class NotificationService {
   void _handlePayload(String? route) {
     if (route == null) return;
 
-    final context = ctx; 
+    final context = ctx;
     if (context == null) return;
 
     context.push(route);
