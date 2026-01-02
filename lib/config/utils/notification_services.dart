@@ -1,201 +1,119 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'package:yoyo_school_app/config/constants/constants.dart';
-import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import '../router/navigation_helper.dart';
+import 'device_info.dart';
 
-/// ------------------------------------------------------------
-/// GLOBALS
-/// ------------------------------------------------------------
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
 final SupabaseClient _client = SupabaseClientService.instance.client;
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services here, call Firebase.initializeApp()
-  await Firebase.initializeApp();
-  print("Handling a background message: ${message.messageId}");
-}
-
 class NotificationService {
-  NotificationService._internal();
-  static final NotificationService instance = NotificationService._internal();
+  static final NotificationService _notificationService =
+      NotificationService._internal();
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
-  // Define Android Channel as a constant for consistency
-  static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
-    'high_importance_channel',
-    'High Importance Notifications',
-    description: 'This channel is used for important school updates.',
-    importance: Importance.max,
-    playSound: true,
-  );
-
-  /// ------------------------------------------------------------
-  /// INIT (CALL ONCE AT APP START)
-  /// ------------------------------------------------------------
-  Future<void> init() async {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    await _initLocalNotifications();
-    await _initFirebaseMessaging();
+  factory NotificationService() {
+    return _notificationService;
   }
 
-  /// ------------------------------------------------------------
-  /// LOCAL NOTIFICATION INIT
-  /// ------------------------------------------------------------
-  Future<void> _initLocalNotifications() async {
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  NotificationService._internal();
 
-    const iosInit = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  void initLocalNotifications(message) async {
+    AndroidInitializationSettings androidInitializationSettings =
+        const AndroidInitializationSettings(
+          '@drawable/ic_stat_app_launcher_icon',
+        );
+    DarwinInitializationSettings iosInitializationSettings =
+        const DarwinInitializationSettings();
+
+    InitializationSettings initializationSetting = InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: iosInitializationSettings,
     );
 
-    const settings = InitializationSettings(android: androidInit, iOS: iosInit);
-
-    // Initialize the plugin
     await flutterLocalNotificationsPlugin.initialize(
-      settings,
-      onDidReceiveNotificationResponse: (response) {
-        _handlePayload(response.payload);
+      initializationSetting,
+      onDidReceiveNotificationResponse: (payload) {
+        handleMessage(message);
       },
     );
-
-    // Create the channel for Android
-    if (Platform.isAndroid) {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >()
-          ?.createNotificationChannel(_channel);
-    }
   }
 
-  /// ------------------------------------------------------------
-  /// FCM SETUP (iOS DEBUG ENHANCED)
-  /// ------------------------------------------------------------
-  Future<void> _initFirebaseMessaging() async {
-    if (Platform.isIOS) {
-      String? apnsToken = await _firebaseMessaging.getAPNSToken();
-      if (apnsToken != null) {
-        _showDebugSnack("APNs Token: $apnsToken");
-      } else {
-        _showDebugSnack(
-          "APNs Token is NULL. FCM will not work on this iOS device yet.",
+  void handleMessage(message) {}
+
+  Future<void> setupInteractMessage(BuildContext context) async {
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+          alert: true,
+          badge: true,
+          sound: true,
         );
-        // This usually means you need to wait a bit longer or check Xcode Signing.
-      }
-    }
-    // 1. Request Permissions (Crucial for iOS)
-    NotificationSettings settings = await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: false,
-    );
 
-    _showDebugSnack("Permission: ${settings.authorizationStatus.name}");
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance
+        .getInitialMessage();
 
-    // 2. iOS APNs Token Validation
-    if (Platform.isIOS) {
-      // Delay allows Apple servers to register with the physical device
-      await Future.delayed(const Duration(seconds: 2));
-      String? apnsToken = await _firebaseMessaging.getAPNSToken();
-
-      if (apnsToken == null) {
-        _showDebugSnack(
-          "ERROR: APNs Token NULL. Check Xcode & .p8 file!",
-          isError: true,
-        );
-      } else {
-        _showDebugSnack("SUCCESS: APNs Token found.");
-      }
-    }
-
-    // 3. Foreground Presentation (Display banner while app is open)
-    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    // 4. Foreground listener
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      showNotification(message);
-    });
-
-    // 5. Background -> Opened
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      handleMessage(message);
-    });
-
-    // 6. Terminated -> Opened
-    final initialMessage = await _firebaseMessaging.getInitialMessage();
     if (initialMessage != null) {
       handleMessage(initialMessage);
     }
+
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      handleMessage(event);
+    });
   }
 
-  /// ------------------------------------------------------------
-  /// SHOW LOCAL NOTIFICATION
-  /// ------------------------------------------------------------
-  Future<void> showNotification(RemoteMessage message) async {
-    _showDebugSnack(message.data.toString());
-    final details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        _channel.id,
-        _channel.name,
-        channelDescription: _channel.description,
-        importance: Importance.max,
-        priority: Priority.high,
-        icon: '@mipmap/ic_launcher',
-      ),
-      iOS: const DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      ),
+  Future<void> showNotification(message) async {
+    AndroidNotificationChannel channel = AndroidNotificationChannel(
+      message.notification!.android!.channelId.toString(),
+      message.notification!.android!.channelId.toString(),
+      importance: Importance.max,
+      showBadge: true,
     );
 
-    await flutterLocalNotificationsPlugin.show(
-      message.hashCode,
-      message.notification?.title,
-      message.notification?.body,
-      details,
-      payload: message.data['route'], // Passes the route to navigation
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          channel.id.toString(),
+          channel.name.toString(),
+          channelDescription: 'your channel description',
+          importance: Importance.high,
+          icon: '@drawable/ic_stat_app_launcher_icon',
+          color: const Color(0xFF2196F3),
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
+
+    const DarwinNotificationDetails darwinNotificationDetails =
+        DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: darwinNotificationDetails,
     );
+
+    Future.delayed(Duration.zero, () {
+      flutterLocalNotificationsPlugin.show(
+        message.notification!.hashCode,
+        message.notification!.title.toString(),
+        message.notification!.body.toString(),
+        notificationDetails,
+      );
+    });
   }
 
-  /// ------------------------------------------------------------
-  /// HANDLE NOTIFICATION TAP
-  /// ------------------------------------------------------------
-  void handleMessage(RemoteMessage message) {
-    _handlePayload(message.data['route']);
-  }
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
-  void _handlePayload(String? route) {
-    if (route == null) return;
-
-    final context = ctx;
-    if (context == null) return;
-
-    context.push(route);
-  }
-
-  /// ------------------------------------------------------------
-  /// SAVE FCM TOKEN TO SUPABASE
-  /// ------------------------------------------------------------
+  DeviceInformation deviceInformation = DeviceInformation();
   Future<void> saveFcmToSupabase(String fcmToken, String userId) async {
     try {
       final response = await _client
@@ -209,7 +127,7 @@ class NotificationService {
 
       if (existingTokens.contains(fcmToken)) return;
 
-      devices.add({'deviceId': await _getDeviceId(), 'fcmId': fcmToken});
+      devices.add({'deviceId': await _getId(), 'fcmId': fcmToken});
 
       await _client
           .from(DbTable.users)
@@ -234,7 +152,7 @@ class NotificationService {
           .single();
 
       final List<dynamic> devices = response['fcm'] ?? [];
-      final deviceId = await _getDeviceId();
+      final deviceId = await _getId();
 
       devices.removeWhere((element) => element['deviceId'] == deviceId);
 
@@ -247,24 +165,18 @@ class NotificationService {
     }
   }
 
-  /// ------------------------------------------------------------
-  /// DEVICE ID
-  /// ------------------------------------------------------------
-  Future<String?> _getDeviceId() async {
-    final deviceInfo = DeviceInfoPlugin();
+  Future<String?> _getId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
-      final ios = await deviceInfo.iosInfo;
-      return ios.identifierForVendor;
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
     } else if (Platform.isAndroid) {
-      final android = await deviceInfo.androidInfo;
-      return android.id;
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id; // unique ID on Android
     }
     return null;
   }
 
-  /// ------------------------------------------------------------
-  /// DEBUG UI HELPER
-  /// ------------------------------------------------------------
   void _showDebugSnack(String message, {bool isError = false}) {
     final context = ctx;
     if (context != null && context.mounted) {
