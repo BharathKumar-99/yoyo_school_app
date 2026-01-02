@@ -161,8 +161,7 @@ class AuthRepository {
     try {
       final token = await FirebaseMessaging.instance.getToken();
       if (token != null) {
-        final notificationService = NotificationService();
-        await notificationService.saveFcmToFireBase(token, userId);
+        await NotificationService.instance.saveFcmToSupabase(token, userId);
       }
     } catch (e) {
       log(e.toString());

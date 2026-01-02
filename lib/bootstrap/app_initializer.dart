@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app.dart';
+import '../config/utils/notification_services.dart';
 import '../config/utils/shared_preferences.dart';
 import '../core/supabase/supabase_client.dart';
 import '../features/common/presentation/global_provider.dart';
 import 'error_handlers.dart';
-import 'firebase_messaging_setup.dart';
 
 class AppInitializer {
   static Future<void> initialize() async {
@@ -16,6 +16,11 @@ class AppInitializer {
     await SupabaseClientService.instance.init();
     await SharedPrefsService.init();
 
+    await NotificationService.instance.init();
+
+    globalProvider = await GlobalProvider.create();
+    ErrorHandlers.register();
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -23,10 +28,5 @@ class AppInitializer {
         statusBarBrightness: Brightness.dark,
       ),
     );
-
-    globalProvider = await GlobalProvider.create();
-
-    ErrorHandlers.register();
-    await FirebaseMessagingSetup.initialize();
   }
 }
