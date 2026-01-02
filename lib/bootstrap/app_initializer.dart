@@ -22,13 +22,11 @@ Future<void> handlebackGroundMessaging(RemoteMessage message) async {
 class AppInitializer {
   static Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
-    if (Platform.isAndroid) {
+   
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-    } else if (Platform.isIOS) {
-      await Firebase.initializeApp();
-    }
+   
 
     await SupabaseClientService.instance.init();
     await SharedPrefsService.init();
