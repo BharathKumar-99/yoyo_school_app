@@ -151,6 +151,7 @@ class NotificationService {
   /// SHOW LOCAL NOTIFICATION
   /// ------------------------------------------------------------
   Future<void> showNotification(RemoteMessage message) async {
+    _showDebugSnack(message.data.toString());
     final details = NotificationDetails(
       android: AndroidNotificationDetails(
         _channel.id,
