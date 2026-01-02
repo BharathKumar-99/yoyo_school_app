@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -60,17 +60,42 @@ class NotificationService {
   }
 
   /// ------------------------------------------------------------
-  /// FCM SETUP
+  /// FCM SETUP (iOS DEBUG ENHANCED)
   /// ------------------------------------------------------------
   Future<void> _initFirebaseMessaging() async {
-    // iOS: disable system UI in foreground (we use local notifications)
-    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: false,
-      badge: false,
-      sound: false,
+    // 1. Request Permissions (Required for iOS)
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
     );
 
-    // Foreground
+    _showDebugSnack("Permission: ${settings.authorizationStatus.name}");
+
+    // 2. iOS APNs Token Validation
+    if (Platform.isIOS) {
+      // Small delay to allow iOS to register with Apple servers
+      await Future.delayed(const Duration(seconds: 2));
+      String? apnsToken = await _firebaseMessaging.getAPNSToken();
+
+      if (apnsToken == null) {
+        _showDebugSnack(
+          "ERROR: APNs Token NULL. Check Xcode & .p8 file!",
+          isError: true,
+        );
+      } else {
+        _showDebugSnack("SUCCESS: APNs Token found.");
+      }
+    }
+
+    // 3. Foreground Presentation Settings
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true, // Show banner even when app is open
+      badge: true,
+      sound: true,
+    );
+
+    // Foreground listener
     FirebaseMessaging.onMessage.listen(showNotification);
 
     // Background → Opened
@@ -119,7 +144,7 @@ class NotificationService {
       message.notification?.title,
       message.notification?.body,
       details,
-      payload: message.data['route'], // IMPORTANT
+      payload: message.data['route'],
     );
   }
 
@@ -133,7 +158,7 @@ class NotificationService {
   void _handlePayload(String? route) {
     if (route == null) return;
 
-    final context = ctx;
+    final context = ctx; // ctx must be your GlobalKey<NavigatorState> context
     if (context == null) return;
 
     context.push(route);
@@ -143,24 +168,29 @@ class NotificationService {
   /// SAVE FCM TOKEN TO SUPABASE
   /// ------------------------------------------------------------
   Future<void> saveFcmToSupabase(String fcmToken, String userId) async {
-    final response = await _client
-        .from(DbTable.users)
-        .select('fcm')
-        .eq('user_id', userId)
-        .single();
+    try {
+      final response = await _client
+          .from(DbTable.users)
+          .select('fcm')
+          .eq('user_id', userId)
+          .single();
 
-    final List<dynamic> devices = response['fcm'] ?? [];
+      final List<dynamic> devices = response['fcm'] ?? [];
+      final existingTokens = devices.map((e) => e['fcmId']).toList();
 
-    final existingTokens = devices.map((e) => e['fcmId']).toList();
+      if (existingTokens.contains(fcmToken)) return;
 
-    if (existingTokens.contains(fcmToken)) return;
+      devices.add({'deviceId': await _getDeviceId(), 'fcmId': fcmToken});
 
-    devices.add({'deviceId': await _getDeviceId(), 'fcmId': fcmToken});
+      await _client
+          .from(DbTable.users)
+          .update({'fcm': devices})
+          .eq('user_id', userId);
 
-    await _client
-        .from(DbTable.users)
-        .update({'fcm': devices})
-        .eq('user_id', userId);
+      _showDebugSnack("FCM Token saved to Supabase");
+    } catch (e) {
+      _showDebugSnack("Supabase Error: $e", isError: true);
+    }
   }
 
   /// ------------------------------------------------------------
@@ -189,7 +219,6 @@ class NotificationService {
   /// ------------------------------------------------------------
   Future<String?> _getDeviceId() async {
     final deviceInfo = DeviceInfoPlugin();
-
     if (Platform.isIOS) {
       final ios = await deviceInfo.iosInfo;
       return ios.identifierForVendor;
@@ -198,5 +227,21 @@ class NotificationService {
       return android.id;
     }
     return null;
+  }
+
+  /// ------------------------------------------------------------
+  /// DEBUG UI HELPER
+  /// ------------------------------------------------------------
+  void _showDebugSnack(String message, {bool isError = false}) {
+    final context = ctx;
+    if (context != null && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: isError ? Colors.red : Colors.blueGrey,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 }
