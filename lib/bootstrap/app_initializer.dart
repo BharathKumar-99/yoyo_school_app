@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yoyo_school_app/firebase_options.dart';
 
 import '../app.dart';
 import '../config/utils/notification_services.dart';
@@ -15,7 +18,11 @@ class AppInitializer {
 
     await SupabaseClientService.instance.init();
     await SharedPrefsService.init();
-    await Firebase.initializeApp();
+
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
     await NotificationService.instance.init();
 
     globalProvider = await GlobalProvider.create();
