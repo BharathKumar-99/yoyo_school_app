@@ -13,21 +13,25 @@ import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 /// ------------------------------------------------------------
 /// GLOBALS
 /// ------------------------------------------------------------
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 final SupabaseClient _client = SupabaseClientService.instance.client;
-
-/// ------------------------------------------------------------
-/// NOTIFICATION SERVICE
-/// ------------------------------------------------------------
 
 class NotificationService {
   NotificationService._internal();
   static final NotificationService instance = NotificationService._internal();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  // Define Android Channel as a constant for consistency
+  static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    description: 'This channel is used for important school updates.',
+    importance: Importance.max,
+    playSound: true,
+  );
 
   /// ------------------------------------------------------------
   /// INIT (CALL ONCE AT APP START)
@@ -51,57 +55,68 @@ class NotificationService {
 
     const settings = InitializationSettings(android: androidInit, iOS: iosInit);
 
+    // Initialize the plugin
     await flutterLocalNotificationsPlugin.initialize(
       settings,
       onDidReceiveNotificationResponse: (response) {
         _handlePayload(response.payload);
       },
     );
+
+    // Create the channel for Android
+    if (Platform.isAndroid) {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(_channel);
+    }
   }
 
   /// ------------------------------------------------------------
   /// FCM SETUP (iOS DEBUG ENHANCED)
   /// ------------------------------------------------------------
   Future<void> _initFirebaseMessaging() async {
-    // 1. Request Permissions (Required for iOS)
+    // 1. Request Permissions (Crucial for iOS)
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
+      provisional: false,
     );
 
     _showDebugSnack("Permission: ${settings.authorizationStatus.name}");
 
     // 2. iOS APNs Token Validation
     if (Platform.isIOS) {
-      // Small delay to allow iOS to register with Apple servers
+      // Delay allows Apple servers to register with the physical device
       await Future.delayed(const Duration(seconds: 2));
       String? apnsToken = await _firebaseMessaging.getAPNSToken();
-
+      
       if (apnsToken == null) {
-        _showDebugSnack(
-          "ERROR: APNs Token NULL. Check Xcode & .p8 file!",
-          isError: true,
-        );
+        _showDebugSnack("ERROR: APNs Token NULL. Check Xcode & .p8 file!", isError: true);
       } else {
         _showDebugSnack("SUCCESS: APNs Token found.");
       }
     }
 
-    // 3. Foreground Presentation Settings
+    // 3. Foreground Presentation (Display banner while app is open)
     await _firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: true, // Show banner even when app is open
+      alert: true,
       badge: true,
       sound: true,
     );
 
-    // Foreground listener
-    FirebaseMessaging.onMessage.listen(showNotification);
+    // 4. Foreground listener
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      showNotification(message);
+    });
 
-    // Background → Opened
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    // 5. Background -> Opened
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      handleMessage(message);
+    });
 
-    // Terminated → Opened
+    // 6. Terminated -> Opened
     final initialMessage = await _firebaseMessaging.getInitialMessage();
     if (initialMessage != null) {
       handleMessage(initialMessage);
@@ -112,25 +127,14 @@ class NotificationService {
   /// SHOW LOCAL NOTIFICATION
   /// ------------------------------------------------------------
   Future<void> showNotification(RemoteMessage message) async {
-    const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'high_importance_channel',
-      'High Importance Notifications',
-      importance: Importance.max,
-    );
-
-    final androidPlugin = flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-
-    await androidPlugin?.createNotificationChannel(channel);
-
     final details = NotificationDetails(
       android: AndroidNotificationDetails(
-        channel.id,
-        channel.name,
-        importance: Importance.high,
+        _channel.id,
+        _channel.name,
+        channelDescription: _channel.description,
+        importance: Importance.max,
         priority: Priority.high,
+        icon: '@mipmap/ic_launcher',
       ),
       iOS: const DarwinNotificationDetails(
         presentAlert: true,
@@ -144,7 +148,7 @@ class NotificationService {
       message.notification?.title,
       message.notification?.body,
       details,
-      payload: message.data['route'],
+      payload: message.data['route'], // Passes the route to navigation
     );
   }
 
@@ -158,7 +162,7 @@ class NotificationService {
   void _handlePayload(String? route) {
     if (route == null) return;
 
-    final context = ctx; // ctx must be your GlobalKey<NavigatorState> context
+    final context = ctx; 
     if (context == null) return;
 
     context.push(route);
@@ -187,7 +191,7 @@ class NotificationService {
           .update({'fcm': devices})
           .eq('user_id', userId);
 
-      _showDebugSnack("FCM Token saved to Supabase");
+      _showDebugSnack("FCM saved to Supabase");
     } catch (e) {
       _showDebugSnack("Supabase Error: $e", isError: true);
     }
@@ -197,21 +201,25 @@ class NotificationService {
   /// REMOVE FCM TOKEN (LOGOUT)
   /// ------------------------------------------------------------
   Future<void> deleteFcmFromSupabase(String userId) async {
-    final response = await _client
-        .from(DbTable.users)
-        .select('fcm')
-        .eq('user_id', userId)
-        .single();
+    try {
+      final response = await _client
+          .from(DbTable.users)
+          .select('fcm')
+          .eq('user_id', userId)
+          .single();
 
-    final List<dynamic> devices = response['fcm'] ?? [];
-    final deviceId = await _getDeviceId();
+      final List<dynamic> devices = response['fcm'] ?? [];
+      final deviceId = await _getDeviceId();
 
-    devices.removeWhere((element) => element['deviceId'] == deviceId);
+      devices.removeWhere((element) => element['deviceId'] == deviceId);
 
-    await _client
-        .from(DbTable.users)
-        .update({'fcm': devices})
-        .eq('user_id', userId);
+      await _client
+          .from(DbTable.users)
+          .update({'fcm': devices})
+          .eq('user_id', userId);
+    } catch (e) {
+      debugPrint("Logout Error: $e");
+    }
   }
 
   /// ------------------------------------------------------------
