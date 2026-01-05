@@ -190,6 +190,7 @@ class ResultProvider extends ChangeNotifier {
       result?.vocab = goodWords.length;
 
       result = await _repo.upsertResult(result!);
+      await _repo.shouldShowPopup();
     } catch (e) {
       throw "Failed to update result";
     }

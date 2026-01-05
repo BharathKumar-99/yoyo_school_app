@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -11,12 +12,14 @@ import 'package:yoyo_school_app/features/splash/app_config_model.dart';
 import 'package:yoyo_school_app/features/splash/data/splash_repo.dart';
 
 import '../../../config/router/navigation_helper.dart';
+import '../../common/presentation/app_update_screen.dart';
 
 class SplashViewModel extends ChangeNotifier {
   UserModel? _user;
   GlobalProvider? _globalProvider;
   final SplashRepo _repo = SplashRepo();
   AppConfigModel? model;
+  bool showUpdate = false;
   SplashViewModel() {
     _globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     init();
@@ -30,7 +33,7 @@ class SplashViewModel extends ChangeNotifier {
     if (_user != null) {
       globalProvider = await GlobalProvider.create();
     }
-    if (!(false)) {
+    if (!(_user?.isTester ?? false)) {
       if (model?.isMaintainance ?? false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           GlobalLoader.hide();
@@ -47,11 +50,7 @@ class SplashViewModel extends ChangeNotifier {
             storeVersion: storeVersion,
             appVersion: appVersion,
           )) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          GlobalLoader.hide();
-          ctx!.go(RouteNames.appUpdate);
-        });
-        return;
+        showUpdate = true;
       }
     }
 
@@ -66,6 +65,9 @@ class SplashViewModel extends ChangeNotifier {
         GlobalLoader.hide();
         ctx!.go(RouteNames.home);
       });
+    }
+    if (showUpdate) {
+      GlobalLoader.showWidget(AppUpdateScreen());
     }
   }
 

@@ -60,6 +60,7 @@ class DbTable {
   static const String school = 'school';
   static const String schoolLanguage = 'school_language';
   static const String student = 'student';
+  static const String feedbackTable = 'feedback_table';
   static const String teacher = 'teacher';
   static const String users = 'users';
   static const String attemptedPhrases = 'attempted_phrases';

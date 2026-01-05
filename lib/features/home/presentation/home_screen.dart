@@ -82,6 +82,7 @@ class HomeScreen extends StatelessWidget {
                         const SizedBox(height: 50),
                         _AnimatedSectionTitle(text.your_classes),
                         const SizedBox(height: 10),
+
                         Column(
                           children:
                               homeProvider

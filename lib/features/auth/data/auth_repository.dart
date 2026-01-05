@@ -79,19 +79,18 @@ class AuthRepository {
       final user = res.user;
       print("Updated metadata: ${user?.userMetadata}");
       try {
-        if (userid != '90e3337c-7684-465d-a752-7c467f7136ff') {
-          await client
-              .from(DbTable.users)
-              .update({
-                'activation_code': null,
-                'is_activated': true,
-                'is_logged_in': true,
-                'last_login': DateTime.now().toIso8601String(),
-                'user_login_info': await getUserDeviceAndAppInfo(),
-              })
-              .eq('user_id', userid);
-        }
-        await setupToken(userid);
+        await client
+            .from(DbTable.users)
+            .update({
+              'activation_code': null,
+              'is_activated': true,
+              'is_logged_in': true,
+              'last_login': DateTime.now().toIso8601String(),
+              'user_login_info': await getUserDeviceAndAppInfo(),
+            })
+            .eq('user_id', userid);
+
+        // await setupToken(userid);
       } catch (e) {
         rethrow;
       }

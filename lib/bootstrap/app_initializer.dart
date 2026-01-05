@@ -22,50 +22,47 @@ Future<void> handlebackGroundMessaging(RemoteMessage message) async {
 class AppInitializer {
   static Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
-   
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-   
+
+    // await Firebase.initializeApp();
 
     await SupabaseClientService.instance.init();
     await SharedPrefsService.init();
-    final firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.requestPermission();
-    FirebaseMessaging.onBackgroundMessage(handlebackGroundMessaging);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: AndroidNotificationDetails(
-          "high_importance_channel",
-          "High Importance Notifications",
-          priority: Priority.max,
-          icon: '@drawable/ic_stat_app_launcher_icon',
-          color: const Color(0xFF2196F3),
-          importance: Importance.max,
-        ),
-      );
+    // final firebaseMessaging = FirebaseMessaging.instance;
+    // await firebaseMessaging.requestPermission();
+    // FirebaseMessaging.onBackgroundMessage(handlebackGroundMessaging);
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //   NotificationDetails platformChannelSpecifics = NotificationDetails(
+    //     android: AndroidNotificationDetails(
+    //       "high_importance_channel",
+    //       "High Importance Notifications",
+    //       priority: Priority.max,
+    //       icon: '@drawable/ic_stat_app_launcher_icon',
+    //       color: const Color(0xFF2196F3),
+    //       importance: Importance.max,
+    //     ),
+    //   );
 
-      AndroidNotificationChannel(
-        'high_importance_channel',
-        'High Importance Notifications',
-        description: 'This channel is used for important notifications.',
-        importance: Importance.high,
-        playSound: true,
-      );
-      if (Platform.isAndroid) {
-        await NotificationService().flutterLocalNotificationsPlugin.show(
-          0,
-          message.notification!.title,
-          message.notification!.body,
-          platformChannelSpecifics,
-          payload: message.data.toString(),
-        );
-      }
-    });
-    final PermissionStatus status = await Permission.notification.status;
-    if (status.isDenied) {
-      await Permission.notification.request();
-    }
+    //   AndroidNotificationChannel(
+    //     'high_importance_channel',
+    //     'High Importance Notifications',
+    //     description: 'This channel is used for important notifications.',
+    //     importance: Importance.high,
+    //     playSound: true,
+    //   );
+    //   if (Platform.isAndroid) {
+    //     await NotificationService().flutterLocalNotificationsPlugin.show(
+    //       0,
+    //       message.notification!.title,
+    //       message.notification!.body,
+    //       platformChannelSpecifics,
+    //       payload: message.data.toString(),
+    //     );
+    //   }
+    // });
+    // final PermissionStatus status = await Permission.notification.status;
+    // if (status.isDenied) {
+    //   await Permission.notification.request();
+    // }
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
