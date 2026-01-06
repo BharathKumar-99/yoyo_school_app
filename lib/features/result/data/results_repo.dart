@@ -63,7 +63,7 @@ class ResultsRepo {
         .eq('user_id', userId)
         .count(CountOption.exact);
 
-    if (data.count == 2) {
+    if (data.count == 10) {
       showDialog(
         context: ctx!,
         builder: (c) => AlertDialog.adaptive(content: FeedbackForm()),

@@ -72,6 +72,36 @@ class GlobalRepo {
     yield* controller.stream;
   }
 
+  late final RealtimeChannel _phraseDisabledChannel;
+
+  void listenPhraseDisabledSchools({
+    required int remoteConfigId,
+    required void Function(List<Map<String, dynamic>> data) onChange,
+  }) {
+    _phraseDisabledChannel = _client.channel('phrase-disabled-schools');
+
+    _phraseDisabledChannel.onPostgresChanges(
+      event: PostgresChangeEvent.all,
+      schema: 'public',
+      table: DbTable.phraseDisabledSchools,
+      filter: PostgresChangeFilter(
+        type: PostgresChangeFilterType.eq,
+        column: 'remote_id',
+        value: remoteConfigId,
+      ),
+      callback: (payload) async {
+        final updated = await _client
+            .from(DbTable.phraseDisabledSchools)
+            .select()
+            .eq('remote_id', remoteConfigId);
+
+        onChange(updated);
+      },
+    );
+
+    _phraseDisabledChannel.subscribe();
+  }
+
   Future<RemoteConfig?> getRemoteCred() async {
     final userId = GetUserDetails.getCurrentUserId();
     if (userId == null) {
@@ -89,8 +119,8 @@ class GlobalRepo {
         .eq('school', user?['school'])
         .limit(1)
         .maybeSingle();
-    log(data!.toString());
-    return RemoteConfig.fromJson(data);
+
+    return RemoteConfig.fromJson(data!);
   }
 
   Future<SpeechEvaluationModel?> callSuperSpeechApi({

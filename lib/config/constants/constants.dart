@@ -1,13 +1,24 @@
 class UrlConstants {
   static const String superSpeachApi = "api.speechsuper.com";
   static const String openAiUrl =
-      'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/openai';
+      '${Constants.dev ? SupabaseConstants.devSupabaseUrl : SupabaseConstants.prodSupabaseUrl}/functions/v1/openai';
   static const String terms = 'https://support.yoyospeak.com/terms/';
   static const String privacy = 'https://support.yoyospeak.com/privacy/';
   static const String playStoreUrl =
       'https://play.google.com/store/apps/details?id=com.yoyospeak.yoyo';
   static const String appStoreUrl =
       'https://apps.apple.com/gb/app/yoyo-speak/id6639612813';
+}
+
+class SupabaseConstants {
+  static const String devSupabaseUrl =
+      'https://zhomsvnayqwfovpvkqzj.supabase.co';
+  static const String devSupabaseKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpob21zdm5heXF3Zm92cHZrcXpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc2NjQ2ODgsImV4cCI6MjA4MzI0MDY4OH0.6-cCsDP1TjxHmbL_B1dT0WZiUHrIXt17Vz26pxzQFZE';
+  static const String prodSupabaseUrl =
+      'https://xijaobuybkpfmyxcrobo.supabase.co';
+  static const String prodSupabaseKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpamFvYnV5YmtwZm15eGNyb2JvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkxOTMwOTEsImV4cCI6MjA3NDc2OTA5MX0.NXUL474MOuf-5YXxby4BZzWgrTcsRkLj5rxLU3jf3JI';
 }
 
 class ImageConstants {
@@ -90,4 +101,6 @@ class Constants {
   static const int lowScreenScore = 10;
 
   static const int retryAttempts = 3;
+
+  static const bool dev = false;
 }

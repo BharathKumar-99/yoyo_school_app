@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 
 class SupabaseClientService {
   SupabaseClientService._();
@@ -8,9 +9,12 @@ class SupabaseClientService {
 
   Future<void> init() async {
     await Supabase.initialize(
-      url: 'https://xijaobuybkpfmyxcrobo.supabase.co',
-      anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpamFvYnV5YmtwZm15eGNyb2JvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkxOTMwOTEsImV4cCI6MjA3NDc2OTA5MX0.NXUL474MOuf-5YXxby4BZzWgrTcsRkLj5rxLU3jf3JI',
+      url: Constants.dev
+          ? SupabaseConstants.devSupabaseUrl
+          : SupabaseConstants.prodSupabaseUrl,
+      anonKey: Constants.dev
+          ? SupabaseConstants.devSupabaseKey
+          : SupabaseConstants.prodSupabaseKey,
     );
     client = Supabase.instance.client;
   }

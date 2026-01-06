@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
+import '../../common/data/global_repo.dart';
 import '../../common/presentation/global_provider.dart';
 import '../../home/model/phrases_model.dart';
 import '../../home/model/school_launguage.dart';
@@ -45,6 +47,7 @@ class PhrasesViewModel extends ChangeNotifier {
   bool isMasteryEnabled = false;
   PhraseModel? _currentlyPlaying;
   PhraseModel? get currentlyPlaying => _currentlyPlaying;
+  final GlobalRepo globalRepo = GlobalRepo();
 
   bool get isPlaying => audioManager.player.playing;
 
@@ -143,6 +146,29 @@ class PhrasesViewModel extends ChangeNotifier {
 
       userResultProvider.addListener(_userResultListener);
       isStreakLoading = false;
+      globalRepo.listenPhraseDisabledSchools(
+        remoteConfigId: globalProvider.apiCred?.id ?? 0,
+        onChange: (rows) {
+          globalProvider.apiCred?.phraseDisabledSchools = rows
+              .map((e) => PhraseDisabledSchools.fromJson(e))
+              .toList();
+          final disabledIds = globalProvider.apiCred?.phraseDisabledSchools
+              .map((e) => e.phraseId)
+              .whereType<int>()
+              .toSet();
+          _processResults(userId, ids, isFirst);
+          newPhrases.removeWhere(
+            (phrase) => disabledIds?.contains(phrase.id) ?? false,
+          );
+          learned.removeWhere(
+            (phrase) => disabledIds?.contains(phrase.id) ?? false,
+          );
+          mastered.removeWhere(
+            (phrase) => disabledIds?.contains(phrase.id) ?? false,
+          );
+          notifyListeners();
+        },
+      );
     } catch (e) {
       throw Exception("Failed initializing phrase data");
     }
