@@ -54,12 +54,7 @@
 		<key>UIStatusBarHidden</key>
 		<false/>
 		<key>FirebaseAppDelegateProxyEnabled</key>
-		<false/>
-		<key>NSLocalNotificationsUsageDescription</key>
-		<string>We use notifications to keep you updated on school activities.</string>
 		<true/>
-		<key>PermissionGroupNotification</key>
-		<string>This app needs access permission for push notifications for seamless arrivals of counterbids</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
