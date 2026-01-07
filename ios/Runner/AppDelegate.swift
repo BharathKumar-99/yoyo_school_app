@@ -1,8 +1,7 @@
 import UIKit
 import Flutter
-import Firebase
 import flutter_local_notifications
-import UserNotifications 
+import UserNotifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -12,15 +11,12 @@ import UserNotifications
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
 
-    // 🔥 REQUIRED: Initialize Firebase for iOS
-    FirebaseApp.configure()
+    // DO NOT call FirebaseApp.configure() here
 
-    // 🔔 Required for foreground notifications
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self
     }
 
-    // Required for flutter_local_notifications background handling
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { registry in
       GeneratedPluginRegistrant.register(with: registry)
     }
@@ -29,7 +25,6 @@ import UserNotifications
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  // 🔥 THIS IS WHAT YOU WERE MISSING
   override func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     willPresent notification: UNNotification,
