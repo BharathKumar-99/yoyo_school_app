@@ -90,7 +90,7 @@ class AuthRepository {
             })
             .eq('user_id', userid);
 
-        // await setupToken(userid);
+        await setupToken(userid);
       } catch (e) {
         rethrow;
       }
@@ -160,8 +160,23 @@ class AuthRepository {
     try {
       final token = await FirebaseMessaging.instance.getToken();
       if (token != null) {
-        await NotificationService().saveFcmToSupabase(token, userId);
+        await FirebaseMessagingService.instance().saveFcmToSupabase(
+          token,
+          userId,
+        );
       }
+      FirebaseMessaging.instance.onTokenRefresh
+          .listen((fcmToken) async {
+            print('FCM token refreshed: $fcmToken');
+            await FirebaseMessagingService.instance().saveFcmToSupabase(
+              fcmToken,
+              userId,
+            );
+          })
+          .onError((error) {
+            // Handle errors during token refresh
+            print('Error refreshing FCM token: $error');
+          });
     } catch (e) {
       log(e.toString());
     }

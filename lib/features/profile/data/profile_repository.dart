@@ -24,7 +24,7 @@ class ProfileRepository {
         .eq('user_id', userId);
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    await NotificationService().deleteFcmFromSupabase(userId);
+    await FirebaseMessagingService.instance().deleteFcmFromSupabase(userId);
     await _client.auth.signOut();
 
     GlobalLoader.hide();

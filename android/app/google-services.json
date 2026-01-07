@@ -7,94 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:193759194536:android:ff36170b96fa681664419d",
-        "android_client_info": {
-          "package_name": "com.example.yoyo_app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBY7ra2TDDk6O-aFJ5ixq6erKH_eyhtcp8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:193759194536:android:5742c53e3418213e64419d",
-        "android_client_info": {
-          "package_name": "com.example.yoyo_ui"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBY7ra2TDDk6O-aFJ5ixq6erKH_eyhtcp8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:193759194536:android:276fd567a167c4c964419d",
-        "android_client_info": {
-          "package_name": "com.student.yoyospeak"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "193759194536-64pbo5rte7980j8el23mn7ncmgmmn61j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.student.yoyospeak",
-            "certificate_hash": "46c09fd837997cf0bf5990183442ca7ebecae7ba"
-          }
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBY7ra2TDDk6O-aFJ5ixq6erKH_eyhtcp8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:193759194536:android:9088eaa272ca37b364419d",
+        "mobilesdk_app_id": "1:193759194536:android:18d08382afb68d7964419d",
         "android_client_info": {
           "package_name": "com.yoyospeak.yoyo"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBY7ra2TDDk6O-aFJ5ixq6erKH_eyhtcp8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:193759194536:android:e8e560e11972a85664419d",
-        "android_client_info": {
-          "package_name": "com.yoyotutor.yoyo"
         }
       },
       "oauth_client": [],
