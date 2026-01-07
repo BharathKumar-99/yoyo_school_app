@@ -1,7 +1,5 @@
 import UIKit
 import Flutter
-import flutter_local_notifications
-import UserNotifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -13,24 +11,10 @@ import UserNotifications
 
     // DO NOT call FirebaseApp.configure() here
 
-    if #available(iOS 10.0, *) {
-      UNUserNotificationCenter.current().delegate = self
-    }
-
-    FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { registry in
-      GeneratedPluginRegistrant.register(with: registry)
-    }
 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  override func userNotificationCenter(
-    _ center: UNUserNotificationCenter,
-    willPresent notification: UNNotification,
-    withCompletionHandler completionHandler:
-      @escaping (UNNotificationPresentationOptions) -> Void
-  ) {
-    completionHandler([.alert, .badge, .sound])
-  }
+  
 }
