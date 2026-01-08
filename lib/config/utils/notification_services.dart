@@ -130,9 +130,9 @@ class NotificationService {
     String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
     String? fcmTokens = await FirebaseMessaging.instance.getToken();
 
-    sendNo(apnsToken ?? "WErrir");
+    sendNo(fcmTokens ?? "WErrir");
     ScaffoldMessenger.of(ctx!).showSnackBar(
-      SnackBar(content: Text("Notification Received: $fcmTokens")),
+      SnackBar(content: Text("Notification Received: $apnsToken")),
     );
     final Map<String, dynamic> userData = response;
     List<dynamic> deviceIds = userData['fcm_tokens'] ?? [];
