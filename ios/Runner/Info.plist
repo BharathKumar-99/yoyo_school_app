@@ -62,6 +62,7 @@
 	<string>This app uses notifications to update you.</string>
 	<key>PermissionGroupNotification</key>
 	<string>This app needs access permission for push notifications for seamless arrivals of counterbids</string>
-		
+	<key>FirebaseAppDelegateProxyEnabled</key>
+<false/>
 </dict>
 </plist>
