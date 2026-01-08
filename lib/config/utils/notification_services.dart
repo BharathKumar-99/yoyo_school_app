@@ -117,7 +117,7 @@ class NotificationService {
   Future<void> saveFcmToFireBase(String fcmToken, String userId) async {
     final response = await _client
         .from(DbTable.users)
-        .select('fcm_tokens')
+        .select('fcm')
         .eq('user_id', userId)
         .single();
 
@@ -133,7 +133,7 @@ class NotificationService {
     deviceIds.add({'deviceId': await _getId(), 'fcmId': fcmToken});
     await _client
         .from(DbTable.users)
-        .update({'fcm_tokens': deviceIds})
+        .update({'fcm': deviceIds})
         .eq('user_id', userId);
   }
 
@@ -154,7 +154,7 @@ class NotificationService {
     deviceIds.removeWhere((element) => element['deviceId'] == deviceId);
     await _client
         .from(DbTable.users)
-        .update({'fcm_tokens': deviceIds})
+        .update({'fcm': deviceIds})
         .eq('user_id', userId);
   }
 
