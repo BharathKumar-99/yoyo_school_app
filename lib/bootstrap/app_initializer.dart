@@ -72,8 +72,7 @@ class AppInitializer {
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
-    NotificationService notificationServices = NotificationService();
-    notificationServices.setupInteractMessage(ctx!);
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
