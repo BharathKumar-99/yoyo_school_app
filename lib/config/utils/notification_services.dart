@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'device_info.dart';
 
@@ -69,6 +70,12 @@ class NotificationService {
   }
 
   Future<void> showNotification(message) async {
+    ScaffoldMessenger.of(ctx!).showSnackBar(
+      SnackBar(
+        content: Text("Notification Received: ${message.notification?.title}"),
+      ),
+    );
+
     AndroidNotificationChannel channel = AndroidNotificationChannel(
       message.notification!.android!.channelId.toString(),
       message.notification!.android!.channelId.toString(),
