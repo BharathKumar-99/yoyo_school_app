@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/firebase_options.dart';
 
 import '../app.dart';
@@ -34,6 +35,13 @@ class AppInitializer {
     await firebaseMessaging.requestPermission();
     FirebaseMessaging.onBackgroundMessage(handlebackGroundMessaging);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      showDialog(
+        context: ctx!,
+        builder: (cont) => AlertDialog.adaptive(
+          title: Text(message.notification!.title ?? ''),
+          content: Text(message.notification!.body ?? ''),
+        ),
+      );
       AndroidNotificationChannel channel = AndroidNotificationChannel(
         message.notification!.android!.channelId.toString(),
         message.notification!.android!.channelId.toString(),
