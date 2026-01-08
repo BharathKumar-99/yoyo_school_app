@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/utils/device_info.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 
 import 'local_notification_services.dart';

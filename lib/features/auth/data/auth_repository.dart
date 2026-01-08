@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
@@ -158,25 +159,38 @@ class AuthRepository {
 
   Future<void> setupToken(String userId) async {
     try {
-      final token = await FirebaseMessaging.instance.getToken();
-      if (token != null) {
-        await FirebaseMessagingService.instance().saveFcmToSupabase(
-          token,
-          userId,
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null) {
+        // APNS token is available, make FCM plugin API requests...
+
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          await FirebaseMessagingService.instance().saveFcmToSupabase(
+            token,
+            userId,
+          );
+        }
+        FirebaseMessaging.instance.onTokenRefresh
+            .listen((fcmToken) async {
+              print('FCM token refreshed: $fcmToken');
+              await FirebaseMessagingService.instance().saveFcmToSupabase(
+                fcmToken,
+                userId,
+              );
+            })
+            .onError((error) {
+              // Handle errors during token refresh
+              print('Error refreshing FCM token: $error');
+            });
+      } else {
+        ScaffoldMessenger.of(ctx!).showSnackBar(
+          SnackBar(
+            content: Text("APN Error"),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
-      FirebaseMessaging.instance.onTokenRefresh
-          .listen((fcmToken) async {
-            print('FCM token refreshed: $fcmToken');
-            await FirebaseMessagingService.instance().saveFcmToSupabase(
-              fcmToken,
-              userId,
-            );
-          })
-          .onError((error) {
-            // Handle errors during token refresh
-            print('Error refreshing FCM token: $error');
-          });
     } catch (e) {
       log(e.toString());
     }
