@@ -127,13 +127,7 @@ class NotificationService {
         .select('fcm')
         .eq('user_id', userId)
         .single();
-    String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-    String? fcmTokens = await FirebaseMessaging.instance.getToken();
 
-    sendNo(fcmTokens ?? "WErrir");
-    ScaffoldMessenger.of(ctx!).showSnackBar(
-      SnackBar(content: Text("Notification Received: $apnsToken")),
-    );
     final Map<String, dynamic> userData = response;
     List<dynamic> deviceIds = userData['fcm_tokens'] ?? [];
     List<dynamic> ids = [];
@@ -153,7 +147,7 @@ class NotificationService {
   deleteFcmFromSupabse(String userId) async {
     final response = await _client
         .from(DbTable.users)
-        .select('fcm_tokens')
+        .select('fcm')
         .eq('user_id', userId)
         .single();
 

@@ -159,34 +159,23 @@ class AuthRepository {
 
   Future<void> setupToken(String userId) async {
     try {
-      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-      if (apnsToken != null) {
-        // APNS token is available, make FCM plugin API requests...
+      // APNS token is available, make FCM plugin API requests...
 
-        final token = await FirebaseMessaging.instance.getToken();
-        if (token != null) {
-          NotificationService notificationService = NotificationService();
-          await notificationService.saveFcmToFireBase(token, userId);
-        }
-        FirebaseMessaging.instance.onTokenRefresh
-            .listen((fcmToken) async {
-              print('FCM token refreshed: $fcmToken');
-              NotificationService notificationService = NotificationService();
-              await notificationService.saveFcmToFireBase(fcmToken, userId);
-            })
-            .onError((error) {
-              // Handle errors during token refresh
-              print('Error refreshing FCM token: $error');
-            });
-      } else {
-        ScaffoldMessenger.of(ctx!).showSnackBar(
-          SnackBar(
-            content: Text("APN Error"),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        NotificationService notificationService = NotificationService();
+        await notificationService.saveFcmToFireBase(token, userId);
       }
+      FirebaseMessaging.instance.onTokenRefresh
+          .listen((fcmToken) async {
+            print('FCM token refreshed: $fcmToken');
+            NotificationService notificationService = NotificationService();
+            await notificationService.saveFcmToFireBase(fcmToken, userId);
+          })
+          .onError((error) {
+            // Handle errors during token refresh
+            print('Error refreshing FCM token: $error');
+          });
     } catch (e) {
       log(e.toString());
     }

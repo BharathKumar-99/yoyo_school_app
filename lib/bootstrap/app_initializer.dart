@@ -34,33 +34,41 @@ class AppInitializer {
     await firebaseMessaging.requestPermission();
     FirebaseMessaging.onBackgroundMessage(handlebackGroundMessaging);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      AndroidNotificationChannel channel = AndroidNotificationChannel(
+        message.notification!.android!.channelId.toString(),
+        message.notification!.android!.channelId.toString(),
+        importance: Importance.max,
+        showBadge: true,
+      );
+
+      const DarwinNotificationDetails darwinNotificationDetails =
+          DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+            interruptionLevel: InterruptionLevel.active,
+          );
+
       NotificationDetails platformChannelSpecifics = NotificationDetails(
+        iOS: darwinNotificationDetails,
         android: AndroidNotificationDetails(
-          "high_importance_channel",
-          "High Importance Notifications",
+          channel.id.toString(),
+          channel.name.toString(),
+          channelDescription: 'your channel description',
+          importance: Importance.high,
+          icon: '@drawable/ic_launcher_foreground',
           priority: Priority.max,
-          icon: '@drawable/ic_stat_app_launcher_icon',
           color: const Color(0xFF2196F3),
-          importance: Importance.max,
         ),
       );
 
-      AndroidNotificationChannel(
-        'high_importance_channel',
-        'High Importance Notifications',
-        description: 'This channel is used for important notifications.',
-        importance: Importance.high,
-        playSound: true,
+      await NotificationService().flutterLocalNotificationsPlugin.show(
+        0,
+        message.notification!.title,
+        message.notification!.body,
+        platformChannelSpecifics,
+        payload: message.data.toString(),
       );
-      if (Platform.isAndroid) {
-        await NotificationService().flutterLocalNotificationsPlugin.show(
-          0,
-          message.notification!.title,
-          message.notification!.body,
-          platformChannelSpecifics,
-          payload: message.data.toString(),
-        );
-      }
     });
     final PermissionStatus status = await Permission.notification.status;
     if (status.isDenied) {
