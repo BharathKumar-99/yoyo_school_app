@@ -127,7 +127,13 @@ class NotificationService {
         .select('fcm')
         .eq('user_id', userId)
         .single();
+    String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    String? fcmTokens = await FirebaseMessaging.instance.getToken();
 
+    sendNo(apnsToken ?? "WErrir");
+    ScaffoldMessenger.of(ctx!).showSnackBar(
+      SnackBar(content: Text("Notification Received: $fcmTokens")),
+    );
     final Map<String, dynamic> userData = response;
     List<dynamic> deviceIds = userData['fcm_tokens'] ?? [];
     List<dynamic> ids = [];
@@ -175,5 +181,47 @@ class NotificationService {
       return androidDeviceInfo.id; // unique ID on Android
     }
     return null;
+  }
+
+  sendNo(String token) {
+    AndroidNotificationChannel channel = AndroidNotificationChannel(
+      "Sdg",
+      "SDfg",
+      importance: Importance.max,
+      showBadge: true,
+    );
+
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          channel.id.toString(),
+          channel.name.toString(),
+          channelDescription: 'your channel description',
+          importance: Importance.high,
+          icon: '@drawable/ic_stat_app_launcher_icon',
+          color: const Color(0xFF2196F3),
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
+
+    const DarwinNotificationDetails darwinNotificationDetails =
+        DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: darwinNotificationDetails,
+    );
+
+    Future.delayed(Duration.zero, () {
+      flutterLocalNotificationsPlugin.show(
+        23,
+        "message.notification!.title.toString()",
+        token,
+        notificationDetails,
+      );
+    });
   }
 }
