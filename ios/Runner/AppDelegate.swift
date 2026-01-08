@@ -1,26 +1,53 @@
 import UIKit
-import Flutter
-import Firebase // Add this
+import Flutter 
+import Firebase
+import FirebaseCore
+import FirebaseMessaging
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
+@objc class AppDelegate: FlutterAppDelegate, MessagingDelegate {
     
-    // Register for remote notifications
-    if #available(iOS 10.0, *) {
-      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
-    }
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+         
+        FirebaseApp.configure()
+        Messaging.messaging().delegate = self
+                
+        GeneratedPluginRegistrant.register(with: self)
+        
+        guard let controller = window?.rootViewController as? FlutterViewController else {
+            fatalError("RootViewController is not a FlutterViewController")
+        }
+        
+        let channel = FlutterMethodChannel(name: "app/minimize", binaryMessenger: controller.binaryMessenger)
+        
+        channel.setMethodCallHandler { (call, result) in
+            if call.method == "minimize" {
+                UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+                result(nil)
+            }
+        }
+         
+        
     
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: { _, _ in }
+            )
+        } else {
+            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
 
-  // Add this method to pass the APNs token to Firebase
-  override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    Messaging.messaging().apnsToken = deviceToken
-    super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
-  }
+        application.registerForRemoteNotifications()
+
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+
+    
 }

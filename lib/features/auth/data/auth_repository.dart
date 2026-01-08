@@ -165,18 +165,14 @@ class AuthRepository {
 
         final token = await FirebaseMessaging.instance.getToken();
         if (token != null) {
-          await FirebaseMessagingService.instance().saveFcmToSupabase(
-            token,
-            userId,
-          );
+          NotificationService notificationService = NotificationService();
+          await notificationService.saveFcmToFireBase(token, userId);
         }
         FirebaseMessaging.instance.onTokenRefresh
             .listen((fcmToken) async {
               print('FCM token refreshed: $fcmToken');
-              await FirebaseMessagingService.instance().saveFcmToSupabase(
-                fcmToken,
-                userId,
-              );
+              NotificationService notificationService = NotificationService();
+              await notificationService.saveFcmToFireBase(fcmToken, userId);
             })
             .onError((error) {
               // Handle errors during token refresh
