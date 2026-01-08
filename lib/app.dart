@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyo_school_app/config/utils/notification_services.dart';
 
 import 'config/router/app_router.dart';
 import 'config/theme/app_theme.dart';
@@ -20,14 +19,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  NotificationService notificationServices = NotificationService();
-
-  @override
-  void initState() {
-    super.initState();
-    notificationServices.setupInteractMessage(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

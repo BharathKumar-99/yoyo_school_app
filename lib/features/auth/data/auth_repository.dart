@@ -1,11 +1,7 @@
 import 'dart:developer';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/utils/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import '../../../core/supabase/supabase_client.dart';
@@ -90,8 +86,6 @@ class AuthRepository {
               'user_login_info': await getUserDeviceAndAppInfo(),
             })
             .eq('user_id', userid);
-
-        await setupToken(userid);
       } catch (e) {
         rethrow;
       }
@@ -152,30 +146,6 @@ class AuthRepository {
           .from(DbTable.teacher)
           .update({'notification': true})
           .eq('classes', classId);
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<void> setupToken(String userId) async {
-    try {
-      // APNS token is available, make FCM plugin API requests...
-
-      final token = await FirebaseMessaging.instance.getToken();
-      if (token != null) {
-        NotificationService notificationService = NotificationService();
-        await notificationService.saveFcmToFireBase(token, userId);
-      }
-      FirebaseMessaging.instance.onTokenRefresh
-          .listen((fcmToken) async {
-            print('FCM token refreshed: $fcmToken');
-            NotificationService notificationService = NotificationService();
-            await notificationService.saveFcmToFireBase(fcmToken, userId);
-          })
-          .onError((error) {
-            // Handle errors during token refresh
-            print('Error refreshing FCM token: $error');
-          });
     } catch (e) {
       log(e.toString());
     }
