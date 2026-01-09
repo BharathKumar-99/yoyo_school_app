@@ -27,10 +27,10 @@ class AppInitializer {
     // 3. Set background handler
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    await NotificationServices().initializeFCM();
     await SupabaseClientService.instance.init();
 
     await SharedPrefsService.init();
+    await NotificationServices().initializeFCM();
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
