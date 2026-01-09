@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "228089288184",
+    "project_id": "yoyoapp-b47a4",
+    "storage_bucket": "yoyoapp-b47a4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228089288184:android:cad153b76a0ff279bb320d",
+        "android_client_info": {
+          "package_name": "com.yoyospeak.yoyo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDHk5u6CB6dVjeq2eaQChaNf3olw99CNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

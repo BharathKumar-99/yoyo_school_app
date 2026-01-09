@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:yoyo_school_app/bootstrap/notification_services.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,6 +87,7 @@ class AuthRepository {
               'user_login_info': await getUserDeviceAndAppInfo(),
             })
             .eq('user_id', userid);
+        await NotificationServices().saveFcmToFireBase(userid);
       } catch (e) {
         rethrow;
       }
