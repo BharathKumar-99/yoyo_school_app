@@ -45,6 +45,9 @@ class UserModel {
         ? DateTime.tryParse(json['last_login'])
         : null;
 
+    onboarding =
+        json['onboarding']; // FIXED: This field was missing in previous versions, causing infinite onboarding loop.
+
     if (json['student'] != null) {
       student = <Student>[];
       json['student'].forEach((v) {
