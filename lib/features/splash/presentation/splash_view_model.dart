@@ -54,13 +54,19 @@ class SplashViewModel extends ChangeNotifier {
       }
     }
 
+    print('🔍 [Splash] Checking onboarding status:');
+    print('   User onboarding (DB): ${_user?.onboarding}');
+    print('   API onboarding enabled: ${_globalProvider?.apiCred?.onboarding}');
+
     if (_user?.onboarding != true &&
         _globalProvider?.apiCred?.onboarding == true) {
+      print('➡️ [Splash] Redirecting to onboarding screen');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         GlobalLoader.hide();
         ctx!.go(RouteNames.onboarding);
       });
     } else {
+      print('➡️ [Splash] Redirecting to home screen');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         GlobalLoader.hide();
         ctx!.go(RouteNames.home);
