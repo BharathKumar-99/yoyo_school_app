@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
@@ -48,7 +49,7 @@ class PhrasesViewModel extends ChangeNotifier {
   PhraseModel? _currentlyPlaying;
   PhraseModel? get currentlyPlaying => _currentlyPlaying;
   final GlobalRepo globalRepo = GlobalRepo();
-
+  Language get language => classes.language!;
   bool get isPlaying => audioManager.player.playing;
 
   PhrasesViewModel(
@@ -115,19 +116,14 @@ class PhrasesViewModel extends ChangeNotifier {
         }
       }
 
-      final userResultProvider = Provider.of<GlobalProvider>(
-        ctx!,
-        listen: false,
-      );
-
       try {
-        await userResultProvider.initRealtimeResults(ids);
+        await globalProvider.initRealtimeResults(ids);
       } catch (_) {
         throw Exception("Failed starting realtime results");
       }
 
       try {
-        userResultProvider.removeListener(_userResultListener);
+        globalProvider.removeListener(_userResultListener);
       } catch (_) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) => GlobalLoader.hide(),
@@ -137,14 +133,14 @@ class PhrasesViewModel extends ChangeNotifier {
       _userResultListener = () {
         if (_isDisposed) return;
         try {
-          schoolResult = userResultProvider.results;
+          schoolResult = globalProvider.results;
           _processResults(userId, ids, isFirst);
         } catch (_) {
           throw Exception("Failed processing user results");
         }
       };
 
-      userResultProvider.addListener(_userResultListener);
+      globalProvider.addListener(_userResultListener);
       isStreakLoading = false;
       globalRepo.listenPhraseDisabledSchools(
         remoteConfigId: globalProvider.apiCred?.id ?? 0,
@@ -169,6 +165,7 @@ class PhrasesViewModel extends ChangeNotifier {
           notifyListeners();
         },
       );
+      await _repo.shouldShowPopup(language);
     } catch (e) {
       throw Exception("Failed initializing phrase data");
     }

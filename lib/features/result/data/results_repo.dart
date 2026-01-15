@@ -1,14 +1,10 @@
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
-import '../../../config/router/navigation_helper.dart';
-import '../../../config/utils/feedback_popup.dart';
 import '../../../config/utils/get_user_details.dart';
 
 class ResultsRepo {
@@ -52,22 +48,6 @@ class ResultsRepo {
     } catch (e) {
       log(e.toString());
       return null;
-    }
-  }
-
-  Future<void> shouldShowPopup() async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
-    final data = await _client
-        .from(DbTable.userResult)
-        .select('id')
-        .eq('user_id', userId)
-        .count(CountOption.exact);
-
-    if (data.count == 10) {
-      showDialog(
-        context: ctx!,
-        builder: (c) => AlertDialog.adaptive(content: FeedbackForm()),
-      );
     }
   }
 

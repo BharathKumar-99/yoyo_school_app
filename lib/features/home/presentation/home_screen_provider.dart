@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/data/home_repository.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
@@ -42,13 +43,22 @@ class HomeScreenProvider extends ChangeNotifier {
         throw "Could not load levels";
       }
 
-      _subscribeToStudentData();
-
       totalPhrases = 0;
       userClases?.classes?.school?.schoolLanguage?.forEach((val) {
         totalPhrases += val.language?.phrase?.length ?? 0;
       });
-
+      if (userClases?.classes?.school?.schoolLanguage?.length == 1) {
+        NavigationHelper.go(
+          RouteNames.phraseCategories,
+          extra: {
+            'language': userClases?.classes?.school?.schoolLanguage?.first,
+            "className": userClases?.classes?.className,
+            "level": levels,
+            'student': userClases,
+          },
+        );
+      }
+      _subscribeToStudentData();
       notifyListeners();
     } catch (e) {
       throw Exception("Home initialization failed: $e");

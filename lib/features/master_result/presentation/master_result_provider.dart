@@ -127,7 +127,6 @@ class MasterResultProvider extends ChangeNotifier {
       result?.vocab = goodWords.length;
 
       result = await _repo.upsertResult(result!);
-      await _repo.shouldShowPopup();
     } catch (e) {
       debugPrint("MasterResultProvider upsertResult error: $e");
     }
