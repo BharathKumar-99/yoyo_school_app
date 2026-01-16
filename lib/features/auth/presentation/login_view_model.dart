@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
-import 'package:yoyo_school_app/features/auth/data/auth_repository.dart';
+import 'package:yoyo_school_app/features/auth/data/auth_repository.dart'; 
 
 class AuthViewModel extends ChangeNotifier {
   AuthViewModel();
@@ -28,6 +28,7 @@ class AuthViewModel extends ChangeNotifier {
         userName,
         activationCode,
       );
+
       if (data['success']) {
         NavigationHelper.push(RouteNames.splash);
       } else {

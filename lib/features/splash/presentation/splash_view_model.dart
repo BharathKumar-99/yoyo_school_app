@@ -7,6 +7,7 @@ import 'package:yoyo_school_app/app.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
+import 'package:yoyo_school_app/features/home/presentation/home_screen_provider.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import 'package:yoyo_school_app/features/splash/app_config_model.dart';
 import 'package:yoyo_school_app/features/splash/data/splash_repo.dart';
@@ -54,22 +55,23 @@ class SplashViewModel extends ChangeNotifier {
       }
     }
 
-    print('🔍 [Splash] Checking onboarding status:');
-    print('   User onboarding (DB): ${_user?.onboarding}');
-    print('   API onboarding enabled: ${_globalProvider?.apiCred?.onboarding}');
-
     if (_user?.onboarding != true &&
         _globalProvider?.apiCred?.onboarding == true) {
-      print('➡️ [Splash] Redirecting to onboarding screen');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         GlobalLoader.hide();
         ctx!.go(RouteNames.onboarding);
       });
     } else {
-      print('➡️ [Splash] Redirecting to home screen');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         GlobalLoader.hide();
-        ctx!.go(RouteNames.home);
+        HomeScreenProvider homeScreenProvider = Provider.of<HomeScreenProvider>(
+          ctx!,
+          listen: false,
+        );
+        final result = await homeScreenProvider.init();
+        if (result) {
+          ctx!.go(RouteNames.home);
+        }
       });
     }
     if (showUpdate) {

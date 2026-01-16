@@ -7,8 +7,7 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
-import 'package:yoyo_school_app/core/widgets/app_bar.dart';
-import 'package:yoyo_school_app/features/home/data/home_repository.dart';
+import 'package:yoyo_school_app/core/widgets/app_bar.dart'; 
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
@@ -19,108 +18,105 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeScreenProvider>(
-      create: (context) => HomeScreenProvider(HomeRepository()),
-      child: Consumer<HomeScreenProvider>(
-        builder: (context, homeProvider, wi) {
-          return Scaffold(
-            body: SafeArea(
-              top: false,
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    toolbarHeight: 80,
-                    flexibleSpace: getAppBar(context),
-                  ),
-
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        const SizedBox(height: 10),
-                        _AnimatedSectionTitle(text.your_metrics),
-                        const SizedBox(height: 10),
-                        _AnimatedRow(
-                          delay: 200,
-                          children: [
-                            getMetricCard(
-                              text.phrases,
-                              "${homeProvider.atemptedPhrases}/${homeProvider.totalPhrases}",
-                              (homeProvider.atemptedPhrases) >
-                                      (homeProvider.totalPhrases / 2)
-                                  ? Colors.green.shade700
-                                  : Colors.orangeAccent,
-                            ),
-                            getMetricCard(
-                              text.vocab,
-                              homeProvider.student?.vocab.toString() ?? "0",
-                              (homeProvider.student?.vocab ?? 0) >
-                                      Constants.minimumSubmitScore
-                                  ? Colors.green.shade700
-                                  : Colors.orangeAccent,
-                            ),
-                            getMetricCard(
-                              text.effort,
-                              "${homeProvider.student?.effort.toString() ?? "0"}% ",
-                              (homeProvider.student?.effort ?? 0) >
-                                      Constants.minimumSubmitScore
-                                  ? Colors.green.shade700
-                                  : Colors.orangeAccent,
-                            ),
-                            getMetricCard(
-                              text.score,
-                              "${homeProvider.student?.score.toString() ?? "0"}%",
-                              (homeProvider.student?.score ?? 0) >
-                                      Constants.minimumSubmitScore
-                                  ? Colors.green.shade700
-                                  : Colors.orangeAccent,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 50),
-                        _AnimatedSectionTitle(text.your_classes),
-                        const SizedBox(height: 10),
-
-                        Column(
-                          children:
-                              homeProvider
-                                  .userClases
-                                  ?.classes
-                                  ?.school
-                                  ?.schoolLanguage
-                                  ?.asMap()
-                                  .entries
-                                  .map(
-                                    (entry) => _AnimatedCard(
-                                      delay: 300 * entry.key,
-                                      child: LaunguageCard(
-                                        student: homeProvider.userClases,
-                                        language: entry.value,
-                                        level: homeProvider.levels ?? [],
-                                        className:
-                                            homeProvider
-                                                .userClases
-                                                ?.classes
-                                                ?.className ??
-                                            "",
-                                      ),
+    return Consumer<HomeScreenProvider>(
+      builder: (context, homeProvider, wi) {
+        return Scaffold(
+          body: SafeArea(
+            top: false,
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  toolbarHeight: 80,
+                  flexibleSpace: getAppBar(context),
+                ),
+    
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      const SizedBox(height: 10),
+                      _AnimatedSectionTitle(text.your_metrics),
+                      const SizedBox(height: 10),
+                      _AnimatedRow(
+                        delay: 200,
+                        children: [
+                          getMetricCard(
+                            text.phrases,
+                            "${homeProvider.atemptedPhrases}/${homeProvider.totalPhrases}",
+                            (homeProvider.atemptedPhrases) >
+                                    (homeProvider.totalPhrases / 2)
+                                ? Colors.green.shade700
+                                : Colors.orangeAccent,
+                          ),
+                          getMetricCard(
+                            text.vocab,
+                            homeProvider.student?.vocab.toString() ?? "0",
+                            (homeProvider.student?.vocab ?? 0) >
+                                    Constants.minimumSubmitScore
+                                ? Colors.green.shade700
+                                : Colors.orangeAccent,
+                          ),
+                          getMetricCard(
+                            text.effort,
+                            "${homeProvider.student?.effort.toString() ?? "0"}% ",
+                            (homeProvider.student?.effort ?? 0) >
+                                    Constants.minimumSubmitScore
+                                ? Colors.green.shade700
+                                : Colors.orangeAccent,
+                          ),
+                          getMetricCard(
+                            text.score,
+                            "${homeProvider.student?.score.toString() ?? "0"}%",
+                            (homeProvider.student?.score ?? 0) >
+                                    Constants.minimumSubmitScore
+                                ? Colors.green.shade700
+                                : Colors.orangeAccent,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                      _AnimatedSectionTitle(text.your_classes),
+                      const SizedBox(height: 10),
+    
+                      Column(
+                        children:
+                            homeProvider
+                                .userClases
+                                ?.classes
+                                ?.school
+                                ?.schoolLanguage
+                                ?.asMap()
+                                .entries
+                                .map(
+                                  (entry) => _AnimatedCard(
+                                    delay: 300 * entry.key,
+                                    child: LaunguageCard(
+                                      student: homeProvider.userClases,
+                                      language: entry.value,
+                                      level: homeProvider.levels ?? [],
+                                      className:
+                                          homeProvider
+                                              .userClases
+                                              ?.classes
+                                              ?.className ??
+                                          "",
                                     ),
-                                  )
-                                  .toList() ??
-                              [],
-                        ),
-                        const SizedBox(height: 30),
-                      ]),
-                    ),
+                                  ),
+                                )
+                                .toList() ??
+                            [],
+                      ),
+                      const SizedBox(height: 30),
+                    ]),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

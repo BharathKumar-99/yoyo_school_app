@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
-import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/data/home_repository.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
@@ -26,12 +25,10 @@ class HomeScreenProvider extends ChangeNotifier {
   HomeScreenProvider(this.homeRepository) {
     _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
     _profileProvider?.initialize();
-    init();
   }
 
-  Future<void> init() async {
+  Future<bool> init() async {
     try {
-      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
       Provider.of<GlobalProvider>(ctx!, listen: false);
       userClases = await homeRepository.getClasses();
       if (userClases == null) {
@@ -57,13 +54,13 @@ class HomeScreenProvider extends ChangeNotifier {
             'student': userClases,
           },
         );
+        return false;
       }
       _subscribeToStudentData();
       notifyListeners();
+      return true;
     } catch (e) {
       throw Exception("Home initialization failed: $e");
-    } finally {
-      WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
     }
   }
 

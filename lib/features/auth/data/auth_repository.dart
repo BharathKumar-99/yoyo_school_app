@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/bootstrap/notification_services.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -137,11 +138,13 @@ class AuthRepository {
           .maybeSingle();
 
       UserModel userModel = UserModel.fromJson(data!);
-
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      final fcmToken = await messaging.getToken();
       int classId = userModel.student?.first.classId ?? 0;
       await client.from(DbTable.activationRequests).insert({
         'username': username,
         'class': classId,
+        'fcm': fcmToken,
       });
 
       await client
