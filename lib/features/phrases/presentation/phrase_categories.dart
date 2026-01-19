@@ -350,51 +350,6 @@ class PhraseCategories extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () => NavigationHelper.go(
-                                  RouteNames.phrasesDetails,
-                                  extra: {
-                                    'language': language,
-                                    "className": text.phrases,
-                                    "level": levels,
-                                    'student': student,
-                                    'categories': 0,
-                                  },
-                                ),
-                                child: Container(
-                                  height: 150,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    gradient: LinearGradient(
-                                      colors:
-                                          provider.classes.language?.gradient ??
-                                          [],
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          text.phrases,
-                                          style: AppTextStyles
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                                color: Colors.white,
-                                                fontFamily: 'Sansita',
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),

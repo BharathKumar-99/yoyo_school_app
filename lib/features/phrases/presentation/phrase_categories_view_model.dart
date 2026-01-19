@@ -77,10 +77,16 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     if (userScore.isNotEmpty) {
       userPercentage = (totalUserScore / userScore.length).round();
     }
-    phraseCategories = await _repo.getAllPhraseCategories(
+    List<PhraseCategoriesModel> model = await _repo.getAllPhraseCategories(
       classes.language?.id ?? 0,
       classes.schoolId ?? 0,
     );
+    phraseCategories = [];
+    for (var element in model) {
+      if (await _repo.checkIfEmpty(element.id ?? 0)) {
+        phraseCategories.add(element);
+      }
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       GlobalLoader.hide();

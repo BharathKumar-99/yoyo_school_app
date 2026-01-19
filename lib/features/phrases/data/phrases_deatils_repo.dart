@@ -51,6 +51,15 @@ class PhrasesDeatilsRepo {
         .toList();
   }
 
+  Future<bool> checkIfEmpty(int catId) async {
+    final response = await _client
+        .from(DbTable.phrase)
+        .select('id')
+        .eq('categories', catId)
+        .count(CountOption.exact);
+    return response.count >= 1;
+  }
+
   Future<List<UserResult>> getUserResult(List<int> ids) async {
     final response = await _client
         .from(DbTable.userResult)
