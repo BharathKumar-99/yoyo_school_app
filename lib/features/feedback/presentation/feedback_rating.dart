@@ -32,6 +32,8 @@ class _FeedbackRatingState extends State<FeedbackRating> {
         _submitFeedback();
         context.pop();
         showModalBottomSheet(
+          scrollControlDisabledMaxHeightRatio:
+              MediaQuery.sizeOf(context).height * 0.6,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),

@@ -122,21 +122,25 @@ class PhrasesDeatilsRepo {
   }
 
   Future<void> shouldShowPopup(Language language) async {
-    final userId = GetUserDetails.getCurrentUserId() ?? "";
-    final data = await _client
-        .from(DbTable.userResult)
-        .select('id')
-        .eq('user_id', userId)
-        .count(CountOption.exact);
+    try {
+      final userId = GetUserDetails.getCurrentUserId() ?? "";
+      final data = await _client
+          .from(DbTable.userResult)
+          .select('id')
+          .eq('user_id', userId)
+          .count(CountOption.exact);
 
-    if (data.count == 10) {
-      showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        context: ctx!,
-        builder: (c) => FeedbackSelector(language: language),
-      );
+      if (data.count == 10) {
+        showModalBottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          context: ctx!,
+          builder: (c) => FeedbackSelector(language: language),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

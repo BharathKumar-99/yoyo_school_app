@@ -52,8 +52,13 @@ class _FeedbackTextfieldState extends State<FeedbackTextfield> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final keyboardOpen = bottomInset > 0;
+
     return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: keyboardOpen
+          ? MediaQuery.of(context).size.height * 0.9
+          : MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
         color: widget.language.gradient?.first,
         borderRadius: BorderRadius.only(
@@ -108,6 +113,8 @@ class _FeedbackTextfieldState extends State<FeedbackTextfield> {
                 ),
               ),
             ),
+            if (keyboardOpen)
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.2),
           ],
         ),
       ),

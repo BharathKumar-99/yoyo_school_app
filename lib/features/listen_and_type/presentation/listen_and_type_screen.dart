@@ -50,28 +50,28 @@ class ListenAndTypeScreen extends StatelessWidget {
                       student: student,
                       categories: value.categories,
                     ),
-                    Card(
-                      elevation: 0,
-                      color: value.language?.gradient?.first.withValues(
-                        alpha: 0.4,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Center(
-                          child: SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(50),
-                              splashColor:
-                                  value.language?.gradient?.first.withValues(
-                                    alpha: 0.2,
-                                  ) ??
-                                  Colors.grey.withValues(alpha: 0.2),
-                              onTap: () async => value.playAudio(),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      splashColor:
+                          value.language?.gradient?.first.withValues(
+                            alpha: 0.2,
+                          ) ??
+                          Colors.grey.withValues(alpha: 0.2),
+                      onTap: () async => value.playAudio(),
+                      child: Card(
+                        elevation: 0,
+                        color: value.language?.gradient?.first.withValues(
+                          alpha: 0.4,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: SizedBox(
+                              height: 40,
+                              width: 40,
                               child: Center(
                                 child: Icon(
                                   Icons.play_arrow_outlined,

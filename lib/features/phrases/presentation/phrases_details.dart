@@ -454,6 +454,7 @@ class PhrasesDetails extends StatelessWidget {
         }
         return Column(
           children: [
+             
             GestureDetector(
               onTap: () {
                 if (goToNext) {
