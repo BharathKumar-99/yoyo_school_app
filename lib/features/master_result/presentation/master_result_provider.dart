@@ -19,7 +19,6 @@ class MasterResultProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   Language language;
   late UserResult? result;
-  Language? slanguage;
   late RemoteConfig apiCred;
   SpeechEvaluationModel? speechEvaluationModel;
   ChatGptResponse? tableResponse;
@@ -56,11 +55,6 @@ class MasterResultProvider extends ChangeNotifier {
 
       userClases = await _repo.getClasses();
       levels = await _repo.getLevel();
-
-      slanguage = userClases?.user?.studentClasses
-          ?.firstWhere((val) => val.classes?.language?.id == language.id)
-          .classes
-          ?.language;
 
       tableResponse = await _globalRepo.getRandomFeedback(score);
       if (score >= 80) {

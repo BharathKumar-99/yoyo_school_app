@@ -16,7 +16,7 @@ import '../../recording/presentation/read_and_practise_screen.dart';
 class TryPhrasesScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final int? streak;
-  final Language schoolLanguage;
+  final Language language;
   final String className;
   final Student student;
   final bool isLast;
@@ -24,7 +24,7 @@ class TryPhrasesScreen extends StatelessWidget {
     super.key,
     required this.phraseModel,
     this.streak,
-    required this.schoolLanguage,
+    required this.language,
     required this.className,
     required this.student,
     required this.isLast,
@@ -41,7 +41,7 @@ class TryPhrasesScreen extends StatelessWidget {
               leading: backBtn(
                 streak: streak != null,
                 context: context,
-                slanguage: schoolLanguage,
+                slanguage: language,
                 className: className,
                 student: student,
                 categories: value.categories,

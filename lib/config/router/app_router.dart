@@ -173,7 +173,7 @@ class AppRoutes {
             child: ChangeNotifierProvider<RecordingProvider>(
               create: (context) => RecordingProvider(
                 data['phrase'] as PhraseModel,
-                data['schoolLanguage'],
+                data['language'],
                 data['streak'],
                 data['isLast'],
                 data['categories'],
@@ -182,7 +182,7 @@ class AppRoutes {
                 key: UniqueKey(),
                 phraseModel: data['phrase'] as PhraseModel,
                 streak: data['streak'],
-                schoolLanguage: data['schoolLanguage'],
+                language: data['language'],
                 className: data['className'],
                 student: data['student'],
                 isLast: data['isLast'],
@@ -203,7 +203,7 @@ class AppRoutes {
             child: ChangeNotifierProvider<RememberRecorderProvider>(
               create: (_) => RememberRecorderProvider(
                 data['phrase'] as PhraseModel,
-                data['schoolLanguage'],
+                data['language'],
                 data['streak'],
                 data['isLast'],
                 data['categories'],
@@ -212,7 +212,7 @@ class AppRoutes {
                 key: UniqueKey(),
                 model: data['phrase'] as PhraseModel,
                 streak: data['streak'],
-                language: data['schoolLanguage'],
+                language: data['language'],
                 className: data['className'],
                 student: data['student'],
                 isLast: data['isLast'],
@@ -234,7 +234,7 @@ class AppRoutes {
               key: UniqueKey(),
               model: data['phrase'] as PhraseModel,
               categories: data['categories'],
-              language: data['schoolLanguage'],
+              language: data['language'],
               className: data['className'],
               student: data['student'],
             ),

@@ -144,7 +144,7 @@ class MasterResultScreen extends StatelessWidget {
                                       onPressed: () => context.go(
                                         RouteNames.phrasesDetails,
                                         extra: {
-                                          'language': value.slanguage,
+                                          'language': value.language,
                                           "className":
                                               value
                                                   .userClases
@@ -156,7 +156,7 @@ class MasterResultScreen extends StatelessWidget {
                                                             .classes
                                                             ?.language
                                                             ?.id ==
-                                                        value.slanguage?.id,
+                                                        value.language.id,
                                                   )
                                                   .classes
                                                   ?.className ??
@@ -491,7 +491,7 @@ class MasterResultScreen extends StatelessWidget {
                                                 onPressed: () => context.go(
                                                   RouteNames.phrasesDetails,
                                                   extra: {
-                                                    'language': value.slanguage,
+                                                    'language': value.language,
                                                     "className":
                                                         value
                                                             .userClases
@@ -504,8 +504,8 @@ class MasterResultScreen extends StatelessWidget {
                                                                       ?.language
                                                                       ?.id ==
                                                                   value
-                                                                      .slanguage
-                                                                      ?.id,
+                                                                      .language
+                                                                      .id,
                                                             )
                                                             .classes
                                                             ?.className ??
@@ -541,7 +541,7 @@ class MasterResultScreen extends StatelessWidget {
                                                 onPressed: () => context.go(
                                                   RouteNames.phrasesDetails,
                                                   extra: {
-                                                    'language': value.slanguage,
+                                                    'language': value.language,
                                                     "className":
                                                         value
                                                             .userClases
@@ -554,8 +554,8 @@ class MasterResultScreen extends StatelessWidget {
                                                                       ?.language
                                                                       ?.id ==
                                                                   value
-                                                                      .slanguage
-                                                                      ?.id,
+                                                                      .language
+                                                                      .id,
                                                             )
                                                             .classes
                                                             ?.className ??

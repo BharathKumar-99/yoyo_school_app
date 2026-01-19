@@ -144,7 +144,7 @@ class ResultScreen extends StatelessWidget {
                                       onPressed: () => context.go(
                                         RouteNames.phrasesDetails,
                                         extra: {
-                                          'language': value.slanguage,
+                                          'language': value.language,
                                           "className":
                                               value
                                                   .userClases
@@ -156,7 +156,7 @@ class ResultScreen extends StatelessWidget {
                                                             .classes
                                                             ?.language
                                                             ?.id ==
-                                                        value.slanguage?.id,
+                                                        value.language.id,
                                                   )
                                                   .classes
                                                   ?.className ??
@@ -661,7 +661,7 @@ class ResultScreen extends StatelessWidget {
                                                 onPressed: () => context.go(
                                                   RouteNames.phrasesDetails,
                                                   extra: {
-                                                    'language': value.slanguage,
+                                                    'language': value.language,
                                                     "className":
                                                         value
                                                             .userClases
@@ -674,8 +674,8 @@ class ResultScreen extends StatelessWidget {
                                                                       ?.language
                                                                       ?.id ==
                                                                   value
-                                                                      .slanguage
-                                                                      ?.id,
+                                                                      .language
+                                                                      .id,
                                                             )
                                                             .classes
                                                             ?.className ??
@@ -758,7 +758,7 @@ class ResultScreen extends StatelessWidget {
                                                 onPressed: () => context.go(
                                                   RouteNames.phrasesDetails,
                                                   extra: {
-                                                    'language': value.slanguage,
+                                                    'language': value.language,
                                                     "className":
                                                         value
                                                             .userClases
@@ -771,8 +771,8 @@ class ResultScreen extends StatelessWidget {
                                                                       ?.language
                                                                       ?.id ==
                                                                   value
-                                                                      .slanguage
-                                                                      ?.id,
+                                                                      .language
+                                                                      .id,
                                                             )
                                                             .classes
                                                             ?.className ??
@@ -818,8 +818,7 @@ class ResultScreen extends StatelessWidget {
                                                     "phrase": value.phraseModel,
                                                     "streak": null,
                                                     "language": value.language,
-                                                    "schoolLanguage":
-                                                        value.slanguage,
+
                                                     "className":
                                                         value
                                                             .userClases
@@ -832,8 +831,8 @@ class ResultScreen extends StatelessWidget {
                                                                       ?.language
                                                                       ?.id ==
                                                                   value
-                                                                      .slanguage
-                                                                      ?.id,
+                                                                      .language
+                                                                      .id,
                                                             )
                                                             .classes
                                                             ?.className ??
@@ -864,7 +863,7 @@ class ResultScreen extends StatelessWidget {
                                                 onPressed: () => context.go(
                                                   RouteNames.phrasesDetails,
                                                   extra: {
-                                                    'language': value.slanguage,
+                                                    'language': value.language,
                                                     "className":
                                                         value
                                                             .userClases
@@ -877,8 +876,8 @@ class ResultScreen extends StatelessWidget {
                                                                       ?.language
                                                                       ?.id ==
                                                                   value
-                                                                      .slanguage
-                                                                      ?.id,
+                                                                      .language
+                                                                      .id,
                                                             )
                                                             .classes
                                                             ?.className ??

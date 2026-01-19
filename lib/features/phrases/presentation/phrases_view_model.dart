@@ -326,10 +326,9 @@ class PhrasesViewModel extends ChangeNotifier {
           extra: {
             "phrase": from == 'new' ? newPhrases.first : learned.first,
             "streak": streak,
-            "schoolLanguage": language,
+            "language": language,
             "className": className,
-            "student": student,
-            "language": language.language,
+            "student": student, 
             'categories': categories,
             "isLast": from == 'new'
                 ? newPhrases.length == 1

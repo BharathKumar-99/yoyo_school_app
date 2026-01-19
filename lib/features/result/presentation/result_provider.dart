@@ -17,7 +17,7 @@ class ResultProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   Language language;
   late UserResult? result;
-  Language? slanguage;
+
   ChatGptResponse? tableResponse;
   ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;
@@ -103,14 +103,6 @@ class ResultProvider extends ChangeNotifier {
           "Failed to get feedback",
         );
       }
-
-      slanguage = userClases?.user?.studentClasses
-          ?.firstWhere(
-            (val) => val.classes?.language?.id == language.id,
-            orElse: () => throw "Language not found in school list",
-          )
-          .classes
-          ?.language;
 
       levels = await _safe(
         () async => _repo.getLevel(),

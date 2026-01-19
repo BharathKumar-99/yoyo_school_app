@@ -463,7 +463,7 @@ class PhrasesDetails extends StatelessWidget {
                       RouteNames.listenAndTypeScreen,
                       extra: {
                         "phrase": model,
-                        "schoolLanguage": provider.language,
+                        "language": provider.language,
                         "className": className,
                         "student": provider.student,
                         'categories': categories,
@@ -475,7 +475,7 @@ class PhrasesDetails extends StatelessWidget {
                       extra: {
                         "phrase": model,
                         "streak": provider.streak,
-                        "schoolLanguage": provider.language,
+                        "language": provider.language,
                         "className": className,
                         "student": provider.student,
                         "isLast": phrases.length == 1,
