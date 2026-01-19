@@ -10,7 +10,6 @@ import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import '../../home/model/level_model.dart';
-import '../../home/model/school_launguage.dart';
 import '../../home/model/student_model.dart';
 import '../model/speech_evaluation_model.dart';
 
@@ -18,7 +17,7 @@ class ResultProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   Language language;
   late UserResult? result;
-  SchoolLanguage? slanguage;
+  Language? slanguage;
   ChatGptResponse? tableResponse;
   ChatGptResponse? gptResponse;
   SpeechEvaluationModel? speechEvaluationModel;
@@ -105,10 +104,13 @@ class ResultProvider extends ChangeNotifier {
         );
       }
 
-      slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
-        (val) => val.language?.id == language.id,
-        orElse: () => throw "Language not found in school list",
-      );
+      slanguage = userClases?.user?.studentClasses
+          ?.firstWhere(
+            (val) => val.classes?.language?.id == language.id,
+            orElse: () => throw "Language not found in school list",
+          )
+          .classes
+          ?.language;
 
       levels = await _safe(
         () async => _repo.getLevel(),

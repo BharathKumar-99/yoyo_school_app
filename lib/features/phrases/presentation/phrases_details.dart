@@ -14,11 +14,10 @@ import 'package:yoyo_school_app/features/listen_and_type/presentation/widgets/fa
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_view_model.dart';
 
 import '../../home/model/level_model.dart';
-import '../../home/model/school_launguage.dart';
 import '../../home/model/student_model.dart';
 
 class PhrasesDetails extends StatelessWidget {
-  final SchoolLanguage language;
+  final Language language;
   final Student? student;
   final String className;
   final List<Level> levels;
@@ -67,7 +66,7 @@ class PhrasesDetails extends StatelessWidget {
                           child: SizedBox(
                             height: MediaQuery.sizeOf(context).height / 2.4,
                             child: Hero(
-                              tag: language.language?.language ?? "",
+                              tag: language.language ?? "",
                               child: DefaultTextStyle(
                                 style: const TextStyle(
                                   decoration: TextDecoration.none,
@@ -76,9 +75,7 @@ class PhrasesDetails extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
                                     gradient: LinearGradient(
-                                      colors:
-                                          provider.classes.language?.gradient ??
-                                          [],
+                                      colors: provider.language.gradient ?? [],
                                     ),
                                     boxShadow: [
                                       BoxShadow(
@@ -111,9 +108,8 @@ class PhrasesDetails extends StatelessWidget {
                                                   child: CachedNetworkImage(
                                                     imageUrl:
                                                         provider
-                                                            .classes
                                                             .language
-                                                            ?.image ??
+                                                            .image ??
                                                         "",
                                                   ),
                                                 ),
@@ -368,11 +364,7 @@ class PhrasesDetails extends StatelessWidget {
                               ),
                               indicator: BoxDecoration(
                                 color:
-                                    provider
-                                        .classes
-                                        .language
-                                        ?.gradient
-                                        ?.first ??
+                                    provider.language.gradient?.first ??
                                     Colors.amberAccent,
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -470,7 +462,7 @@ class PhrasesDetails extends StatelessWidget {
                       RouteNames.listenAndTypeScreen,
                       extra: {
                         "phrase": model,
-                        "schoolLanguage": provider.classes,
+                        "schoolLanguage": provider.language,
                         "className": className,
                         "student": provider.student,
                         'categories': categories,
@@ -482,11 +474,10 @@ class PhrasesDetails extends StatelessWidget {
                       extra: {
                         "phrase": model,
                         "streak": provider.streak,
-                        "schoolLanguage": provider.classes,
+                        "schoolLanguage": provider.language,
                         "className": className,
                         "student": provider.student,
                         "isLast": phrases.length == 1,
-                        "language": provider.classes.language,
                         'categories': categories,
                       },
                     );
@@ -496,7 +487,7 @@ class PhrasesDetails extends StatelessWidget {
               child: PhrasesWidget(
                 title: model.phrase ?? "",
                 subTitle: model.translation ?? "",
-                launguage: provider.classes.language,
+                launguage: provider.language,
                 precentage: percentage,
                 onIconTap: () {
                   provider.playAudio(model);

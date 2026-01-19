@@ -7,6 +7,7 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/feedback/presentation/feedback_selector.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
+import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
@@ -71,13 +72,17 @@ class PhrasesDeatilsRepo {
   }
 
   Future<void> insertStreak(String uid, int? lid) async {
-    await _client
-        .from(DbTable.streakTable)
-        .upsert(
-          {'user_id': uid, 'language_id': lid, 'max_streak': 0},
-          onConflict: 'user_id,language_id',
-          ignoreDuplicates: true,
-        );
+    try {
+      await _client
+          .from(DbTable.streakTable)
+          .upsert(
+            {'user_id': uid, 'language_id': lid, 'max_streak': 0},
+            onConflict: 'user_id,language_id',
+            ignoreDuplicates: true,
+          );
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   Future<void> resetPhrase(int id, int studenId) async {
@@ -102,12 +107,16 @@ class PhrasesDeatilsRepo {
     List<Student> students = [];
 
     final data = await _client
-        .from(DbTable.student)
-        .select('*')
-        .eq('class', classId);
+        .from(DbTable.studentClasses)
+        .select('''*,${DbTable.users}(*)''')
+        .eq('classes', classId);
 
+    List<StudentClassesModel> studentClassesModel = [];
     for (var element in data) {
-      students.add(Student.fromJson(element));
+      studentClassesModel.add(StudentClassesModel.fromJson(element));
+    }
+    for (var val in studentClassesModel) {
+      if (val.user!.student != null) students.add(val.user!.student!.first);
     }
     return students;
   }

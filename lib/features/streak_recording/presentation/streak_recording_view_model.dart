@@ -6,7 +6,6 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/features/common/data/global_repo.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
 
 import '../../home/model/language_model.dart';
@@ -25,7 +24,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   int streak;
   String form;
   bool isLast;
-  SchoolLanguage? slanguage;
+  Language? slanguage;
   bool loading = true;
   int score = 0;
   SpeechEvaluationModel? speechEvaluationModel;
@@ -55,9 +54,10 @@ class StreakRecordingViewModel extends ChangeNotifier {
       phrase: phraseModel.phrase ?? "",
     );
     score = speechEvaluationModel?.result?.overall ?? 0;
-    slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
-      (val) => val.language?.id == language.id,
-    );
+    slanguage = userClases?.user?.studentClasses
+        ?.firstWhere((val) => val.classes?.language?.id == language.id)
+        .classes
+        ?.language;
     levels = await _repo.getLevel();
 
     await upsertResult(score, submit: score > Constants.minimumSubmitScore);
@@ -71,7 +71,14 @@ class StreakRecordingViewModel extends ChangeNotifier {
           RouteNames.phrasesDetails,
           extra: {
             'language': slanguage,
-            "className": userClases?.classes?.className ?? "",
+            "className":
+                userClases?.user?.studentClasses
+                    ?.firstWhere(
+                      (val) => val.classes?.language?.id == slanguage?.id,
+                    )
+                    .classes
+                    ?.className ??
+                '',
             "level": levels ?? [],
             'student': userClases,
             'next': true,

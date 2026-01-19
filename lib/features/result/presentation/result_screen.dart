@@ -148,9 +148,19 @@ class ResultScreen extends StatelessWidget {
                                           "className":
                                               value
                                                   .userClases
-                                                  ?.classes
+                                                  ?.user
+                                                  ?.studentClasses
+                                                  ?.firstWhere(
+                                                    (val) =>
+                                                        val
+                                                            .classes
+                                                            ?.language
+                                                            ?.id ==
+                                                        value.slanguage?.id,
+                                                  )
+                                                  .classes
                                                   ?.className ??
-                                              "",
+                                              '',
                                           "level": value.levels ?? [],
                                           'student': value.userClases,
                                           'categories': categories,
@@ -655,9 +665,21 @@ class ResultScreen extends StatelessWidget {
                                                     "className":
                                                         value
                                                             .userClases
-                                                            ?.classes
+                                                            ?.user
+                                                            ?.studentClasses
+                                                            ?.firstWhere(
+                                                              (val) =>
+                                                                  val
+                                                                      .classes
+                                                                      ?.language
+                                                                      ?.id ==
+                                                                  value
+                                                                      .slanguage
+                                                                      ?.id,
+                                                            )
+                                                            .classes
                                                             ?.className ??
-                                                        "",
+                                                        '',
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     'categories': categories,
@@ -740,9 +762,21 @@ class ResultScreen extends StatelessWidget {
                                                     "className":
                                                         value
                                                             .userClases
-                                                            ?.classes
+                                                            ?.user
+                                                            ?.studentClasses
+                                                            ?.firstWhere(
+                                                              (val) =>
+                                                                  val
+                                                                      .classes
+                                                                      ?.language
+                                                                      ?.id ==
+                                                                  value
+                                                                      .slanguage
+                                                                      ?.id,
+                                                            )
+                                                            .classes
                                                             ?.className ??
-                                                        "",
+                                                        '',
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     'next': true,
@@ -768,9 +802,10 @@ class ResultScreen extends StatelessWidget {
                                               ),
                                             )
                                           : (value
-                                                    .globalProvider
-                                                    .apiCred
-                                                    ?.mastery??false) &&
+                                                        .globalProvider
+                                                        .apiCred
+                                                        ?.mastery ??
+                                                    false) &&
                                                 (phraseModel.readingPhrase !=
                                                     true)
                                           ? SizedBox(
@@ -788,9 +823,21 @@ class ResultScreen extends StatelessWidget {
                                                     "className":
                                                         value
                                                             .userClases
-                                                            ?.classes
+                                                            ?.user
+                                                            ?.studentClasses
+                                                            ?.firstWhere(
+                                                              (val) =>
+                                                                  val
+                                                                      .classes
+                                                                      ?.language
+                                                                      ?.id ==
+                                                                  value
+                                                                      .slanguage
+                                                                      ?.id,
+                                                            )
+                                                            .classes
                                                             ?.className ??
-                                                        "",
+                                                        '',
                                                     'categories': categories,
                                                     "isLast": false,
                                                   },
@@ -821,9 +868,21 @@ class ResultScreen extends StatelessWidget {
                                                     "className":
                                                         value
                                                             .userClases
-                                                            ?.classes
+                                                            ?.user
+                                                            ?.studentClasses
+                                                            ?.firstWhere(
+                                                              (val) =>
+                                                                  val
+                                                                      .classes
+                                                                      ?.language
+                                                                      ?.id ==
+                                                                  value
+                                                                      .slanguage
+                                                                      ?.id,
+                                                            )
+                                                            .classes
                                                             ?.className ??
-                                                        "",
+                                                        '',
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     "next": true,

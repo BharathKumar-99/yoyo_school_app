@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/listen_and_type/presentation/listen_and_type_view_model.dart';
 
@@ -11,14 +11,14 @@ import 'widgets/fake_wave.dart';
 
 class ListenAndTypeScreen extends StatelessWidget {
   final PhraseModel model;
-  final SchoolLanguage schoolLanguage;
+  final Language language;
   final String className;
   final Student student;
   final int categories;
   const ListenAndTypeScreen({
     super.key,
     required this.model,
-    required this.schoolLanguage,
+    required this.language,
     required this.className,
     required this.student,
     required this.categories,
@@ -45,7 +45,7 @@ class ListenAndTypeScreen extends StatelessWidget {
                     backBtn(
                       streak: false,
                       context: context,
-                      slanguage: schoolLanguage,
+                      slanguage: language,
                       className: className,
                       student: student,
                       categories: value.categories,

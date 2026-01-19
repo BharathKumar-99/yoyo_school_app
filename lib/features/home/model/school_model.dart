@@ -1,5 +1,3 @@
-import 'school_launguage.dart';
-
 class School {
   int? id;
   String? principle;
@@ -7,7 +5,6 @@ class School {
   String? schoolName;
   int? noOfStudents;
   String? schoolAddress;
-  List<SchoolLanguage>? schoolLanguage;
   int? schoolTelephoneNo;
   String? image;
 
@@ -18,13 +15,11 @@ class School {
     this.schoolName,
     this.noOfStudents,
     this.schoolAddress,
-    this.schoolLanguage,
     this.schoolTelephoneNo,
     this.image,
   });
 
   factory School.fromJson(Map<String, dynamic> json) {
-    var languageList = json['school_language'] as List?;
     return School(
       id: json['id'],
       principle: json['principle'],
@@ -34,9 +29,7 @@ class School {
       schoolName: json['school_name'],
       noOfStudents: json['no_of_students'],
       schoolAddress: json['school_address'],
-      schoolLanguage: languageList
-          ?.map((e) => SchoolLanguage.fromJson(e))
-          .toList(),
+
       schoolTelephoneNo: json['school_telephone_no'],
       image: json['image'],
     );
@@ -50,7 +43,6 @@ class School {
       'school_name': schoolName,
       'no_of_students': noOfStudents,
       'school_address': schoolAddress,
-      'school_language': schoolLanguage?.map((e) => e.toJson()).toList(),
       'school_telephone_no': schoolTelephoneNo,
       'image': image,
     };

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/phrases/data/phrases_deatils_repo.dart';
 import '../../../config/utils/get_user_details.dart';
@@ -11,7 +11,7 @@ import '../../result/model/user_result_model.dart';
 import '../model/phrase_categories_model.dart';
 
 class PhraseCategoriesViewModel extends ChangeNotifier {
-  final SchoolLanguage classes;
+  final Language language;
   int classPercentage = 0;
   int userPercentage = 0;
   final Student? student;
@@ -24,7 +24,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   bool isLoading = true;
   GlobalProvider? globalProvider;
 
-  PhraseCategoriesViewModel(this.classes, this.student) {
+  PhraseCategoriesViewModel(this.language, this.student) {
     try {
       init();
     } catch (e) {
@@ -36,7 +36,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
     globalProvider = Provider.of<GlobalProvider>(ctx!);
     final userId = GetUserDetails.getCurrentUserId() ?? "";
-    final ids = classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
+    final ids = language.phrase?.map((e) => e.id ?? 0).toList() ?? [];
     userResult = await _repo.getUserResult(ids);
     classStudents.clear();
 
@@ -78,8 +78,8 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
       userPercentage = (totalUserScore / userScore.length).round();
     }
     List<PhraseCategoriesModel> model = await _repo.getAllPhraseCategories(
-      classes.language?.id ?? 0,
-      classes.schoolId ?? 0,
+      language.id ?? 0,
+      student?.user?.school ?? 0,
     );
     phraseCategories = [];
     for (var element in model) {

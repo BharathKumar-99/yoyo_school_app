@@ -71,15 +71,9 @@ class ResultsRepo {
         ${DbTable.attemptedPhrases}(*,${DbTable.phrase}(*)),
         ${DbTable.classes}(
           *,
-          ${DbTable.school}(
+          ${DbTable.language}(
             *,
-            ${DbTable.schoolLanguage}(
-              *,
-              ${DbTable.language}(
-                *,
-                ${DbTable.phrase}(*)
-              )
-            )
+            ${DbTable.phrase}(*)
           )
         )
       ''')
@@ -90,14 +84,13 @@ class ResultsRepo {
 
       final student = Student.fromJson(data);
 
-      final school = student.classes?.school;
-      if (school != null && school.schoolLanguage != null) {
-        school.schoolLanguage = school.schoolLanguage!
-            .where((sl) => sl.language?.level == languageLevel)
+      if (student.user?.studentClasses != null) {
+        student.user?.studentClasses = student.user?.studentClasses!
+            .where((sl) => sl.classes?.language?.level == languageLevel)
             .toList();
 
-        for (final schoolLang in school.schoolLanguage!) {
-          final lang = schoolLang.language;
+        for (final schoolLang in student.user!.studentClasses!) {
+          final lang = schoolLang.classes?.language;
           if (lang?.phrase != null) {
             lang!.phrase = lang.phrase!
                 .where((p) => p.level == languageLevel)

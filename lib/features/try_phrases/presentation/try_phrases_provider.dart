@@ -53,14 +53,14 @@ class TryPhrasesProvider extends ChangeNotifier {
       language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      rethrow;
+
     }
 
     try {
       result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      rethrow;
+
     }
 
     try {
@@ -68,14 +68,14 @@ class TryPhrasesProvider extends ChangeNotifier {
       await audioManagerQuestion.setVolume(1);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      rethrow;
+   
     }
 
     try {
       await upsertResult(listen: false);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      rethrow;
+      
     }
 
     isLoading = false;
@@ -89,7 +89,7 @@ class TryPhrasesProvider extends ChangeNotifier {
       }
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      rethrow;
+      
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());

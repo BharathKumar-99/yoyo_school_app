@@ -13,13 +13,12 @@ import 'package:yoyo_school_app/config/router/route_names.dart';
 import '../../common/data/global_repo.dart';
 import '../../common/presentation/global_provider.dart';
 import '../../home/model/phrases_model.dart';
-import '../../home/model/school_launguage.dart';
 import '../../home/model/student_model.dart';
 import '../../../config/utils/audio_manager_singleton.dart';
 import '../../phrases/data/phrases_deatils_repo.dart';
 
 class PhrasesViewModel extends ChangeNotifier {
-  final SchoolLanguage classes;
+  final Language language;
   final Student? student;
   bool isGoToNextPhrase;
   int? streak;
@@ -49,11 +48,11 @@ class PhrasesViewModel extends ChangeNotifier {
   PhraseModel? _currentlyPlaying;
   PhraseModel? get currentlyPlaying => _currentlyPlaying;
   final GlobalRepo globalRepo = GlobalRepo();
-  Language get language => classes.language!;
+
   bool get isPlaying => audioManager.player.playing;
 
   PhrasesViewModel(
-    this.classes,
+    this.language,
     this.student,
     this.isGoToNextPhrase,
     this.streak,
@@ -99,18 +98,17 @@ class PhrasesViewModel extends ChangeNotifier {
 
     try {
       final userId = GetUserDetails.getCurrentUserId() ?? "";
-      final ids =
-          classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
+      final ids = language.phrase?.map((e) => e.id ?? 0).toList() ?? [];
 
       try {
-        streakNumber = await _repo.getStreakValue(userId, classes.language?.id);
+        streakNumber = await _repo.getStreakValue(userId, language.id);
       } catch (_) {
         throw Exception("Failed loading streak data");
       }
 
       if ((streakNumber ?? 0) <= 0) {
         try {
-          await _repo.insertStreak(userId, classes.language?.id);
+          await _repo.insertStreak(userId, language.id);
         } catch (_) {
           throw Exception("Failed saving streak");
         }
@@ -207,7 +205,7 @@ class PhrasesViewModel extends ChangeNotifier {
       createClassScore(individualUser);
 
       final phraseList =
-          classes.language?.phrase?.where((val) {
+          language.phrase?.where((val) {
               if (categories == -1) {
                 return val.warmup == true;
               } else if (categories == 0) {
@@ -234,7 +232,7 @@ class PhrasesViewModel extends ChangeNotifier {
       mastered = mastered.toSet().toList();
       learned.removeWhere((p) => mastered.contains(p));
 
-      for (final phrase in classes.language?.phrase ?? []) {
+      for (final phrase in language.phrase ?? []) {
         if (!learned.contains(phrase) &&
             !mastered.contains(phrase) &&
             (phraseList?.contains(phrase) ?? false)) {
@@ -307,7 +305,7 @@ class PhrasesViewModel extends ChangeNotifier {
       userResult = merged;
 
       for (final val in userResult) {
-        for (final phrase in classes.language?.phrase ?? []) {
+        for (final phrase in language.phrase ?? []) {
           if (val.phrasesId == phrase.id) {
             if (val.type == Constants.learned && val.scoreSubmitted == false) {
               learned.add(phrase);
@@ -327,10 +325,10 @@ class PhrasesViewModel extends ChangeNotifier {
           extra: {
             "phrase": from == 'new' ? newPhrases.first : learned.first,
             "streak": streak,
-            "schoolLanguage": classes,
+            "schoolLanguage": language,
             "className": className,
             "student": student,
-            "language": classes.language,
+            "language": language.language,
             'categories': categories,
             "isLast": from == 'new'
                 ? newPhrases.length == 1
@@ -405,8 +403,7 @@ class PhrasesViewModel extends ChangeNotifier {
 
       await _repo.resetPhrase(id ?? 0, student?.id ?? 0);
 
-      final ids =
-          classes.language?.phrase?.map((e) => e.id ?? 0).toList() ?? [];
+      final ids = language.phrase?.map((e) => e.id ?? 0).toList() ?? [];
 
       final provider = Provider.of<GlobalProvider>(ctx!, listen: false);
 

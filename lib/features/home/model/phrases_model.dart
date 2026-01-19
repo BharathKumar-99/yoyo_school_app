@@ -54,7 +54,9 @@ class PhraseModel {
       translation: json['translation'] as String?,
       questionRecording: json['question_recording'] as String?,
       warmup: json['warmup'],
-      questions: json['question'],
+      questions: json['question'] == '' || json['question'] == null
+          ? null
+          : json['question'],
       questionTranslation: json['question_translation'],
       categories: json['categories'],
       itemIndex: json['item_index'],

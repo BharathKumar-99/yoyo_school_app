@@ -8,7 +8,6 @@ import 'package:yoyo_school_app/features/common/presentation/global_provider.dar
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/remote_config_model.dart';
 import 'package:yoyo_school_app/features/result/model/speech_evaluation_model.dart';
@@ -20,7 +19,7 @@ class MasterResultProvider extends ChangeNotifier {
   PhraseModel phraseModel;
   Language language;
   late UserResult? result;
-  SchoolLanguage? slanguage;
+  Language? slanguage;
   late RemoteConfig apiCred;
   SpeechEvaluationModel? speechEvaluationModel;
   ChatGptResponse? tableResponse;
@@ -58,10 +57,10 @@ class MasterResultProvider extends ChangeNotifier {
       userClases = await _repo.getClasses();
       levels = await _repo.getLevel();
 
-      slanguage = userClases?.classes?.school?.schoolLanguage?.firstWhere(
-        (val) => val.language?.id == language.id,
-        orElse: () => SchoolLanguage(),
-      );
+      slanguage = userClases?.user?.studentClasses
+          ?.firstWhere((val) => val.classes?.language?.id == language.id)
+          .classes
+          ?.language;
 
       tableResponse = await _globalRepo.getRandomFeedback(score);
       if (score >= 80) {

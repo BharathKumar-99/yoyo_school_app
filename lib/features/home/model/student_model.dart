@@ -1,27 +1,29 @@
+import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/features/profile/model/user_model.dart';
+
 import 'attempt_phrases_model.dart';
-import 'classes_model.dart';
 
 class Student {
   int? id;
   DateTime? createdAt;
   String? userId;
-  int? classId; 
+  UserModel? user;
+  int? classId;
   int? vocab;
   int? effort;
   int? score;
   List<AttemptedPhrase>? attemptedPhrases;
-  Classes? classes;
 
   Student({
     this.id,
     this.createdAt,
     this.userId,
-    this.classId, 
+    this.classId,
     this.vocab,
     this.effort,
     this.score,
     this.attemptedPhrases,
-    this.classes,
+    this.user,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
@@ -31,15 +33,16 @@ class Student {
           ? DateTime.parse(json['created_at'])
           : null,
       userId: json['user_id'],
-      classId: json['class'], 
+      classId: json['class'],
       vocab: json['vocab'],
       effort: json['effort'],
       score: json['score'],
       attemptedPhrases: (json['attempted_phrases'] as List?)
           ?.map((e) => AttemptedPhrase.fromJson(e))
           .toList(),
-      classes: json['classes'] != null
-          ? Classes.fromJson(json['classes'])
+
+      user: json[DbTable.users] is Map
+          ? UserModel.fromJson(json[DbTable.users])
           : null,
     );
   }
@@ -49,7 +52,7 @@ class Student {
       'id': id,
       'created_at': createdAt?.toIso8601String(),
       'user_id': userId,
-      'class': classId, 
+      'class': classId,
       'vocab': vocab,
       'effort': effort,
       'score': score,

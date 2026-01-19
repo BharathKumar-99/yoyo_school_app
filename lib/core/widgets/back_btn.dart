@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import '../../config/router/navigation_helper.dart';
-import '../../features/home/model/level_model.dart';
-import '../../features/home/model/school_launguage.dart' show SchoolLanguage;
+import '../../features/home/model/level_model.dart'; 
 import '../../features/home/model/student_model.dart';
 
 Widget backBtn({
   bool streak = false,
   BuildContext? context,
-  SchoolLanguage? slanguage,
+  Language? slanguage,
   String? className,
   List<Level>? levels,
   Student? student,

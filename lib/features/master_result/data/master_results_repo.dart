@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
+import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import '../../../config/utils/get_user_details.dart';
@@ -75,15 +76,8 @@ class MasterResultsRepo {
         ${DbTable.attemptedPhrases}(*,${DbTable.phrase}(*)),
         ${DbTable.classes}(
           *,
-          ${DbTable.school}(
-            *,
-            ${DbTable.schoolLanguage}(
-              *,
-              ${DbTable.language}(
-                *,
-                ${DbTable.phrase}(*)
-              )
-            )
+          ${DbTable.language}(
+            *, ${DbTable.phrase}(*)
           )
         )
       ''')
@@ -94,14 +88,14 @@ class MasterResultsRepo {
 
       final student = Student.fromJson(data);
 
-      final school = student.classes?.school;
-      if (school != null && school.schoolLanguage != null) {
-        school.schoolLanguage = school.schoolLanguage!
-            .where((sl) => sl.language?.level == languageLevel)
+      List<StudentClassesModel>? school = student.user?.studentClasses;
+      if (school != null && school.isNotEmpty) {
+        school = school
+            .where((sl) => sl.classes?.language?.level == languageLevel)
             .toList();
 
-        for (final schoolLang in school.schoolLanguage!) {
-          final lang = schoolLang.language;
+        for (final studentClasses in school) {
+          final lang = studentClasses.classes?.language;
           if (lang?.phrase != null) {
             lang!.phrase = lang.phrase!
                 .where((p) => p.level == languageLevel)

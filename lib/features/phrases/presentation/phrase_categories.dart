@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 
 import '../../../config/constants/constants.dart';
@@ -10,11 +11,10 @@ import '../../../config/router/navigation_helper.dart';
 import '../../../config/utils/usefull_functions.dart';
 import '../../../core/widgets/app_bar.dart';
 import '../../home/model/level_model.dart';
-import '../../home/model/school_launguage.dart';
 import 'phrase_categories_view_model.dart';
 
 class PhraseCategories extends StatelessWidget {
-  final SchoolLanguage language;
+  final Language language;
   final Student? student;
   final String className;
   final List<Level> levels;
@@ -39,7 +39,7 @@ class PhraseCategories extends StatelessWidget {
                     SizedBox(
                       height: MediaQuery.sizeOf(context).height / 2.4,
                       child: Hero(
-                        tag: language.language?.language ?? "",
+                        tag: language.language ?? "",
                         child: DefaultTextStyle(
                           style: const TextStyle(
                             decoration: TextDecoration.none,
@@ -48,8 +48,7 @@ class PhraseCategories extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               gradient: LinearGradient(
-                                colors:
-                                    provider.classes.language?.gradient ?? [],
+                                colors: provider.language.gradient ?? [],
                               ),
                               boxShadow: [
                                 BoxShadow(
@@ -77,11 +76,7 @@ class PhraseCategories extends StatelessWidget {
                                             ),
                                             child: CachedNetworkImage(
                                               imageUrl:
-                                                  provider
-                                                      .classes
-                                                      .language
-                                                      ?.image ??
-                                                  "",
+                                                  provider.language.image ?? "",
                                             ),
                                           ),
                                         ),
@@ -107,10 +102,7 @@ class PhraseCategories extends StatelessWidget {
                                             children: [
                                               SizedBox(height: 20),
                                               Text(
-                                                provider
-                                                        .classes
-                                                        .language
-                                                        ?.language ??
+                                                provider.language.language ??
                                                     "",
                                                 style: AppTextStyles
                                                     .textTheme
@@ -129,7 +121,7 @@ class PhraseCategories extends StatelessWidget {
                                                     ),
                                               ),
                                               Text(
-                                                "${text.level}${UsefullFunctions.returnLevel(provider.classes.language?.level ?? 0, levels)}",
+                                                "${text.level}${UsefullFunctions.returnLevel(provider.language.level ?? 0, levels)}",
                                                 style: AppTextStyles
                                                     .textTheme
                                                     .headlineSmall!
@@ -306,11 +298,7 @@ class PhraseCategories extends StatelessWidget {
 
                                       gradient: LinearGradient(
                                         colors:
-                                            provider
-                                                .classes
-                                                .language
-                                                ?.gradient ??
-                                            [],
+                                            provider.language.gradient ?? [],
                                       ),
                                     ),
                                     child: Padding(
@@ -362,8 +350,8 @@ class PhraseCategories extends StatelessWidget {
     );
   }
 
-  getWarmUpCard(SchoolLanguage val) {
-    switch (val.language?.id) {
+  getWarmUpCard(Language val) {
+    switch (val.id) {
       case 2:
         return Container(
           height: 150,
@@ -495,7 +483,7 @@ class PhraseCategories extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: val.language?.gradient?.first ?? Colors.white,
+            color: val.gradient?.first ?? Colors.white,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),

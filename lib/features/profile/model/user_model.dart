@@ -1,3 +1,4 @@
+import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 
 class UserModel {
@@ -12,6 +13,7 @@ class UserModel {
   bool? onboarding;
   bool? isTester;
   List<Student>? student;
+  List<StudentClassesModel>? studentClasses;
 
   UserModel({
     required this.userId,
@@ -25,6 +27,7 @@ class UserModel {
     this.onboarding,
     this.isTester,
     this.student,
+    this.studentClasses,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -44,7 +47,9 @@ class UserModel {
     lastLogin = json['last_login'] != null
         ? DateTime.tryParse(json['last_login'])
         : null;
-
+    studentClasses = (json['student_classes'] as List?)
+        ?.map((e) => StudentClassesModel.fromJson(e))
+        .toList();
     onboarding =
         json['onboarding']; // FIXED: This field was missing in previous versions, causing infinite onboarding loop.
 

@@ -6,18 +6,18 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/recording/presentation/remember_and_practise_screen.dart';
 
 import '../../../config/constants/constants.dart';
-import '../../home/model/school_launguage.dart';
 
 class MasterPhraseSreen extends StatelessWidget {
   final PhraseModel model;
   final int? streak;
-  final SchoolLanguage schoolLanguage;
+  final Language language;
   final String className;
   final Student student;
   final bool isLast;
@@ -25,7 +25,7 @@ class MasterPhraseSreen extends StatelessWidget {
     super.key,
     required this.model,
     this.streak,
-    required this.schoolLanguage,
+    required this.language,
     required this.className,
     required this.student,
     required this.isLast,
@@ -78,7 +78,7 @@ class MasterPhraseSreen extends StatelessWidget {
                               child: backBtn(
                                 streak: streak != null,
                                 context: context,
-                                slanguage: schoolLanguage,
+                                slanguage: language,
                                 className: className,
                                 student: student,
                                 categories: value.categories,

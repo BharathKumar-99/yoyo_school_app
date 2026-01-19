@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/features/home/data/home_repository.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
+import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
@@ -41,15 +41,16 @@ class HomeScreenProvider extends ChangeNotifier {
       }
 
       totalPhrases = 0;
-      userClases?.classes?.school?.schoolLanguage?.forEach((val) {
-        totalPhrases += val.language?.phrase?.length ?? 0;
+      userClases?.user?.studentClasses?.forEach((student) {
+        totalPhrases += student.classes?.language?.phrase?.length ?? 0;
       });
-      if (userClases?.classes?.school?.schoolLanguage?.length == 1) {
+
+      if (userClases?.user?.studentClasses?.length == 1) {
         NavigationHelper.go(
           RouteNames.phraseCategories,
           extra: {
-            'language': userClases?.classes?.school?.schoolLanguage?.first,
-            "className": userClases?.classes?.className,
+            'language': userClases?.user?.studentClasses?.first.classes?.language,
+            "className": userClases?.user?.studentClasses?.first.classes?.className,
             "level": levels,
             'student': userClases,
           },
@@ -72,9 +73,10 @@ class HomeScreenProvider extends ChangeNotifier {
             if (studentdata == null) return;
             student = studentdata;
             List<int> ids = [];
-            for (SchoolLanguage schoolLang
-                in userClases?.classes?.school?.schoolLanguage ?? []) {
-              for (PhraseModel phrase in schoolLang.language?.phrase ?? []) {
+            for (StudentClassesModel studentClasses
+                in userClases?.user?.studentClasses ?? []) {
+              for (PhraseModel phrase
+                  in studentClasses.classes?.language?.phrase ?? []) {
                 ids.add(phrase.id ?? 0);
               }
             }

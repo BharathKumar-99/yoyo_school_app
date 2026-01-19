@@ -7,9 +7,9 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
-import 'package:yoyo_school_app/core/widgets/app_bar.dart'; 
+import 'package:yoyo_school_app/core/widgets/app_bar.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen_provider.dart';
 
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                   toolbarHeight: 80,
                   flexibleSpace: getAppBar(context),
                 ),
-    
+
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverList(
@@ -79,14 +79,10 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(height: 50),
                       _AnimatedSectionTitle(text.your_classes),
                       const SizedBox(height: 10),
-    
+
                       Column(
                         children:
-                            homeProvider
-                                .userClases
-                                ?.classes
-                                ?.school
-                                ?.schoolLanguage
+                            homeProvider.userClases?.user?.studentClasses
                                 ?.asMap()
                                 .entries
                                 .map(
@@ -94,14 +90,10 @@ class HomeScreen extends StatelessWidget {
                                     delay: 300 * entry.key,
                                     child: LaunguageCard(
                                       student: homeProvider.userClases,
-                                      language: entry.value,
+                                      language: entry.value.classes?.language,
                                       level: homeProvider.levels ?? [],
                                       className:
-                                          homeProvider
-                                              .userClases
-                                              ?.classes
-                                              ?.className ??
-                                          "",
+                                          entry.value.classes?.className ?? "",
                                     ),
                                   ),
                                 )
@@ -194,7 +186,7 @@ class _AnimatedCard extends StatelessWidget {
 
 class LaunguageCard extends StatefulWidget {
   final Student? student;
-  final SchoolLanguage? language;
+  final Language? language;
   final String className;
   final List<Level> level;
 
@@ -238,7 +230,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
             duration: const Duration(milliseconds: 150),
             curve: Curves.easeOut,
             child: Hero(
-              tag: widget.language?.language?.language ?? "",
+              tag: widget.language?.language ?? "",
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -251,7 +243,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     gradient: LinearGradient(
-                      colors: widget.language?.language?.gradient ?? [],
+                      colors: widget.language?.gradient ?? [],
                     ),
                   ),
                   child: Stack(
@@ -264,7 +256,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
                             borderRadius: BorderRadius.circular(16),
                             image: DecorationImage(
                               image: CachedNetworkImageProvider(
-                                widget.language?.language?.image ?? "",
+                                widget.language?.image ?? "",
                               ),
                               fit: BoxFit.fill,
                             ),
@@ -281,7 +273,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.language?.language?.language ?? "",
+                              widget.language?.language ?? "",
                               style: AppTextStyles.textTheme.headlineSmall!
                                   .copyWith(color: Colors.white),
                             ),
@@ -291,12 +283,12 @@ class _LaunguageCardState extends State<LaunguageCard> {
                                   .copyWith(color: Colors.white),
                             ),
                             Text(
-                              "${text.level}${UsefullFunctions.returnLevel(widget.language?.language?.level ?? 0, widget.level)}",
+                              "${text.level}${UsefullFunctions.returnLevel(widget.language?.level ?? 0, widget.level)}",
                               style: AppTextStyles.textTheme.headlineSmall!
                                   .copyWith(color: Colors.white),
                             ),
                             Text(
-                              "${widget.student?.attemptedPhrases?.where((val) => val.phrase?.level == widget.language?.language?.level && widget.language?.language?.id == val.phrase?.language).length} / ${widget.language?.language?.phrase?.length ?? 0}  ${text.phrases}",
+                              "${widget.student?.attemptedPhrases?.where((val) => val.phrase?.level == widget.language?.level && widget.language?.id == val.phrase?.language).length} / ${widget.language?.phrase?.length ?? 0}  ${text.phrases}",
                               style: AppTextStyles.textTheme.titleMedium!
                                   .copyWith(color: Colors.white),
                             ),

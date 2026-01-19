@@ -4,8 +4,8 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
+import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
-import 'package:yoyo_school_app/features/home/model/school_launguage.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/try_phrases/presentation/try_phrases_provider.dart';
 import 'package:yoyo_school_app/core/widgets/back_btn.dart';
@@ -16,7 +16,7 @@ import '../../recording/presentation/read_and_practise_screen.dart';
 class TryPhrasesScreen extends StatelessWidget {
   final PhraseModel phraseModel;
   final int? streak;
-  final SchoolLanguage schoolLanguage;
+  final Language schoolLanguage;
   final String className;
   final Student student;
   final bool isLast;
