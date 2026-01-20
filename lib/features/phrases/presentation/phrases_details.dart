@@ -266,7 +266,19 @@ class PhrasesDetails extends StatelessWidget {
                                                     Spacer(),
                                                     GestureDetector(
                                                       onTap: () =>
-                                                          context.pop(),
+                                                          NavigationHelper.go(
+                                                            RouteNames
+                                                                .phraseCategories,
+                                                            extra: {
+                                                              'language':
+                                                                  language,
+                                                              "className":
+                                                                  className,
+                                                              "level": levels,
+                                                              'student':
+                                                                  student,
+                                                            },
+                                                          ),
                                                       child: Text(
                                                         text.back,
                                                         style: Theme.of(context)
