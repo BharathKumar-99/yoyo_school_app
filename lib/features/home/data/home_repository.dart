@@ -37,7 +37,7 @@ class HomeRepository {
           .select('''
       *,
       ${DbTable.users}(
-        *,
+        *,${DbTable.userResult}(*, ${DbTable.phrase}(*)),
         ${DbTable.studentClasses}(
           *,
           ${DbTable.classes}(

@@ -1,5 +1,7 @@
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 class UserModel {
   String? userId;
@@ -14,6 +16,7 @@ class UserModel {
   bool? isTester;
   List<Student>? student;
   List<StudentClassesModel>? studentClasses;
+  List<UserResult>? userResult;
 
   UserModel({
     required this.userId,
@@ -28,6 +31,7 @@ class UserModel {
     this.isTester,
     this.student,
     this.studentClasses,
+    this.userResult,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -50,13 +54,18 @@ class UserModel {
     studentClasses = (json['student_classes'] as List?)
         ?.map((e) => StudentClassesModel.fromJson(e))
         .toList();
-    onboarding =
-        json['onboarding']; // FIXED: This field was missing in previous versions, causing infinite onboarding loop.
+    onboarding = json['onboarding'];
 
     if (json['student'] != null) {
       student = <Student>[];
       json['student'].forEach((v) {
         student!.add(Student.fromJson(v));
+      });
+    }
+    if (json[DbTable.userResult] != null) {
+      userResult = <UserResult>[];
+      json[DbTable.userResult].forEach((v) {
+        userResult!.add(UserResult.fromJson(v));
       });
     }
   }

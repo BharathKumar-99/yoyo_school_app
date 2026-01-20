@@ -1,4 +1,5 @@
 import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 
 import '../../profile/model/user_model.dart';
 
@@ -17,6 +18,7 @@ class UserResult {
   int? highestScore;
   String? type;
   UserModel? user;
+  PhraseModel? phrase;
 
   UserResult({
     this.id,
@@ -33,6 +35,7 @@ class UserResult {
     this.type,
     this.user,
     this.highestScore,
+    this.phrase,
   });
 
   factory UserResult.fromJson(Map<String, dynamic> json) {
@@ -42,7 +45,10 @@ class UserResult {
           ? DateTime.tryParse(json['created_at'])
           : null,
       userId: json['user_id'] as String?,
-      phrasesId: json['phrases_id'] as int?,
+      phrasesId: json['phrases_id'] is int ? json['phrases_id'] as int? : null,
+      phrase: json[DbTable.phrase] is Map
+          ? PhraseModel.fromJson(json[DbTable.phrase])
+          : null,
       score: json['score'] as int?,
       vocab: json['vocab'] as int?,
       attempt: json['attempt'] as int?,

@@ -288,7 +288,7 @@ class _LaunguageCardState extends State<LaunguageCard> {
                                   .copyWith(color: Colors.white),
                             ),
                             Text(
-                              "${widget.student?.attemptedPhrases?.where((val) => val.phrase?.level == widget.language?.level && widget.language?.id == val.phrase?.language).length} / ${widget.language?.phrase?.length ?? 0}  ${text.phrases}",
+                              "${widget.student?.user?.userResult?.where((val) =>  widget.language?.id == val.phrase?.language).length} / ${widget.language?.phrase?.length ?? 0}  ${text.phrases}",
                               style: AppTextStyles.textTheme.titleMedium!
                                   .copyWith(color: Colors.white),
                             ),
