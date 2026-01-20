@@ -263,7 +263,21 @@ class PhrasesDetails extends StatelessWidget {
                                                         ),
                                                       ],
                                                     ),
-                                                    SizedBox(height: 20),
+                                                    Spacer(),
+                                                    GestureDetector(
+                                                      onTap: () =>
+                                                          context.pop(),
+                                                      child: Text(
+                                                        text.back,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .copyWith(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                               ),

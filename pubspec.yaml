@@ -1,7 +1,7 @@
 name: yoyo_school_app
 description: "A new Flutter project."
 publish_to: "none"
-version: 9.5.85
+version: 9.5.86
 
 environment:
   sdk: ^3.8.1
