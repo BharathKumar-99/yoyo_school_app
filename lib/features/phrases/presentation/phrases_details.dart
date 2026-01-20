@@ -52,6 +52,7 @@ class PhrasesDetails extends StatelessWidget {
         className,
         streakPhraseId,
         categories,
+        context,
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
@@ -454,7 +455,6 @@ class PhrasesDetails extends StatelessWidget {
         }
         return Column(
           children: [
-             
             GestureDetector(
               onTap: () {
                 if (goToNext) {

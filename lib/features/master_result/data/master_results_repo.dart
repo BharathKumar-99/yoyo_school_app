@@ -72,12 +72,17 @@ class MasterResultsRepo {
       final data = await _client
           .from(DbTable.student)
           .select('''
-        *,
+       *,${DbTable.users}(*,${DbTable.studentClasses}(*, ${DbTable.classes}(*,  ${DbTable.language}(
+            *,
+            ${DbTable.phrase}(*)
+          )
+        )))),
         ${DbTable.attemptedPhrases}(*,${DbTable.phrase}(*)),
         ${DbTable.classes}(
           *,
           ${DbTable.language}(
-            *, ${DbTable.phrase}(*)
+            *,
+            ${DbTable.phrase}(*)
           )
         )
       ''')

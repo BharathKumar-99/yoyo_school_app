@@ -113,9 +113,8 @@ class ResultProvider extends ChangeNotifier {
         () => upsertResult(
           score,
           submit:
-              (score > Constants.lowScreenScore &&
-              (score > Constants.minimumSubmitScore ||
-                  (phraseModel.readingPhrase == true))),
+              ((score > Constants.lowScreenScore &&
+              (score > Constants.minimumSubmitScore))),
         ),
         "Failed to save result",
       );

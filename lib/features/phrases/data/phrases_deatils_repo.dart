@@ -108,7 +108,7 @@ class PhrasesDeatilsRepo {
 
     final data = await _client
         .from(DbTable.studentClasses)
-        .select('''*,${DbTable.users}(*)''')
+        .select('''*,${DbTable.users}(*,${DbTable.student}(*))''')
         .eq('classes', classId);
 
     List<StudentClassesModel> studentClassesModel = [];

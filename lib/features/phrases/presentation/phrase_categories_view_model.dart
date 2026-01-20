@@ -41,7 +41,11 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     classStudents.clear();
 
     Map<String, List<int>> individualUser = {};
-    classStudents = await _repo.getAllClassStudents(student?.classId ?? 0);
+    classStudents = await _repo.getAllClassStudents(
+      student?.user?.studentClasses != null
+          ? student?.user?.studentClasses?.first.classes?.id ?? 0
+          : 0,
+    );
     List<String> classUsers = [];
     for (var element in classStudents) {
       classUsers.add(element.userId ?? '');

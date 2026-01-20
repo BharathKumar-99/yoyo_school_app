@@ -61,6 +61,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.className,
     this.streakPhraseId,
     this.categories,
+    BuildContext context,
   ) {
     try {
       globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
@@ -68,7 +69,7 @@ class PhrasesViewModel extends ChangeNotifier {
       isStreakLoading = streak != null || isGoToNextPhrase;
 
       Future.delayed(Duration.zero, () {
-        init(true);
+        init(true, context);
       });
     } catch (e) {
       throw Exception("Failed to initialize PhrasesViewModel");
@@ -93,7 +94,7 @@ class PhrasesViewModel extends ChangeNotifier {
     if (!_isDisposed) super.notifyListeners();
   }
 
-  Future<void> init(bool isFirst) async {
+  Future<void> init(bool isFirst, BuildContext context) async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     try {
@@ -113,15 +114,18 @@ class PhrasesViewModel extends ChangeNotifier {
           throw Exception("Failed saving streak");
         }
       }
-
+      final userResultProvider = Provider.of<GlobalProvider>(
+        ctx!,
+        listen: false,
+      );
       try {
-        await globalProvider.initRealtimeResults(ids);
+        await userResultProvider.initRealtimeResults(ids);
       } catch (_) {
         throw Exception("Failed starting realtime results");
       }
 
       try {
-        globalProvider.removeListener(_userResultListener);
+        userResultProvider.removeListener(_userResultListener);
       } catch (_) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) => GlobalLoader.hide(),
@@ -129,16 +133,15 @@ class PhrasesViewModel extends ChangeNotifier {
       }
 
       _userResultListener = () {
-        if (_isDisposed) return;
         try {
-          schoolResult = globalProvider.results;
+          schoolResult = userResultProvider.results;
           _processResults(userId, ids, isFirst);
         } catch (_) {
           throw Exception("Failed processing user results");
         }
       };
 
-      globalProvider.addListener(_userResultListener);
+      userResultProvider.addListener(_userResultListener);
       isStreakLoading = false;
       globalRepo.listenPhraseDisabledSchools(
         remoteConfigId: globalProvider.apiCred?.id ?? 0,
@@ -163,13 +166,11 @@ class PhrasesViewModel extends ChangeNotifier {
           notifyListeners();
         },
       );
-    await _repo.shouldShowPopup(language);
     } catch (e) {
       throw Exception("Failed initializing phrase data");
     }
   }
 
-  
   void _processResults(String userId, List<int> ids, bool isFirst) async {
     try {
       if (_isDisposed || ctx == null || !ctx!.mounted) return;
@@ -184,7 +185,9 @@ class PhrasesViewModel extends ChangeNotifier {
 
       Map<String, List<int>> individualUser = {};
 
-      classStudents = await _repo.getAllClassStudents(student?.classId ?? 0);
+      classStudents = await _repo.getAllClassStudents(
+        student?.user?.studentClasses?.first.classes?.id ?? 0,
+      );
       List<String> classUsers = [];
       for (var element in classStudents) {
         classUsers.add(element.userId ?? '');
@@ -328,7 +331,7 @@ class PhrasesViewModel extends ChangeNotifier {
             "streak": streak,
             "language": language,
             "className": className,
-            "student": student, 
+            "student": student,
             'categories': categories,
             "isLast": from == 'new'
                 ? newPhrases.length == 1
