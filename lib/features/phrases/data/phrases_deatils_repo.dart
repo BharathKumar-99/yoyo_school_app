@@ -116,7 +116,13 @@ class PhrasesDeatilsRepo {
       studentClassesModel.add(StudentClassesModel.fromJson(element));
     }
     for (var val in studentClassesModel) {
-      if (val.user!.student != null) students.add(val.user!.student!.first);
+      if (val.user?.student != null) {
+        students.add(val.user!.student!);
+      } else {
+        if (val.user!.studentList != null) {
+          students.add(val.user!.studentList!.first);
+        }
+      }
     }
     return students;
   }

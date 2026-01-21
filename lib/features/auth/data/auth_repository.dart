@@ -133,14 +133,14 @@ class AuthRepository {
     try {
       final data = await client
           .from(DbTable.users)
-          .select('''*,${DbTable.student}(*)''')
+          .select('''*,${DbTable.studentClasses}(*)''')
           .eq('username', username)
           .maybeSingle();
 
       UserModel userModel = UserModel.fromJson(data!);
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       final fcmToken = await messaging.getToken();
-      int classId = userModel.student?.first.classId ?? 0;
+      int classId = userModel.studentClasses?.first.classId ?? 0;
       await client.from(DbTable.activationRequests).insert({
         'username': username,
         'class': classId,

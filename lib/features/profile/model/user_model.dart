@@ -14,7 +14,8 @@ class UserModel {
   DateTime? lastLogin;
   bool? onboarding;
   bool? isTester;
-  List<Student>? student;
+  List<Student>? studentList;
+  Student? student;
   List<StudentClassesModel>? studentClasses;
   List<UserResult>? userResult;
 
@@ -29,7 +30,7 @@ class UserModel {
     this.lastLogin,
     this.onboarding,
     this.isTester,
-    this.student,
+    this.studentList,
     this.studentClasses,
     this.userResult,
   });
@@ -56,11 +57,14 @@ class UserModel {
         .toList();
     onboarding = json['onboarding'];
 
-    if (json['student'] != null) {
-      student = <Student>[];
+    if (json['student'] != null && json['student'] is List) {
+      studentList = <Student>[];
       json['student'].forEach((v) {
-        student!.add(Student.fromJson(v));
+        studentList!.add(Student.fromJson(v));
       });
+    }
+    if (json['student'] != null && json['student'] is Map) {
+      student = Student.fromJson(json['student']);
     }
     if (json[DbTable.userResult] != null) {
       userResult = <UserResult>[];
