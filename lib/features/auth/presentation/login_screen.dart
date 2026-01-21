@@ -163,23 +163,34 @@ class ActivationCodeFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    String text = newValue.text.toUpperCase().replaceAll(
+    // Detect backspace/delete
+    final isDeleting = newValue.text.length < oldValue.text.length;
+
+    // Keep only A-Z and 0-9
+    String raw = newValue.text.toUpperCase().replaceAll(
       RegExp(r'[^A-Z0-9]'),
       '',
     );
 
-    if (text.length > 3) {
-      text = '${text.substring(0, 3)}-${text.substring(3)}';
+    // Max raw length = 6
+    if (raw.length > 6) {
+      raw = raw.substring(0, 6);
     }
 
-    // Limit maximum length to HYT-UL7 → 3 + 1 + 3 = 7 chars
-    if (text.length > 7) {
-      text = text.substring(0, 7);
+    String formatted;
+
+    if (raw.length < 3) {
+      formatted = raw;
+    } else if (raw.length == 3) {
+      // ✅ Add dash ONLY if not deleting
+      formatted = isDeleting ? raw : '$raw-';
+    } else {
+      formatted = '${raw.substring(0, 3)}-${raw.substring(3)}';
     }
 
     return TextEditingValue(
-      text: text,
-      selection: TextSelection.collapsed(offset: text.length),
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

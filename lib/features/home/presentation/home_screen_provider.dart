@@ -45,20 +45,22 @@ class HomeScreenProvider extends ChangeNotifier {
         totalPhrases += student.classes?.language?.phrase?.length ?? 0;
       });
 
+      _subscribeToStudentData();
+      notifyListeners();
       if (userClases?.user?.studentClasses?.length == 1) {
         NavigationHelper.go(
           RouteNames.phraseCategories,
           extra: {
-            'language': userClases?.user?.studentClasses?.first.classes?.language,
-            "className": userClases?.user?.studentClasses?.first.classes?.className,
+            'language':
+                userClases?.user?.studentClasses?.first.classes?.language,
+            "className":
+                userClases?.user?.studentClasses?.first.classes?.className,
             "level": levels,
             'student': userClases,
           },
         );
         return false;
       }
-      _subscribeToStudentData();
-      notifyListeners();
       return true;
     } catch (e) {
       throw Exception("Home initialization failed: $e");

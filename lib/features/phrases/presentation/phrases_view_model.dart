@@ -61,7 +61,6 @@ class PhrasesViewModel extends ChangeNotifier {
     this.className,
     this.streakPhraseId,
     this.categories,
-    BuildContext context,
   ) {
     try {
       globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
@@ -69,7 +68,7 @@ class PhrasesViewModel extends ChangeNotifier {
       isStreakLoading = streak != null || isGoToNextPhrase;
 
       Future.delayed(Duration.zero, () {
-        init(true, context);
+        init(true);
       });
     } catch (e) {
       throw Exception("Failed to initialize PhrasesViewModel");
@@ -94,7 +93,7 @@ class PhrasesViewModel extends ChangeNotifier {
     if (!_isDisposed) super.notifyListeners();
   }
 
-  Future<void> init(bool isFirst, BuildContext context) async {
+  Future<void> init(bool isFirst) async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     try {

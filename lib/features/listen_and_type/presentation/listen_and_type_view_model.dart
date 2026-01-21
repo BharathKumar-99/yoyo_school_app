@@ -8,7 +8,6 @@ import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 
 import '../../home/model/phrases_model.dart';
-import '../data/listen_repo.dart';
 
 class ListenAndTypeViewModel extends ChangeNotifier {
   final RecorderController waveController = RecorderController();
@@ -18,15 +17,11 @@ class ListenAndTypeViewModel extends ChangeNotifier {
   Language? language;
   final int categories;
   final AudioPlayer audioManager = AudioPlayer();
-  final ListenRepo _repo = ListenRepo();
-  ListenAndTypeViewModel(this.phraseModel, this.categories) {
-    initAudio();
-    getData();
-    _listenToPlayerState();
-  }
 
-  getData() async {
-    language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
+  ListenAndTypeViewModel(this.phraseModel, this.categories, this.language) {
+    initAudio();
+
+    _listenToPlayerState();
   }
 
   Future<void> initAudio() async {
@@ -68,6 +63,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
         'phraseModel': phraseModel,
         'typedPhrase': textEditingController.text.trim(),
         'language': language,
+        'categories': categories,
       },
     );
   }

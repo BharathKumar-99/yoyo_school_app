@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/utils/get_user_details.dart';
+import 'package:yoyo_school_app/features/home/model/level_model.dart';
+import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/listen_and_type_result/data/listen_repo.dart';
 import 'package:yoyo_school_app/features/listen_and_type_result/model/listen_model.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../home/model/language_model.dart';
 import '../../home/model/phrases_model.dart';
@@ -17,15 +22,55 @@ class ListenAndTypeResultProvider extends ChangeNotifier {
   String typedString;
   final ListenRepo _repo = ListenRepo();
   ListenModel? listenModel;
+  late UserResult? result;
   Language language;
+  Student? userClases;
+  List<Level>? levels = [];
+  int score = 0;
   bool loading = true;
   ListenAndTypeResultProvider(this.model, this.typedString, this.language) {
     init();
   }
   init() async {
     listenModel = await _repo.getTextResult(typedString, model.phrase ?? '');
+    result = await _repo.getAttemptedPhrase(model.id ?? 0);
+    userClases = await _repo.getClasses();
+    levels = await _repo.getLevel();
+    score = listenModel?.overallScore ?? 0;
+    upsertResult(
+      score,
+      submit:
+          ((score > Constants.lowScreenScore &&
+          (score > Constants.minimumSubmitScore))),
+    );
     loading = false;
     notifyListeners();
+  }
+
+  Future<void> upsertResult(int score, {bool submit = false}) async {
+    try {
+      final userId = GetUserDetails.getCurrentUserId() ?? "";
+
+      result ??= UserResult(
+        userId: userId,
+        phrasesId: model.id,
+        type: Constants.learned,
+      );
+
+      result?.score = score;
+      if ((result?.highestScore ?? 0) < score) {
+        result?.highestScore = score;
+      }
+      result?.scoreSubmitted = submit;
+      result?.goodWords = [];
+      result?.badWords = [];
+      result?.attempt = (result?.attempt ?? 0) + 1;
+      result?.vocab = 0;
+
+      result = await _repo.upsertResult(result!);
+    } catch (e) {
+      throw "Failed to update result";
+    }
   }
 
   Color getWordColor(String score) {

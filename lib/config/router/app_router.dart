@@ -141,6 +141,7 @@ class AppRoutes {
             model: data['phraseModel'],
             typedString: data['typedPhrase'],
             language: data['language'],
+            categories: data['categories'],
           );
         },
       ),
@@ -229,6 +230,7 @@ class AppRoutes {
             create: (context) => ListenAndTypeViewModel(
               data['phrase'] as PhraseModel,
               data['categories'],
+              data['language'],
             ),
             child: ListenAndTypeScreen(
               key: UniqueKey(),

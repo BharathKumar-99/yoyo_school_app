@@ -52,7 +52,6 @@ class PhrasesDetails extends StatelessWidget {
         className,
         streakPhraseId,
         categories,
-        context,
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {

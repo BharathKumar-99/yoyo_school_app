@@ -3,10 +3,12 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/listen_and_type_result/presentation/listen_and_type_result_provider.dart';
@@ -17,11 +19,13 @@ class ListenAndTypeResultScreen extends StatelessWidget {
   final PhraseModel model;
   final String typedString;
   final Language language;
+  final int categories;
   const ListenAndTypeResultScreen({
     super.key,
     required this.model,
     required this.typedString,
     required this.language,
+    required this.categories,
   });
 
   @override
@@ -296,19 +300,61 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                             value.listenModel?.body ?? '',
                             maxLines: 3,
                           ),
-
-                          SizedBox(
-                            width: width,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: language.gradient!.first,
-                              ),
-                              onPressed: () {
-                                NavigationHelper.pop();
-                              },
-                              child: Text(text.tryAgain),
-                            ),
-                          ),
+                          value.score > Constants.minimumSubmitScore
+                              ? SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () => context.go(
+                                      RouteNames.phrasesDetails,
+                                      extra: {
+                                        'language': value.language,
+                                        "className":
+                                            value
+                                                .userClases
+                                                ?.user
+                                                ?.studentClasses
+                                                ?.firstWhere(
+                                                  (val) =>
+                                                      val
+                                                          .classes
+                                                          ?.language
+                                                          ?.id ==
+                                                      value.language.id,
+                                                )
+                                                .classes
+                                                ?.className ??
+                                            '',
+                                        "level": value.levels ?? [],
+                                        'student': value.userClases,
+                                        "next": true,
+                                        "from": "new",
+                                        'categories': categories,
+                                      },
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          value.language.gradient?.first ??
+                                          Colors.blue,
+                                    ),
+                                    child: Text(
+                                      text.next_phrase,
+                                      style:
+                                          AppTextStyles.textTheme.titleMedium,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: width,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: language.gradient!.first,
+                                    ),
+                                    onPressed: () {
+                                      NavigationHelper.pop();
+                                    },
+                                    child: Text(text.tryAgain),
+                                  ),
+                                ),
                         ],
                       ),
                     ),

@@ -34,13 +34,13 @@ class ListenAndTypeScreen extends StatelessWidget {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
+
             body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(28.0),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(28),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 20,
                   children: [
                     backBtn(
                       streak: false,
@@ -50,60 +50,55 @@ class ListenAndTypeScreen extends StatelessWidget {
                       student: student,
                       categories: value.categories,
                     ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(50),
-                      splashColor:
-                          value.language?.gradient?.first.withValues(
-                            alpha: 0.2,
-                          ) ??
-                          Colors.grey.withValues(alpha: 0.2),
-                      onTap: () async => value.playAudio(),
-                      child: Card(
-                        elevation: 0,
-                        color: value.language?.gradient?.first.withValues(
-                          alpha: 0.4,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Center(
-                            child: SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Center(
-                                child: Icon(
-                                  Icons.play_arrow_outlined,
-                                  size: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
+
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: value.playAudio,
+                        child: Card(
+                          elevation: 0,
+                          color: value.language?.gradient?.first.withValues(
+                            alpha: 0.4,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Icon(
+                              Icons.play_arrow_outlined,
+                              size: 45,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
                     ),
+
+                    const SizedBox(height: 20),
+
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 28),
                       child: Column(
-                        spacing: 10,
                         children: [
                           FakeWaveform(
                             isPlaying: value.isPlaying,
                             height: 30,
                             color: Colors.black,
                           ),
-
                           Text(text.listenPhrase),
                         ],
                       ),
                     ),
+
+                    const SizedBox(height: 20),
+
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 600),
-                      padding: EdgeInsets.only(top: 10),
                       curve: Curves.easeInOut,
-
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
@@ -114,45 +109,46 @@ class ListenAndTypeScreen extends StatelessWidget {
                               Colors.white,
                           width: 3,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                (value.language?.gradient?.first ??
-                                        Colors.black)
-                                    .withValues(alpha: 0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
                         color: Colors.white,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8),
                         child: TextField(
-                          maxLines: 10,
                           controller: value.textEditingController,
+                          maxLines: 10,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: text.listenTextField,
-                            hintStyle: TextStyle(color: Colors.grey),
                           ),
                         ),
                       ),
                     ),
-                    Spacer(),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: value.language?.gradient?.first,
-                        ),
-                        onPressed: () {
-                          value.submit();
-                        },
-                        child: Text('Submit'),
-                      ),
-                    ),
+
+                    // 👇 space so content doesn't hide behind button
+                    const SizedBox(height: 120),
                   ],
+                ),
+              ),
+            ),
+
+            bottomNavigationBar: SafeArea(
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.only(
+                  left: 28,
+                  right: 28,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: value.language?.gradient?.first,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    onPressed: value.submit,
+                    child: const Text('Submit'),
+                  ),
                 ),
               ),
             ),
