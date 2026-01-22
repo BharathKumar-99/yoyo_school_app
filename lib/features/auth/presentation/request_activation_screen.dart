@@ -99,7 +99,10 @@ class RequestActivationScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 40,
+                  ),
                   child: IconButton(
                     onPressed: () => context.pop(),
                     icon: const Icon(

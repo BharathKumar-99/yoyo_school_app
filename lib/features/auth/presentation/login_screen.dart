@@ -17,16 +17,16 @@ class LoginScreen extends StatelessWidget {
       child: Consumer<AuthViewModel>(
         builder: (context, vm, _) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               children: [
                 Image.asset(ImageConstants.loginBg),
                 SafeArea(
-                  child: Column(
-                    children: [
-                      Image.asset(ImageConstants.appLogo),
-                      Expanded(
-                        child: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Image.asset(ImageConstants.appLogo),
+                        Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -121,34 +121,27 @@ class LoginScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Spacer(),
-                                Center(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      NavigationHelper.push(
-                                        RouteNames.needActivationCode,
-                                      );
-                                    },
-                                    child: Text(
-                                      text.requestNewCode,
-                                      style: AppTextStyles.textTheme.bodyMedium!
-                                          .copyWith(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: Colors.black,
-                                          ),
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
+            ),
+            bottomNavigationBar: TextButton(
+              onPressed: () {
+                NavigationHelper.push(RouteNames.needActivationCode);
+              },
+              child: Text(
+                text.requestNewCode,
+                style: AppTextStyles.textTheme.bodyMedium!.copyWith(
+                  decoration: TextDecoration.underline,
+                  color: Colors.black,
+                ),
+              ),
             ),
           );
         },
