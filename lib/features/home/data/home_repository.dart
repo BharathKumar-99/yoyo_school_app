@@ -129,18 +129,16 @@ class HomeRepository {
     }
   }
 
-  Future<int> getTotalAtemptedPhrases(int studentId, List<int> ids) async {
+  Future<int> getTotalAtemptedPhrases(String userId, List<int> ids) async {
     int count = 0;
     final response = await _client
-        .from(DbTable.attemptedPhrases)
+        .from(DbTable.userResult)
         .select('*')
-        .eq('student_id', studentId)
+        .eq('score_submited', true)
+        .eq('user_id', userId)
         .inFilter('phrases_id', ids)
         .count(CountOption.exact);
     count = response.count;
     return count;
   }
 }
-
-
-

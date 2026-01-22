@@ -45,7 +45,7 @@ class ProfileProvider extends ChangeNotifier {
       isLoading = true;
 
       WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
-
+      _userSubscription?.cancel();
       _userSubscription = profileRepository.getUserDataStream().listen(
         (userData) async {
           try {

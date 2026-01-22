@@ -459,10 +459,14 @@ class TryPhrasesScreen extends StatelessWidget {
                                                               onTap: () async {
                                                                 if (playing) {
                                                                   await value
-                                                                      .pauseAudio();
+                                                                      .pauseAudio(
+                                                                        context,
+                                                                      );
                                                                 } else {
                                                                   await value
-                                                                      .playAudio();
+                                                                      .playAudio(
+                                                                        context,
+                                                                      );
                                                                 }
                                                               },
                                                               child: Center(
@@ -501,7 +505,9 @@ class TryPhrasesScreen extends StatelessWidget {
                                                                   ),
                                                           onTap: () async =>
                                                               await value
-                                                                  .playAudio(),
+                                                                  .playAudio(
+                                                                    context,
+                                                                  ),
                                                           child: Center(
                                                             child: Icon(
                                                               Icons

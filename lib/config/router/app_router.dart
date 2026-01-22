@@ -170,6 +170,7 @@ class AppRoutes {
               data['streak'],
               data['isLast'],
               data['categories'],
+              context,
             ),
             child: ChangeNotifierProvider<RecordingProvider>(
               create: (context) => RecordingProvider(

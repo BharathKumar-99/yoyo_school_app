@@ -30,8 +30,9 @@ class TryPhrasesProvider extends ChangeNotifier {
     this.streak,
     this.isLast,
     this.categories,
+    BuildContext context,
   ) {
-    initAudio();
+    initAudio(context);
   }
 
   @override
@@ -46,21 +47,19 @@ class TryPhrasesProvider extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  Future<void> initAudio() async {
+  Future<void> initAudio(BuildContext context) async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     try {
       language = await _repo.getPhraseModelData(phraseModel.language ?? 0);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-
     }
 
     try {
       result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-
     }
 
     try {
@@ -68,14 +67,12 @@ class TryPhrasesProvider extends ChangeNotifier {
       await audioManagerQuestion.setVolume(1);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-   
     }
 
     try {
       await upsertResult(listen: false);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      
     }
 
     isLoading = false;
@@ -89,18 +86,17 @@ class TryPhrasesProvider extends ChangeNotifier {
       }
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
-      
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.hide());
     if (phraseModel.questions != null) {
       await playQuestionAudio();
     } else {
-      await playAudio();
+      await playAudio(context);
     }
   }
 
-  Future<void> playAudio() async {
+  Future<void> playAudio(BuildContext context) async {
     try {
       final player = audioManager;
 
@@ -115,10 +111,11 @@ class TryPhrasesProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
-    notifyListeners();
+
+    if (context.mounted) notifyListeners();
   }
 
-  Future<void> pauseAudio() async {
+  Future<void> pauseAudio(BuildContext context) async {
     try {
       final player = audioManager;
 
@@ -128,7 +125,7 @@ class TryPhrasesProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
-    notifyListeners();
+    if (context.mounted) notifyListeners();
   }
 
   Future<void> togglePlayPause() async {

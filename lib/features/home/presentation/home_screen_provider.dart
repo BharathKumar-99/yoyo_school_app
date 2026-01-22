@@ -25,6 +25,7 @@ class HomeScreenProvider extends ChangeNotifier {
   HomeScreenProvider(this.homeRepository) {
     _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
     _profileProvider?.initialize();
+    notifyListeners();
   }
 
   Future<bool> init() async {
@@ -83,7 +84,7 @@ class HomeScreenProvider extends ChangeNotifier {
               }
             }
             atemptedPhrases = await homeRepository.getTotalAtemptedPhrases(
-              student?.id ?? 0,
+              student?.userId ?? '',
               ids,
             );
             notifyListeners();
