@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 import '../../../config/utils/get_user_details.dart';
@@ -116,5 +117,36 @@ class ResultsRepo {
       lvl.add(Level.fromJson(va));
     }
     return lvl;
+  }
+
+  Future<void> resetCategoriesPhrases(int categories, int studenId) async {
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+    try {
+      final data = await _client
+          .from(DbTable.phrase)
+          .select("*")
+          .eq('categories', categories);
+
+      List<PhraseModel> phrases = [];
+
+      for (var element in data) {
+        phrases.add(PhraseModel.fromJson(element));
+      }
+
+      for (var element in phrases) {
+        await _client
+            .from(DbTable.userResult)
+            .delete()
+            .eq('phrases_id', element.id ?? 0)
+            .eq('user_id', userId);
+        await _client
+            .from(DbTable.attemptedPhrases)
+            .delete()
+            .eq('phrases_id', element.id ?? 0)
+            .eq('student_id', studenId);
+      }
+    } catch (e) {
+      log("issue here");
+    }
   }
 }

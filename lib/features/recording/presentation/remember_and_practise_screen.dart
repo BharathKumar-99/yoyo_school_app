@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/core/audio/global_recording_state.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 
@@ -54,7 +55,7 @@ class RememberAndPractiseScreen extends StatelessWidget {
               ),
               AudioControlWidget(
                 color: launguage.gradient?.first ?? Colors.white,
-                isRecording: value.isRecording,
+                isRecording: isRecordingNotifier.value,
                 border: Colors.white,
                 bgColor: Colors.white,
                 onStartHold: () async {
@@ -87,13 +88,13 @@ class RememberAndPractiseScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                (value.isRecording) ? text.recording : text.masterIt,
+                (isRecordingNotifier.value) ? text.recording : text.masterIt,
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 5),
               Text(text.holdAndRecord, style: TextStyle(color: Colors.white)),
               SizedBox(height: 5),
-              if (value.isRecording)
+              if (isRecordingNotifier.value)
                 Text(
                   value.recordingTime,
                   style: TextStyle(color: Colors.white),

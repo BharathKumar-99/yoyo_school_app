@@ -20,6 +20,7 @@ class MasterResultScreen extends StatelessWidget {
   final bool isLast;
   final int retryNumber;
   final int categories;
+  final String className;
   const MasterResultScreen({
     super.key,
     required this.phraseModel,
@@ -28,6 +29,7 @@ class MasterResultScreen extends StatelessWidget {
     required this.isLast,
     required this.retryNumber,
     required this.categories,
+    required this.className,
   });
 
   @override
@@ -145,22 +147,7 @@ class MasterResultScreen extends StatelessWidget {
                                         RouteNames.phrasesDetails,
                                         extra: {
                                           'language': value.language,
-                                          "className":
-                                              value
-                                                  .userClases
-                                                  ?.user
-                                                  ?.studentClasses
-                                                  ?.firstWhere(
-                                                    (val) =>
-                                                        val
-                                                            .classes
-                                                            ?.language
-                                                            ?.id ==
-                                                        value.language.id,
-                                                  )
-                                                  .classes
-                                                  ?.className ??
-                                              '',
+                                          "className": className,
                                           "level": value.levels ?? [],
                                           'student': value.userClases,
                                           'categories': categories,
@@ -492,24 +479,7 @@ class MasterResultScreen extends StatelessWidget {
                                                   RouteNames.phrasesDetails,
                                                   extra: {
                                                     'language': value.language,
-                                                    "className":
-                                                        value
-                                                            .userClases
-                                                            ?.user
-                                                            ?.studentClasses
-                                                            ?.firstWhere(
-                                                              (val) =>
-                                                                  val
-                                                                      .classes
-                                                                      ?.language
-                                                                      ?.id ==
-                                                                  value
-                                                                      .language
-                                                                      .id,
-                                                            )
-                                                            .classes
-                                                            ?.className ??
-                                                        '',
+                                                    "className": className,
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     'next': true,
@@ -542,24 +512,7 @@ class MasterResultScreen extends StatelessWidget {
                                                   RouteNames.phrasesDetails,
                                                   extra: {
                                                     'language': value.language,
-                                                    "className":
-                                                        value
-                                                            .userClases
-                                                            ?.user
-                                                            ?.studentClasses
-                                                            ?.firstWhere(
-                                                              (val) =>
-                                                                  val
-                                                                      .classes
-                                                                      ?.language
-                                                                      ?.id ==
-                                                                  value
-                                                                      .language
-                                                                      .id,
-                                                            )
-                                                            .classes
-                                                            ?.className ??
-                                                        '',
+                                                    "className": className,
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     "next": true,

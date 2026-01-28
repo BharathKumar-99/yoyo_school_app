@@ -877,7 +877,7 @@ abstract class AppLocalizations {
   /// No description provided for @lastLearned.
   ///
   /// In en, this message translates to:
-  /// **'You\'ve finished learning this language!'**
+  /// **'You\'ve learned all the phrases in this category!'**
   String get lastLearned;
 
   /// No description provided for @lastMastered.

@@ -424,7 +424,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
-  String get lastLearned => 'You\'ve finished learning this language!';
+  String get lastLearned => 'You\'ve learned all the phrases in this category!';
 
   @override
   String get lastMastered => 'You\'ve mastered all phrases in this language!';

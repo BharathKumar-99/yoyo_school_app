@@ -130,6 +130,7 @@ class AppRoutes {
             isLast: data['isLast'],
             retryNumber: data['retry'] ?? 0,
             categories: data['categories'],
+            className: data['className'],
           );
         },
       ),
@@ -142,6 +143,7 @@ class AppRoutes {
             typedString: data['typedPhrase'],
             language: data['language'],
             categories: data['categories'],
+            className: data['className'],
           );
         },
       ),
@@ -156,6 +158,7 @@ class AppRoutes {
             isLast: data['isLast'],
             retryNumber: data['retry'] ?? 0,
             categories: data['categories'],
+            className: data['className'],
           );
         },
       ),
@@ -179,6 +182,7 @@ class AppRoutes {
                 data['streak'],
                 data['isLast'],
                 data['categories'],
+                data['className'],
               ),
               child: TryPhrasesScreen(
                 key: UniqueKey(),
@@ -209,6 +213,7 @@ class AppRoutes {
                 data['streak'],
                 data['isLast'],
                 data['categories'],
+                data['className'],
               ),
               child: MasterPhraseSreen(
                 key: UniqueKey(),
@@ -232,6 +237,7 @@ class AppRoutes {
               data['phrase'] as PhraseModel,
               data['categories'],
               data['language'],
+              data['className'],
             ),
             child: ListenAndTypeScreen(
               key: UniqueKey(),

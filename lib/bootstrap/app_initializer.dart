@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:yoyo_school_app/bootstrap/notification_services.dart';
 import 'package:yoyo_school_app/firebase_options.dart';
 import '../app.dart';
@@ -34,7 +35,7 @@ class AppInitializer {
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
-
+    checkMicPermission();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -42,5 +43,15 @@ class AppInitializer {
         statusBarBrightness: Brightness.dark,
       ),
     );
+  }
+}
+
+Future<void> checkMicPermission() async {
+  final status = await Permission.microphone.status;
+
+  if (status.isDenied) {
+    await Permission.microphone.request();
+  } else if (status.isPermanentlyDenied) {
+    await openAppSettings();
   }
 }

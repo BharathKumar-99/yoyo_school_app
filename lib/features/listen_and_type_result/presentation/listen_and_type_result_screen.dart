@@ -20,12 +20,14 @@ class ListenAndTypeResultScreen extends StatelessWidget {
   final String typedString;
   final Language language;
   final int categories;
+  final String className;
   const ListenAndTypeResultScreen({
     super.key,
     required this.model,
     required this.typedString,
     required this.language,
     required this.categories,
+    required this.className,
   });
 
   @override
@@ -308,22 +310,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                                       RouteNames.phrasesDetails,
                                       extra: {
                                         'language': value.language,
-                                        "className":
-                                            value
-                                                .userClases
-                                                ?.user
-                                                ?.studentClasses
-                                                ?.firstWhere(
-                                                  (val) =>
-                                                      val
-                                                          .classes
-                                                          ?.language
-                                                          ?.id ==
-                                                      value.language.id,
-                                                )
-                                                .classes
-                                                ?.className ??
-                                            '',
+                                        "className": className,
                                         "level": value.levels ?? [],
                                         'student': value.userClases,
                                         "next": true,

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
+import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/data/global_repo.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
@@ -211,5 +212,11 @@ class ResultProvider extends ChangeNotifier {
         : 'You’re only ${(result?.score ?? 0) - (currentHigest)}% off your previous best score';
     text = preText;
     return text;
+  }
+
+  Future<void> resetPhrase(int categories) async {
+    WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.show());
+    await _repo.resetCategoriesPhrases(categories, userClases?.id ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.hide());
   }
 }

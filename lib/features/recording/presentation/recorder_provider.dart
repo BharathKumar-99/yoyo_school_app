@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
+import 'package:yoyo_school_app/core/audio/global_recording_state.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 
 import '../../home/model/phrases_model.dart';
@@ -18,13 +19,13 @@ class RecordingProvider extends ChangeNotifier {
   Language launguage;
   int? streak;
   final player = AudioPlayer();
-  bool isRecording = false;
   String? recordingPath;
   String recordingTime = "00:00";
   late final StreamSubscription<Duration> _durationSubscription;
   bool isLast;
   int retryNumber = 1;
   int categories;
+  String className;
 
   RecordingProvider(
     this.phraseModel,
@@ -32,6 +33,7 @@ class RecordingProvider extends ChangeNotifier {
     this.streak,
     this.isLast,
     this.categories,
+    this.className,
   ) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
@@ -66,9 +68,9 @@ class RecordingProvider extends ChangeNotifier {
 
   Future<void> toggleRecording(BuildContext ct, {bool cancel = false}) async {
     try {
-      if (isRecording) {
+      if (isRecordingNotifier.value) {
         recordingPath = await recorderController.stop();
-        isRecording = false;
+        isRecordingNotifier.value = false;
         if (recordingPath != null && !cancel) {
           recordingTime = "00:00";
           await player.setFilePath(recordingPath!);
@@ -101,6 +103,7 @@ class RecordingProvider extends ChangeNotifier {
                       'isLast': isLast,
                       'retry': retryNumber,
                       'categories': categories,
+                      'className': className,
                     },
                   )
                   .then((val) {
@@ -112,7 +115,7 @@ class RecordingProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         await recorderController.record();
-        isRecording = true;
+        isRecordingNotifier.value = true;
         notifyListeners();
       }
     } catch (e) {

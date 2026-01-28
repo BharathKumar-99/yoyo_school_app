@@ -19,6 +19,7 @@ class ResultScreen extends StatelessWidget {
   final String audioPath;
   final bool isLast;
   final int retryNumber;
+  final String className;
   final int categories;
   const ResultScreen({
     super.key,
@@ -28,6 +29,7 @@ class ResultScreen extends StatelessWidget {
     required this.isLast,
     required this.retryNumber,
     required this.categories,
+    required this.className,
   });
 
   @override
@@ -145,22 +147,7 @@ class ResultScreen extends StatelessWidget {
                                         RouteNames.phrasesDetails,
                                         extra: {
                                           'language': value.language,
-                                          "className":
-                                              value
-                                                  .userClases
-                                                  ?.user
-                                                  ?.studentClasses
-                                                  ?.firstWhere(
-                                                    (val) =>
-                                                        val
-                                                            .classes
-                                                            ?.language
-                                                            ?.id ==
-                                                        value.language.id,
-                                                  )
-                                                  .classes
-                                                  ?.className ??
-                                              '',
+                                          "className": className,
                                           "level": value.levels ?? [],
                                           'student': value.userClases,
                                           'categories': categories,
@@ -662,24 +649,7 @@ class ResultScreen extends StatelessWidget {
                                                   RouteNames.phrasesDetails,
                                                   extra: {
                                                     'language': value.language,
-                                                    "className":
-                                                        value
-                                                            .userClases
-                                                            ?.user
-                                                            ?.studentClasses
-                                                            ?.firstWhere(
-                                                              (val) =>
-                                                                  val
-                                                                      .classes
-                                                                      ?.language
-                                                                      ?.id ==
-                                                                  value
-                                                                      .language
-                                                                      .id,
-                                                            )
-                                                            .classes
-                                                            ?.className ??
-                                                        '',
+                                                    "className": className,
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     'categories': categories,
@@ -759,24 +729,7 @@ class ResultScreen extends StatelessWidget {
                                                   RouteNames.phrasesDetails,
                                                   extra: {
                                                     'language': value.language,
-                                                    "className":
-                                                        value
-                                                            .userClases
-                                                            ?.user
-                                                            ?.studentClasses
-                                                            ?.firstWhere(
-                                                              (val) =>
-                                                                  val
-                                                                      .classes
-                                                                      ?.language
-                                                                      ?.id ==
-                                                                  value
-                                                                      .language
-                                                                      .id,
-                                                            )
-                                                            .classes
-                                                            ?.className ??
-                                                        '',
+                                                    "className": className,
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     'next': true,
@@ -819,24 +772,7 @@ class ResultScreen extends StatelessWidget {
                                                     "streak": null,
                                                     "language": value.language,
 
-                                                    "className":
-                                                        value
-                                                            .userClases
-                                                            ?.user
-                                                            ?.studentClasses
-                                                            ?.firstWhere(
-                                                              (val) =>
-                                                                  val
-                                                                      .classes
-                                                                      ?.language
-                                                                      ?.id ==
-                                                                  value
-                                                                      .language
-                                                                      .id,
-                                                            )
-                                                            .classes
-                                                            ?.className ??
-                                                        '',
+                                                    "className": className,
                                                     'categories': categories,
                                                     "isLast": false,
                                                   },
@@ -864,24 +800,7 @@ class ResultScreen extends StatelessWidget {
                                                   RouteNames.phrasesDetails,
                                                   extra: {
                                                     'language': value.language,
-                                                    "className":
-                                                        value
-                                                            .userClases
-                                                            ?.user
-                                                            ?.studentClasses
-                                                            ?.firstWhere(
-                                                              (val) =>
-                                                                  val
-                                                                      .classes
-                                                                      ?.language
-                                                                      ?.id ==
-                                                                  value
-                                                                      .language
-                                                                      .id,
-                                                            )
-                                                            .classes
-                                                            ?.className ??
-                                                        '',
+                                                    "className": className,
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     "next": true,
@@ -907,6 +826,28 @@ class ResultScreen extends StatelessWidget {
                                             ),
 
                                       SizedBox(height: 5),
+                                      if (isLast)
+                                        Center(
+                                          child: TextButton(
+                                            onPressed: () async {
+                                              await value.resetPhrase(
+                                                categories,
+                                              );
+                                              context.go(RouteNames.home);
+                                            },
+                                            child: Text(
+                                              'Practise them all again',
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    color: Colors.black,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
                                       Center(
                                         child: TextButton(
                                           onPressed: () {

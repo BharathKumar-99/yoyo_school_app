@@ -174,7 +174,6 @@ class TryPhrasesProvider extends ChangeNotifier {
       if (listen) {
         result?.listen = (result?.listen ?? 0) + 1;
       }
-
       result = await _repo.upsertResult(result!);
     } catch (e) {
       rethrow;
