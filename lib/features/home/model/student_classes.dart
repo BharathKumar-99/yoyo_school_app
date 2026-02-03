@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/features/home/model/classes_model.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
@@ -18,7 +16,7 @@ class StudentClassesModel {
     id = json['id'];
     createdAt = json['created_at'];
     userId = json['user'] is String ? json['user'] : null;
-    classId = json['classes'] is Int ? json['classes'] : null;
+    classId = json['classes'] is int ? json['classes'] : null;
     user = json[DbTable.users] is Map
         ? UserModel.fromJson(json[DbTable.users])
         : null;

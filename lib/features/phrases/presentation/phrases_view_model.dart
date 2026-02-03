@@ -165,10 +165,13 @@ class PhrasesViewModel extends ChangeNotifier {
           notifyListeners();
         },
       );
+      showPopUp();
     } catch (e) {
       throw Exception("Failed initializing phrase data");
     }
   }
+
+  void showPopUp() async => await _repo.shouldShowPopup(language);
 
   void _processResults(String userId, List<int> ids, bool isFirst) async {
     try {
