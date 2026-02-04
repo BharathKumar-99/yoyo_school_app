@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/core/audio/global_recording_state.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 
 import '../../home/model/phrases_model.dart';
@@ -54,8 +55,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
 
       isPlaying = true;
       notifyListeners();
-
-      await player.play();
+      if (!player.playing && !isRecordingNotifier.value) await player.play();
     } catch (e) {
       rethrow;
     }

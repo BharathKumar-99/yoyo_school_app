@@ -41,6 +41,10 @@ class _FeedbackTextfieldState extends State<FeedbackTextfield> {
         'feedback': _feedbackController.text,
         'user_id': userId,
       });
+      await client
+          .from(DbTable.users)
+          .update({'is_feedback_recorded': true})
+          .eq('user_id', userId);
     } catch (e) {
       log(e.toString());
     }

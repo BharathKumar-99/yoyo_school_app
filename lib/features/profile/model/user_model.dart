@@ -18,6 +18,7 @@ class UserModel {
   Student? student;
   List<StudentClassesModel>? studentClasses;
   List<UserResult>? userResult;
+  bool? isFeedBackRecorded;
 
   UserModel({
     required this.userId,
@@ -33,6 +34,7 @@ class UserModel {
     this.studentList,
     this.studentClasses,
     this.userResult,
+    this.isFeedBackRecorded,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class UserModel {
     username = json['username'];
 
     isTester = json['is_tester'];
+    isFeedBackRecorded = json['is_feedback_recorded'] ?? false;
 
     school = json['school'] != null && json['school'] is int
         ? json['school']
@@ -85,6 +88,7 @@ class UserModel {
       'last_login': lastLogin?.toIso8601String(),
       'onboarding': onboarding,
       'is_tester': isTester,
+      'is_feedback_recorded': isFeedBackRecorded,
     };
   }
 }

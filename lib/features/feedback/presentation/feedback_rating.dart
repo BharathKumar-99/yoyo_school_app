@@ -60,6 +60,10 @@ class _FeedbackRatingState extends State<FeedbackRating> {
         'rating': rating,
         'user_id': userId,
       });
+      await client
+          .from(DbTable.users)
+          .update({'is_feedback_recorded': true})
+          .eq('user_id', userId);
     } catch (e) {
       log(e.toString());
     }

@@ -9,6 +9,7 @@ import 'package:yoyo_school_app/features/feedback/presentation/feedback_selector
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../../config/utils/get_user_details.dart';
@@ -134,9 +135,15 @@ class PhrasesDeatilsRepo {
           .from(DbTable.userResult)
           .select('id')
           .eq('user_id', userId)
+          .eq('score_submited', true)
           .count(CountOption.exact);
-
-      if (data.count == 10) {
+      final userData = await _client
+          .from(DbTable.users)
+          .select('*')
+          .eq('user_id', userId)
+          .maybeSingle();
+      UserModel userModel = UserModel.fromJson(userData!);
+      if (data.count >= 10 && userModel.isFeedBackRecorded != true) {
         showModalBottomSheet(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),

@@ -134,7 +134,7 @@ class AuthRepository {
       final data = await client
           .from(DbTable.users)
           .select('''*,${DbTable.studentClasses}(*)''')
-          .eq('username', username)
+          .ilike('username', username)
           .maybeSingle();
 
       UserModel userModel = UserModel.fromJson(data!);

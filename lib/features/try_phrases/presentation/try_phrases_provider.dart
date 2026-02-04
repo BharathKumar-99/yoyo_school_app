@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:yoyo_school_app/config/utils/permission.dart';
+import 'package:yoyo_school_app/core/audio/global_recording_state.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
@@ -48,6 +50,10 @@ class TryPhrasesProvider extends ChangeNotifier {
   }
 
   Future<void> initAudio(BuildContext context) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkMicPermission();
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     try {
@@ -104,7 +110,7 @@ class TryPhrasesProvider extends ChangeNotifier {
         await player.seek(Duration.zero);
       }
 
-      if (!player.playing) {
+      if (!player.playing && !isRecordingNotifier.value) {
         await player.play();
         await upsertResult();
       }
@@ -138,8 +144,10 @@ class TryPhrasesProvider extends ChangeNotifier {
         if (player.playerState.processingState == ProcessingState.completed) {
           await player.seek(Duration.zero);
         }
-        await player.play();
-        await upsertResult();
+        if (!player.playing && !isRecordingNotifier.value) {
+          await player.play();
+          await upsertResult();
+        }
       }
     } catch (e) {
       rethrow;
@@ -154,8 +162,10 @@ class TryPhrasesProvider extends ChangeNotifier {
         await player.seek(Duration.zero);
       }
 
-      await player.play();
-      await upsertResult();
+      if (!player.playing && !isRecordingNotifier.value) {
+        await player.play();
+        await upsertResult();
+      }
     } catch (e) {
       rethrow;
     }

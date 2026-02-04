@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:yoyo_school_app/bootstrap/notification_services.dart';
+import 'package:yoyo_school_app/config/utils/permission.dart';
 import 'package:yoyo_school_app/firebase_options.dart';
 import '../app.dart';
 import '../config/utils/shared_preferences.dart';
@@ -35,6 +36,7 @@ class AppInitializer {
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
+    checkNotificationPermission();
     checkMicPermission();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -46,11 +48,11 @@ class AppInitializer {
   }
 }
 
-Future<void> checkMicPermission() async {
-  final status = await Permission.microphone.status;
+Future<void> checkNotificationPermission() async {
+  final status = await Permission.notification.status;
 
   if (status.isDenied) {
-    await Permission.microphone.request();
+    await Permission.notification.request();
   } else if (status.isPermanentlyDenied) {
     await openAppSettings();
   }

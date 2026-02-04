@@ -826,46 +826,55 @@ class ResultScreen extends StatelessWidget {
                                             ),
 
                                       SizedBox(height: 5),
-                                      if (isLast)
-                                        Center(
-                                          child: TextButton(
-                                            onPressed: () async {
-                                              await value.resetPhrase(
-                                                categories,
-                                              );
-                                              context.go(RouteNames.home);
-                                            },
-                                            child: Text(
-                                              'Practise them all again',
-                                              style: AppTextStyles
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    color: Colors.black,
-                                                  ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          // if (isLast)
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                await value.resetPhrase(
+                                                  categories,
+                                                );
+                                                context.go(RouteNames.home);
+                                              },
+                                              child: AutoSizeText(
+                                                'Practise them all again',
+                                                textAlign: TextAlign.center,
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: Colors.black,
+                                                    ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      Center(
-                                        child: TextButton(
-                                          onPressed: () {
-                                            context.go(RouteNames.home);
-                                          },
-                                          child: Text(
-                                            'Back to dashboard',
-                                            style: AppTextStyles
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color: Colors.black,
-                                                ),
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                context.go(RouteNames.home);
+                                              },
+                                              child: Text(
+                                                'Back to dashboard',
+                                                textAlign: TextAlign.center,
+                                                style: AppTextStyles
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: Colors.black,
+                                                    ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
+
                                       SizedBox(height: 10),
                                     ],
                                   ),

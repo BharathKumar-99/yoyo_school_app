@@ -3,6 +3,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/config/utils/permission.dart';
+import 'package:yoyo_school_app/core/audio/global_recording_state.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/master_phrase/data/master_phrase_repo.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
@@ -25,6 +27,9 @@ class MasterPhraseProvider extends ChangeNotifier {
   Future<void> init() async {
     isLoading = true;
     notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkMicPermission();
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
@@ -95,9 +100,10 @@ class MasterPhraseProvider extends ChangeNotifier {
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }
-
-      await player.play();
-      await upsertResult();
+      if (!player.playing && !isRecordingNotifier.value) {
+        await player.play();
+        await upsertResult();
+      }
     } catch (e) {
       throw "Audio playback failed";
     }
@@ -115,9 +121,10 @@ class MasterPhraseProvider extends ChangeNotifier {
       if (player.playerState.processingState == ProcessingState.completed) {
         await player.seek(Duration.zero);
       }
-
-      await player.play();
-      await upsertResult();
+      if (!player.playing && !isRecordingNotifier.value) {
+        await player.play();
+        await upsertResult();
+      }
     } catch (e) {
       throw "Audio playback failed";
     }
