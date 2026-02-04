@@ -17,11 +17,6 @@ class RequestActivationViewModel extends ChangeNotifier {
     try {
       WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.show());
       await _repository.requestNewActivationCode(userName);
-
-      UsefullFunctions.showSnackBar(
-        ctx!,
-        'You’ve successfully requested a new activation code. Please ask your teacher for it',
-      );
     } catch (e) {
       return UsefullFunctions.showSnackBar(ctx!, e.toString());
     } finally {
