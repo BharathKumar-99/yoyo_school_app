@@ -34,7 +34,7 @@ class PhraseCategories extends StatefulWidget {
 class _PhraseCategoriesState extends State<PhraseCategories> {
   @override
   void initState() {
-    requestMicrophonePermission();
+    checkMicPermission();
     super.initState();
   }
 
