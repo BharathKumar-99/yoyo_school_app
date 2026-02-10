@@ -19,6 +19,7 @@ import 'package:yoyo_school_app/features/listen_and_type_result/presentation/lis
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboarding_screen.dart';
+import 'package:yoyo_school_app/features/permission_screen/presentation/permission_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrase_categories.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
@@ -47,6 +48,10 @@ class AppRoutes {
       GoRoute(
         path: RouteNames.appUpdate,
         builder: (context, state) => const AppUpdateScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.permission,
+        builder: (context, state) => const PermissionsScreen(),
       ),
       GoRoute(
         path: RouteNames.appMaintenance,
