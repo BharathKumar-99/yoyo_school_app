@@ -262,19 +262,17 @@ class AppRoutes {
       final isAuthenticated =
           supabase.auth.currentSession != null ||
           GetUserDetails.getCurrentUserId() != null;
-      final goingToPermissions = state.fullPath == RouteNames.permission;
 
       final goingToLogin = state.fullPath == RouteNames.login;
       final goingToActivationCode =
           state.fullPath == RouteNames.needActivationCode;
 
-      if (isAuthenticated && !goingToPermissions) {
-        final permissionsGranted = await allGranted();
+      final permissionsGranted = await allGranted();
 
-        if (!permissionsGranted) {
-          return RouteNames.permission;
-        }
+      if (!permissionsGranted) {
+        return RouteNames.permission;
       }
+
       if (isAuthenticated && goingToLogin) {
         return RouteNames.splash;
       }
