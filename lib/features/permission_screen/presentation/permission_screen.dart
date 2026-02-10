@@ -13,28 +13,50 @@ class PermissionsScreen extends StatefulWidget {
 class _PermissionsScreenState extends State<PermissionsScreen> {
   bool micGranted = false;
   bool notifGranted = false;
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPermissionStatus();
+  }
+
+  Future<void> _loadPermissionStatus() async {
+    final mic = await Permission.microphone.status;
+    final notif = await Permission.notification.status;
+
+    setState(() {
+      micGranted = mic.isGranted;
+      notifGranted = notif.isGranted;
+    });
+  }
 
   Future<void> _requestMic() async {
-    PermissionStatus status = await Permission.microphone.status;
+    setState(() => loading = true);
 
-    if (status.isDenied) {
-      status = await Permission.microphone.request();
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings();
+    final status = await Permission.microphone.request();
+
+    if (status.isGranted) {
+      micGranted = true;
+    } else {
+      await openAppSettings();
     }
 
-    setState(() => micGranted = status.isGranted);
+    setState(() => loading = false);
   }
 
   Future<void> _requestNotifications() async {
-    PermissionStatus status = await Permission.notification.status;
+    setState(() => loading = true);
 
-    if (status.isDenied) {
-      status = await Permission.notification.request();
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings();
+    final status = await Permission.notification.request();
+
+    if (status.isGranted) {
+      notifGranted = true;
+    } else {
+      await openAppSettings();
     }
-    setState(() => notifGranted = status.isGranted);
+
+    setState(() => loading = false);
   }
 
   bool get allGranted => micGranted && notifGranted;
@@ -57,18 +79,18 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
               const SizedBox(height: 12),
 
               const Text(
-                "We need a couple of permissions to give you the best experience.",
+                "To continue, please allow the following permissions.",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
 
               const SizedBox(height: 40),
-              
+
               _PermissionTile(
                 icon: Icons.mic,
                 title: "Microphone",
                 description: "Used for recording phrases",
                 granted: micGranted,
-                onTap: _requestMic,
+                onTap: loading ? null : _requestMic,
               ),
 
               const SizedBox(height: 20),
@@ -76,9 +98,9 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
               _PermissionTile(
                 icon: Icons.notifications,
                 title: "Notifications",
-                description: "Stay updated with alerts and reminders",
+                description: "Receive reminders and updates",
                 granted: notifGranted,
-                onTap: _requestNotifications,
+                onTap: loading ? null : _requestNotifications,
               ),
 
               const Spacer(),
@@ -88,13 +110,14 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
                 child: ElevatedButton(
                   onPressed: allGranted
                       ? () {
-                          // Navigate to app
-                          context.go(RouteNames.permission);
+                          context.go(RouteNames.splash);
                         }
                       : null,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Text("Continue"),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: loading
+                        ? const CircularProgressIndicator()
+                        : const Text("Continue"),
                   ),
                 ),
               ),
@@ -111,7 +134,7 @@ class _PermissionTile extends StatelessWidget {
   final String title;
   final String description;
   final bool granted;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _PermissionTile({
     required this.icon,
