@@ -50,10 +50,6 @@ class TryPhrasesProvider extends ChangeNotifier {
   }
 
   Future<void> initAudio(BuildContext context) async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkMicPermission();
-    });
-
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     try {

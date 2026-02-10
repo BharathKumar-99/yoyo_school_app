@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
+import 'package:yoyo_school_app/config/utils/permission.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 
@@ -13,7 +14,7 @@ import '../../../core/widgets/app_bar.dart';
 import '../../home/model/level_model.dart';
 import 'phrase_categories_view_model.dart';
 
-class PhraseCategories extends StatelessWidget {
+class PhraseCategories extends StatefulWidget {
   final Language language;
   final Student? student;
   final String className;
@@ -27,10 +28,22 @@ class PhraseCategories extends StatelessWidget {
   });
 
   @override
+  State<PhraseCategories> createState() => _PhraseCategoriesState();
+}
+
+class _PhraseCategoriesState extends State<PhraseCategories> {
+  @override
+  void initState() {
+    requestMicrophonePermission();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider<PhraseCategoriesViewModel>(
-        create: (_) => PhraseCategoriesViewModel(language, student),
+        create: (_) =>
+            PhraseCategoriesViewModel(widget.language, widget.student),
         child: Consumer<PhraseCategoriesViewModel>(
           builder: (context, provider, child) => provider.isLoading
               ? Container()
@@ -39,7 +52,7 @@ class PhraseCategories extends StatelessWidget {
                     SizedBox(
                       height: MediaQuery.sizeOf(context).height / 2.4,
                       child: Hero(
-                        tag: language.language ?? "",
+                        tag: widget.language.language ?? "",
                         child: DefaultTextStyle(
                           style: const TextStyle(
                             decoration: TextDecoration.none,
@@ -112,7 +125,7 @@ class PhraseCategories extends StatelessWidget {
                                                     ),
                                               ),
                                               Text(
-                                                className,
+                                                widget.className,
                                                 style: AppTextStyles
                                                     .textTheme
                                                     .headlineSmall!
@@ -121,7 +134,7 @@ class PhraseCategories extends StatelessWidget {
                                                     ),
                                               ),
                                               Text(
-                                                "${text.level}${UsefullFunctions.returnLevel(provider.language.level ?? 0, levels)}",
+                                                "${text.level}${UsefullFunctions.returnLevel(provider.language.level ?? 0, widget.levels)}",
                                                 style: AppTextStyles
                                                     .textTheme
                                                     .headlineSmall!
@@ -266,14 +279,14 @@ class PhraseCategories extends StatelessWidget {
                                   onTap: () => NavigationHelper.go(
                                     RouteNames.phrasesDetails,
                                     extra: {
-                                      'language': language,
+                                      'language': widget.language,
                                       "className": text.warmUp,
-                                      "level": levels,
-                                      'student': student,
+                                      "level": widget.levels,
+                                      'student': widget.student,
                                       'categories': -1,
                                     },
                                   ),
-                                  child: getWarmUpCard(language),
+                                  child: getWarmUpCard(widget.language),
                                 ),
 
                               ...provider.phraseCategories.map(
@@ -282,10 +295,10 @@ class PhraseCategories extends StatelessWidget {
                                     NavigationHelper.go(
                                       RouteNames.phrasesDetails,
                                       extra: {
-                                        'language': language,
+                                        'language': widget.language,
                                         "className": val.name ?? '',
-                                        "level": levels,
-                                        'student': student,
+                                        "level": widget.levels,
+                                        'student': widget.student,
                                         'categories': val.id,
                                       },
                                     );

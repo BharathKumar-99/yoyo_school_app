@@ -34,9 +34,6 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkMicPermission();
-    });
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
     globalProvider = Provider.of<GlobalProvider>(ctx!);

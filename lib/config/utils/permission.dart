@@ -1,21 +1,16 @@
 import 'package:permission_handler/permission_handler.dart';
 
-Future<void> checkMicPermission() async {
-  final status = await Permission.microphone.status;
-
-  // Already granted → do nothing
+Future<void> requestMicrophonePermission() async {
+  final status = await Permission.microphone.request();
   if (status.isGranted) {
-    return;
-  }
-
-  // Permanently denied → open settings
-  if (status.isPermanentlyDenied) {
-    await openAppSettings();
-    return;
-  }
-
-  // Only request if NOT already requested
-  if (status.isDenied) {
-    await Permission.microphone.request();
+    print("Microphone permission granted");
+    // Proceed with microphone-related functionality
+  } else if (status.isDenied) {
+    print("Microphone permission denied");
+    // Show a rationale or gracefully handle the denial
+  } else if (status.isPermanentlyDenied) {
+    print("Microphone permission permanently denied");
+    // Guide the user to app settings
+    openAppSettings();
   }
 }

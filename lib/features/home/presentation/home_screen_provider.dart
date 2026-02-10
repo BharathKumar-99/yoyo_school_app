@@ -27,9 +27,6 @@ class HomeScreenProvider extends ChangeNotifier {
     _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
     _profileProvider?.initialize();
     notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkMicPermission();
-    });
   }
 
   Future<bool> init() async {

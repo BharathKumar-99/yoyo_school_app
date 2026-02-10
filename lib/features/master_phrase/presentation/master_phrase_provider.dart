@@ -27,9 +27,6 @@ class MasterPhraseProvider extends ChangeNotifier {
   Future<void> init() async {
     isLoading = true;
     notifyListeners();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkMicPermission();
-    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
 
