@@ -1,24 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyo_school_app/config/utils/permission.dart';
 import 'package:yoyo_school_app/features/splash/presentation/splash_view_model.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkMicPermission();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

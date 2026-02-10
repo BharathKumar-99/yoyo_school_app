@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/config/utils/permission.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
@@ -33,7 +34,11 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   }
 
   Future<void> init() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkMicPermission();
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+
     globalProvider = Provider.of<GlobalProvider>(ctx!);
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final ids = language.phrase?.map((e) => e.id ?? 0).toList() ?? [];
