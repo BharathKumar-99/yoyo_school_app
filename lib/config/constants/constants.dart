@@ -97,6 +97,7 @@ class Constants {
   static const int minimumSubmitScore = 80;
   static const String learned = 'Learned';
   static const String mastered = 'Mastered';
+  static const String kMicGrantedKey = 'mic_granted_confirmed';
 
   static const int lowScreenScore = 10;
 

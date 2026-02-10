@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_tracker.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
@@ -290,10 +291,8 @@ class AppRoutes {
     },
   );
 
-  static Future<bool> allGranted() async {
-    final mic = await Permission.microphone.status;
-    final notif = await Permission.notification.status;
-
-    return mic.isGranted && notif.isGranted;
+  static Future<dynamic> allGranted() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(Constants.kMicGrantedKey) ?? false;
   }
 }

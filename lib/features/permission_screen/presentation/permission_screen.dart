@@ -6,8 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 
 import 'package:yoyo_school_app/config/router/route_names.dart';
+
+const String kMicGrantedKey = Constants.kMicGrantedKey;
 
 class PermissionsScreen extends StatefulWidget {
   const PermissionsScreen({super.key});
@@ -52,26 +56,33 @@ class _PermissionsScreenState extends State<PermissionsScreen>
     }
   }
 
+  /// 🔐 SOURCE OF TRUTH — SharedPreferences
   Future<void> _loadPermissionStatus() async {
-    final mic = await Permission.microphone.status;
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      micGranted = mic.isGranted;
+      micGranted = prefs.getBool(kMicGrantedKey) ?? false;
     });
   }
 
-  /// 🎤 Request mic permission by recording 1 second
+  /// 🎤 Request mic permission by ACTUAL recording
   Future<void> _requestMicByRecording() async {
     try {
       final dir = await getTemporaryDirectory();
       final path = '${dir.path}/mic_probe.aac';
 
-      await _recorderController.record(path: path); // 🔥 triggers popup
+      await _recorderController.record(path: path); // 🔥 iOS popup
+
+      // ✅ If recording starts, MIC IS GRANTED (truth)
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(kMicGrantedKey, true);
+
+      setState(() {
+        micGranted = true;
+      });
 
       await Future.delayed(const Duration(seconds: 1));
-
       await _recorderController.stop();
 
-      // cleanup
       final file = File(path);
       if (await file.exists()) {
         await file.delete();
@@ -86,13 +97,12 @@ class _PermissionsScreenState extends State<PermissionsScreen>
 
     await _requestMicByRecording();
 
+    // ONLY for permanently blocked case
     final status = await Permission.microphone.status;
-
     if (status.isPermanentlyDenied || status.isRestricted) {
       await openAppSettings();
     }
 
-    await _loadPermissionStatus();
     setState(() => loading = false);
   }
 
@@ -109,7 +119,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
               const Spacer(),
 
               const Text(
-                "Microphone Access ",
+                "Microphone Access",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
@@ -134,12 +144,17 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: micGranted
+                        ? Colors.blue
+                        : Colors.grey.shade300,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () => context.go(RouteNames.splash),
+                  onPressed: micGranted
+                      ? () => context.go(RouteNames.splash)
+                      : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: loading
@@ -162,7 +177,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 ),
               ),
 
-              // 👇 Invisible waveform (keeps recorder alive safely)
+              // Invisible waveform keeps recorder stable on iOS
               AudioWaveforms(
                 recorderController: _recorderController,
                 size: const Size(0, 0),
