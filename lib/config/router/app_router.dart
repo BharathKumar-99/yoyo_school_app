@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_tracker.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -256,31 +257,40 @@ class AppRoutes {
       ),
     ],
     observers: [routeTracker],
-    redirect: (context, state) {
+    redirect: (context, state) async {
       final supabase = SupabaseClientService.instance.client;
       final isAuthenticated =
           supabase.auth.currentSession != null ||
           GetUserDetails.getCurrentUserId() != null;
+      final goingToPermissions = state.fullPath == RouteNames.permission;
 
       final goingToLogin = state.fullPath == RouteNames.login;
       final goingToActivationCode =
           state.fullPath == RouteNames.needActivationCode;
 
-      // 1. If the user is authenticated and is trying to go to the Login page,
-      //    send them to the main/splash page instead.
+      if (isAuthenticated && !goingToPermissions) {
+        final permissionsGranted = await allGranted();
+
+        if (!permissionsGranted) {
+          return RouteNames.permission;
+        }
+      }
       if (isAuthenticated && goingToLogin) {
-        return RouteNames
-            .splash; // Assuming splash is your post-login entry point
+        return RouteNames.splash;
       }
 
-      // 2. If the user is NOT authenticated and is trying to access a protected page,
-      //    send them to the Login page.
       if (!isAuthenticated && !goingToLogin && !goingToActivationCode) {
         return RouteNames.login;
       }
 
-      // 3. Otherwise, let them continue to the path they requested.
       return null;
     },
   );
+
+  static Future<bool> allGranted() async {
+    final mic = await Permission.microphone.status;
+    final notif = await Permission.notification.status;
+
+    return mic.isGranted && notif.isGranted;
+  }
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
-import 'package:yoyo_school_app/config/utils/permission.dart';
 import 'package:yoyo_school_app/features/home/data/home_repository.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';

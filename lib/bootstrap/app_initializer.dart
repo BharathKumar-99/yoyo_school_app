@@ -36,8 +36,6 @@ class AppInitializer {
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
-    checkNotificationPermission();
-    checkMicPermission();
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

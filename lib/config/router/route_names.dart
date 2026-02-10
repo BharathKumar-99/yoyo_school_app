@@ -2,6 +2,7 @@ class RouteNames {
   static const login = '/login';
   static const needActivationCode = '/needActivationCode';
   static const home = '/';
+  static const permission = '/permission';
   static const splash = '/splash';
   static const onboarding = '/onboarding';
   static const profile = '/profile';
