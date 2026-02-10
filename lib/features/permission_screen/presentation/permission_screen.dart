@@ -109,7 +109,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
               const Spacer(),
 
               const Text(
-                "Microphone Access",
+                "Microphone Access ",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
@@ -134,17 +134,12 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: micGranted
-                        ? Colors.blue
-                        : Colors.grey.shade300,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: micGranted
-                      ? () => context.go(RouteNames.splash)
-                      : null,
+                  onPressed: () => context.go(RouteNames.splash),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: loading
