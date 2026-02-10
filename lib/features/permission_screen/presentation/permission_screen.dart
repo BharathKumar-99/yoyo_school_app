@@ -15,21 +15,26 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
   bool notifGranted = false;
 
   Future<void> _requestMic() async {
-    final status = await Permission.microphone.request();
-    setState(() => micGranted = status.isGranted);
+    PermissionStatus status = await Permission.microphone.status;
 
-    if (status.isPermanentlyDenied) {
+    if (status.isDenied) {
+      status = await Permission.microphone.request();
+    } else if (status.isPermanentlyDenied) {
       openAppSettings();
     }
+
+    setState(() => micGranted = status.isGranted);
   }
 
   Future<void> _requestNotifications() async {
-    final status = await Permission.notification.request();
-    setState(() => notifGranted = status.isGranted);
+    PermissionStatus status = await Permission.notification.status;
 
-    if (status.isPermanentlyDenied) {
+    if (status.isDenied) {
+      status = await Permission.notification.request();
+    } else if (status.isPermanentlyDenied) {
       openAppSettings();
     }
+    setState(() => notifGranted = status.isGranted);
   }
 
   bool get allGranted => micGranted && notifGranted;
@@ -57,7 +62,7 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
               ),
 
               const SizedBox(height: 40),
-
+              
               _PermissionTile(
                 icon: Icons.mic,
                 title: "Microphone",
