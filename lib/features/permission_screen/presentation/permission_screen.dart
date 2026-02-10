@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:yoyo_school_app/config/router/route_names.dart';
 
 class PermissionsScreen extends StatefulWidget {
@@ -10,26 +16,35 @@ class PermissionsScreen extends StatefulWidget {
   State<PermissionsScreen> createState() => _PermissionsScreenState();
 }
 
-// Added WidgetsBindingObserver to detect when user returns from Settings
-class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindingObserver {
+class _PermissionsScreenState extends State<PermissionsScreen>
+    with WidgetsBindingObserver {
   bool micGranted = false;
-  bool notifGranted = false;
   bool loading = false;
+
+  late final RecorderController _recorderController;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    _recorderController = RecorderController()
+      ..androidEncoder = AndroidEncoder.aac
+      ..androidOutputFormat = AndroidOutputFormat.mpeg4
+      ..iosEncoder = IosEncoder.kAudioFormatMPEG4AAC
+      ..sampleRate = 44100
+      ..bitRate = 128000;
+
     _loadPermissionStatus();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _recorderController.dispose();
     super.dispose();
   }
 
-  // This triggers when the user comes back to the app from iOS Settings
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -39,34 +54,47 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
 
   Future<void> _loadPermissionStatus() async {
     final mic = await Permission.microphone.status;
-    final notif = await Permission.notification.status;
-
     setState(() {
       micGranted = mic.isGranted;
-      notifGranted = notif.isGranted;
     });
   }
 
-  Future<void> _handlePermissionRequest(Permission permission) async {
+  /// 🎤 Request mic permission by recording 1 second
+  Future<void> _requestMicByRecording() async {
+    try {
+      final dir = await getTemporaryDirectory();
+      final path = '${dir.path}/mic_probe.aac';
+
+      await _recorderController.record(path: path); // 🔥 triggers popup
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      await _recorderController.stop();
+
+      // cleanup
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (e) {
+      debugPrint('Mic probe failed: $e');
+    }
+  }
+
+  Future<void> _handleMicTap() async {
     setState(() => loading = true);
 
-    // 1. Check current status
-    var status = await permission.status;
+    await _requestMicByRecording();
 
-    // 2. If it's the first time or previously denied (but not permanently), show POPUP
-    if (status.isDenied) {
-      status = await permission.request();
-    } 
-    // 3. If user already said "Don't Allow" twice or disabled it in settings
-    else if (status.isPermanentlyDenied || status.isRestricted) {
+    final status = await Permission.microphone.status;
+
+    if (status.isPermanentlyDenied || status.isRestricted) {
       await openAppSettings();
     }
 
     await _loadPermissionStatus();
     setState(() => loading = false);
   }
-
-  bool get allGranted => micGranted && notifGranted;
 
   @override
   Widget build(BuildContext context) {
@@ -79,15 +107,17 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
+
               const Text(
-                "Permissions Required",
+                "Microphone Access",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               const Text(
-                "To continue, please allow the following permissions so the app can function correctly.",
+                "We need microphone access to record your voice during lessons.",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
+
               const SizedBox(height: 40),
 
               _PermissionTile(
@@ -95,17 +125,7 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
                 title: "Microphone",
                 description: "Used for recording phrases",
                 granted: micGranted,
-                onTap: () => _handlePermissionRequest(Permission.microphone),
-              ),
-
-              const SizedBox(height: 20),
-
-              _PermissionTile(
-                icon: Icons.notifications,
-                title: "Notifications",
-                description: "Receive reminders and updates",
-                granted: notifGranted,
-                onTap: () => _handlePermissionRequest(Permission.notification),
+                onTap: _handleMicTap,
               ),
 
               const Spacer(),
@@ -114,24 +134,44 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: allGranted ? Colors.blue : Colors.grey.shade300,
+                    backgroundColor: micGranted
+                        ? Colors.blue
+                        : Colors.grey.shade300,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  onPressed: allGranted
+                  onPressed: micGranted
                       ? () => context.go(RouteNames.splash)
                       : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: loading
                         ? const SizedBox(
-                            height: 20, 
-                            width: 20, 
-                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           )
-                        : const Text("Continue", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        : const Text(
+                            "Continue",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
+              ),
+
+              // 👇 Invisible waveform (keeps recorder alive safely)
+              AudioWaveforms(
+                recorderController: _recorderController,
+                size: const Size(0, 0),
+                waveStyle: const WaveStyle(showMiddleLine: false),
               ),
             ],
           ),
@@ -180,7 +220,11 @@ class _PermissionTile extends StatelessWidget {
                 color: granted ? Colors.green : Colors.grey.shade100,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 24, color: granted ? Colors.white : Colors.grey),
+              child: Icon(
+                icon,
+                size: 24,
+                color: granted ? Colors.white : Colors.grey,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -189,10 +233,16 @@ class _PermissionTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 2),
-                  Text(description, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+                  Text(
+                    description,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                 ],
               ),
             ),
