@@ -827,51 +827,87 @@ class ResultScreen extends StatelessWidget {
 
                                       SizedBox(height: 5),
                                       Row(
+                                        spacing: 10,
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          // if (isLast)
                                           Expanded(
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                await value.resetPhrase(
-                                                  categories,
-                                                );
-                                                context.go(RouteNames.home);
-                                              },
-                                              child: AutoSizeText(
-                                                'Practise them all again',
-                                                textAlign: TextAlign.center,
-                                                style: AppTextStyles
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors.black,
-                                                    ),
+                                            child: OutlinedButton(
+                                              style: OutlinedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 20,
+                                                ),
+                                                backgroundColor: Color(
+                                                  0xffffffff,
+                                                ),
+                                                foregroundColor: Color(
+                                                  0xffffffff,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                    color: Colors.black,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: GestureDetector(
-                                              onTap: () {
+                                              onPressed: () {
                                                 context.go(RouteNames.home);
                                               },
                                               child: Text(
-                                                'Back to dashboard',
+                                                'Go Home',
                                                 textAlign: TextAlign.center,
                                                 style: AppTextStyles
                                                     .textTheme
                                                     .bodySmall!
                                                     .copyWith(
-                                                      decoration: TextDecoration
-                                                          .underline,
                                                       color: Colors.black,
                                                     ),
                                               ),
                                             ),
                                           ),
+                                          if (isLast)
+                                            Expanded(
+                                              child: OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 20,
+                                                  ),
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                  foregroundColor: Color(
+                                                    0xffffffff,
+                                                  ),
+                                                  shape: RoundedRectangleBorder(
+                                                    side: BorderSide.none,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16,
+                                                        ),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  await value.resetPhrase(
+                                                    categories,
+                                                  );
+                                                  context.go(RouteNames.home);
+                                                },
+                                                child: AutoSizeText(
+                                                  'Repeat All',
+                                                  textAlign: TextAlign.center,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .copyWith(
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
                                         ],
                                       ),
 
