@@ -360,7 +360,11 @@ class ResultScreen extends StatelessWidget {
                                             ],
                                           )
                                         : ((value.score <
-                                              Constants.minimumSubmitScore))
+                                              (value
+                                                      .globalProvider
+                                                      .apiCred
+                                                      ?.successThreshold ??
+                                                  0)))
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -408,12 +412,18 @@ class ResultScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              if ((Constants.minimumSubmitScore -
-                                                          value.score <
-                                                      10) &&
-                                                  Constants.minimumSubmitScore -
-                                                          value.score >
-                                                      0)
+                                              if (((value.score <
+                                                      (value
+                                                              .globalProvider
+                                                              .apiCred
+                                                              ?.successThreshold ??
+                                                          0))) &&
+                                                  (value.score >
+                                                      (value
+                                                              .globalProvider
+                                                              .apiCred
+                                                              ?.lowerThreshold ??
+                                                          0)))
                                                 Center(
                                                   child: Padding(
                                                     padding:
@@ -442,13 +452,14 @@ class ResultScreen extends StatelessWidget {
                                                                 vertical: 6,
                                                               ),
                                                           child: Text(
-                                                            "${text.youareJust} ${Constants.minimumSubmitScore - value.score}% ${text.off}",
+                                                            "${value.score}%",
                                                             textAlign: TextAlign
                                                                 .center,
                                                             style: AppTextStyles
                                                                 .textTheme
-                                                                .headlineMedium!
+                                                                .headlineLarge!
                                                                 .copyWith(
+                                                                  fontSize: 35,
                                                                   color: Colors
                                                                       .white,
                                                                 ),
@@ -507,7 +518,12 @@ class ResultScreen extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: w(0.07)),
                             child:
-                                (value.score < Constants.minimumSubmitScore ||
+                                (value.score <
+                                        (value
+                                                .globalProvider
+                                                .apiCred
+                                                ?.successThreshold ??
+                                            0) ||
                                     (phraseModel.readingPhrase ?? false))
                                 ? Column(
                                     crossAxisAlignment:
@@ -918,7 +934,9 @@ class ResultScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (value.score > Constants.minimumSubmitScore &&
+                    if (value.score >
+                            (value.globalProvider.apiCred?.successThreshold ??
+                                0) &&
                         phraseModel.readingPhrase != true)
                       Column(
                         children: [

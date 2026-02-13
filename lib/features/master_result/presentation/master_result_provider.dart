@@ -63,7 +63,10 @@ class MasterResultProvider extends ChangeNotifier {
         );
       }
 
-      await upsertResult(score, submit: score > Constants.minimumSubmitScore);
+      await upsertResult(
+        score,
+        submit: score > (globalProvider.apiCred?.successThreshold ?? 0),
+      );
 
       notifyListeners();
     } catch (e) {

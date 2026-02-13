@@ -20,7 +20,7 @@ import '../../result/model/user_result_model.dart';
 
 class GlobalRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
-
+  GlobalProvider? globalProvider;
   RealtimeChannel? _userResultChannel;
 
   Stream<List<UserResult>> streamAllUserResults(List<int> ids) async* {
@@ -306,7 +306,7 @@ class GlobalRepo {
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'data': scoreData,
-              'threshold': Constants.minimumSubmitScore,
+              'threshold': (globalProvider?.apiCred?.successThreshold ?? 0),
             }),
           )
           .timeout(

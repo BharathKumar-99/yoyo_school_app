@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/features/common/data/global_repo.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/result/data/results_repo.dart';
 
@@ -27,6 +29,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   Language? slanguage;
   bool loading = true;
   int score = 0;
+  GlobalProvider? globalProvider;
   SpeechEvaluationModel? speechEvaluationModel;
   final ResultsRepo _repo = ResultsRepo();
   final GlobalRepo _globalRepo = GlobalRepo();
@@ -46,6 +49,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   init() async {
     loading = true;
     notifyListeners();
+    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     result = await _repo.getAttemptedPhrase(phraseModel.id ?? 0);
     userClases = await _repo.getClasses();
     speechEvaluationModel = await _globalRepo.callSuperSpeechApi(
@@ -60,13 +64,16 @@ class StreakRecordingViewModel extends ChangeNotifier {
         ?.language;
     levels = await _repo.getLevel();
 
-    await upsertResult(score, submit: score > Constants.minimumSubmitScore);
+    await upsertResult(
+      score,
+      submit: score > (globalProvider?.apiCred?.successThreshold ?? 0),
+    );
 
     loading = false;
     notifyListeners();
 
     Future.delayed(Duration(seconds: 3), () {
-      if (score > Constants.minimumSubmitScore && !isLast) {
+      if (score > (globalProvider?.apiCred?.successThreshold ?? 0) && !isLast) {
         NavigationHelper.pushReplacement(
           RouteNames.phrasesDetails,
           extra: {

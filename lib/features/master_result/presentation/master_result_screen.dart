@@ -238,7 +238,12 @@ class MasterResultScreen extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(height: 20),
-                                  (value.score < Constants.minimumSubmitScore)
+                                  (value.score <
+                                          (value
+                                                  .globalProvider
+                                                  .apiCred
+                                                  ?.successThreshold ??
+                                              0))
                                       ? SizedBox(
                                           width: double.infinity,
                                           child: Card(
@@ -314,7 +319,13 @@ class MasterResultScreen extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: w(0.07)),
-                            child: (value.score < Constants.minimumSubmitScore)
+                            child:
+                                (value.score <
+                                    (value
+                                            .globalProvider
+                                            .apiCred
+                                            ?.successThreshold ??
+                                        0))
                                 ? Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -562,7 +573,8 @@ class MasterResultScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (value.score > Constants.minimumSubmitScore)
+                    if (value.score >
+                        (value.globalProvider.apiCred?.successThreshold ?? 0))
                       Column(
                         children: [
                           Spacer(flex: 3),

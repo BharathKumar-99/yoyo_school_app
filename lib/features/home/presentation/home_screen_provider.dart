@@ -21,6 +21,7 @@ class HomeScreenProvider extends ChangeNotifier {
   int atemptedPhrases = 0;
   StreamSubscription<Student?>? _studentSubscription;
   ProfileProvider? _profileProvider;
+  GlobalProvider? globalProvider;
 
   HomeScreenProvider(this.homeRepository) {
     _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
@@ -30,7 +31,7 @@ class HomeScreenProvider extends ChangeNotifier {
 
   Future<bool> init() async {
     try {
-      Provider.of<GlobalProvider>(ctx!, listen: false);
+      globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
       userClases = await homeRepository.getClasses();
       if (userClases == null) {
         throw "Could not load classes";

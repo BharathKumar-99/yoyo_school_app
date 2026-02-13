@@ -267,6 +267,7 @@ class AppRoutes {
     observers: [routeTracker],
     redirect: (context, state) async {
       final supabase = SupabaseClientService.instance.client;
+
       final isAuthenticated =
           supabase.auth.currentSession != null ||
           GetUserDetails.getCurrentUserId() != null;
@@ -274,10 +275,11 @@ class AppRoutes {
       final goingToLogin = state.fullPath == RouteNames.login;
       final goingToActivationCode =
           state.fullPath == RouteNames.needActivationCode;
+      final goingToPermission = state.fullPath == RouteNames.permission;
 
       final permissionsGranted = await allGranted();
 
-      if (!permissionsGranted) {
+      if (!permissionsGranted && !goingToPermission) {
         return RouteNames.permission;
       }
 
@@ -293,7 +295,7 @@ class AppRoutes {
     },
   );
 
-  static Future<dynamic> allGranted() async {
+  static Future<bool> allGranted() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(Constants.kMicGrantedKey) ?? false;
   }

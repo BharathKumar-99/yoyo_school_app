@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
@@ -54,7 +53,11 @@ class HomeScreen extends StatelessWidget {
                             text.vocab,
                             homeProvider.student?.vocab.toString() ?? "0",
                             (homeProvider.student?.vocab ?? 0) >
-                                    Constants.minimumSubmitScore
+                                    (homeProvider
+                                            .globalProvider
+                                            ?.apiCred
+                                            ?.successThreshold ??
+                                        0)
                                 ? Colors.green.shade700
                                 : Colors.orangeAccent,
                           ),
@@ -62,7 +65,11 @@ class HomeScreen extends StatelessWidget {
                             text.effort,
                             "${homeProvider.student?.effort.toString() ?? "0"}% ",
                             (homeProvider.student?.effort ?? 0) >
-                                    Constants.minimumSubmitScore
+                                    (homeProvider
+                                            .globalProvider
+                                            ?.apiCred
+                                            ?.successThreshold ??
+                                        0)
                                 ? Colors.green.shade700
                                 : Colors.orangeAccent,
                           ),
@@ -70,7 +77,11 @@ class HomeScreen extends StatelessWidget {
                             text.score,
                             "${homeProvider.student?.score.toString() ?? "0"}%",
                             (homeProvider.student?.score ?? 0) >
-                                    Constants.minimumSubmitScore
+                                    (homeProvider
+                                            .globalProvider
+                                            ?.apiCred
+                                            ?.successThreshold ??
+                                        0)
                                 ? Colors.green.shade700
                                 : Colors.orangeAccent,
                           ),

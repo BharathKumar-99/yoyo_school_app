@@ -302,7 +302,12 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                             value.listenModel?.body ?? '',
                             maxLines: 3,
                           ),
-                          value.score > Constants.minimumSubmitScore
+                          value.score >
+                                  (value
+                                          .globalProvider
+                                          ?.apiCred
+                                          ?.successThreshold ??
+                                      0)
                               ? SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(

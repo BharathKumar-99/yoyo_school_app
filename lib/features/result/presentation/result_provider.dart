@@ -115,7 +115,7 @@ class ResultProvider extends ChangeNotifier {
           score,
           submit:
               ((score > Constants.lowScreenScore &&
-              (score > Constants.minimumSubmitScore))),
+              (score > (globalProvider.apiCred?.successThreshold ?? 0)))),
         ),
         "Failed to save result",
       );

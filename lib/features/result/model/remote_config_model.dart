@@ -7,6 +7,8 @@ class RemoteConfig {
   final bool onboarding;
   final bool mastery;
   final bool warmup;
+  final int lowerThreshold;
+  final int successThreshold;
   LanguageSlack slack;
   int school;
   List<PhraseDisabledSchools> phraseDisabledSchools;
@@ -23,6 +25,8 @@ class RemoteConfig {
     required this.school,
     required this.warmup,
     required this.phraseDisabledSchools,
+    required this.lowerThreshold,
+    required this.successThreshold,
   });
 
   factory RemoteConfig.fromJson(Map<String, dynamic> json) {
@@ -54,6 +58,8 @@ class RemoteConfig {
       school: json['school'],
       warmup: json['warmup'],
       phraseDisabledSchools: phraseDisabledSchool,
+      lowerThreshold: json['lower_threshold'],
+      successThreshold: json['success_threshold'],
     );
   }
 
@@ -68,6 +74,7 @@ class RemoteConfig {
     'mastery': mastery,
     'school': school,
     'warmup': warmup,
+    'success_threshold': successThreshold,
   };
 }
 

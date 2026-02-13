@@ -64,7 +64,8 @@ class StreakRecordingPopup extends StatelessWidget {
                   ],
                 ),
               )
-            : value.score > Constants.minimumSubmitScore
+            : value.score >
+                  (value.globalProvider?.apiCred?.successThreshold ?? 0)
             ? Container(
                 height: MediaQuery.sizeOf(context).height / 3,
                 decoration: BoxDecoration(

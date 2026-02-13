@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
+import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/listen_and_type_result/data/listen_repo.dart';
@@ -28,10 +31,12 @@ class ListenAndTypeResultProvider extends ChangeNotifier {
   List<Level>? levels = [];
   int score = 0;
   bool loading = true;
+  GlobalProvider? globalProvider;
   ListenAndTypeResultProvider(this.model, this.typedString, this.language) {
     init();
   }
   init() async {
+    globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
     listenModel = await _repo.getTextResult(typedString, model.phrase ?? '');
     result = await _repo.getAttemptedPhrase(model.id ?? 0);
     userClases = await _repo.getClasses();
@@ -41,7 +46,7 @@ class ListenAndTypeResultProvider extends ChangeNotifier {
       score,
       submit:
           ((score > Constants.lowScreenScore &&
-          (score > Constants.minimumSubmitScore))),
+          (score > (globalProvider?.apiCred?.successThreshold ?? 0)))),
     );
     loading = false;
     notifyListeners();
