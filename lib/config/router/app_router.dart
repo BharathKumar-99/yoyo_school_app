@@ -23,6 +23,7 @@ import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboardi
 import 'package:yoyo_school_app/features/permission_screen/presentation/permission_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrase_categories.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
+import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/your_profile_screen.dart';
 import 'package:yoyo_school_app/features/master_result/presentation/master_result_screen.dart';
 import 'package:yoyo_school_app/features/recording/presentation/remember_recorder_provider.dart';
@@ -60,7 +61,8 @@ class AppRoutes {
       ),
       GoRoute(
         path: RouteNames.login,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) =>
+            LoginScreen(user: state.extra as UserModel?),
       ),
       GoRoute(
         path: RouteNames.needActivationCode,

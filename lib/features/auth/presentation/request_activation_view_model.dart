@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/config/utils/usefull_functions.dart';
 import 'package:yoyo_school_app/features/auth/data/auth_repository.dart';
+import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 
 import '../../../config/router/navigation_helper.dart';
 
@@ -17,6 +19,26 @@ class RequestActivationViewModel extends ChangeNotifier {
     try {
       WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.show());
       await _repository.requestNewActivationCode(userName);
+      UserModel? userModel = await _repository.getUserCode(userName);
+      WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.hide());
+      showDialog(
+        context: ctx!,
+        builder: (BuildContext context) => AlertDialog.adaptive(
+          title: Text(text.new_activation_code),
+          content: Text(userModel?.activationCode ?? 'N/A'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                NavigationHelper.pushReplacement(
+                  RouteNames.login,
+                  extra: userModel,
+                );
+              },
+              child: Text(text.login_btn),
+            ),
+          ],
+        ),
+      );
     } catch (e) {
       return UsefullFunctions.showSnackBar(ctx!, e.toString());
     } finally {

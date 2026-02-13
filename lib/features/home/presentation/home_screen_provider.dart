@@ -83,10 +83,19 @@ class HomeScreenProvider extends ChangeNotifier {
                 ids.add(phrase.id ?? 0);
               }
             }
-            atemptedPhrases = await homeRepository.getTotalAtemptedPhrases(
-              student?.userId ?? '',
-              ids,
+            List<int> langIds = [];
+            userClases?.user?.studentClasses?.forEach(
+              (val) => langIds.add(val.classes?.language?.id ?? 0),
             );
+            atemptedPhrases =
+                userClases?.user?.userResult
+                    ?.where(
+                      (element) =>
+                          langIds.contains(element.phrase?.language) &&
+                          element.scoreSubmitted == true,
+                    )
+                    .length ??
+                0;
             notifyListeners();
           } catch (e) {
             throw Exception("Failed to update student data: $e");

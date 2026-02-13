@@ -5,15 +5,17 @@ import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
+import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import 'login_view_model.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final UserModel? user;
+  const LoginScreen({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => AuthViewModel(),
+      create: (_) => AuthViewModel(user),
       child: Consumer<AuthViewModel>(
         builder: (context, vm, _) {
           return Scaffold(

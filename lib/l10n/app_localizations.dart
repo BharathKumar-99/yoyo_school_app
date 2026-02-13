@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'Login'**
   String get login_btn;
 
+  /// No description provided for @new_activation_code.
+  ///
+  /// In en, this message translates to:
+  /// **'New Activation Code'**
+  String get new_activation_code;
+
   /// No description provided for @new_version_available.
   ///
   /// In en, this message translates to:

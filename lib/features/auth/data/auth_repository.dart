@@ -151,8 +151,25 @@ class AuthRepository {
           .from(DbTable.teacher)
           .update({'notification': true})
           .eq('classes', classId);
+      await client.functions.invoke('fcm-test');
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future<UserModel?> getUserCode(String username) async {
+    try {
+      final data = await client
+          .from(DbTable.users)
+          .select('*')
+          .ilike('username', username)
+          .maybeSingle();
+
+      UserModel userModel = UserModel.fromJson(data!);
+
+      return userModel;
+    } catch (e) {
+      return null;
     }
   }
 }

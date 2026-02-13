@@ -11,6 +11,7 @@ class UserModel {
   String? email;
   int? school;
   String? username;
+  String? activationCode;
   DateTime? lastLogin;
   bool? onboarding;
   bool? isTester;
@@ -31,6 +32,7 @@ class UserModel {
     this.lastLogin,
     this.onboarding,
     this.isTester,
+    this.activationCode,
     this.studentList,
     this.studentClasses,
     this.userResult,
@@ -46,6 +48,7 @@ class UserModel {
     username = json['username'];
 
     isTester = json['is_tester'];
+    activationCode = json['activation_code'];
     isFeedBackRecorded = json['is_feedback_recorded'] ?? false;
 
     school = json['school'] != null && json['school'] is int
@@ -84,6 +87,7 @@ class UserModel {
       'email': email,
       'school': school,
       'first_name': firstName,
+      'activation_code': activationCode,
       'sur_name': surName,
       'last_login': lastLogin?.toIso8601String(),
       'onboarding': onboarding,

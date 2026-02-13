@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_btn => 'Login';
 
   @override
+  String get new_activation_code => 'New Activation Code';
+
+  @override
   String get new_version_available => 'New Version Available';
 
   @override

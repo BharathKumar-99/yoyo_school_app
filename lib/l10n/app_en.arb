@@ -1,6 +1,7 @@
 {
     "login_text": "Get Started",
     "login_btn": "Login",
+    "new_activation_code": "New Activation Code",
     "new_version_available": "New Version Available",
     "scheduled_maintenance": "Scheduled Maintenance",
     "back_online": "We expect to be back online in Sometime",
