@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyo_school_app/bootstrap/app_initializer.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 
@@ -119,6 +120,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
     if (status.isGranted) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(kNotificationGrantedKey, true);
+      handleNotification();
     }
 
     if (status.isPermanentlyDenied) {

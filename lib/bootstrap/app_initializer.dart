@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:yoyo_school_app/bootstrap/notification_services.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyo_school_app/bootstrap/notification_services.dart';
+import 'package:yoyo_school_app/features/permission_screen/presentation/permission_screen.dart'
+    as Constants;
 import 'package:yoyo_school_app/firebase_options.dart';
 import '../app.dart';
 import '../config/utils/shared_preferences.dart';
@@ -29,9 +31,8 @@ class AppInitializer {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     await SupabaseClientService.instance.init();
-
+    handleNotification();
     await SharedPrefsService.init();
-    await NotificationServices().initializeFCM();
 
     globalProvider = await GlobalProvider.create();
     ErrorHandlers.register();
@@ -45,12 +46,12 @@ class AppInitializer {
   }
 }
 
-Future<void> checkNotificationPermission() async {
-  final status = await Permission.notification.status;
+void handleNotification() async {
+  final prefs = await SharedPreferences.getInstance();
+  final notificationGranted =
+      prefs.getBool(Constants.kNotificationGrantedKey) ?? false;
 
-  if (status.isDenied) {
-    await Permission.notification.request();
-  } else if (status.isPermanentlyDenied) {
-    await openAppSettings();
+  if (notificationGranted) {
+    await NotificationServices().initializeFCM();
   }
 }
