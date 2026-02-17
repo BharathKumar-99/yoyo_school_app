@@ -142,7 +142,7 @@ class AuthRepository {
       final fcmToken = await messaging.getToken();
       int classId = userModel.studentClasses?.first.classId ?? 0;
       await client.from(DbTable.activationRequests).insert({
-        'username': username,
+        'username': userModel.username,
         'class': classId,
         'fcm': fcmToken,
       });
