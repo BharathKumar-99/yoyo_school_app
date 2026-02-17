@@ -22,7 +22,9 @@ class ProfileRepository {
         .update({'is_activated': false, 'is_logged_in': false})
         .eq('user_id', userId);
     final prefs = await SharedPreferences.getInstance();
+    final permission = prefs.getBool(Constants.kMicGrantedKey) ?? false;
     await prefs.clear();
+    await prefs.setBool(Constants.kMicGrantedKey, permission);
 
     await _client.auth.signOut();
 

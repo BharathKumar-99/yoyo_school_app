@@ -279,16 +279,27 @@ class AppRoutes {
 
       final permissionsGranted = await allGranted();
 
-      if (!permissionsGranted && !goingToPermission) {
+      // 🛑 1. If permission NOT granted
+      if (!permissionsGranted) {
+        // Already on permission page? do nothing
+        if (goingToPermission) return null;
+
         return RouteNames.permission;
       }
 
-      if (isAuthenticated && goingToLogin) {
-        return RouteNames.splash;
+      // 🛑 2. If permission granted & still on permission page
+      if (permissionsGranted && goingToPermission) {
+        return isAuthenticated ? RouteNames.splash : RouteNames.login;
       }
 
+      // 🛑 3. Auth check
       if (!isAuthenticated && !goingToLogin && !goingToActivationCode) {
         return RouteNames.login;
+      }
+
+      // 🛑 4. If logged in & going to login
+      if (isAuthenticated && goingToLogin) {
+        return RouteNames.splash;
       }
 
       return null;
