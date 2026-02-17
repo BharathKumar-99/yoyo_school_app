@@ -13,11 +13,6 @@ class NotificationServices {
       FlutterLocalNotificationsPlugin();
 
   Future<void> initializeFCM() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    // 3. Request Permissions (Crucial for iOS/TestFlight)
-    await messaging.requestPermission(alert: true, badge: true, sound: true);
-
     // 5. Setup Local Notifications (For Foreground Alerts)
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',

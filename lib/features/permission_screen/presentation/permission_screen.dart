@@ -8,10 +8,10 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
-
 import 'package:yoyo_school_app/config/router/route_names.dart';
 
 const String kMicGrantedKey = Constants.kMicGrantedKey;
+const String kNotificationGrantedKey = Constants.kNotificationGrantedKey;
 
 class PermissionsScreen extends StatefulWidget {
   const PermissionsScreen({super.key});
@@ -23,6 +23,7 @@ class PermissionsScreen extends StatefulWidget {
 class _PermissionsScreenState extends State<PermissionsScreen>
     with WidgetsBindingObserver {
   bool micGranted = false;
+  bool notificationGranted = false;
   bool loading = false;
 
   late final RecorderController _recorderController;
@@ -49,6 +50,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
     super.dispose();
   }
 
+  /// 🔄 Recheck when returning from Settings
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -56,23 +58,24 @@ class _PermissionsScreenState extends State<PermissionsScreen>
     }
   }
 
-  /// 🔐 SOURCE OF TRUTH — SharedPreferences
+  /// 🔐 Load from SharedPreferences (UI source)
   Future<void> _loadPermissionStatus() async {
     final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       micGranted = prefs.getBool(kMicGrantedKey) ?? false;
+      notificationGranted = prefs.getBool(kNotificationGrantedKey) ?? false;
     });
   }
 
-  /// 🎤 Request mic permission by ACTUAL recording
+  /// 🎤 Request mic by actual recording (best for iOS)
   Future<void> _requestMicByRecording() async {
     try {
       final dir = await getTemporaryDirectory();
       final path = '${dir.path}/mic_probe.aac';
 
-      await _recorderController.record(path: path); // 🔥 iOS popup
+      await _recorderController.record(path: path);
 
-      // ✅ If recording starts, MIC IS GRANTED (truth)
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(kMicGrantedKey, true);
 
@@ -97,14 +100,37 @@ class _PermissionsScreenState extends State<PermissionsScreen>
 
     await _requestMicByRecording();
 
-    // ONLY for permanently blocked case
     final status = await Permission.microphone.status;
     if (status.isPermanentlyDenied || status.isRestricted) {
       await openAppSettings();
     }
 
+    await _loadPermissionStatus();
+
     setState(() => loading = false);
   }
+
+  /// 🔔 Notification Permission
+  Future<void> _handleNotificationTap() async {
+    setState(() => loading = true);
+
+    final status = await Permission.notification.request();
+
+    if (status.isGranted) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(kNotificationGrantedKey, true);
+    }
+
+    if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+
+    await _loadPermissionStatus();
+
+    setState(() => loading = false);
+  }
+
+  bool get allGranted => micGranted && notificationGranted;
 
   @override
   Widget build(BuildContext context) {
@@ -119,16 +145,26 @@ class _PermissionsScreenState extends State<PermissionsScreen>
               const Spacer(),
 
               const Text(
-                "Microphone Access",
+                "Permissions",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               const Text(
-                "We need microphone access to record your voice during lessons.",
+                "We need some permissions to move forward",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
 
               const SizedBox(height: 40),
+
+              _PermissionTile(
+                icon: Icons.notifications,
+                title: "Notification",
+                description: "Used for reminders and important updates",
+                granted: notificationGranted,
+                onTap: _handleNotificationTap,
+              ),
+
+              const SizedBox(height: 20),
 
               _PermissionTile(
                 icon: Icons.mic,
@@ -144,7 +180,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: micGranted
+                    backgroundColor: allGranted
                         ? Colors.blue
                         : Colors.grey.shade300,
                     foregroundColor: Colors.white,
@@ -152,7 +188,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: micGranted
+                  onPressed: allGranted
                       ? () => context.go(RouteNames.splash)
                       : null,
                   child: Padding(
@@ -177,7 +213,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 ),
               ),
 
-              // Invisible waveform keeps recorder stable on iOS
+              /// Invisible waveform keeps recorder stable on iOS
               AudioWaveforms(
                 recorderController: _recorderController,
                 size: const Size(0, 0),
