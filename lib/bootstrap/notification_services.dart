@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
@@ -13,6 +14,10 @@ class NotificationServices {
       FlutterLocalNotificationsPlugin();
 
   Future<void> initializeFCM() async {
+    final prefs = await SharedPreferences.getInstance();
+    final notificationGranted =
+        prefs.getBool(Constants.kNotificationGrantedKey) ?? false;
+
     // 5. Setup Local Notifications (For Foreground Alerts)
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
@@ -49,7 +54,8 @@ class NotificationServices {
 
       if (dbUserId != null) {
         print('🔄 [FCM] Updating token for DB User ID: $dbUserId');
-        await saveFcmToFireBase(dbUserId);
+
+        if (notificationGranted) await saveFcmToFireBase(dbUserId);
       } else {
         print(
           '⚠️ [FCM] Token refreshed but no mapped "user_id" found in metadata',
@@ -64,6 +70,7 @@ class NotificationServices {
 
     if (dbUserId != null) {
       print('📱 [FCM] Startup: Validating token for DB User ID: $dbUserId');
+
       saveFcmToFireBase(dbUserId);
     } else {
       print(
