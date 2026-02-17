@@ -8,6 +8,7 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/bootstrap/app_initializer.dart';
+import 'package:yoyo_school_app/bootstrap/notification_services.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 
@@ -114,16 +115,18 @@ class _PermissionsScreenState extends State<PermissionsScreen>
   /// 🔔 Notification Permission
   Future<void> _handleNotificationTap() async {
     setState(() => loading = true);
+    final prefs = await SharedPreferences.getInstance();
+    await NotificationServices().initializeFCM();
 
-    final status = await Permission.notification.request();
+    notificationGranted = prefs.getBool(kNotificationGrantedKey) ?? false;
 
-    if (status.isGranted) {
+    if (notificationGranted) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(kNotificationGrantedKey, true);
       handleNotification();
     }
 
-    if (status.isPermanentlyDenied) {
+    if (notificationGranted) {
       await openAppSettings();
     }
 
