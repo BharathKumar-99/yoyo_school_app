@@ -155,8 +155,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Spacer(),
-
+              Image.asset(ImageConstants.logoHome, height: 80), const Spacer(),
               const Text(
                 "Permissions",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
