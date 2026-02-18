@@ -146,12 +146,20 @@ class AuthRepository {
         'class': classId,
         'fcm': fcmToken,
       });
-
+      final newData = await client
+          .from(DbTable.users)
+          .select('''*,${DbTable.studentClasses}(*)''')
+          .ilike('username', username)
+          .maybeSingle();
+      UserModel newUser = UserModel.fromJson(newData!);
       await client
           .from(DbTable.teacher)
           .update({'notification': true})
           .eq('classes', classId);
-      await client.functions.invoke('fcm-test');
+      await client.functions.invoke(
+        'fcm-test',
+        body: {'code': newUser.activationCode, 'token': fcmToken},
+      );
     } catch (e) {
       log(e.toString());
     }
