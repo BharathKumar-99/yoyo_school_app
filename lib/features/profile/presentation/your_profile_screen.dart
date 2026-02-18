@@ -153,6 +153,7 @@ class _YourProfileState extends State<YourProfile> {
                       if (provider.school?.image != null)
                         CachedNetworkImage(
                           imageUrl: provider.school?.image ?? '',
+                          height: MediaQuery.sizeOf(context).height * 0.3,
                         ),
                     ],
                   ),
