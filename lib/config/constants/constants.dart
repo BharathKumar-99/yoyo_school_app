@@ -98,6 +98,7 @@ class Constants {
   static const String mastered = 'Mastered';
   static const String kMicGrantedKey = 'mic_granted_confirmed';
   static const String kNotificationGrantedKey = "notification_granted";
+  static const String kPermissionKey = "permission_skip";
 
   static const int lowScreenScore = 10;
 

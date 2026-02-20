@@ -278,8 +278,9 @@ class AppRoutes {
       final goingToPermission = state.fullPath == RouteNames.permission;
 
       final permissionsGranted = await allGranted();
+      final permissionsChecked = await _permissionCheckedThisLaunch();
 
-      if (!permissionsGranted) {
+      if (!permissionsGranted && !permissionsChecked) {
         if (goingToPermission) return null;
 
         return RouteNames.permission;
@@ -304,5 +305,10 @@ class AppRoutes {
   static Future<bool> allGranted() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(Constants.kMicGrantedKey) ?? false;
+  }
+
+  static Future<bool> _permissionCheckedThisLaunch() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(Constants.kPermissionKey) ?? false;
   }
 }

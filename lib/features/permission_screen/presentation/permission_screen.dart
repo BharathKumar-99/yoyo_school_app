@@ -225,6 +225,30 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 ),
               ),
 
+              Center(
+                child: TextButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+
+                    // Mark that we already forced permission once
+                    await prefs.setBool(Constants.kPermissionKey, true);
+
+                    if (context.mounted) {
+                      context.go(RouteNames.login);
+                      // or wherever your app should continue
+                    }
+                  },
+                  child: Text(
+                    'Continue without',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+
               /// Invisible waveform keeps recorder stable on iOS
               AudioWaveforms(
                 recorderController: _recorderController,
