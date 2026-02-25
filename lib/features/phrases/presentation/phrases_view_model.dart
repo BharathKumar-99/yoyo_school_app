@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
@@ -48,7 +51,7 @@ class PhrasesViewModel extends ChangeNotifier {
   PhraseModel? _currentlyPlaying;
   PhraseModel? get currentlyPlaying => _currentlyPlaying;
   final GlobalRepo globalRepo = GlobalRepo();
-
+  late final RecorderController _recorderController;
   bool get isPlaying => audioManager.player.playing;
 
   PhrasesViewModel(
@@ -63,6 +66,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.categories,
   ) {
     try {
+      _requestMicByRecording();
       globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
       isMasteryEnabled = globalProvider.apiCred?.mastery ?? false;
       isStreakLoading = streak != null || isGoToNextPhrase;
@@ -75,6 +79,32 @@ class PhrasesViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> _requestMicByRecording() async {
+    try {
+      _recorderController = RecorderController()
+        ..androidEncoder = AndroidEncoder.aac
+        ..androidOutputFormat = AndroidOutputFormat.mpeg4
+        ..iosEncoder = IosEncoder.kAudioFormatMPEG4AAC
+        ..sampleRate = 44100
+        ..bitRate = 128000;
+
+      final dir = await getTemporaryDirectory();
+      final path = '${dir.path}/mic_probe.aac';
+
+      await _recorderController.record(path: path);
+
+      await Future.delayed(const Duration(seconds: 1));
+      await _recorderController.stop();
+
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (e) {
+      debugPrint('Mic probe failed: $e');
+    }
+  }
+
   @override
   void dispose() {
     _isDisposed = true;
@@ -84,6 +114,7 @@ class PhrasesViewModel extends ChangeNotifier {
         listen: false,
       );
       userResultProvider.removeListener(_userResultListener);
+      _recorderController.dispose();
     } catch (_) {}
     super.dispose();
   }
