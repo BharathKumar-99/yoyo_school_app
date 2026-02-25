@@ -28,6 +28,12 @@ class GlobalProvider with ChangeNotifier {
     return GlobalProvider._(config);
   }
 
+  Future<void> reInitialize() async {
+    final config = await _repo.getRemoteCred();
+    apiCred = config;
+    notifyListeners();
+  }
+
   Future<void> initRealtimeResults(List<int> phraseIds) async {
     try {
       if (phraseIds.isEmpty) return;

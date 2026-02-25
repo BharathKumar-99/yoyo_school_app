@@ -8,6 +8,8 @@ import 'package:yoyo_school_app/features/auth/data/auth_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
+import '../../common/presentation/global_provider.dart';
+
 class AuthViewModel extends ChangeNotifier {
   final AuthRepository _repository = AuthRepository();
   String? errorMessage;
@@ -37,6 +39,7 @@ class AuthViewModel extends ChangeNotifier {
       );
 
       if (data['success']) {
+        await ctx!.read<GlobalProvider>().reInitialize();
         Provider.of<ProfileProvider>(ctx!, listen: false).initialize();
         NavigationHelper.push(RouteNames.splash);
       } else {

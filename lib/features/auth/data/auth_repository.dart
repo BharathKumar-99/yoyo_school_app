@@ -1,6 +1,6 @@
 import 'dart:developer';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart'; 
+import 'package:supabase_flutter/supabase_flutter.dart'; 
 import 'package:yoyo_school_app/bootstrap/notification_services.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
@@ -10,6 +10,7 @@ import '../../../core/supabase/supabase_client.dart';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+ 
 
 class AuthRepository {
   final client = SupabaseClientService.instance.client;
@@ -88,6 +89,7 @@ class AuthRepository {
               'user_login_info': await getUserDeviceAndAppInfo(),
             })
             .eq('user_id', userid);
+
         await NotificationServices().saveFcmToFireBase(userid);
       } catch (e) {
         rethrow;
@@ -119,7 +121,6 @@ class AuthRepository {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('logged_in_user', username);
       await prefs.setString('user_id', user['user_id']);
-
       return await ensureAnonymous(user['user_id'], user['school']);
     } on Exception {
       rethrow;
