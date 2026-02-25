@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_tracker.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
@@ -20,7 +18,6 @@ import 'package:yoyo_school_app/features/listen_and_type_result/presentation/lis
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_sreen.dart';
 import 'package:yoyo_school_app/features/onboarding_screen/presentation/onboarding_screen.dart';
-import 'package:yoyo_school_app/features/permission_screen/presentation/permission_screen.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrase_categories.dart';
 import 'package:yoyo_school_app/features/phrases/presentation/phrases_details.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
@@ -51,10 +48,7 @@ class AppRoutes {
         path: RouteNames.appUpdate,
         builder: (context, state) => const AppUpdateScreen(),
       ),
-      GoRoute(
-        path: RouteNames.permission,
-        builder: (context, state) => const PermissionsScreen(),
-      ),
+
       GoRoute(
         path: RouteNames.appMaintenance,
         builder: (context, state) => const MaintenanceModeScreen(),
@@ -275,20 +269,6 @@ class AppRoutes {
       final goingToLogin = state.fullPath == RouteNames.login;
       final goingToActivationCode =
           state.fullPath == RouteNames.needActivationCode;
-      final goingToPermission = state.fullPath == RouteNames.permission;
-
-      final permissionsGranted = await allGranted();
-      final permissionsChecked = await _permissionCheckedThisLaunch();
-
-      if (!permissionsGranted && !permissionsChecked) {
-        if (goingToPermission) return null;
-
-        return RouteNames.permission;
-      }
-
-      if (permissionsGranted && goingToPermission) {
-        return isAuthenticated ? RouteNames.splash : RouteNames.login;
-      }
 
       if (!isAuthenticated && !goingToLogin && !goingToActivationCode) {
         return RouteNames.login;
@@ -301,14 +281,4 @@ class AppRoutes {
       return null;
     },
   );
-
-  static Future<bool> allGranted() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(Constants.kMicGrantedKey) ?? false;
-  }
-
-  static Future<bool> _permissionCheckedThisLaunch() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(Constants.kPermissionKey) ?? false;
-  }
 }

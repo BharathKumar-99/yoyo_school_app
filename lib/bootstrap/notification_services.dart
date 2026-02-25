@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -13,7 +14,31 @@ class NotificationServices {
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
 
+  Future<void> _handleNotificationTap() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      announcement: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(Constants.kNotificationGrantedKey, true);
+    }
+
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      await openAppSettings();
+    }
+  }
+
   Future<void> initializeFCM() async {
+    _handleNotificationTap();
     final prefs = await SharedPreferences.getInstance();
     final notificationGranted =
         prefs.getBool(Constants.kNotificationGrantedKey) ?? false;

@@ -2,10 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyo_school_app/bootstrap/notification_services.dart';
-import 'package:yoyo_school_app/features/permission_screen/presentation/permission_screen.dart'
-    as Constants;
 import 'package:yoyo_school_app/firebase_options.dart';
 import '../app.dart';
 import '../config/utils/shared_preferences.dart';
@@ -31,7 +28,7 @@ class AppInitializer {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     await SupabaseClientService.instance.init();
-    handleNotification();
+    await NotificationServices().initializeFCM();
     await SharedPrefsService.init();
 
     globalProvider = await GlobalProvider.create();
@@ -43,15 +40,5 @@ class AppInitializer {
         statusBarBrightness: Brightness.dark,
       ),
     );
-  }
-}
-
-void handleNotification() async {
-  final prefs = await SharedPreferences.getInstance();
-  final notificationGranted =
-      prefs.getBool(Constants.kNotificationGrantedKey) ?? false;
-
-  if (notificationGranted) {
-    await NotificationServices().initializeFCM();
   }
 }
