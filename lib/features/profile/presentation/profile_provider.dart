@@ -7,6 +7,8 @@ import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/profile/data/profile_repository.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 
+import '../../../config/utils/translate_funtions.dart';
+
 class ProfileProvider extends ChangeNotifier {
   final ProfileRepository profileRepository;
   final TextEditingController email = TextEditingController();
@@ -51,8 +53,12 @@ class ProfileProvider extends ChangeNotifier {
           try {
             if (userData == null) return;
 
-            user = userData;
-
+            user = await profileRepository.getUserModel();
+            final translator = TranslateFunctions();
+            translator.updateSelectedLanguage(
+              user?.studentLanguageModel?.language ?? '',
+            );
+            await translator.preloadModel();
             school = await profileRepository.getSchoolData(user?.school ?? 0);
             nameFromUser = extractCaps(user?.username ?? '');
 

@@ -3,6 +3,8 @@ import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
+import 'student_language_model.dart';
+
 class UserModel {
   String? userId;
   DateTime? createdAt;
@@ -20,6 +22,7 @@ class UserModel {
   List<StudentClassesModel>? studentClasses;
   List<UserResult>? userResult;
   bool? isFeedBackRecorded;
+  StudentLanguageModel? studentLanguageModel;
 
   UserModel({
     required this.userId,
@@ -37,6 +40,7 @@ class UserModel {
     this.studentClasses,
     this.userResult,
     this.isFeedBackRecorded,
+    this.studentLanguageModel,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -77,6 +81,11 @@ class UserModel {
       json[DbTable.userResult].forEach((v) {
         userResult!.add(UserResult.fromJson(v));
       });
+    }
+    if (json[DbTable.studentLanguage] != null) {
+      studentLanguageModel = StudentLanguageModel.fromJson(
+        json[DbTable.studentLanguage],
+      );
     }
   }
 

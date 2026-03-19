@@ -47,7 +47,6 @@ class ProfileRepository {
 
   Stream<UserModel?> getUserDataStream() {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
-
     try {
       return _client
           .from(DbTable.users)
@@ -62,6 +61,20 @@ class ProfileRepository {
     } catch (e, st) {
       log('Realtime UserData Error: $e\n$st');
       return const Stream.empty();
+    }
+  }
+
+  Future<UserModel?> getUserModel() async {
+    final userId = GetUserDetails.getCurrentUserId() ?? "";
+    try {
+      final data = await _client
+          .from(DbTable.users)
+          .select('''*,${DbTable.studentLanguage}(*)''')
+          .eq('user_id', userId)
+          .maybeSingle();
+      return UserModel.fromJson(data!);
+    } catch (e) {
+      return null;
     }
   }
 

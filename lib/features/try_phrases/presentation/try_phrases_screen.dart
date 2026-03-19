@@ -183,7 +183,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                     translationText =
                                                         value
                                                             .phraseModel
-                                                            .questionTranslation ??
+                                                            .questionTranslatedText ??
                                                         '';
 
                                                     final TextStyle
@@ -540,7 +540,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                               final String translationText =
                                                   value
                                                       .phraseModel
-                                                      .translation ??
+                                                      .translatedText ??
                                                   '';
                                               final TextStyle style =
                                                   AppTextStyles
@@ -584,7 +584,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                         child: AutoSizeText(
                                                           value
                                                                   .phraseModel
-                                                                  .translation ??
+                                                                  .translatedText ??
                                                               '',
 
                                                           maxLines: 1,
@@ -609,7 +609,7 @@ class TryPhrasesScreen extends StatelessWidget {
                                                               builder: (_) =>
                                                                   AlertDialog(
                                                                     content: Text(
-                                                                      value.phraseModel.translation ??
+                                                                      value.phraseModel.translatedText ??
                                                                           '',
                                                                     ),
                                                                   ),

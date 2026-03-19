@@ -1,3 +1,5 @@
+import 'package:yoyo_school_app/config/utils/translate_funtions.dart';
+
 class PhraseModel {
   int? id;
   int? level;
@@ -7,7 +9,7 @@ class PhraseModel {
   int? language;
   String? recording;
   DateTime? createdAt;
-  String? translation;
+  String? engTranslation;
   int? score;
   bool? warmup;
   String? questions;
@@ -17,6 +19,8 @@ class PhraseModel {
   int? itemIndex;
   bool? readingPhrase;
   bool? listen;
+  String? translatedText;
+  String? questionTranslatedText;
 
   PhraseModel({
     this.id,
@@ -27,7 +31,7 @@ class PhraseModel {
     this.language,
     this.recording,
     this.createdAt,
-    this.translation,
+    this.engTranslation,
     this.score,
     this.questionRecording,
     this.questionTranslation,
@@ -37,6 +41,8 @@ class PhraseModel {
     this.itemIndex,
     this.readingPhrase,
     this.listen,
+    this.questionTranslatedText,
+    this.translatedText,
   });
 
   factory PhraseModel.fromJson(Map<String, dynamic> json) {
@@ -51,7 +57,7 @@ class PhraseModel {
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
           : null,
-      translation: json['translation'] as String?,
+      engTranslation: json['translation'] as String?,
       questionRecording: json['question_recording'] as String?,
       warmup: json['warmup'],
       questions: json['question'] == '' || json['question'] == null
@@ -62,6 +68,17 @@ class PhraseModel {
       itemIndex: json['item_index'],
       readingPhrase: json['reading_phrase'],
       listen: json['listen'],
+      translatedText: null,
+      questionTranslatedText: null,
+    );
+  }
+
+  Future<void> translate() async {
+    if (engTranslation == null || (engTranslation?.isEmpty ?? true)) return;
+
+    translatedText ??= await TranslateFunctions().translateText(engTranslation);
+    questionTranslatedText ??= await TranslateFunctions().translateText(
+      questionTranslation,
     );
   }
 
@@ -75,7 +92,7 @@ class PhraseModel {
       'language': language,
       'recording': recording,
       'created_at': createdAt?.toIso8601String(),
-      'translation': translation,
+      'translation': engTranslation,
       'warmup': warmup,
       'questions': questions,
       'question_translation': questionTranslation,

@@ -80,7 +80,7 @@ class HomeRepository {
           .whereType<int>()
           .toSet();
 
-      student.user?.studentClasses?.forEach((classes) {
+      student.user?.studentClasses?.forEach((classes) async {
         classes.classes?.language?.phrase?.removeWhere(
           (phrase) => disabledIds?.contains(phrase.id) ?? false,
         );

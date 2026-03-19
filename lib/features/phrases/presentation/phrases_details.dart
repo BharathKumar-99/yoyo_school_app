@@ -512,7 +512,7 @@ class PhrasesDetails extends StatelessWidget {
               },
               child: PhrasesWidget(
                 title: model.phrase ?? "",
-                subTitle: model.translation ?? "",
+                subTitle: model.translatedText ?? "",
                 launguage: provider.language,
                 precentage: percentage,
                 onIconTap: () {

@@ -47,6 +47,16 @@ class HomeScreenProvider extends ChangeNotifier {
         totalPhrases += student.classes?.language?.phrase?.length ?? 0;
       });
 
+      userClases
+          ?.user
+          ?.studentClasses
+          ?.first
+          .classes
+          ?.language
+          ?.phrase = await translateAll(
+        userClases?.user?.studentClasses?.first.classes?.language?.phrase ?? [],
+      );
+
       _subscribeToStudentData();
       notifyListeners();
       if (userClases?.user?.studentClasses?.length == 1) {
@@ -67,6 +77,15 @@ class HomeScreenProvider extends ChangeNotifier {
     } catch (e) {
       throw Exception("Home initialization failed: $e");
     }
+  }
+
+  Future<List<PhraseModel>> translateAll(List<PhraseModel> phrases) async {
+    return await Future.wait(
+      phrases.map((p) async {
+        await p.translate();
+        return p;
+      }),
+    );
   }
 
   void _subscribeToStudentData() {

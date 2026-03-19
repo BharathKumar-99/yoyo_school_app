@@ -92,9 +92,9 @@ class SplashViewModel extends ChangeNotifier {
       final s = i < store.length ? store[i] : 0;
       final a = i < app.length ? app[i] : 0;
 
-      if (s > a) return true; // update required
-      if (s < a) return false; // app is newer
+      if (s > a) return true;
+      if (s < a) return false;
     }
-    return false; // same version
+    return false;
   }
 }

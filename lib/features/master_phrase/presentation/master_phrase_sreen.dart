@@ -228,7 +228,7 @@ class MasterPhraseSreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          value.phraseModel.translation ?? '',
+                                          value.phraseModel.translatedText ?? '',
                                         ),
                                       ),
                                     ],
