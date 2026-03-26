@@ -1,6 +1,7 @@
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/profile/model/teacher_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import 'student_language_model.dart';
@@ -21,6 +22,7 @@ class UserModel {
   Student? student;
   List<StudentClassesModel>? studentClasses;
   List<UserResult>? userResult;
+  TeacherModel? teacherModel;
   bool? isFeedBackRecorded;
   StudentLanguageModel? studentLanguageModel;
 
@@ -41,6 +43,7 @@ class UserModel {
     this.userResult,
     this.isFeedBackRecorded,
     this.studentLanguageModel,
+    this.teacherModel,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -66,7 +69,9 @@ class UserModel {
         ?.map((e) => StudentClassesModel.fromJson(e))
         .toList();
     onboarding = json['onboarding'];
-
+    if (json['teacher'] != null && json['teacher'].isNotEmpty) {
+      teacherModel = TeacherModel.fromJson(json['teacher'].first);
+    }
     if (json['student'] != null && json['student'] is List) {
       studentList = <Student>[];
       json['student'].forEach((v) {

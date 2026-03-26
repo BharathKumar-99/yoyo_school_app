@@ -8,6 +8,7 @@ class RouteNames {
   static const otp = '/otp';
   static const phrasesDetails = '/phrasesDetails';
   static const result = '/result';
+  static const addHomeWork = '/addHomework';
   static const masterResult = '/masterResult';
   static const tryPhrases = '/tryPhrases';
   static const masterPhrases = '/masterPhrases';

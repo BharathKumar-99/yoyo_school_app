@@ -1,6 +1,7 @@
-import 'package:yoyo_school_app/features/home/model/language_model.dart';
-
+import '../../../config/constants/constants.dart';
+import 'language_model.dart';
 import 'school_model.dart';
+import 'student_classes.dart';
 
 class Classes {
   int? id;
@@ -11,6 +12,7 @@ class Classes {
   int? languageId;
   Language? language;
   int? submissionThreshold;
+  List<StudentClassesModel>? studentClasses;
 
   Classes({
     this.id,
@@ -21,12 +23,13 @@ class Classes {
     this.languageId,
     this.language,
     this.submissionThreshold,
+    this.studentClasses,
   });
 
   factory Classes.fromJson(Map<String, dynamic> json) {
     return Classes(
       id: json['id'],
-      school: json['school'] is Map? School.fromJson(json['school']) : null,
+      school: json['school'] is Map ? School.fromJson(json['school']) : null,
       className: json['class_name'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
@@ -37,6 +40,9 @@ class Classes {
           ? Language.fromJson(json['language'])
           : null,
       submissionThreshold: json['submission_threshold'],
+      studentClasses: (json[DbTable.studentClasses] as List?)
+          ?.map((e) => StudentClassesModel.fromJson(e))
+          .toList(),
     );
   }
 

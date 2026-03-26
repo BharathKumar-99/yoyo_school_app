@@ -6,11 +6,14 @@ import 'package:yoyo_school_app/features/home/data/home_repository.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/homework/model/home_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 
 import '../../../config/router/navigation_helper.dart';
 import '../../common/presentation/global_provider.dart';
+import '../model/classes_model.dart';
 import '../model/level_model.dart';
+import '../model/school_model.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
   final HomeRepository homeRepository;
@@ -20,13 +23,146 @@ class HomeScreenProvider extends ChangeNotifier {
   int totalPhrases = 0;
   int atemptedPhrases = 0;
   StreamSubscription<Student?>? _studentSubscription;
-  ProfileProvider? _profileProvider;
+  ProfileProvider? profileProvider;
   GlobalProvider? globalProvider;
+  School? school;
+  List<HomeworkModel> homeWorkModel = [];
+
+  int classPhrases = 0;
+  int classVocab = 0;
+  int classEffort = 0;
+  int classScore = 0;
+  int classCPhrases = 0;
+
+  int schoolPhrase = 0;
+  int schoolVocab = 0;
+  int schoolEffort = 0;
+  int schoolScore = 0;
+  int schoolCPhrase = 0;
 
   HomeScreenProvider(this.homeRepository) {
-    _profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
-    _profileProvider?.initialize();
+    profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
+    profileProvider?.initialize();
     notifyListeners();
+  }
+
+  getMetrics() async {
+    schoolPhrase = 0;
+    schoolCPhrase = 0;
+    schoolVocab = 0;
+    schoolEffort = 0;
+    schoolScore = 0;
+
+    classPhrases = 0;
+    classCPhrases = 0;
+    classVocab = 0;
+    classEffort = 0;
+    classScore = 0;
+
+    List<int> schoolVocabList = [];
+    List<int> schoolEffortList = [];
+    List<int> schoolScoreList = [];
+
+    List<int> classVocabList = [];
+    List<int> classEffortList = [];
+    List<int> classScoreList = [];
+
+    homeWorkModel = await homeRepository.getHomeWorkModel(
+      profileProvider?.school?.id ?? 0,
+    );
+
+    school = await homeRepository.getSchoolData(
+      profileProvider?.school?.id ?? 0,
+    );
+
+    for (Classes classes in school?.classes ?? []) {
+      final disabledIds =
+          globalProvider?.apiCred?.phraseDisabledSchools
+              .map((e) => e.phraseId)
+              .whereType<int>()
+              .toSet() ??
+          {};
+
+      final phrases =
+          classes.studentClasses?.firstOrNull?.classes?.language?.phrase;
+
+      if (classes.studentClasses?.isNotEmpty ?? false) {
+        if (classes.id == userClases?.user?.studentClasses?.first.classes?.id) {
+          classVocabList.add(
+            classes.studentClasses?.first.user?.student?.vocab ?? 0,
+          );
+          classEffortList.add(
+            classes.studentClasses?.first.user?.student?.effort ?? 0,
+          );
+          classScoreList.add(
+            classes.studentClasses?.first.user?.student?.score ?? 0,
+          );
+
+          classPhrases +=
+              phrases
+                  ?.where((phrase) => !disabledIds.contains(phrase.id))
+                  .length ??
+              0;
+
+          List<int> langIds = [];
+          classes.studentClasses?.forEach(
+            (val) => langIds.add(val.classes?.language?.id ?? 0),
+          );
+
+          classCPhrases +=
+              classes.studentClasses?.firstOrNull?.user?.userResult
+                  ?.where(
+                    (element) =>
+                        langIds.contains(element.phrase?.language) &&
+                        element.scoreSubmitted == true,
+                  )
+                  .length ??
+              0;
+        }
+        List<int> langIds = [];
+        classes.studentClasses?.forEach(
+          (val) => langIds.add(val.classes?.language?.id ?? 0),
+        );
+
+        schoolCPhrase +=
+            classes.studentClasses?.firstOrNull?.user?.userResult
+                ?.where(
+                  (element) =>
+                      langIds.contains(element.phrase?.language) &&
+                      element.scoreSubmitted == true,
+                )
+                .length ??
+            0;
+        schoolPhrase +=
+            phrases
+                ?.where((phrase) => !disabledIds.contains(phrase.id))
+                .length ??
+            0;
+        schoolVocabList.add(
+          classes.studentClasses?.first.user?.student?.vocab ?? 0,
+        );
+        schoolEffortList.add(
+          classes.studentClasses?.first.user?.student?.effort ?? 0,
+        );
+        schoolScoreList.add(
+          classes.studentClasses?.first.user?.student?.score ?? 0,
+        );
+      }
+    }
+
+    int safeAvg(List<int>? list) {
+      if (list == null || list.isEmpty) return 0;
+
+      return (list.reduce((a, b) => a + b) / list.length).toInt();
+    }
+
+    schoolVocab = safeAvg(schoolVocabList);
+    schoolEffort = safeAvg(schoolEffortList);
+    schoolScore = safeAvg(schoolScoreList);
+
+    classVocab = safeAvg(classVocabList);
+    classEffort = safeAvg(classEffortList);
+    classScore = safeAvg(classScoreList);
   }
 
   Future<bool> init() async {
@@ -58,6 +194,7 @@ class HomeScreenProvider extends ChangeNotifier {
       );
 
       _subscribeToStudentData();
+      if (profileProvider?.isTeacher == true) getMetrics();
       notifyListeners();
       if (userClases?.user?.studentClasses?.length == 1) {
         NavigationHelper.go(

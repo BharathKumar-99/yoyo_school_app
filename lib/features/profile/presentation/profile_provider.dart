@@ -17,7 +17,7 @@ class ProfileProvider extends ChangeNotifier {
   String? nameFromUser;
   StreamSubscription<UserModel?>? _userSubscription;
   School? school;
-
+  bool get isTeacher => user?.teacherModel != null;
   ProfileProvider(this.profileRepository);
 
   void initialize() {

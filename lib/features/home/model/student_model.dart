@@ -10,6 +10,7 @@ class Student {
   UserModel? user;
   int? classId;
   int? vocab;
+  int? languageLevel;
   int? effort;
   int? score;
   List<AttemptedPhrase>? attemptedPhrases;
@@ -24,6 +25,7 @@ class Student {
     this.score,
     this.attemptedPhrases,
     this.user,
+    this.languageLevel,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class Student {
       vocab: json['vocab'],
       effort: json['effort'],
       score: json['score'],
+      languageLevel: json['language_level'],
       attemptedPhrases: (json['attempted_phrases'] as List?)
           ?.map((e) => AttemptedPhrase.fromJson(e))
           .toList(),

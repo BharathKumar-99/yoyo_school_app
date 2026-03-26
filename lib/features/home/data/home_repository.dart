@@ -5,7 +5,9 @@ import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
+import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/homework/model/home_model.dart';
 
 class HomeRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
@@ -140,5 +142,36 @@ class HomeRepository {
         .count(CountOption.exact);
     count = response.count;
     return count;
+  }
+
+  Future<School?> getSchoolData(int id) async {
+    try {
+      final data = await _client
+          .from(DbTable.school)
+          .select(
+            '''*,${DbTable.classes}(*,${DbTable.language}(*,${DbTable.level}(*),${DbTable.phrase}(*)),${DbTable.studentClasses}(*,${DbTable.classes}(*,${DbTable.language}(*,${DbTable.phrase}(*))), ${DbTable.users}(*,${DbTable.student}(*),${DbTable.userResult}(*,${DbTable.phrase}(*)))))''',
+          )
+          .eq('id', id)
+          .maybeSingle();
+      return School.fromJson(data!);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<HomeworkModel>> getHomeWorkModel(int i) async {
+    try {
+      final data = await _client
+          .from(DbTable.homework)
+          .select("*")
+          .eq('school', i);
+      List<HomeworkModel> model = [];
+      for (var element in data) {
+        model.add(HomeworkModel.fromJson(element));
+      }
+      return model;
+    } catch (e) {
+      return [];
+    }
   }
 }

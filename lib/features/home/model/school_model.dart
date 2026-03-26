@@ -1,3 +1,7 @@
+import 'package:yoyo_school_app/features/home/model/classes_model.dart';
+
+import '../../../config/constants/constants.dart';
+
 class School {
   int? id;
   String? principle;
@@ -7,6 +11,7 @@ class School {
   String? schoolAddress;
   int? schoolTelephoneNo;
   String? image;
+  List<Classes>? classes;
 
   School({
     this.id,
@@ -17,6 +22,7 @@ class School {
     this.schoolAddress,
     this.schoolTelephoneNo,
     this.image,
+    this.classes,
   });
 
   factory School.fromJson(Map<String, dynamic> json) {
@@ -32,6 +38,9 @@ class School {
 
       schoolTelephoneNo: json['school_telephone_no'],
       image: json['image'],
+      classes: (json[DbTable.classes] as List?)
+          ?.map((e) => Classes.fromJson(e))
+          .toList(),
     );
   }
 

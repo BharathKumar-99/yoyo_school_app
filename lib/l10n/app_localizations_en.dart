@@ -62,10 +62,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get your_profile => 'Your Profile';
 
   @override
+  String get class_metrics => 'Class metrics';
+
+  @override
+  String get rank => 'Rank';
+
+  @override
+  String get school_metrics => 'School metrics';
+
+  @override
   String get your_school => 'Your School';
 
   @override
+  String get homework => 'Homework';
+
+  @override
+  String get set_homework => 'Set Homework';
+
+  @override
   String get your_metrics => 'Your metrics';
+
+  @override
+  String get students => 'Students';
+
+  @override
+  String get set => 'Set';
+
+  @override
+  String get due => 'Due';
+
+  @override
+  String get dueDate => 'Due Date';
+
+  @override
+  String get structures => 'Structures (Select 1)';
+
+  @override
+  String get conversation => 'Conversation';
+
+  @override
+  String get pastTense => 'Past Tense';
+
+  @override
+  String get presentTense => 'Present Tense';
+
+  @override
+  String get opinions => 'Opinions';
+
+  @override
+  String get negatives => 'Negatives';
+
+  @override
+  String get subjects => 'Subjects (select 0-2)';
+
+  @override
+  String get holidays => 'Holidays';
+
+  @override
+  String get school => 'School';
+
+  @override
+  String get foodAndDrink => 'Food & Drink';
+
+  @override
+  String get myself => 'Myself';
+
+  @override
+  String get friends => 'Friends';
+
+  @override
+  String get anythingElse => 'Anything Else';
+
+  @override
+  String get anythingElseHint =>
+      'Type here (e.g. any other structure or subjects)';
+
+  @override
+  String get createHomework => 'Create Homework';
+
+  @override
+  String get effort => 'Effort';
 
   @override
   String get phrases => 'Phrases';
@@ -75,9 +151,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vocab => 'Vocab';
-
-  @override
-  String get effort => 'Effort';
 
   @override
   String get terms => 'Terms and Condition';

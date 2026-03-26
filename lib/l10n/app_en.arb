@@ -16,8 +16,54 @@
     "invalidActivationToken": "Invalid Activation Code",
     "userFound": "User Found",
     "your_profile": "Your Profile",
+    "class_metrics": "Class metrics",
+    "rank": "Rank",
+    "school_metrics": "School metrics",
     "your_school": "Your School",
+    "homework": "Homework",
+    "set_homework": "Set Homework",
     "your_metrics": "Your metrics",
+    "students": "Students",
+    "set": "Set",
+    "due": "Due",
+    "dueDate": "Due Date",
+    "@dueDate": {
+        "description": "Label for due date input"
+    },
+    "structures": "Structures (Select 1)",
+    "@structures": {
+        "description": "Section title for structures selection"
+    },
+    "conversation": "Conversation",
+    "pastTense": "Past Tense",
+    "presentTense": "Present Tense",
+    "opinions": "Opinions",
+    "negatives": "Negatives",
+    "subjects": "Subjects (select 0-2)",
+    "@subjects": {
+        "description": "Section title for subjects selection"
+    },
+    "holidays": "Holidays",
+    "school": "School",
+    "foodAndDrink": "Food & Drink",
+    "myself": "Myself",
+    "friends": "Friends",
+    "anythingElse": "Anything Else",
+    "@anythingElse": {
+        "description": "Label for additional input field"
+    },
+    "anythingElseHint": "Type here (e.g. any other structure or subjects)",
+    "@anythingElseHint": {
+        "description": "Hint text for additional input"
+    },
+    "createHomework": "Create Homework",
+    "@createHomework": {
+        "description": "Button text to create homework"
+    },
+    "effort": "Effort",
+    "@effort": {
+        "description": "Effort label"
+    },
     "phrases": "Phrases",
     "back": "< Back",
     "vocab": "Vocab",

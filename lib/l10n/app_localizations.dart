@@ -196,17 +196,167 @@ abstract class AppLocalizations {
   /// **'Your Profile'**
   String get your_profile;
 
+  /// No description provided for @class_metrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Class metrics'**
+  String get class_metrics;
+
+  /// No description provided for @rank.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank'**
+  String get rank;
+
+  /// No description provided for @school_metrics.
+  ///
+  /// In en, this message translates to:
+  /// **'School metrics'**
+  String get school_metrics;
+
   /// No description provided for @your_school.
   ///
   /// In en, this message translates to:
   /// **'Your School'**
   String get your_school;
 
+  /// No description provided for @homework.
+  ///
+  /// In en, this message translates to:
+  /// **'Homework'**
+  String get homework;
+
+  /// No description provided for @set_homework.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Homework'**
+  String get set_homework;
+
   /// No description provided for @your_metrics.
   ///
   /// In en, this message translates to:
   /// **'Your metrics'**
   String get your_metrics;
+
+  /// No description provided for @students.
+  ///
+  /// In en, this message translates to:
+  /// **'Students'**
+  String get students;
+
+  /// No description provided for @set.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get set;
+
+  /// No description provided for @due.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get due;
+
+  /// Label for due date input
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date'**
+  String get dueDate;
+
+  /// Section title for structures selection
+  ///
+  /// In en, this message translates to:
+  /// **'Structures (Select 1)'**
+  String get structures;
+
+  /// No description provided for @conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation'**
+  String get conversation;
+
+  /// No description provided for @pastTense.
+  ///
+  /// In en, this message translates to:
+  /// **'Past Tense'**
+  String get pastTense;
+
+  /// No description provided for @presentTense.
+  ///
+  /// In en, this message translates to:
+  /// **'Present Tense'**
+  String get presentTense;
+
+  /// No description provided for @opinions.
+  ///
+  /// In en, this message translates to:
+  /// **'Opinions'**
+  String get opinions;
+
+  /// No description provided for @negatives.
+  ///
+  /// In en, this message translates to:
+  /// **'Negatives'**
+  String get negatives;
+
+  /// Section title for subjects selection
+  ///
+  /// In en, this message translates to:
+  /// **'Subjects (select 0-2)'**
+  String get subjects;
+
+  /// No description provided for @holidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Holidays'**
+  String get holidays;
+
+  /// No description provided for @school.
+  ///
+  /// In en, this message translates to:
+  /// **'School'**
+  String get school;
+
+  /// No description provided for @foodAndDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Drink'**
+  String get foodAndDrink;
+
+  /// No description provided for @myself.
+  ///
+  /// In en, this message translates to:
+  /// **'Myself'**
+  String get myself;
+
+  /// No description provided for @friends.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends'**
+  String get friends;
+
+  /// Label for additional input field
+  ///
+  /// In en, this message translates to:
+  /// **'Anything Else'**
+  String get anythingElse;
+
+  /// Hint text for additional input
+  ///
+  /// In en, this message translates to:
+  /// **'Type here (e.g. any other structure or subjects)'**
+  String get anythingElseHint;
+
+  /// Button text to create homework
+  ///
+  /// In en, this message translates to:
+  /// **'Create Homework'**
+  String get createHomework;
+
+  /// Effort label
+  ///
+  /// In en, this message translates to:
+  /// **'Effort'**
+  String get effort;
 
   /// No description provided for @phrases.
   ///
@@ -225,12 +375,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vocab'**
   String get vocab;
-
-  /// No description provided for @effort.
-  ///
-  /// In en, this message translates to:
-  /// **'Effort'**
-  String get effort;
 
   /// No description provided for @terms.
   ///

@@ -27,7 +27,7 @@ class Language {
     return Language(
       id: json['id'] as int?,
       image: json['image'] as String?,
-      level: json['level'] as int?,
+      level: json['level'] is int ? json['level'] as int? : 0,
       gradient:
           (json['gradient'] as List<dynamic>?)
               ?.map((e) => Color(int.tryParse(e.toString()) ?? 0xFFFFFFFF))

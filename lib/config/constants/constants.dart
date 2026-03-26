@@ -86,7 +86,7 @@ class DbTable {
   static const String studentLanguage = 'student_language';
   static const String appConfig = 'app_config';
   static const String phraseDisabledSchools = 'phrase_disabled_schools';
-
+  static const String homework = 'homework';
 }
 
 class Stroage {

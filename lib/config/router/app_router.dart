@@ -13,6 +13,8 @@ import 'package:yoyo_school_app/features/common/presentation/maintainance_mode.d
 import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
+import 'package:yoyo_school_app/features/homework/presentation/add_homework_screen.dart';
+import 'package:yoyo_school_app/features/homework/presentation/home_work_provider.dart';
 import 'package:yoyo_school_app/features/listen_and_type/presentation/listen_and_type_screen.dart';
 import 'package:yoyo_school_app/features/listen_and_type_result/presentation/listen_and_type_result_screen.dart';
 import 'package:yoyo_school_app/features/master_phrase/presentation/master_phrase_provider.dart';
@@ -47,6 +49,10 @@ class AppRoutes {
       GoRoute(
         path: RouteNames.appUpdate,
         builder: (context, state) => const AppUpdateScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.addHomeWork,
+        builder: (context, state) => const AddHomeworkScreen(),
       ),
 
       GoRoute(

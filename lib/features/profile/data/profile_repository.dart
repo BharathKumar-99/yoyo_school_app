@@ -69,7 +69,7 @@ class ProfileRepository {
     try {
       final data = await _client
           .from(DbTable.users)
-          .select('''*,${DbTable.studentLanguage}(*)''')
+          .select('''*,${DbTable.studentLanguage}(*),${DbTable.teacher}(*)''')
           .eq('user_id', userId)
           .maybeSingle();
       return UserModel.fromJson(data!);
