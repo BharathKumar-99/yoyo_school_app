@@ -59,6 +59,7 @@ class AnimationAsset {
   static const String learnedSuccess = "${animationLoc}learned_success.json";
   static const String masteredSuccess = "${animationLoc}mastered_success.json";
   static const String streakTick = "${animationLoc}streak_tick.json";
+  static const String popupsuccess = "${animationLoc}popupsuccess.json";
   static const String yoyoWaitingText = "${animationLoc}yoyo_waiting_text.json";
 }
 

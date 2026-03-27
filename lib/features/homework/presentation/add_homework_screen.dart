@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/theme/app_theme.dart';
 import 'package:yoyo_school_app/features/homework/presentation/home_work_provider.dart';
 
 class AddHomeworkScreen extends StatelessWidget {
@@ -13,112 +16,129 @@ class AddHomeworkScreen extends StatelessWidget {
       child: Consumer<HomeWorkProvider>(
         builder: (context, value, child) => Scaffold(
           backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// Back Button
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// Title
-                    Text(
-                      text.set_homework,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+          body: value.isLoading
+              ? Container(
+                  height: MediaQuery.sizeOf(context).height,
+                  width: MediaQuery.sizeOf(context).width,
+                  decoration: BoxDecoration(
+                    color: AppTheme.lightTheme.colorScheme.primary,
+                  ),
+                  child: Center(
+                    child: SizedBox(
+                      height: 200,
+                      child: Lottie.asset(
+                        AnimationAsset.yoyoWaitingText,
+                        fit: BoxFit.fill,
                       ),
                     ),
-
-                    const SizedBox(height: 20),
-
-                    /// Due Date
-                    _buildDatePickerBox(context, text.dueDate, value),
-
-                    const SizedBox(height: 20),
-
-                    /// Structures
-                    Text(
-                      text.structures,
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 10),
-
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: value.structures.map((item) {
-                        return _structureChip(item, Colors.orange, value);
-                      }).toList(),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// Subjects
-                    Text(
-                      text.subjects,
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 10),
-
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: value.subjects.map((item) {
-                        return _subjectChip(item, Colors.purple, value);
-                      }).toList(),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    Text(
-                      text.anythingElse,
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 10),
-
-                    _buildInputBox(
-                      text.anythingElseHint,
-                      value.anythingElseController,
-                      maxLines: 4,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    /// Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () => value.createHomework(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                  ),
+                )
+              : SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// Back Button
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(Icons.arrow_back_ios_new_rounded),
                           ),
-                        ),
-                        child: Text(
-                          text.createHomework,
-                          style: TextStyle(fontSize: 16),
-                        ),
+
+                          const SizedBox(height: 20),
+
+                          /// Title
+                          Text(
+                            text.set_homework,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          /// Due Date
+                          _buildDatePickerBox(context, text.dueDate, value),
+
+                          const SizedBox(height: 20),
+
+                          /// Structures
+                          Text(
+                            text.structures,
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 10),
+
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: value.structures.map((item) {
+                              return _structureChip(item, Colors.orange, value);
+                            }).toList(),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          /// Subjects
+                          Text(
+                            text.subjects,
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 10),
+
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: value.subjects.map((item) {
+                              return _subjectChip(item, Colors.purple, value);
+                            }).toList(),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          Text(
+                            text.anythingElse,
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 10),
+
+                          _buildInputBox(
+                            text.anythingElseHint,
+                            value.anythingElseController,
+                            maxLines: 4,
+                          ),
+
+                          const SizedBox(height: 30),
+
+                          /// Button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () => value.createHomework(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.deepPurple,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                text.createHomework,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
         ),
       ),
     );

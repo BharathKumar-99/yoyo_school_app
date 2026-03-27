@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/config/utils/popup_global.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen_provider.dart';
 
 class HomeWorkProvider extends ChangeNotifier {
@@ -13,7 +16,7 @@ class HomeWorkProvider extends ChangeNotifier {
   DateTime? selectedDate;
   HomeScreenProvider? homeScreenProvider;
   TextEditingController anythingElseController = TextEditingController();
-
+  bool isLoading = false;
   final List<String> structures = [
     text.conversation,
     text.pastTense,
@@ -39,17 +42,22 @@ class HomeWorkProvider extends ChangeNotifier {
 
   void selectStructure(String text) {
     if (selectedStructure.contains(text)) {
-      selectedStructure.removeWhere((val) => val == text);
+      selectedStructure.clear(); // deselect if same tapped
     } else {
-      selectedStructure.add(text);
+      selectedStructure
+        ..clear()
+        ..add(text); // keep only one
     }
     notifyListeners();
   }
 
   void selectSubject(String text) {
     if (selectedSubject.contains(text)) {
-      selectedSubject.removeWhere((val) => val == text);
+      selectedSubject.remove(text);
     } else {
+      if (selectedSubject.length >= 2) {
+        selectedSubject.removeAt(0); // remove oldest
+      }
       selectedSubject.add(text);
     }
     notifyListeners();
@@ -66,7 +74,8 @@ class HomeWorkProvider extends ChangeNotifier {
         throw "Select due date";
       }
 
-      GlobalLoader.show();
+      isLoading = true;
+      notifyListeners();
 
       final int schoolId = homeScreenProvider?.profileProvider?.school?.id ?? 0;
       final int classId =
@@ -114,23 +123,10 @@ class HomeWorkProvider extends ChangeNotifier {
         throw data['error'] ?? "Failed to create homework";
       }
 
-      // ✅ 4. Success Handling
-      final homeworkId = data['homework_id'];
-      final title = data['title'];
-      final phraseIds = data['phrase_ids'];
-      GlobalLoader.hide();
-      showAdaptiveDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (ctx) => AlertDialog.adaptive(
-          title: Text('Building'),
-          content: SizedBox(
-            height: 50,
-            width: 50,
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        ),
-      );
+      isLoading = false;
+      notifyListeners();
+      PopupDialog.show(selectedDate!);
+      context.go(RouteNames.home);
     } catch (e) {
       GlobalLoader.hide();
       debugPrint("Error: $e");
