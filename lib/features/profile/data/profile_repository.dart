@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -6,6 +7,7 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
+import 'package:yoyo_school_app/config/utils/restarter.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 
 import '../../home/model/school_model.dart';
@@ -14,7 +16,7 @@ import '../model/user_model.dart';
 class ProfileRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     GlobalLoader.show();
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     _client
@@ -29,7 +31,7 @@ class ProfileRepository {
     await _client.auth.signOut();
 
     GlobalLoader.hide();
-    NavigationHelper.go(RouteNames.login);
+    RestartWidget.restartApp(context);
   }
 
   Future<School?> getSchoolData(int id) async {

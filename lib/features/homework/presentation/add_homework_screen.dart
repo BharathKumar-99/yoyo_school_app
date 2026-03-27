@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -15,6 +16,7 @@ class AddHomeworkScreen extends StatelessWidget {
       create: (_) => HomeWorkProvider(context),
       child: Consumer<HomeWorkProvider>(
         builder: (context, value, child) => Scaffold(
+          resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
           body: value.isLoading
               ? Container(
@@ -41,13 +43,18 @@ class AddHomeworkScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           /// Back Button
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(10),
+                          GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                              ),
                             ),
-                            child: const Icon(Icons.arrow_back_ios_new_rounded),
                           ),
 
                           const SizedBox(height: 20),
@@ -114,36 +121,25 @@ class AddHomeworkScreen extends StatelessWidget {
                             maxLines: 4,
                           ),
 
-                          const SizedBox(height: 30),
-
                           /// Button
                         ],
                       ),
                     ),
                   ),
                 ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => value.createHomework(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+          bottomNavigationBar: value.isLoading
+              ? SizedBox.shrink()
+              : Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.white,
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () => value.createHomework(context),
+                      child: Text(text.createHomework),
+                    ),
                   ),
                 ),
-                child: Text(
-                  text.createHomework,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
         ),
       ),
     );

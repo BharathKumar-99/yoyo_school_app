@@ -18,20 +18,30 @@ class HomeWorkProvider extends ChangeNotifier {
   TextEditingController anythingElseController = TextEditingController();
   bool isLoading = false;
   final List<String> structures = [
-    text.conversation,
-    text.pastTense,
-    text.presentTense,
-    text.opinions,
-    text.negatives,
-  ];
+  text.conversation,
+  text.presentTense,
+  text.pastTense,
+  text.futureTense,
+  text.opinions,
+  text.reasons,
+  text.descriptions,
+  text.questions,
+  text.negatives,
+  text.comparisons,
+];
 
-  final List<String> subjects = [
-    text.holidays,
-    text.school,
-    text.foodAndDrink,
-    text.myself,
-    text.friends,
-  ];
+final List<String> subjects = [
+  text.myself,
+  text.family,
+  text.friends,
+  text.school,
+  text.home,
+  text.freeTime,
+  text.hobbies,
+  text.foodAndDrink,
+  text.holidays,
+  text.townLocalArea,
+];
 
   HomeWorkProvider(BuildContext context) {
     homeScreenProvider = Provider.of<HomeScreenProvider>(

@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
@@ -125,117 +126,165 @@ class HomeScreen extends StatelessWidget {
                                     .toList() ??
                                 [],
                           ),
-
-                          _AnimatedSectionTitle(text.class_metrics),
-                          _AnimatedRow(
-                            delay: 200,
-                            children: [
-                              getMetricCard(
-                                text.phrases,
-                                "${homeProvider.classCPhrases}/${homeProvider.classPhrases}",
-                                (homeProvider.classCPhrases) >
-                                        (homeProvider.classPhrases / 2)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                              getMetricCard(
-                                text.vocab,
-                                homeProvider.classVocab.toString(),
-                                (homeProvider.classVocab) >
-                                        (homeProvider
-                                                .globalProvider
-                                                ?.apiCred
-                                                ?.successThreshold ??
-                                            0)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                              getMetricCard(
-                                text.effort,
-                                "${homeProvider.classEffort}% ",
-                                (homeProvider.classEffort) >
-                                        (homeProvider
-                                                .globalProvider
-                                                ?.apiCred
-                                                ?.successThreshold ??
-                                            0)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                              getMetricCard(
-                                text.score,
-                                "${homeProvider.classScore}%",
-                                (homeProvider.classScore) >
-                                        (homeProvider
-                                                .globalProvider
-                                                ?.apiCred
-                                                ?.successThreshold ??
-                                            0)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          _AnimatedSectionTitle(text.school_metrics),
-                          _AnimatedRow(
-                            delay: 200,
-                            children: [
-                              getMetricCard(
-                                text.phrases,
-                                "${homeProvider.schoolCPhrase}/${homeProvider.schoolPhrase}",
-                                (homeProvider.schoolCPhrase) >
-                                        (homeProvider.schoolPhrase / 2)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                              getMetricCard(
-                                text.vocab,
-                                homeProvider.schoolVocab.toString(),
-                                (homeProvider.schoolVocab) >
-                                        (homeProvider
-                                                .globalProvider
-                                                ?.apiCred
-                                                ?.successThreshold ??
-                                            0)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                              getMetricCard(
-                                text.effort,
-                                "${homeProvider.schoolEffort}% ",
-                                (homeProvider.schoolEffort) >
-                                        (homeProvider
-                                                .globalProvider
-                                                ?.apiCred
-                                                ?.successThreshold ??
-                                            0)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                              getMetricCard(
-                                text.score,
-                                "${homeProvider.schoolScore}%",
-                                (homeProvider.schoolScore) >
-                                        (homeProvider
-                                                .globalProvider
-                                                ?.apiCred
-                                                ?.successThreshold ??
-                                            0)
-                                    ? Colors.green.shade700
-                                    : Colors.orangeAccent,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          _AnimatedSectionTitle(text.homework),
-                          SizedBox(height: 15),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.push(RouteNames.addHomeWork);
-                            },
-                            child: Text(text.set_homework),
-                          ),
+                          if (profile.isTeacher == true)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _AnimatedSectionTitle(text.class_metrics),
+                                _AnimatedRow(
+                                  delay: 200,
+                                  children: [
+                                    getMetricCard(
+                                      text.phrases,
+                                      "${homeProvider.classCPhrases}/${homeProvider.classPhrases}",
+                                      (homeProvider.classCPhrases) >
+                                              (homeProvider.classPhrases / 2)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.vocab,
+                                      homeProvider.classVocab.toString(),
+                                      (homeProvider.classVocab) >
+                                              (homeProvider
+                                                      .globalProvider
+                                                      ?.apiCred
+                                                      ?.successThreshold ??
+                                                  0)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.effort,
+                                      "${homeProvider.classEffort}% ",
+                                      (homeProvider.classEffort) >
+                                              (homeProvider
+                                                      .globalProvider
+                                                      ?.apiCred
+                                                      ?.successThreshold ??
+                                                  0)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.score,
+                                      "${homeProvider.classScore}%",
+                                      (homeProvider.classScore) >
+                                              (homeProvider
+                                                      .globalProvider
+                                                      ?.apiCred
+                                                      ?.successThreshold ??
+                                                  0)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                _AnimatedSectionTitle(text.school_metrics),
+                                _AnimatedRow(
+                                  delay: 200,
+                                  children: [
+                                    getMetricCard(
+                                      text.phrases,
+                                      "${homeProvider.schoolCPhrase}/${homeProvider.schoolPhrase}",
+                                      (homeProvider.schoolCPhrase) >
+                                              (homeProvider.schoolPhrase / 2)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.vocab,
+                                      homeProvider.schoolVocab.toString(),
+                                      (homeProvider.schoolVocab) >
+                                              (homeProvider
+                                                      .globalProvider
+                                                      ?.apiCred
+                                                      ?.successThreshold ??
+                                                  0)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.effort,
+                                      "${homeProvider.schoolEffort}% ",
+                                      (homeProvider.schoolEffort) >
+                                              (homeProvider
+                                                      .globalProvider
+                                                      ?.apiCred
+                                                      ?.successThreshold ??
+                                                  0)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.score,
+                                      "${homeProvider.schoolScore}%",
+                                      (homeProvider.schoolScore) >
+                                              (homeProvider
+                                                      .globalProvider
+                                                      ?.apiCred
+                                                      ?.successThreshold ??
+                                                  0)
+                                          ? Colors.green.shade700
+                                          : Colors.orangeAccent,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                _AnimatedSectionTitle(text.homework),
+                                SizedBox(height: 15),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      context.push(RouteNames.addHomeWork);
+                                    },
+                                    child: Text(text.set_homework),
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+                                _AnimatedRow(
+                                  delay: 200,
+                                  children: [
+                                    getMetricCard(
+                                      text.set,
+                                      homeProvider.homeWorkModel.isNotEmpty
+                                          ? formatDate(
+                                              homeProvider
+                                                  .homeWorkModel
+                                                  .last
+                                                  .setDate!,
+                                            )
+                                          : "N/A",
+                                      Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.due,
+                                      homeProvider.homeWorkModel.isNotEmpty
+                                          ? formatDate(
+                                              homeProvider
+                                                  .homeWorkModel
+                                                  .last
+                                                  .setDate!,
+                                            )
+                                          : "N/A",
+                                      Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.students,
+                                      "${homeProvider.homeworkCompletedStudents}/${homeProvider.homeworkStudent}",
+                                      Colors.orangeAccent,
+                                    ),
+                                    getMetricCard(
+                                      text.score,
+                                      "${homeProvider.homeWorkScore}%",
+                                      Colors.orangeAccent,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                         ]),
                       ),
                     ),
@@ -248,6 +297,10 @@ class HomeScreen extends StatelessWidget {
       },
     );
   }
+}
+
+String formatDate(DateTime date) {
+  return DateFormat('dd/MM').format(date);
 }
 
 class _AnimatedSectionTitle extends StatelessWidget {

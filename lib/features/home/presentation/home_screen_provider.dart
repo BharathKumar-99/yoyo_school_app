@@ -8,6 +8,7 @@ import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/homework/model/home_model.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../../config/router/navigation_helper.dart';
 import '../../common/presentation/global_provider.dart';
@@ -40,10 +41,58 @@ class HomeScreenProvider extends ChangeNotifier {
   int schoolScore = 0;
   int schoolCPhrase = 0;
 
+  int homeWorkScore = 0;
+  int homeworkStudent = 0;
+  int homeworkCompletedStudents = 0;
+
   HomeScreenProvider(this.homeRepository) {
     profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
     profileProvider?.initialize();
     notifyListeners();
+  }
+
+  getHomeWork() async {
+    List<PhraseModel> phrasesHomework = await homeRepository.getHomeworkPhrase(
+      homeWorkModel.last.id,
+    );
+    List<int> phraseIds = [];
+    for (var val in phrasesHomework) {
+      phraseIds.add(val.id!);
+    }
+    List<UserResult> results = await homeRepository.getHomeWorkResults(
+      phraseIds,
+    );
+
+    final Map<String, List<UserResult>> userMap = {};
+
+    for (var result in results) {
+      final userId = result.userId;
+
+      if (userId == null) continue;
+
+      userMap.putIfAbsent(userId, () => []).add(result);
+    }
+
+    // Step 2: Check count per user
+    for (var entry in userMap.entries) {
+      final userResults = entry.value;
+
+      if (userResults.length == phraseIds.length) {
+        homeworkCompletedStudents++;
+      }
+    }
+
+    double totalScore = 0;
+    int count = 0;
+
+    for (var result in results) {
+      if (result.score != null) {
+        totalScore += result.score!;
+        count++;
+      }
+    }
+
+    homeWorkScore = (count > 0 ? totalScore / count : 0).round();
   }
 
   getMetrics() async {
@@ -58,6 +107,7 @@ class HomeScreenProvider extends ChangeNotifier {
     classVocab = 0;
     classEffort = 0;
     classScore = 0;
+    homeworkStudent = 0;
 
     List<int> schoolVocabList = [];
     List<int> schoolEffortList = [];
@@ -70,7 +120,9 @@ class HomeScreenProvider extends ChangeNotifier {
     homeWorkModel = await homeRepository.getHomeWorkModel(
       profileProvider?.school?.id ?? 0,
     );
-
+    if (homeWorkModel.isNotEmpty) {
+      await getHomeWork();
+    }
     school = await homeRepository.getSchoolData(
       profileProvider?.school?.id ?? 0,
     );
@@ -88,6 +140,7 @@ class HomeScreenProvider extends ChangeNotifier {
 
       if (classes.studentClasses?.isNotEmpty ?? false) {
         if (classes.id == userClases?.user?.studentClasses?.first.classes?.id) {
+          homeworkStudent++;
           classVocabList.add(
             classes.studentClasses?.first.user?.student?.vocab ?? 0,
           );

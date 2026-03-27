@@ -5,9 +5,11 @@ import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 import 'package:yoyo_school_app/features/home/model/level_model.dart';
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/homework/model/home_model.dart';
+import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 class HomeRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
@@ -173,5 +175,27 @@ class HomeRepository {
     } catch (e) {
       return [];
     }
+  }
+
+  Future<List<PhraseModel>> getHomeworkPhrase(int? id) async {
+    if (id == null) return [];
+
+    final response = await _client
+        .from(DbTable.phrase)
+        .select()
+        .eq('homework_id', id);
+
+    return (response as List).map((e) => PhraseModel.fromJson(e)).toList();
+  }
+
+  Future<List<UserResult>> getHomeWorkResults(List<int> ids) async {
+    if (ids.isEmpty) return [];
+
+    final response = await _client
+        .from(DbTable.userResult)
+        .select('*')
+        .inFilter('phrases_id', ids);
+
+    return (response as List).map((e) => UserResult.fromJson(e)).toList();
   }
 }

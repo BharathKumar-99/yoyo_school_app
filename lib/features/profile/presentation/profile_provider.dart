@@ -88,7 +88,7 @@ class ProfileProvider extends ChangeNotifier {
   Future<void> logoutUser() async {
     ctx!.pop();
 
-    await profileRepository.logout();
+    await profileRepository.logout(ctx!);
   }
 
   Future<void> logout() async {

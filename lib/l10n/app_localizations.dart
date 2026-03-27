@@ -304,6 +304,72 @@ abstract class AppLocalizations {
   /// **'Subjects (select 0-2)'**
   String get subjects;
 
+  /// No description provided for @comparisons.
+  ///
+  /// In en, this message translates to:
+  /// **'Comparisons'**
+  String get comparisons;
+
+  /// No description provided for @futureTense.
+  ///
+  /// In en, this message translates to:
+  /// **'Future Tense'**
+  String get futureTense;
+
+  /// No description provided for @reasons.
+  ///
+  /// In en, this message translates to:
+  /// **'Reasons'**
+  String get reasons;
+
+  /// No description provided for @descriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Descriptions'**
+  String get descriptions;
+
+  /// No description provided for @foodAndDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Drink'**
+  String get foodAndDrink;
+
+  /// No description provided for @questions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get questions;
+
+  /// No description provided for @family.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get family;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @freeTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Time'**
+  String get freeTime;
+
+  /// No description provided for @hobbies.
+  ///
+  /// In en, this message translates to:
+  /// **'Hobbies'**
+  String get hobbies;
+
+  /// No description provided for @townLocalArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Town / Local Area'**
+  String get townLocalArea;
+
   /// No description provided for @holidays.
   ///
   /// In en, this message translates to:
@@ -315,12 +381,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'School'**
   String get school;
-
-  /// No description provided for @foodAndDrink.
-  ///
-  /// In en, this message translates to:
-  /// **'Food & Drink'**
-  String get foodAndDrink;
 
   /// No description provided for @myself.
   ///

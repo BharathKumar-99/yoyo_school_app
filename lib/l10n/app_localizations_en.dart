@@ -116,13 +116,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subjects => 'Subjects (select 0-2)';
 
   @override
+  String get comparisons => 'Comparisons';
+
+  @override
+  String get futureTense => 'Future Tense';
+
+  @override
+  String get reasons => 'Reasons';
+
+  @override
+  String get descriptions => 'Descriptions';
+
+  @override
+  String get foodAndDrink => 'Food & Drink';
+
+  @override
+  String get questions => 'Questions';
+
+  @override
+  String get family => 'Family';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get freeTime => 'Free Time';
+
+  @override
+  String get hobbies => 'Hobbies';
+
+  @override
+  String get townLocalArea => 'Town / Local Area';
+
+  @override
   String get holidays => 'Holidays';
 
   @override
   String get school => 'School';
-
-  @override
-  String get foodAndDrink => 'Food & Drink';
 
   @override
   String get myself => 'Myself';
