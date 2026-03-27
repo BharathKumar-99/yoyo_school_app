@@ -117,28 +117,33 @@ class AddHomeworkScreen extends StatelessWidget {
                           const SizedBox(height: 30),
 
                           /// Button
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: () => value.createHomework(context),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.deepPurple,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                text.createHomework,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () => value.createHomework(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  text.createHomework,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
         ),
       ),
     );

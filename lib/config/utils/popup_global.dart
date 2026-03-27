@@ -41,13 +41,16 @@ class PopupDialog {
           ],
         ),
         actions: [
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                hide();
-              },
-              child: Text('Continue'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  hide();
+                },
+                child: Text('Continue'),
+              ),
             ),
           ),
         ],
