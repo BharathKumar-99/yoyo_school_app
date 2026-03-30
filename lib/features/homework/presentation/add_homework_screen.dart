@@ -7,8 +7,30 @@ import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/theme/app_theme.dart';
 import 'package:yoyo_school_app/features/homework/presentation/home_work_provider.dart';
 
-class AddHomeworkScreen extends StatelessWidget {
+class AddHomeworkScreen extends StatefulWidget {
   const AddHomeworkScreen({super.key});
+
+  @override
+  State<AddHomeworkScreen> createState() => _AddHomeworkScreenState();
+}
+
+class _AddHomeworkScreenState extends State<AddHomeworkScreen> {
+  int _dotCount = 1;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return false;
+
+      setState(() {
+        _dotCount = (_dotCount % 3) + 1;
+      });
+      return true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +52,26 @@ class AddHomeworkScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppTheme.lightTheme.colorScheme.primary,
                     ),
-                    child: Center(
-                      child: SizedBox(
-                        height: 200,
-                        child: Lottie.asset(
-                          AnimationAsset.yoyoWaitingText,
-                          fit: BoxFit.fill,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          child: Lottie.asset(
+                            AnimationAsset.yoyoWaitingText,
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Building${'.' * _dotCount}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 : SafeArea(

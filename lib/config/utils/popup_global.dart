@@ -26,17 +26,17 @@ class PopupDialog {
     _loaderEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
-          /// 🔥 Blur Background
           Positioned.fill(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-              child: Container(color: Colors.black.withOpacity(0.3)),
+              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+              child: Container(color: Colors.black26),
             ),
           ),
 
           /// Dialog Center
           Center(
             child: AlertDialog.adaptive(
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
