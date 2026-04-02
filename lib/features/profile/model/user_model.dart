@@ -4,6 +4,7 @@ import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/profile/model/teacher_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
+import 'fcm.dart';
 import 'student_language_model.dart';
 
 class UserModel {
@@ -14,6 +15,7 @@ class UserModel {
   String? email;
   int? school;
   String? username;
+  List<Fcm>? fcm;
   String? activationCode;
   DateTime? lastLogin;
   bool? onboarding;
@@ -36,6 +38,7 @@ class UserModel {
     this.username,
     this.lastLogin,
     this.onboarding,
+    this.fcm,
     this.isTester,
     this.activationCode,
     this.studentList,
@@ -68,6 +71,12 @@ class UserModel {
     studentClasses = (json['student_classes'] as List?)
         ?.map((e) => StudentClassesModel.fromJson(e))
         .toList();
+    if (json['fcm'] != null) {
+      fcm = <Fcm>[];
+      json['fcm'].forEach((v) {
+        fcm!.add(Fcm.fromJson(v));
+      });
+    }
     onboarding = json['onboarding'];
     if (json['teacher'] != null && json['teacher'].isNotEmpty) {
       teacherModel = TeacherModel.fromJson(json['teacher'].first);
@@ -106,6 +115,7 @@ class UserModel {
       'last_login': lastLogin?.toIso8601String(),
       'onboarding': onboarding,
       'is_tester': isTester,
+      'fcm': fcm?.map((v) => v.toJson()).toList(),
       'is_feedback_recorded': isFeedBackRecorded,
     };
   }

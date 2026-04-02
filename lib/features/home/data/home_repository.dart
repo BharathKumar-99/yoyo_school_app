@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/app.dart';
@@ -10,6 +11,9 @@ import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/homework/model/home_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
+
+import '../../profile/model/fcm.dart';
+import '../model/student_classes.dart';
 
 class HomeRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
@@ -197,5 +201,51 @@ class HomeRepository {
         .inFilter('phrases_id', ids);
 
     return (response as List).map((e) => UserResult.fromJson(e)).toList();
+  }
+
+  Future<void> sendNotification(int classId) async {
+    List<StudentClassesModel> studentClass = await getStudents(classId);
+    List<String> fcmId = [];
+
+    for (var element in studentClass) {
+      for (Fcm fcm in element.user?.fcm ?? []) {
+        if (fcm.fcmId != null && fcm.fcmId!.isNotEmpty) {
+          fcmId.add(fcm.fcmId!);
+        }
+      }
+    }
+
+    final tokens = fcmId
+        .where((e) => e.toString().trim().isNotEmpty)
+        .map((e) => e.toString())
+        .toList();
+
+    final payload = jsonEncode({
+      'message': 'New Homework Added',
+      'token': tokens,
+    });
+
+    print("SENDING PAYLOAD: $payload");
+    final res = await _client.functions.invoke(
+      'send_notification',
+      body: payload,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    print("RESPONSE: ${res.data}");
+  }
+
+  Future<List<StudentClassesModel>> getStudents(int classId) async {
+    List<StudentClassesModel> students = [];
+    final data = await _client
+        .from(DbTable.studentClasses)
+        .select('''*,${DbTable.users}(*)''')
+        .eq('classes', classId);
+
+    for (var element in data) {
+      students.add(StudentClassesModel.fromJson(element));
+    }
+
+    return students;
   }
 }
