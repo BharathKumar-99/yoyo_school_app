@@ -264,6 +264,7 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                         ),
                       ),
                     ),
+
                     Expanded(
                       child: Padding(
                         padding: EdgeInsetsGeometry.only(left: 23, right: 23),
@@ -273,6 +274,164 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                             spacing: 20,
                             children: [
                               SizedBox(height: 5),
+                              if (provider.homeworkModel != null)
+                                Container(
+                                  height: 150,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+
+                                    gradient: LinearGradient(
+                                      colors: provider.language.gradient ?? [],
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            spacing: 10,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Homework',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge!
+                                                    .copyWith(
+                                                      color: Colors.white,
+                                                    ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color:
+                                                      provider
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.white,
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 16.0,
+                                                        vertical: 8,
+                                                      ),
+                                                  child: Text(
+                                                    provider.getDueText(
+                                                      provider
+                                                          .homeworkModel!
+                                                          .dueDate!,
+                                                    ),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleSmall!
+                                                        .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 80,
+                                          margin: EdgeInsets.symmetric(
+                                            vertical: 20,
+                                            horizontal: 20,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                            color: provider
+                                                .language
+                                                .gradient
+                                                ?.last,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: Card(
+                                                    child: Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              8.0,
+                                                            ),
+                                                        child: Text(
+                                                          '${provider.homeWorkCompleted}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Card(
+                                                    child: Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              8.0,
+                                                            ),
+                                                        child: Text(
+                                                          '${provider.homeworkModel?.phrases?.length}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 55,
+                                          width: 55,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              100,
+                                            ),
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                ImageConstants.loginBg,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '${provider.getCompletionPercentage(completed: provider.homeWorkCompleted, total: provider.homeworkModel?.phrases?.length ?? 0)}%',
+                                              style: AppTextStyles
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
                               if (provider.globalProvider?.apiCred?.warmup ??
                                   false)
                                 GestureDetector(

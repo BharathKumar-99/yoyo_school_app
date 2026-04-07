@@ -9,6 +9,7 @@ import 'package:yoyo_school_app/features/feedback/presentation/feedback_selector
 import 'package:yoyo_school_app/features/home/model/language_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
+import 'package:yoyo_school_app/features/homework/model/home_model.dart';
 import 'package:yoyo_school_app/features/profile/model/user_model.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
@@ -17,6 +18,40 @@ import '../model/phrase_categories_model.dart';
 
 class PhrasesDeatilsRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
+
+  Future<HomeworkModel?> getLatestHomework(int school) async {
+    try {
+      final data = await _client
+          .from(DbTable.homework)
+          .select('''*,${DbTable.phrase}(*)''')
+          .eq('school', school)
+          .order('created_at', ascending: false)
+          .limit(1)
+          .maybeSingle();
+      HomeworkModel homeworkModel = HomeworkModel.fromJson(data!);
+      return homeworkModel;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<int> getCompletedPhraseCount({
+    required String userId,
+    required int homeworkId,
+  }) async {
+    try {
+      final response = await _client.rpc(
+        'get_completed_phrase_count',
+        params: {'p_user_id': userId, 'p_homework_id': homeworkId},
+      );
+
+      // Supabase returns dynamic → cast safely
+      return (response as num).toInt();
+    } catch (e) {
+      print('Error fetching completed phrase count: $e');
+      return 0; // fallback
+    }
+  }
 
   Future<List<UserResult>> getUserResults() async {
     final newResponse = await _client
