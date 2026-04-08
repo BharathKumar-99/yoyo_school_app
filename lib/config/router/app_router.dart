@@ -51,7 +51,9 @@ class AppRoutes {
       ),
       GoRoute(
         path: RouteNames.addHomeWork,
-        builder: (context, state) => const AddHomeworkScreen(),
+        builder: (context, state) {
+          return const AddHomeworkScreen();
+        },
       ),
 
       GoRoute(
@@ -110,7 +112,8 @@ class AppRoutes {
             streak: data['streak'],
             from: data['from'],
             streakPhraseId: data['phraseId'],
-            categories: data['categories'],
+            categories: data['categories'] ?? 0,
+            homework: data['homework'],
           );
         },
       ),
@@ -139,6 +142,7 @@ class AppRoutes {
             retryNumber: data['retry'] ?? 0,
             categories: data['categories'],
             className: data['className'],
+            homework: data['homework'],
           );
         },
       ),
@@ -152,6 +156,7 @@ class AppRoutes {
             language: data['language'],
             categories: data['categories'],
             className: data['className'],
+            homework: data['homework'],
           );
         },
       ),
@@ -167,6 +172,7 @@ class AppRoutes {
             retryNumber: data['retry'] ?? 0,
             categories: data['categories'],
             className: data['className'],
+            homework: data['homework'],
           );
         },
       ),
@@ -182,6 +188,7 @@ class AppRoutes {
               data['isLast'],
               data['categories'],
               context,
+              data['homework'],
             ),
             child: ChangeNotifierProvider<RecordingProvider>(
               create: (context) => RecordingProvider(
@@ -190,6 +197,7 @@ class AppRoutes {
                 data['streak'],
                 data['isLast'],
                 data['categories'],
+                data['homework'],
                 data['className'],
               ),
               child: TryPhrasesScreen(
@@ -213,6 +221,7 @@ class AppRoutes {
             create: (_) => MasterPhraseProvider(
               data['phrase'] as PhraseModel,
               data['categories'],
+              data['homework'],
             ),
             child: ChangeNotifierProvider<RememberRecorderProvider>(
               create: (_) => RememberRecorderProvider(
@@ -222,6 +231,7 @@ class AppRoutes {
                 data['isLast'],
                 data['categories'],
                 data['className'],
+                data['homework'],
               ),
               child: MasterPhraseSreen(
                 key: UniqueKey(),
@@ -246,6 +256,7 @@ class AppRoutes {
               data['categories'],
               data['language'],
               data['className'],
+              data['homework'],
             ),
             child: ListenAndTypeScreen(
               key: UniqueKey(),
@@ -254,6 +265,7 @@ class AppRoutes {
               language: data['language'],
               className: data['className'],
               student: data['student'],
+              homework: data['homework'],
             ),
           );
         },

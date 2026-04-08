@@ -119,13 +119,22 @@ class ResultsRepo {
     return lvl;
   }
 
-  Future<void> resetCategoriesPhrases(int categories, int studenId) async {
+  Future<void> resetCategoriesPhrases(
+    int categories,
+    int? homework,
+    int studenId,
+  ) async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     try {
-      final data = await _client
-          .from(DbTable.phrase)
-          .select("*")
-          .eq('categories', categories);
+      final data = homework != null
+          ? await _client
+                .from(DbTable.phrase)
+                .select("*")
+                .eq('homework_id', homework)
+          : await _client
+                .from(DbTable.phrase)
+                .select("*")
+                .eq('categories', categories);
 
       List<PhraseModel> phrases = [];
 

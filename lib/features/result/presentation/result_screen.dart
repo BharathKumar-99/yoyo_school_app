@@ -21,6 +21,7 @@ class ResultScreen extends StatelessWidget {
   final int retryNumber;
   final String className;
   final int categories;
+  final int? homework;
   const ResultScreen({
     super.key,
     required this.phraseModel,
@@ -30,6 +31,7 @@ class ResultScreen extends StatelessWidget {
     required this.retryNumber,
     required this.categories,
     required this.className,
+    required this.homework,
   });
 
   @override
@@ -151,6 +153,7 @@ class ResultScreen extends StatelessWidget {
                                           "level": value.levels ?? [],
                                           'student': value.userClases,
                                           'categories': categories,
+                                          'homework': homework,
                                         },
                                       ),
 
@@ -669,6 +672,7 @@ class ResultScreen extends StatelessWidget {
                                                     "level": value.levels ?? [],
                                                     'student': value.userClases,
                                                     'categories': categories,
+                                                    'homework': homework,
                                                   },
                                                 ),
 
@@ -752,6 +756,7 @@ class ResultScreen extends StatelessWidget {
                                                     'from': 'new',
                                                     "streak": 1,
                                                     'categories': categories,
+                                                    'homework': homework,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -790,6 +795,7 @@ class ResultScreen extends StatelessWidget {
 
                                                     "className": className,
                                                     'categories': categories,
+                                                    'homework': homework,
                                                     "isLast": false,
                                                   },
                                                 ),
@@ -822,6 +828,7 @@ class ResultScreen extends StatelessWidget {
                                                     "next": true,
                                                     "from": "new",
                                                     'categories': categories,
+                                                    'homework': homework,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -909,6 +916,7 @@ class ResultScreen extends StatelessWidget {
                                                 onPressed: () async {
                                                   await value.resetPhrase(
                                                     categories,
+                                                    homework,
                                                   );
                                                   context.go(RouteNames.home);
                                                 },

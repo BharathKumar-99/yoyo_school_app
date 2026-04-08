@@ -214,9 +214,13 @@ class ResultProvider extends ChangeNotifier {
     return text;
   }
 
-  Future<void> resetPhrase(int categories) async {
+  Future<void> resetPhrase(int categories, int? homework) async {
     WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.show());
-    await _repo.resetCategoriesPhrases(categories, userClases?.id ?? 0);
+    await _repo.resetCategoriesPhrases(
+      categories,
+      homework,
+      userClases?.id ?? 0,
+    );
     WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.hide());
   }
 }

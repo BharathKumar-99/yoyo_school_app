@@ -23,6 +23,7 @@ class RememberRecorderProvider extends ChangeNotifier {
   int retryNumber = 1;
   int categories;
   String className;
+  int? homework;
   RememberRecorderProvider(
     this.phraseModel,
     this.language,
@@ -30,6 +31,7 @@ class RememberRecorderProvider extends ChangeNotifier {
     this.isLast,
     this.categories,
     this.className,
+    this.homework,
   ) {
     recorderController = RecorderController()
       ..androidEncoder = AndroidEncoder.aac
@@ -82,6 +84,7 @@ class RememberRecorderProvider extends ChangeNotifier {
                 form: "learned",
                 isLast: isLast,
                 categories: categories,
+                homework: homework,
               ),
             );
           } else {
@@ -95,6 +98,7 @@ class RememberRecorderProvider extends ChangeNotifier {
                     'isLast': isLast,
                     'retry': retryNumber,
                     'categories': categories,
+                    'homework': homework,
                     "className": className,
                   },
                 )

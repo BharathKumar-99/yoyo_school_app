@@ -17,6 +17,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
   TextEditingController textEditingController = TextEditingController();
   Language? language;
   final int categories;
+  int? homework;
   final AudioPlayer audioManager = AudioPlayer();
   String className;
   ListenAndTypeViewModel(
@@ -24,6 +25,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
     this.categories,
     this.language,
     this.className,
+    this.homework,
   ) {
     initAudio();
 
@@ -69,6 +71,7 @@ class ListenAndTypeViewModel extends ChangeNotifier {
         'typedPhrase': textEditingController.text.trim(),
         'language': language,
         'categories': categories,
+        'homework': homework,
         "className": className,
       },
     );

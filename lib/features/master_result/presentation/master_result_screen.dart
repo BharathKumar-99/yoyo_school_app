@@ -21,6 +21,7 @@ class MasterResultScreen extends StatelessWidget {
   final int retryNumber;
   final int categories;
   final String className;
+  final int? homework;
   const MasterResultScreen({
     super.key,
     required this.phraseModel,
@@ -29,6 +30,7 @@ class MasterResultScreen extends StatelessWidget {
     required this.isLast,
     required this.retryNumber,
     required this.categories,
+    this.homework,
     required this.className,
   });
 
@@ -151,6 +153,7 @@ class MasterResultScreen extends StatelessWidget {
                                           "level": value.levels ?? [],
                                           'student': value.userClases,
                                           'categories': categories,
+                                          'homework': homework,
                                         },
                                       ),
 
@@ -498,6 +501,7 @@ class MasterResultScreen extends StatelessWidget {
                                                     "from": "learned",
                                                     "phraseId": phraseModel.id,
                                                     'categories': categories,
+                                                    'homework': homework,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(
@@ -529,6 +533,7 @@ class MasterResultScreen extends StatelessWidget {
                                                     "next": true,
                                                     "from": "new",
                                                     'categories': categories,
+                                                    'homework': homework,
                                                   },
                                                 ),
                                                 style: ElevatedButton.styleFrom(

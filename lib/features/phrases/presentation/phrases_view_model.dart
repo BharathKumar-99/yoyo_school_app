@@ -47,6 +47,7 @@ class PhrasesViewModel extends ChangeNotifier {
   late GlobalProvider globalProvider;
   int? streakPhraseId;
   int categories;
+  int? homework;
   bool isMasteryEnabled = false;
   PhraseModel? _currentlyPlaying;
   PhraseModel? get currentlyPlaying => _currentlyPlaying;
@@ -64,6 +65,7 @@ class PhrasesViewModel extends ChangeNotifier {
     this.className,
     this.streakPhraseId,
     this.categories,
+    this.homework,
   ) {
     try {
       _requestMicByRecording();
@@ -243,7 +245,9 @@ class PhrasesViewModel extends ChangeNotifier {
 
       final phraseList =
           language.phrase?.where((val) {
-              if (categories == -1) {
+              if (homework != null) {
+                return val.homeworkId == homework;
+              } else if (categories == -1) {
                 return val.warmup == true;
               } else if (categories == 0) {
                 return val.categories == null;

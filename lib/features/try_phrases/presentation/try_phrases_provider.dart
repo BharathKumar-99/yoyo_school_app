@@ -24,6 +24,7 @@ class TryPhrasesProvider extends ChangeNotifier {
   bool isLast;
   bool showStreakVal = false;
   final int categories;
+  final int? homework;
   bool showMoreTranslation = false;
 
   TryPhrasesProvider(
@@ -32,6 +33,7 @@ class TryPhrasesProvider extends ChangeNotifier {
     this.isLast,
     this.categories,
     BuildContext context,
+    this.homework,
   ) {
     initAudio(context);
   }

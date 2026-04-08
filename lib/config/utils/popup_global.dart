@@ -5,7 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:intl/intl.dart';
+import '../../features/home/model/language_model.dart';
+import '../../features/home/model/level_model.dart';
+import '../../features/home/model/student_model.dart';
 import '../constants/constants.dart';
+import '../router/route_names.dart';
 
 class PopupDialog {
   static OverlayEntry? _loaderEntry;
@@ -15,7 +19,14 @@ class PopupDialog {
     return DateFormat('dd-MM-yy').format(date);
   }
 
-  static void show(DateTime time) {
+  static void show(
+    DateTime time,
+    Language? language,
+    List<Level> levels,
+    Student? student,
+    int id,
+    String className,
+  ) {
     if (_loaderEntry != null) return;
 
     final context = GoRouter.of(
@@ -87,8 +98,14 @@ class PopupDialog {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: hide,
-                      child: Text('Continue'),
+                      onPressed: () => hide(
+                        language: language,
+                        levels: levels,
+                        student: student,
+                        id: id,
+                        className: className,
+                      ),
+                      child: Text('Try it out'),
                     ),
                   ),
                 ),
@@ -104,9 +121,25 @@ class PopupDialog {
     ).routerDelegate.navigatorKey.currentState?.overlay?.insert(_loaderEntry!);
   }
 
-  static void hide() {
+  static void hide({
+    required Language? language,
+    required List<Level> levels,
+    required Student? student,
+    required int id,
+    required String className,
+  }) {
     _loaderEntry?.remove();
     _loaderEntry = null;
+    NavigationHelper.go(
+      RouteNames.phrasesDetails,
+      extra: {
+        'language': language,
+        "className": className,
+        "level": levels,
+        'student': student,
+        'homework': id,
+      },
+    );
   }
 
   static void hideUpdate() {

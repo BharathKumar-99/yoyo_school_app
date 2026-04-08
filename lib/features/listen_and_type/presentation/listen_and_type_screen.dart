@@ -15,6 +15,7 @@ class ListenAndTypeScreen extends StatelessWidget {
   final String className;
   final Student student;
   final int categories;
+  final int? homework;
   const ListenAndTypeScreen({
     super.key,
     required this.model,
@@ -22,6 +23,7 @@ class ListenAndTypeScreen extends StatelessWidget {
     required this.className,
     required this.student,
     required this.categories,
+    this.homework,
   });
 
   @override
@@ -49,6 +51,7 @@ class ListenAndTypeScreen extends StatelessWidget {
                       className: className,
                       student: student,
                       categories: value.categories,
+                      homework: homework,
                     ),
 
                     const SizedBox(height: 20),

@@ -19,7 +19,8 @@ class MasterPhraseProvider extends ChangeNotifier {
   bool isLoading = true;
   bool showStreakVal = false;
   int categories;
-  MasterPhraseProvider(this.phraseModel, this.categories) {
+  int? homework;
+  MasterPhraseProvider(this.phraseModel, this.categories, this.homework) {
     init();
   }
 

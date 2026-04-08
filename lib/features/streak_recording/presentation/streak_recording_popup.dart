@@ -17,6 +17,7 @@ class StreakRecordingPopup extends StatelessWidget {
   final String form;
   final bool isLast;
   final int categories;
+  final int? homework;
   const StreakRecordingPopup({
     super.key,
     required this.phraseModel,
@@ -26,6 +27,7 @@ class StreakRecordingPopup extends StatelessWidget {
     required this.form,
     required this.isLast,
     required this.categories,
+    this.homework,
   });
 
   @override
@@ -39,6 +41,7 @@ class StreakRecordingPopup extends StatelessWidget {
         form,
         isLast,
         categories,
+        homework,
       ),
       child: Consumer<StreakRecordingViewModel>(
         builder: (context, value, child) => value.loading

@@ -20,6 +20,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
   final String typedString;
   final Language language;
   final int categories;
+  final int? homework;
   final String className;
   const ListenAndTypeResultScreen({
     super.key,
@@ -28,6 +29,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
     required this.language,
     required this.categories,
     required this.className,
+    this.homework,
   });
 
   @override
@@ -321,6 +323,7 @@ class ListenAndTypeResultScreen extends StatelessWidget {
                                         "next": true,
                                         "from": "new",
                                         'categories': categories,
+                                        'homework': homework,
                                       },
                                     ),
                                     style: ElevatedButton.styleFrom(

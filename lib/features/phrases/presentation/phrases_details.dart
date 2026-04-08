@@ -26,6 +26,8 @@ class PhrasesDetails extends StatelessWidget {
   final String? from;
   final int? streakPhraseId;
   final int categories;
+  final int? homework;
+
   const PhrasesDetails({
     super.key,
     required this.language,
@@ -37,6 +39,7 @@ class PhrasesDetails extends StatelessWidget {
     this.from,
     this.streakPhraseId,
     required this.categories,
+    this.homework,
   });
 
   @override
@@ -52,6 +55,7 @@ class PhrasesDetails extends StatelessWidget {
         className,
         streakPhraseId,
         categories,
+        homework,
       ),
       child: Consumer<PhrasesViewModel>(
         builder: (context, provider, wi) {
@@ -492,6 +496,7 @@ class PhrasesDetails extends StatelessWidget {
                         "className": className,
                         "student": provider.student,
                         'categories': categories,
+                        'homework': homework,
                       },
                     );
                   } else {
@@ -505,6 +510,7 @@ class PhrasesDetails extends StatelessWidget {
                         "student": provider.student,
                         "isLast": phrases.length == 1,
                         'categories': categories,
+                        'homework': homework,
                       },
                     );
                   }

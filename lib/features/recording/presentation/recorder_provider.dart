@@ -25,6 +25,7 @@ class RecordingProvider extends ChangeNotifier {
   bool isLast;
   int retryNumber = 1;
   int categories;
+  int? homework;
   String className;
 
   RecordingProvider(
@@ -33,6 +34,7 @@ class RecordingProvider extends ChangeNotifier {
     this.streak,
     this.isLast,
     this.categories,
+    this.homework,
     this.className,
   ) {
     recorderController = RecorderController()

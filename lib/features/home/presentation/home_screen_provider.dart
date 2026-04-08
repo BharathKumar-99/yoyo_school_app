@@ -73,7 +73,6 @@ class HomeScreenProvider extends ChangeNotifier {
       userMap.putIfAbsent(userId, () => []).add(result);
     }
 
-    // Step 2: Check count per user
     for (var entry in userMap.entries) {
       final userResults = entry.value;
 

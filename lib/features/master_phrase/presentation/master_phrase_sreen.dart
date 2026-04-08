@@ -21,6 +21,7 @@ class MasterPhraseSreen extends StatelessWidget {
   final String className;
   final Student student;
   final bool isLast;
+  
   const MasterPhraseSreen({
     super.key,
     required this.model,

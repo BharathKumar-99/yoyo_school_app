@@ -34,6 +34,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
   final ResultsRepo _repo = ResultsRepo();
   final GlobalRepo _globalRepo = GlobalRepo();
   int categories;
+  int? homework;
   StreakRecordingViewModel(
     this.phraseModel,
     this.audioPath,
@@ -42,6 +43,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
     this.form,
     this.isLast,
     this.categories,
+    this.homework,
   ) {
     init();
   }
@@ -93,6 +95,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
             "streak": streak + 1,
             "phraseId": phraseModel.id,
             'categories': categories,
+            'homework': homework,
           },
         );
       } else {
@@ -105,6 +108,7 @@ class StreakRecordingViewModel extends ChangeNotifier {
             'language': language,
             'isLast': isLast,
             'categories': categories,
+            'homework': homework,
           },
         );
       }

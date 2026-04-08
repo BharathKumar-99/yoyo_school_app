@@ -17,6 +17,7 @@ class HomeWorkProvider extends ChangeNotifier {
   HomeScreenProvider? homeScreenProvider;
   TextEditingController anythingElseController = TextEditingController();
   bool isLoading = false;
+
   final List<String> structures = [
     text.conversation,
     text.presentTense,
@@ -132,10 +133,25 @@ class HomeWorkProvider extends ChangeNotifier {
       if (response.statusCode != 200 || data['success'] != true) {
         throw data['error'] ?? "Failed to create homework";
       }
-      
+      await homeScreenProvider?.init();
       isLoading = false;
       notifyListeners();
-      PopupDialog.show(selectedDate!);
+
+      PopupDialog.show(
+        selectedDate!,
+        homeScreenProvider
+            ?.userClases
+            ?.user
+            ?.studentClasses
+            ?.first
+            .classes
+            ?.language,
+        homeScreenProvider?.levels ?? [],
+        homeScreenProvider?.student,
+        data['homework_id'],
+        data['title'],
+      );
+
       context.go(RouteNames.home);
     } catch (e) {
       GlobalLoader.hide();
