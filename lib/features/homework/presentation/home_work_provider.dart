@@ -133,7 +133,9 @@ class HomeWorkProvider extends ChangeNotifier {
       if (response.statusCode != 200 || data['success'] != true) {
         throw data['error'] ?? "Failed to create homework";
       }
+      await Future.delayed(const Duration(seconds: 15));
       await homeScreenProvider?.init();
+      await Future.delayed(const Duration(seconds: 5));
       isLoading = false;
       notifyListeners();
 
@@ -152,11 +154,13 @@ class HomeWorkProvider extends ChangeNotifier {
         data['title'],
       );
 
+      if (!context.mounted) return;
       context.go(RouteNames.home);
     } catch (e) {
       GlobalLoader.hide();
       debugPrint("Error: $e");
 
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );

@@ -26,6 +26,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   final PhrasesDeatilsRepo _repo = PhrasesDeatilsRepo();
   bool isLoading = true;
   GlobalProvider? globalProvider;
+  int homeworkAvgScore = 0;
 
   PhraseCategoriesViewModel(this.language, this.student) {
     try {
@@ -33,11 +34,6 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     } catch (e) {
       throw Exception("Failed to initialize PhrasesViewModel");
     }
-  }
-
-  int getCompletionPercentage({required int completed, required int total}) {
-    if (total == 0) return 0;
-    return ((completed / total) * 100).toInt();
   }
 
   Future<void> init() async {
@@ -50,6 +46,10 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     homeworkModel = await _repo.getLatestHomework(student?.user?.school ?? 0);
     if (homeworkModel != null) {
       homeWorkCompleted = await _repo.getCompletedPhraseCount(
+        userId: userId,
+        homeworkId: homeworkModel?.id ?? 0,
+      );
+      homeworkAvgScore = await _repo.getUserAverageScore(
         userId: userId,
         homeworkId: homeworkModel?.id ?? 0,
       );

@@ -441,7 +441,7 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                '${provider.getCompletionPercentage(completed: provider.homeWorkCompleted, total: provider.homeworkModel?.phrases?.length ?? 0)}%',
+                                                '${provider.homeworkAvgScore}%',
                                                 style: AppTextStyles
                                                     .textTheme
                                                     .bodyLarge!

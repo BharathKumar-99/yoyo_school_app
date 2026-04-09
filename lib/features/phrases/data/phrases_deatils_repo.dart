@@ -35,6 +35,23 @@ class PhrasesDeatilsRepo {
     }
   }
 
+  Future<int> getUserAverageScore({
+    required String userId,
+    required int homeworkId,
+  }) async {
+    try {
+      final response = await _client.rpc(
+        'get_user_average_score',
+        params: {'p_user_id': userId, 'p_homework_id': homeworkId},
+      );
+
+      return ((response as num?)?.toDouble() ?? 0.0).round();
+    } catch (e) {
+      print('Error fetching average score: $e');
+      return 0;
+    }
+  }
+
   Future<int> getCompletedPhraseCount({
     required String userId,
     required int homeworkId,
