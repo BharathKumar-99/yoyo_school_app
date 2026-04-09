@@ -313,6 +313,15 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text(
+                                                  'Homework',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
+                                                      .copyWith(
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                                Text(
                                                   provider
                                                           .homeworkModel
                                                           ?.title ??
