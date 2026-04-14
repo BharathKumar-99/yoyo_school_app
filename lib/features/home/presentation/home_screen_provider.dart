@@ -134,8 +134,7 @@ class HomeScreenProvider extends ChangeNotifier {
               .toSet() ??
           {};
 
-      final phrases =
-          classes.studentClasses?.firstOrNull?.classes?.language?.phrase;
+      final phrases = classes.language?.phrase;
 
       if (classes.studentClasses?.isNotEmpty ?? false) {
         if (classes.id == userClases?.user?.studentClasses?.first.classes?.id) {
@@ -156,10 +155,7 @@ class HomeScreenProvider extends ChangeNotifier {
                   .length ??
               0;
 
-          List<int> langIds = [];
-          classes.studentClasses?.forEach(
-            (val) => langIds.add(val.classes?.language?.id ?? 0),
-          );
+          List<int> langIds = [classes.language?.id ?? 0];
 
           classCPhrases +=
               classes.studentClasses?.firstOrNull?.user?.userResult
@@ -171,10 +167,7 @@ class HomeScreenProvider extends ChangeNotifier {
                   .length ??
               0;
         }
-        List<int> langIds = [];
-        classes.studentClasses?.forEach(
-          (val) => langIds.add(val.classes?.language?.id ?? 0),
-        );
+        List<int> langIds = [classes.language?.id ?? 0];
 
         schoolCPhrase +=
             classes.studentClasses?.firstOrNull?.user?.userResult

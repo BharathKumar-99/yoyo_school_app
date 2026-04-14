@@ -477,10 +477,12 @@ class PhrasesDetails extends StatelessWidget {
         final model = phrases[index];
         String? percentage;
         if (showPercentage) {
-          final result = provider.userResult.firstWhere(
+          final resultIndex = provider.userResult.indexWhere(
             (val) => val.phrasesId == model.id,
           );
-          percentage = "${result.score}%";
+          if (resultIndex != -1) {
+            percentage = "${provider.userResult[resultIndex].score}%";
+          }
         }
         return Column(
           children: [

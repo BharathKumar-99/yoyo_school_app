@@ -155,7 +155,7 @@ class HomeRepository {
       final data = await _client
           .from(DbTable.school)
           .select(
-            '''*,${DbTable.classes}(*,${DbTable.language}(*,${DbTable.level}(*),${DbTable.phrase}(*)),${DbTable.studentClasses}(*,${DbTable.classes}(*,${DbTable.language}(*,${DbTable.phrase}(*))), ${DbTable.users}(*,${DbTable.student}(*),${DbTable.userResult}(*,${DbTable.phrase}(*)))))''',
+            '''*,${DbTable.classes}(*,${DbTable.language}(*,${DbTable.level}(*),${DbTable.phrase}(id, language, homework_id)),${DbTable.studentClasses}(*, ${DbTable.users}(*,${DbTable.student}(*),${DbTable.userResult}(id, phrases_id, score, score_submited, ${DbTable.phrase}(id, language)))))''',
           )
           .eq('id', id)
           .maybeSingle();
