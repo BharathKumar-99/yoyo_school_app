@@ -403,7 +403,7 @@ abstract class AppLocalizations {
   /// Hint text for additional input
   ///
   /// In en, this message translates to:
-  /// **'Type here (e.g. any other structure or subjects)'**
+  /// **'Example: Create speaking homework on holidays, focusing on the past tense, opinions, and extending answers'**
   String get anythingElseHint;
 
   /// Button text to create homework

@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/config/utils/popup_global.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen_provider.dart';
+
+import '../../../core/supabase/supabase_client.dart';
 
 class HomeWorkProvider extends ChangeNotifier {
   List<String> selectedStructure = [];
@@ -17,6 +25,58 @@ class HomeWorkProvider extends ChangeNotifier {
   HomeScreenProvider? homeScreenProvider;
   TextEditingController anythingElseController = TextEditingController();
   bool isLoading = false;
+  final SpeechToText speechToText = SpeechToText();
+  bool _speechEnabled = false;
+
+  int selectedAttachmentType = 0; // 0 = none, 1 = docs, 2 = photo
+  bool exactContent = false;
+  Uint8List? attachedBytes;
+  String? attachedFileName;
+
+  void setAttachmentType(int type) async {
+    if (selectedAttachmentType == type) {
+      selectedAttachmentType = 0; // toggle off
+      attachedBytes = null;
+      attachedFileName = null;
+      notifyListeners();
+      return;
+    }
+
+    if (type == 1) {
+      final result = await FilePicker.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'jpeg'],
+        withData: true,
+      );
+      if (result != null && result.files.isNotEmpty) {
+        attachedBytes = result.files.first.bytes;
+        attachedFileName = result.files.first.name;
+        selectedAttachmentType = type;
+      } else {
+        selectedAttachmentType = 0;
+        attachedBytes = null;
+        attachedFileName = null;
+      }
+    } else if (type == 2) {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.camera);
+      if (image != null) {
+        attachedBytes = await image.readAsBytes();
+        attachedFileName = image.name;
+        selectedAttachmentType = type;
+      } else {
+        selectedAttachmentType = 0;
+        attachedBytes = null;
+        attachedFileName = null;
+      }
+    }
+    notifyListeners();
+  }
+
+  void toggleExactContent(bool? value) {
+    exactContent = value ?? false;
+    notifyListeners();
+  }
 
   final List<String> structures = [
     text.conversation,
@@ -49,6 +109,16 @@ class HomeWorkProvider extends ChangeNotifier {
       context,
       listen: false,
     );
+    initSpeech();
+  }
+
+  Future<void> initSpeech() async {
+    _speechEnabled = await speechToText.initialize(
+      onStatus: (status) => print('Status: $status'),
+      onError: (error) => print('Error: $error'),
+    );
+    print("Speech available: $_speechEnabled");
+    notifyListeners();
   }
 
   void selectStructure(String text) {
@@ -59,6 +129,27 @@ class HomeWorkProvider extends ChangeNotifier {
         ..clear()
         ..add(text); // keep only one
     }
+    notifyListeners();
+  }
+
+  void startListening() async {
+    await speechToText.listen(onResult: _onSpeechResult);
+    notifyListeners();
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  void stopListening() async {
+    await speechToText.stop();
+    notifyListeners();
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    anythingElseController.text = result.recognizedWords;
     notifyListeners();
   }
 
@@ -81,8 +172,8 @@ class HomeWorkProvider extends ChangeNotifier {
 
   Future<void> createHomework(BuildContext context) async {
     try {
-      if (selectedDate == null) {
-        throw "Select due date";
+      if (anythingElseController.text.isEmpty) {
+        throw "Please enter something else";
       }
 
       isLoading = true;
@@ -110,29 +201,36 @@ class HomeWorkProvider extends ChangeNotifier {
           0;
 
       // ✅ 2. Prepare Request
+      if (attachedBytes == null || attachedFileName == null) {
+        throw "Please upload a document or take a photo";
+      }
+
+      final fileName =
+          '${DateTime.now().millisecondsSinceEpoch}_$attachedFileName';
+
+      final String uploadPath = 'homework/$classId/$fileName';
+      await SupabaseClientService.instance.client.storage
+          .from('homework')
+          .uploadBinary(uploadPath, attachedBytes!);
+      final String publicUrl = SupabaseClientService.instance.client.storage
+          .from('homework')
+          .getPublicUrl(uploadPath);
+
       final url = Uri.parse(
-        'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/add_homework',
+        'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/auto-homework',
       );
 
       final body = {
-        "due_date": selectedDate!.toIso8601String(),
-        "structures": selectedStructure,
-        "subjects": selectedSubject,
-        "anythingelse": anythingElseController.text.trim(),
-        "schoolId": schoolId,
-        "classId": classId,
-        "phraseCount": 10,
-        "languageId": languageId,
+        "class_id": classId,
+        "school_id": schoolId,
+        "homework_prompt": anythingElseController.text.trim(),
+        "homework_document": publicUrl,
       };
 
-      // ✅ 3. API Call
       final response = await http.post(url, body: jsonEncode(body));
-
       final data = jsonDecode(response.body);
+      notifyListeners();
 
-      if (response.statusCode != 200 || data['success'] != true) {
-        throw data['error'] ?? "Failed to create homework";
-      }
       await Future.delayed(const Duration(seconds: 15));
       await homeScreenProvider?.init();
       await Future.delayed(const Duration(seconds: 5));

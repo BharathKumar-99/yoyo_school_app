@@ -165,7 +165,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get anythingElseHint =>
-      'Type here (e.g. any other structure or subjects)';
+      'Example: Create speaking homework on holidays, focusing on the past tense, opinions, and extending answers';
 
   @override
   String get createHomework => 'Create Homework';

@@ -62,7 +62,7 @@
     "@anythingElse": {
         "description": "Label for additional input field"
     },
-    "anythingElseHint": "Type here (e.g. any other structure or subjects)",
+    "anythingElseHint": "Example: Create speaking homework on holidays, focusing on the past tense, opinions, and extending answers",
     "@anythingElseHint": {
         "description": "Hint text for additional input"
     },

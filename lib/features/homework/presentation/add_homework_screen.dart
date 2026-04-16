@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/theme/app_colors.dart';
 import 'package:yoyo_school_app/config/theme/app_theme.dart';
 import 'package:yoyo_school_app/features/homework/presentation/home_work_provider.dart';
 
@@ -111,62 +112,83 @@ class _AddHomeworkScreenState extends State<AddHomeworkScreen> {
 
                             const SizedBox(height: 20),
 
-                            /// Due Date
-                            _buildDatePickerBox(context, text.dueDate, value),
-
+                            TextField(
+                              controller: value.anythingElseController,
+                              maxLines: 7,
+                              decoration: InputDecoration(
+                                hintText: text.anythingElseHint,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 20),
-
-                            /// Structures
-                            Text(
-                              text.structures,
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                            GestureDetector(
+                              onLongPress: () => value.startListening(),
+                              onLongPressUp: () => value.stopListening(),
+                              child: ElevatedButton.icon(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      value.speechToText.isListening
+                                      ? Colors.red
+                                      : Theme.of(context).colorScheme.primary,
+                                ),
+                                icon: Icon(Icons.mic_rounded, size: 20),
+                                label: Text(
+                                  value.speechToText.isListening
+                                      ? 'Stop'
+                                      : 'Use Voice',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 30),
 
-                            Wrap(
-                              spacing: 10,
-                              runSpacing: 10,
-                              children: value.structures.map((item) {
-                                return _structureChip(
-                                  item,
-                                  Colors.orange,
-                                  value,
-                                );
-                              }).toList(),
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            /// Subjects
-                            Text(
-                              text.subjects,
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 10),
-
-                            Wrap(
-                              spacing: 10,
-                              runSpacing: 10,
-                              children: value.subjects.map((item) {
-                                return _subjectChip(item, Colors.purple, value);
-                              }).toList(),
+                            // Attachment Options
+                            _buildAttachmentOption(
+                              title:
+                                  "UPLOAD Docs:: Text book material, print off exercises etc",
+                              icon: Icons.upload_file_outlined,
+                              activeColor: Colors.orange,
+                              isSelected: value.selectedAttachmentType == 1,
+                              onTap: () => value.setAttachmentType(1),
                             ),
 
-                            const SizedBox(height: 20),
-
-                            Text(
-                              text.anythingElse,
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 10),
-
-                            _buildInputBox(
-                              text.anythingElseHint,
-                              value.anythingElseController,
-                              maxLines: 4,
+                            _buildAttachmentOption(
+                              title: "Take a photo of document or worksheet",
+                              icon: Icons.camera_alt_outlined,
+                              activeColor: Colors.purple,
+                              isSelected: value.selectedAttachmentType == 2,
+                              onTap: () => value.setAttachmentType(2),
                             ),
 
-                            /// Button
+                            // Checkbox
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: value.exactContent,
+                                  onChanged: value.toggleExactContent,
+                                  side: BorderSide(color: Colors.grey.shade500),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "Tick if you want YoYo to use the content on the uploads exactly",
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -186,6 +208,48 @@ class _AddHomeworkScreenState extends State<AddHomeworkScreen> {
                     ),
                   ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAttachmentOption({
+    required String title,
+    required IconData icon,
+    required Color activeColor,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        decoration: BoxDecoration(
+          color: isSelected ? activeColor.withValues(alpha: 0.1) : Colors.white,
+          border: Border.all(
+            color: isSelected
+                ? activeColor
+                : activeColor.withValues(alpha: 0.4),
+            width: isSelected ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.grey.shade700, size: 28),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
