@@ -189,33 +189,19 @@ class HomeWorkProvider extends ChangeNotifier {
               .classes
               ?.id ??
           0;
-      final int languageId =
-          homeScreenProvider
-              ?.userClases
-              ?.user
-              ?.studentClasses
-              ?.first
-              .classes
-              ?.language
-              ?.id ??
-          0;
+      String publicUrl = '';
+      if (attachedBytes != null && attachedFileName != null) {
+        final fileName =
+            '${DateTime.now().millisecondsSinceEpoch}_$attachedFileName';
 
-      // ✅ 2. Prepare Request
-      if (attachedBytes == null || attachedFileName == null) {
-        throw "Please upload a document or take a photo";
+        final String uploadPath = 'homework/$classId/$fileName';
+        await SupabaseClientService.instance.client.storage
+            .from('homework')
+            .uploadBinary(uploadPath, attachedBytes!);
+        publicUrl = SupabaseClientService.instance.client.storage
+            .from('homework')
+            .getPublicUrl(uploadPath);
       }
-
-      final fileName =
-          '${DateTime.now().millisecondsSinceEpoch}_$attachedFileName';
-
-      final String uploadPath = 'homework/$classId/$fileName';
-      await SupabaseClientService.instance.client.storage
-          .from('homework')
-          .uploadBinary(uploadPath, attachedBytes!);
-      final String publicUrl = SupabaseClientService.instance.client.storage
-          .from('homework')
-          .getPublicUrl(uploadPath);
-
       final url = Uri.parse(
         'https://xijaobuybkpfmyxcrobo.supabase.co/functions/v1/auto-homework',
       );
