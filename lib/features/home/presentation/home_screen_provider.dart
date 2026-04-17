@@ -7,6 +7,7 @@ import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_classes.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/homework/model/home_model.dart';
+import 'package:yoyo_school_app/features/profile/model/user_deatils_mode.dart';
 import 'package:yoyo_school_app/features/profile/presentation/profile_provider.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
@@ -28,6 +29,8 @@ class HomeScreenProvider extends ChangeNotifier {
   GlobalProvider? globalProvider;
   School? school;
   List<HomeworkModel> homeWorkModel = [];
+  List<UserDetailsModel> userDetailsModel = [];
+  int homeworkDays = 0;
 
   int classPhrases = 0;
   int classVocab = 0;
@@ -48,6 +51,16 @@ class HomeScreenProvider extends ChangeNotifier {
   HomeScreenProvider(this.homeRepository) {
     profileProvider = Provider.of<ProfileProvider>(ctx!, listen: false);
     profileProvider?.initialize();
+
+    notifyListeners();
+  }
+
+  getDetails() async {
+    userDetailsModel = await homeRepository.getDetails(
+      userClases?.user?.studentClasses?.first.classes?.id ?? 0,
+    );
+    userDetailsModel = userDetailsModel
+      ..sort((a, b) => a.classRank!.compareTo(b.classRank!));
     notifyListeners();
   }
 
@@ -69,7 +82,7 @@ class HomeScreenProvider extends ChangeNotifier {
       final userId = result.userId;
 
       if (userId == null) continue;
-
+      getDetails();
       userMap.putIfAbsent(userId, () => []).add(result);
     }
 
@@ -122,6 +135,10 @@ class HomeScreenProvider extends ChangeNotifier {
     if (homeWorkModel.isNotEmpty) {
       await getHomeWork();
     }
+    DateTime now = DateTime.now();
+    DateTime dueDate = homeWorkModel.last.dueDate ?? DateTime.now();
+    homeworkDays = now.difference(dueDate).inDays;
+
     school = await homeRepository.getSchoolData(
       profileProvider?.school?.id ?? 0,
     );
@@ -239,7 +256,8 @@ class HomeScreenProvider extends ChangeNotifier {
       );
 
       _subscribeToStudentData();
-      if (profileProvider?.isTeacher == true) getMetrics();
+      getDetails();
+      getMetrics();
       notifyListeners();
       if (userClases?.user?.studentClasses?.length == 1) {
         NavigationHelper.go(

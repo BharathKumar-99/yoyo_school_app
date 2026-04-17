@@ -80,7 +80,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get set_homework => 'Set Homework';
 
   @override
-  String get your_metrics => 'Your metrics';
+  String get your_metrics => 'Your Score';
 
   @override
   String get students => 'Students';

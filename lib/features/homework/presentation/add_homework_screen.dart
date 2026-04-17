@@ -4,7 +4,6 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
-import 'package:yoyo_school_app/config/theme/app_colors.dart';
 import 'package:yoyo_school_app/config/theme/app_theme.dart';
 import 'package:yoyo_school_app/features/homework/presentation/home_work_provider.dart';
 
@@ -250,116 +249,6 @@ class _AddHomeworkScreenState extends State<AddHomeworkScreen> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  _buildInputBox(
-    String hint,
-    TextEditingController controller, {
-    int maxLines = 1,
-  }) {
-    return TextField(
-      maxLines: maxLines,
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hint,
-        prefixIcon: const Icon(Icons.lock_outline),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    return "${date.day}/${date.month}/${date.year}";
-  }
-
-  Widget _buildDatePickerBox(
-    BuildContext context,
-    String hint,
-    HomeWorkProvider provider,
-  ) {
-    return InkWell(
-      onTap: () async {
-        final pickedDate = await showDatePicker(
-          context: context,
-          initialDate: provider.selectedDate ?? DateTime.now(),
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2100),
-        );
-
-        if (pickedDate != null) {
-          provider.pickDate(pickedDate);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade400),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.calendar_today_outlined),
-            const SizedBox(width: 10),
-
-            /// Text / Selected Date
-            Text(
-              provider.selectedDate != null
-                  ? _formatDate(provider.selectedDate!)
-                  : hint,
-              style: TextStyle(
-                color: provider.selectedDate != null
-                    ? Colors.black
-                    : Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _structureChip(String text, Color color, HomeWorkProvider provider) {
-    return GestureDetector(
-      onTap: () => provider.selectStructure(text),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: provider.selectedStructure.contains(text)
-              ? color
-              : color.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _subjectChip(String text, Color color, HomeWorkProvider provider) {
-    return GestureDetector(
-      onTap: () => provider.selectSubject(text),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: provider.selectedSubject.contains(text)
-              ? color
-              : color.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
         ),
       ),
     );

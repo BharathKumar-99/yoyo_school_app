@@ -46,6 +46,37 @@ class HomeScreen extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 10,
+                                  ),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: LinearGradient(
+                                      colors:
+                                          homeProvider
+                                              .userClases
+                                              ?.user
+                                              ?.studentClasses
+                                              ?.first
+                                              .classes
+                                              ?.language
+                                              ?.gradient ??
+                                          [],
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "🔔 Homework due in ${homeProvider.homeworkDays} days! ",
+                                    textAlign: TextAlign.center,
+                                    style: TextTheme.of(context).titleLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                ),
                                 _AnimatedSectionTitle(text.your_metrics),
                                 const SizedBox(height: 10),
 
@@ -126,6 +157,196 @@ class HomeScreen extends StatelessWidget {
                                     .toList() ??
                                 [],
                           ),
+                          if (profile.isTeacher != true)
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Leader board',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displaySmall!
+                                          .copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        'Rank#${homeProvider.userDetailsModel.where((val) => val.userId == homeProvider.profileProvider?.user?.userId).first.classRank}',
+                                        style: TextTheme.of(context).titleLarge!
+                                            .copyWith(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Table(
+                                  columnWidths: const {
+                                    0: FlexColumnWidth(2),
+                                    1: FlexColumnWidth(1),
+                                    2: FlexColumnWidth(1),
+                                  },
+                                  children: [
+                                    TableRow(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            "Username",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(color: Colors.black),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            "Effort",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(color: Colors.black),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            "Score",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    ...homeProvider.userDetailsModel.map(
+                                      (e) => TableRow(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Text(
+                                              "${e.classRank == 1 ? "🥇" : ""} ${e.username ?? ""}",
+                                              style: TextTheme.of(context)
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    fontWeight:
+                                                        e.classRank == 1 ||
+                                                            e.userId ==
+                                                                homeProvider
+                                                                    .profileProvider
+                                                                    ?.user
+                                                                    ?.userId
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
+                                                    color: e.classRank == 1
+                                                        ? Colors.grey[800]
+                                                        : e.userId ==
+                                                              homeProvider
+                                                                  .profileProvider
+                                                                  ?.user
+                                                                  ?.userId
+                                                        ? homeProvider
+                                                                  .userClases
+                                                                  ?.user
+                                                                  ?.studentClasses
+                                                                  ?.first
+                                                                  .classes
+                                                                  ?.language
+                                                                  ?.gradient
+                                                                  ?.first ??
+                                                              Colors.black
+                                                        : Colors.black,
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Text(
+                                              "${e.effort}%",
+                                              style: TextTheme.of(context)
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    fontWeight:
+                                                        e.classRank == 1 ||
+                                                            e.userId ==
+                                                                homeProvider
+                                                                    .profileProvider
+                                                                    ?.user
+                                                                    ?.userId
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
+                                                    color: e.classRank == 1
+                                                        ? Colors.grey[800]
+                                                        : e.userId ==
+                                                              homeProvider
+                                                                  .profileProvider
+                                                                  ?.user
+                                                                  ?.userId
+                                                        ? homeProvider
+                                                                  .userClases
+                                                                  ?.user
+                                                                  ?.studentClasses
+                                                                  ?.first
+                                                                  .classes
+                                                                  ?.language
+                                                                  ?.gradient
+                                                                  ?.first ??
+                                                              Colors.black
+                                                        : Colors.black,
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Text(
+                                              '${e.score}%',
+                                              style: TextTheme.of(context)
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                    fontWeight:
+                                                        e.classRank == 1 ||
+                                                            e.userId ==
+                                                                homeProvider
+                                                                    .profileProvider
+                                                                    ?.user
+                                                                    ?.userId
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
+                                                    color: e.classRank == 1
+                                                        ? Colors.grey[800]
+                                                        : e.userId ==
+                                                              homeProvider
+                                                                  .profileProvider
+                                                                  ?.user
+                                                                  ?.userId
+                                                        ? homeProvider
+                                                                  .userClases
+                                                                  ?.user
+                                                                  ?.studentClasses
+                                                                  ?.first
+                                                                  .classes
+                                                                  ?.language
+                                                                  ?.gradient
+                                                                  ?.first ??
+                                                              Colors.black
+                                                        : Colors.black,
+                                                  ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           if (profile.isTeacher == true)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

@@ -235,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @your_metrics.
   ///
   /// In en, this message translates to:
-  /// **'Your metrics'**
+  /// **'Your Score'**
   String get your_metrics;
 
   /// No description provided for @students.

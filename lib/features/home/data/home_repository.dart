@@ -10,6 +10,7 @@ import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/model/school_model.dart';
 import 'package:yoyo_school_app/features/home/model/student_model.dart';
 import 'package:yoyo_school_app/features/homework/model/home_model.dart';
+import 'package:yoyo_school_app/features/profile/model/user_deatils_mode.dart';
 import 'package:yoyo_school_app/features/result/model/user_result_model.dart';
 
 import '../../profile/model/fcm.dart';
@@ -247,5 +248,17 @@ class HomeRepository {
     }
 
     return students;
+  }
+
+  Future<List<UserDetailsModel>> getDetails(int i) async {
+    final data = await _client
+        .from('user_student_view')
+        .select()
+        .eq('class_id', i);
+    List<UserDetailsModel> model = [];
+    for (var element in data) {
+      model.add(UserDetailsModel.fromJson(element));
+    }
+    return model;
   }
 }
