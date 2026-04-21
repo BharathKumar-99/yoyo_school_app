@@ -583,7 +583,7 @@ class PhrasesWidget extends StatelessWidget {
       builder: (context, provider, w) {
         return Column(
           children: [
-            if (question != null)
+            if (question != null && question != 'null')
               Container(
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 26),

@@ -45,6 +45,7 @@ class TryPhrasesScreen extends StatelessWidget {
                 className: className,
                 student: student,
                 categories: value.categories,
+                homework: value.homework
               ),
             ),
             body: value.isLoading
