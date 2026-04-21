@@ -227,7 +227,7 @@ class HomeScreenProvider extends ChangeNotifier {
     classScore = safeAvg(classScoreList);
   }
 
-  Future<bool> init() async {
+  Future<bool> init({bool home = true}) async {
     try {
       globalProvider = Provider.of<GlobalProvider>(ctx!, listen: false);
       userClases = await homeRepository.getClasses();
@@ -259,7 +259,7 @@ class HomeScreenProvider extends ChangeNotifier {
       getDetails();
       getMetrics();
       notifyListeners();
-      if (userClases?.user?.studentClasses?.length == 1) {
+      if (userClases?.user?.studentClasses?.length == 1 && home) {
         NavigationHelper.go(
           RouteNames.phraseCategories,
           extra: {

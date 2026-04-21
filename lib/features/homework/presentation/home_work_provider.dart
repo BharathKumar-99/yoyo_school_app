@@ -171,10 +171,6 @@ class HomeWorkProvider extends ChangeNotifier {
 
   Future<void> createHomework(BuildContext context) async {
     try {
-      if (anythingElseController.text.isEmpty) {
-        throw "Please enter something else";
-      }
-
       isLoading = true;
       notifyListeners();
 
@@ -214,16 +210,15 @@ class HomeWorkProvider extends ChangeNotifier {
 
       final response = await http.post(url, body: jsonEncode(body));
       final data = jsonDecode(response.body);
-      notifyListeners();
 
       await Future.delayed(const Duration(seconds: 15));
-      await homeScreenProvider?.init();
+      await homeScreenProvider?.init(home: false);
       await Future.delayed(const Duration(seconds: 5));
       isLoading = false;
       notifyListeners();
 
       PopupDialog.show(
-        selectedDate!,
+        selectedDate ?? DateTime.now().add(const Duration(days: 7)),
         homeScreenProvider
             ?.userClases
             ?.user
