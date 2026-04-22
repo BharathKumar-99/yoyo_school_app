@@ -21,24 +21,43 @@ class RequestActivationViewModel extends ChangeNotifier {
       await _repository.requestNewActivationCode(userName);
       UserModel? userModel = await _repository.getUserCode(userName);
       WidgetsBinding.instance.addPostFrameCallback((v) => GlobalLoader.hide());
-      showDialog(
-        context: ctx!,
-        builder: (BuildContext context) => AlertDialog.adaptive(
-          title: Text(text.new_activation_code),
-          content: Text(userModel?.activationCode ?? 'N/A'),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                NavigationHelper.pushReplacement(
-                  RouteNames.login,
-                  extra: userModel,
-                );
-              },
-              child: Text(text.login_btn),
-            ),
-          ],
-        ),
-      );
+      if (userModel?.studentClasses?.first.classes?.activationCodeTeacher ==
+          true) {
+        showDialog(
+          context: ctx!,
+          builder: (BuildContext context) => AlertDialog.adaptive(
+            title: Text(text.new_activation_code),
+            content: Text('Ask your teacher for your new activation code'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  NavigationHelper.pushReplacement(RouteNames.login);
+                },
+                child: Text(text.login_btn),
+              ),
+            ],
+          ),
+        );
+      } else {
+        showDialog(
+          context: ctx!,
+          builder: (BuildContext context) => AlertDialog.adaptive(
+            title: Text(text.new_activation_code),
+            content: Text(userModel?.activationCode ?? 'N/A'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  NavigationHelper.pushReplacement(
+                    RouteNames.login,
+                    extra: userModel,
+                  );
+                },
+                child: Text(text.login_btn),
+              ),
+            ],
+          ),
+        );
+      }
     } catch (e) {
       return UsefullFunctions.showSnackBar(ctx!, e.toString());
     } finally {

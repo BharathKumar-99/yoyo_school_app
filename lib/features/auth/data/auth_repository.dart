@@ -1,6 +1,6 @@
 import 'dart:developer';
-import 'package:firebase_messaging/firebase_messaging.dart'; 
-import 'package:supabase_flutter/supabase_flutter.dart'; 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:yoyo_school_app/bootstrap/notification_services.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
@@ -10,7 +10,6 @@ import '../../../core/supabase/supabase_client.dart';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
- 
 
 class AuthRepository {
   final client = SupabaseClientService.instance.client;
@@ -134,14 +133,14 @@ class AuthRepository {
     try {
       final data = await client
           .from(DbTable.users)
-          .select('''*,${DbTable.studentClasses}(*)''')
+          .select('''*,${DbTable.studentClasses}(*,${DbTable.classes}(*))''')
           .ilike('username', username)
           .maybeSingle();
 
       UserModel userModel = UserModel.fromJson(data!);
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       final fcmToken = await messaging.getToken();
-      int classId = userModel.studentClasses?.first.classId ?? 0;
+      int classId = userModel.studentClasses?.first.classes?.id ?? 0;
       await client.from(DbTable.activationRequests).insert({
         'username': userModel.username,
         'class': classId,
@@ -157,10 +156,14 @@ class AuthRepository {
           .from(DbTable.teacher)
           .update({'notification': true})
           .eq('classes', classId);
-      await client.functions.invoke(
-        'fcm-test',
-        body: {'code': newUser.activationCode, 'token': fcmToken},
-      );
+
+      if (userModel.studentClasses?.first.classes?.activationCodeTeacher !=
+          true) {
+        await client.functions.invoke(
+          'fcm-test',
+          body: {'code': newUser.activationCode, 'token': fcmToken},
+        );
+      }
     } catch (e) {
       log(e.toString());
     }
@@ -170,7 +173,7 @@ class AuthRepository {
     try {
       final data = await client
           .from(DbTable.users)
-          .select('*')
+          .select('''*,${DbTable.studentClasses}(*,${DbTable.classes}(*))''')
           .ilike('username', username)
           .maybeSingle();
 

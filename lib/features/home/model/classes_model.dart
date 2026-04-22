@@ -13,6 +13,7 @@ class Classes {
   Language? language;
   int? submissionThreshold;
   List<StudentClassesModel>? studentClasses;
+  bool? activationCodeTeacher;
 
   Classes({
     this.id,
@@ -24,6 +25,7 @@ class Classes {
     this.language,
     this.submissionThreshold,
     this.studentClasses,
+    this.activationCodeTeacher,
   });
 
   factory Classes.fromJson(Map<String, dynamic> json) {
@@ -40,6 +42,7 @@ class Classes {
           ? Language.fromJson(json['language'])
           : null,
       submissionThreshold: json['submission_threshold'],
+      activationCodeTeacher: json['activation_code_teacher'],
       studentClasses: (json[DbTable.studentClasses] as List?)
           ?.map((e) => StudentClassesModel.fromJson(e))
           .toList(),
@@ -54,6 +57,7 @@ class Classes {
       'created_at': createdAt?.toIso8601String(),
       'no_of_students': noOfStudents,
       'submission_threshold': submissionThreshold,
+      'activation_code_teacher': activationCodeTeacher,
     };
   }
 }
