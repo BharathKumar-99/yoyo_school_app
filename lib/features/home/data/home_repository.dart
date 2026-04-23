@@ -171,7 +171,7 @@ class HomeRepository {
       final data = await _client
           .from(DbTable.homework)
           .select("*")
-          .eq('school', i);
+          .eq('school', i) .order('created_at', ascending: false);
       List<HomeworkModel> model = [];
       for (var element in data) {
         model.add(HomeworkModel.fromJson(element));
