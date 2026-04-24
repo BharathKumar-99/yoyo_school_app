@@ -42,7 +42,8 @@ class HomeScreen extends StatelessWidget {
                       sliver: SliverList(
                         delegate: SliverChildListDelegate([
                           const SizedBox(height: 10),
-                          if (profile.isTeacher != true)
+                          if (profile.isTeacher != true &&
+                              homeProvider.homeworkDays > 0)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -730,6 +731,7 @@ Widget getMetricCard(String title, String data, Color bgColor) {
           AutoSizeText(title, style: AppTextStyles.textTheme.titleMedium),
           const SizedBox(height: 10),
           Container(
+            height: 45,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: bgColor,

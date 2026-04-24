@@ -166,16 +166,23 @@ class HomeRepository {
     }
   }
 
-  Future<List<HomeworkModel>> getHomeWorkModel(int i) async {
+  Future<List<HomeworkModel>> getHomeWorkModel(
+    int schoolId,
+    int language,
+  ) async {
     try {
+      List<HomeworkModel> model = [];
       final data = await _client
           .from(DbTable.homework)
-          .select("*")
-          .eq('school', i) .order('created_at', ascending: false);
-      List<HomeworkModel> model = [];
-      for (var element in data) {
-        model.add(HomeworkModel.fromJson(element));
+          .select('*, ${DbTable.phrase}(*)') // join phrases
+          .eq('school', schoolId)
+          .eq('${DbTable.phrase}.language', language) // filter on related table
+          .order('created_at', ascending: false);
+
+      for (var e in data) {
+        model.add(HomeworkModel.fromJson(e));
       }
+      model = model.where((e) => (e.phrases?.isNotEmpty ?? false)).toList();
       return model;
     } catch (e) {
       return [];

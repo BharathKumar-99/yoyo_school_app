@@ -290,7 +290,7 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                                     );
                                   },
                                   child: Container(
-                                    height: 150,
+                                    height: 170,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),

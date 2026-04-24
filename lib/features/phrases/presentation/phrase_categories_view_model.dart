@@ -43,7 +43,10 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     final ids = language.phrase?.map((e) => e.id ?? 0).toList() ?? [];
     userResult = await _repo.getUserResult(ids);
-    homeworkModel = await _repo.getLatestHomework(student?.user?.school ?? 0);
+    homeworkModel = await _repo.getLatestHomework(
+      student?.user?.school ?? 0,
+      language.id ?? 0,
+    );
     if (homeworkModel != null) {
       homeWorkCompleted = await _repo.getCompletedPhraseCount(
         userId: userId,
@@ -118,11 +121,9 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   String getDueText(DateTime dueDate) {
     final now = DateTime.now();
 
-    // Normalize to remove time difference issues
-    final today = DateTime(now.year, now.month, now.day);
     final due = DateTime(dueDate.year, dueDate.month, dueDate.day);
 
-    final difference = due.difference(today).inDays;
+    final difference = now.difference(due).inDays;
 
     if (difference > 0) {
       return 'Due in $difference day${difference == 1 ? '' : 's'}';

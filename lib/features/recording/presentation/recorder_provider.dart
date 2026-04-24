@@ -106,6 +106,7 @@ class RecordingProvider extends ChangeNotifier {
                       'retry': retryNumber,
                       'categories': categories,
                       'className': className,
+                      'homework': homework,
                     },
                   )
                   .then((val) {

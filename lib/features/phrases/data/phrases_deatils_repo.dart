@@ -18,18 +18,20 @@ import '../model/phrase_categories_model.dart';
 
 class PhrasesDeatilsRepo {
   final SupabaseClient _client = SupabaseClientService.instance.client;
-
-  Future<HomeworkModel?> getLatestHomework(int school) async {
+  Future<HomeworkModel?> getLatestHomework(int school, int language) async {
     try {
       final data = await _client
           .from(DbTable.homework)
-          .select('''*,${DbTable.phrase}(*)''')
+          .select('*, ${DbTable.phrase}!inner(*)') // 👈 important
           .eq('school', school)
+          .eq('${DbTable.phrase}.language', language)
           .order('created_at', ascending: false)
           .limit(1)
           .maybeSingle();
-      HomeworkModel homeworkModel = HomeworkModel.fromJson(data!);
-      return homeworkModel;
+
+      if (data == null) return null;
+
+      return HomeworkModel.fromJson(data);
     } catch (e) {
       return null;
     }

@@ -368,6 +368,7 @@ class PhrasesViewModel extends ChangeNotifier {
             "streak": streak,
             "language": language,
             "className": className,
+            "homework": homework,
             "student": student,
             'categories': categories,
             "isLast": from == 'new'
