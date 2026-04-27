@@ -14,6 +14,7 @@ class RouteNames {
   static const masterPhrases = '/masterPhrases';
   static const settings = '/settings';
   static const error = '/error';
+  static const networkError = '/networkError';
   static const webview = '/webview';
   static const phraseCategories = '/phraseCategories';
   static const appUpdate = '/appUpdate';

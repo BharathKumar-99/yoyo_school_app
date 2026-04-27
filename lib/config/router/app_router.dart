@@ -11,6 +11,7 @@ import 'package:yoyo_school_app/features/auth/presentation/request_activation_sc
 import 'package:yoyo_school_app/features/common/presentation/app_update_screen.dart';
 import 'package:yoyo_school_app/features/common/presentation/maintainance_mode.dart';
 import 'package:yoyo_school_app/features/errors/presentation/error_scren.dart';
+import 'package:yoyo_school_app/features/errors/presentation/network_error_screen.dart';
 import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
 import 'package:yoyo_school_app/features/home/presentation/home_screen.dart';
 import 'package:yoyo_school_app/features/homework/presentation/add_homework_screen.dart';
@@ -96,6 +97,10 @@ class AppRoutes {
           Map data = state.extra as Map;
           return ErrorScreen(message: data['message'], error: data['error']);
         },
+      ),
+      GoRoute(
+        path: RouteNames.networkError,
+        builder: (context, state) => const NetworkErrorScreen(),
       ),
 
       GoRoute(

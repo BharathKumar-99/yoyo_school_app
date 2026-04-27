@@ -24,6 +24,8 @@ class AppInitializer {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
+    //lock the app tp portrait mode
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     // 3. Set background handler
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

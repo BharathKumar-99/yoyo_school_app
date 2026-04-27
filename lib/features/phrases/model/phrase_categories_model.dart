@@ -1,9 +1,12 @@
+import 'package:yoyo_school_app/features/home/model/phrases_model.dart';
+
 class PhraseCategoriesModel {
   int? id;
   String? createdAt;
   String? name;
   String? image;
   int? language;
+  List<PhraseModel>? phrases;
 
   PhraseCategoriesModel({
     this.id,
@@ -11,6 +14,7 @@ class PhraseCategoriesModel {
     this.name,
     this.image,
     this.language,
+    this.phrases,
   });
 
   PhraseCategoriesModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +23,12 @@ class PhraseCategoriesModel {
     name = json['name'];
     language = json['language'];
     image = json['image'];
+    if (json['phrase'] != null) {
+      phrases = <PhraseModel>[];
+      json['phrase'].forEach((v) {
+        phrases!.add(PhraseModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +38,7 @@ class PhraseCategoriesModel {
     data['name'] = name;
     data['language'] = language;
     data['images'] = image;
+    data['phrase'] = phrases;
     return data;
   }
 }

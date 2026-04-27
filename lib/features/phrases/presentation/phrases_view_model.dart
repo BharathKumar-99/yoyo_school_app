@@ -200,7 +200,7 @@ class PhrasesViewModel extends ChangeNotifier {
       );
       showPopUp();
     } catch (e) {
-      throw Exception("Failed initializing phrase data");
+      debugPrint('Failed initializing phrase data: $e');
     }
   }
 

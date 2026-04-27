@@ -42,8 +42,7 @@ class HomeScreen extends StatelessWidget {
                       sliver: SliverList(
                         delegate: SliverChildListDelegate([
                           const SizedBox(height: 10),
-                          if (profile.isTeacher != true &&
-                              homeProvider.homeworkDays > 0)
+                          if (profile.isTeacher != true)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -69,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    "🔔 Homework due in ${homeProvider.homeworkDays} days! ",
+                                    "🔔 Homework ${homeProvider.homeworkDays > 0 ? 'due in' : 'overdue by'} ${homeProvider.homeworkDays.abs()} days! ",
                                     textAlign: TextAlign.center,
                                     style: TextTheme.of(context).titleLarge!
                                         .copyWith(
@@ -178,8 +177,8 @@ class HomeScreen extends StatelessWidget {
                                     ElevatedButton(
                                       onPressed: () {},
                                       child: Text(
-                                        'Rank#${homeProvider.userDetailsModel.where((val) => val.userId == homeProvider.profileProvider?.user?.userId).first.classRank}',
-                                        style: TextTheme.of(context).titleLarge!
+                                        'Rank#${homeProvider.userDetailsModel.where((val) => val.userId == homeProvider.profileProvider?.user?.userId).isEmpty ? "0" : homeProvider.userDetailsModel.where((val) => val.userId == homeProvider.profileProvider?.user?.userId).toList().first.classRank}',
+                                        style: TextTheme.of(context).titleSmall!
                                             .copyWith(color: Colors.white),
                                       ),
                                     ),
@@ -697,11 +696,6 @@ class _LaunguageCardState extends State<LaunguageCard> {
                             Text(
                               "${text.level}${UsefullFunctions.returnLevel(widget.language?.level ?? 0, widget.level)}",
                               style: AppTextStyles.textTheme.headlineSmall!
-                                  .copyWith(color: Colors.white),
-                            ),
-                            Text(
-                              "${widget.student?.user?.userResult?.where((val) => widget.language?.id == val.phrase?.language && val.scoreSubmitted == true).length} / ${widget.language?.phrase?.length ?? 0}  ${text.phrases}",
-                              style: AppTextStyles.textTheme.titleMedium!
                                   .copyWith(color: Colors.white),
                             ),
                           ],

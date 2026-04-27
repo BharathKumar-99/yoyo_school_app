@@ -11,7 +11,9 @@ class SplashScreen extends StatelessWidget {
       create: (context) => SplashViewModel(),
       child: Consumer<SplashViewModel>(
         builder: (context, spl, w) {
-          return Container(color: Colors.white);
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator.adaptive()),
+          );
         },
       ),
     );

@@ -59,8 +59,25 @@ class HomeScreenProvider extends ChangeNotifier {
     userDetailsModel = await homeRepository.getDetails(
       userClases?.user?.studentClasses?.first.classes?.id ?? 0,
     );
-    userDetailsModel = userDetailsModel
-      ..sort((a, b) => a.classRank!.compareTo(b.classRank!));
+    userDetailsModel.sort((a, b) {
+      final aRank = a.classRank;
+      final bRank = b.classRank;
+
+      // Handle null ranks
+      if (aRank == null && bRank == null) return 0;
+      if (aRank == null) return 1;
+      if (bRank == null) return -1;
+
+      final rankCompare = aRank.compareTo(bRank);
+      if (rankCompare != 0) return rankCompare;
+
+      // 👉 If ranks are same, compare effort
+      final aEffort = a.effort ?? 0;
+      final bEffort = b.effort ?? 0;
+
+      return bEffort.compareTo(aEffort); // ascending
+    });
+
     notifyListeners();
   }
 
@@ -131,14 +148,16 @@ class HomeScreenProvider extends ChangeNotifier {
 
     homeWorkModel = await homeRepository.getHomeWorkModel(
       profileProvider?.school?.id ?? 0,
-      profileProvider?.user?.studentClasses?.first.classes?.language?.id ?? 0,
+      profileProvider?.user?.studentClasses?.first.classes?.languageId ?? 0,
     );
     if (homeWorkModel.isNotEmpty) {
       await getHomeWork();
 
       DateTime now = DateTime.now();
+
       DateTime dueDate = homeWorkModel.first.dueDate ?? DateTime.now();
-      homeworkDays = now.difference(dueDate).inDays;
+      final due = DateTime(dueDate.year, dueDate.month, dueDate.day);
+      homeworkDays = (now.difference(due).inDays);
     }
     school = await homeRepository.getSchoolData(
       profileProvider?.school?.id ?? 0,
@@ -243,7 +262,11 @@ class HomeScreenProvider extends ChangeNotifier {
 
       totalPhrases = 0;
       userClases?.user?.studentClasses?.forEach((student) {
-        totalPhrases += student.classes?.language?.phrase?.length ?? 0;
+        totalPhrases +=
+            student.classes?.language?.phrase
+                ?.where((p) => p.categories != null)
+                .length ??
+            0;
       });
 
       userClases
@@ -313,7 +336,8 @@ class HomeScreenProvider extends ChangeNotifier {
                     ?.where(
                       (element) =>
                           langIds.contains(element.phrase?.language) &&
-                          element.scoreSubmitted == true,
+                          element.scoreSubmitted == true &&
+                          element.phrase?.categories != null,
                     )
                     .length ??
                 0;
@@ -324,7 +348,6 @@ class HomeScreenProvider extends ChangeNotifier {
         },
         onError: (error) {
           debugPrint("Student stream error: $error");
-          throw Exception("Student stream crashed: $error");
         },
       );
     } catch (e) {

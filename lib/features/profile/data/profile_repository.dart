@@ -2,10 +2,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:yoyo_school_app/config/constants/constants.dart'; 
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/utils/get_user_details.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/config/utils/restarter.dart';
+import 'package:yoyo_school_app/config/router/navigation_helper.dart';
+import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
 
 import '../../home/model/school_model.dart';
@@ -57,9 +59,14 @@ class ProfileRepository {
               return UserModel.fromJson(event.first);
             }
             return null;
+          })
+          .handleError((error, stackTrace) {
+            log('Realtime Stream Error: $error\n$stackTrace');
+            NavigationHelper.push(RouteNames.networkError);
           });
     } catch (e, st) {
       log('Realtime UserData Error: $e\n$st');
+      NavigationHelper.push(RouteNames.networkError);
       return const Stream.empty();
     }
   }
@@ -69,7 +76,9 @@ class ProfileRepository {
     try {
       final data = await _client
           .from(DbTable.users)
-          .select('''*,${DbTable.studentLanguage}(*),${DbTable.teacher}(*)''')
+          .select(
+            '''*,${DbTable.studentLanguage}(*),${DbTable.studentClasses}(*,${DbTable.classes}(*)) ,${DbTable.teacher}(*)''',
+          )
           .eq('user_id', userId)
           .maybeSingle();
       return UserModel.fromJson(data!);
