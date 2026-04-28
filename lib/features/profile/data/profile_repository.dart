@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +17,10 @@ import '../model/user_model.dart';
 class ProfileRepository {
   final SupabaseClient _client = SupabaseClientService.instance.client;
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout(
+    BuildContext context,
+    StreamSubscription? streamSubscription,
+  ) async {
     GlobalLoader.show();
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     _client
@@ -27,9 +31,8 @@ class ProfileRepository {
     final permission = prefs.getBool(Constants.kMicGrantedKey) ?? false;
     await prefs.clear();
     await prefs.setBool(Constants.kMicGrantedKey, permission);
-
+    await streamSubscription?.cancel();
     await _client.auth.signOut();
-
     GlobalLoader.hide();
     RestartWidget.restartApp(context);
   }

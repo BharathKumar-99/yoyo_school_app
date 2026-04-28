@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -212,8 +213,10 @@ class HomeWorkProvider extends ChangeNotifier {
       final data = jsonDecode(response.body);
 
       await Future.delayed(const Duration(seconds: 15));
-      await homeScreenProvider?.init(home: false);
-      await Future.delayed(const Duration(seconds: 5));
+      Timer.periodic(const Duration(minutes: 5), (timer) async {
+        await homeScreenProvider?.init(home: false);
+      });
+
       isLoading = false;
       notifyListeners();
 

@@ -1,10 +1,47 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/theme/app_text_styles.dart';
 
-class NetworkErrorScreen extends StatelessWidget {
+class NetworkErrorScreen extends StatefulWidget {
   const NetworkErrorScreen({super.key});
+
+  @override
+  State<NetworkErrorScreen> createState() => _NetworkErrorScreenState();
+}
+
+class _NetworkErrorScreenState extends State<NetworkErrorScreen> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startNetworkCheck();
+  }
+
+  void _startNetworkCheck() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          timer.cancel();
+          if (mounted) {
+            context.pop();
+          }
+        }
+      } on SocketException catch (_) {
+        // Still no internet
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +77,7 @@ class NetworkErrorScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: () {
-                  context.go(RouteNames.splash);
+                  context.pop();
                 },
                 icon: const Icon(Icons.refresh),
                 label: const Text("Retry"),
