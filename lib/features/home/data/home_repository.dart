@@ -112,6 +112,16 @@ class HomeRepository {
         }
       }
 
+      final homeworkResponse = await getHomeWorkModel(schoolId, langId);
+
+        for (var val in homeworkResponse) {
+        if (val.phrases != null) {
+          for (var p in val.phrases!) {
+            allowedPhraseIds.add(p.id ?? 0);
+          }
+        }
+      }
+
       // Step 6: Filter phrases
       for (final sc in student.user?.studentClasses ?? []) {
         final lang = sc.classes?.language;
@@ -121,7 +131,7 @@ class HomeRepository {
               .where(
                 (p) =>
                     p.level == languageLevel &&
-                    p.categories != null &&
+                     
                     (allowedPhraseIds.isEmpty ||
                         allowedPhraseIds.contains(p.id)) &&
                     !(disabledIds?.contains(p.id) ?? false),
