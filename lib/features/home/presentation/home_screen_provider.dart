@@ -154,10 +154,11 @@ class HomeScreenProvider extends ChangeNotifier {
       await getHomeWork();
 
       DateTime now = DateTime.now();
-
+      DateTime today = DateTime(now.year, now.month, now.day);
       DateTime dueDate = homeWorkModel.first.dueDate ?? DateTime.now();
       final due = DateTime(dueDate.year, dueDate.month, dueDate.day);
-      homeworkDays = (now.difference(due).inDays);
+
+      homeworkDays = (due.difference(today).inDays);
     }
     school = await homeRepository.getSchoolData(
       profileProvider?.school?.id ?? 0,

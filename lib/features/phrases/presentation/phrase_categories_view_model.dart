@@ -122,8 +122,9 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     final now = DateTime.now();
 
     final due = DateTime(dueDate.year, dueDate.month, dueDate.day);
+    final today = DateTime(now.year, now.month, now.day);
 
-    final difference = now.difference(due).inDays;
+    final difference = due.difference(today).inDays;
 
     if (difference > 0) {
       return 'Due in $difference day${difference == 1 ? '' : 's'}';
