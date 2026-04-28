@@ -351,7 +351,38 @@ class HomeScreen extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _AnimatedSectionTitle(text.class_metrics),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _AnimatedSectionTitle(text.class_metrics),
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors:
+                                              homeProvider
+                                                  .userClases
+                                                  ?.user
+                                                  ?.studentClasses
+                                                  ?.first
+                                                  .classes
+                                                  ?.language
+                                                  ?.gradient ??
+                                              [],
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        'Rank#${homeProvider.userDetailsModel.where((val) => val.userId == homeProvider.profileProvider?.user?.userId).isEmpty ? "0" : homeProvider.userDetailsModel.where((val) => val.userId == homeProvider.profileProvider?.user?.userId).toList().first.classRank}',
+                                        style: TextTheme.of(context).titleSmall!
+                                            .copyWith(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 _AnimatedRow(
                                   delay: 200,
                                   children: [
