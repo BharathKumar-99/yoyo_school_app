@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -28,6 +30,21 @@ class SplashViewModel extends ChangeNotifier {
 
   Future<void> init() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => GlobalLoader.show());
+
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isEmpty || result[0].rawAddress.isEmpty) {
+        throw const SocketException('No internet');
+      }
+    } on SocketException catch (_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        GlobalLoader.hide();
+        await ctx!.push(RouteNames.networkError);
+        init();
+      });
+      return;
+    }
+
     model = await _repo.getAppConfig();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _user = await _repo.getProfileData();

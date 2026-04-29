@@ -103,24 +103,30 @@ class GlobalRepo {
   }
 
   Future<RemoteConfig?> getRemoteCred() async {
-    final userId = GetUserDetails.getCurrentUserId();
-    if (userId == null) {
+    try {
+      final userId = GetUserDetails.getCurrentUserId();
+      if (userId == null) {
+        return null;
+      }
+      final user = await _client
+          .from(DbTable.users)
+          .select('school')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      final data = await _client
+          .from(DbTable.remoteConfig)
+          .select('''*,${DbTable.phraseDisabledSchools}(*)''')
+          .eq('school', user?['school'])
+          .limit(1)
+          .maybeSingle();
+
+      if (data == null) return null;
+      return RemoteConfig.fromJson(data);
+    } catch (e) {
+      log("GlobalRepo.getRemoteCred error (likely network): $e");
       return null;
     }
-    final user = await _client
-        .from(DbTable.users)
-        .select('school')
-        .eq('user_id', userId)
-        .maybeSingle();
-
-    final data = await _client
-        .from(DbTable.remoteConfig)
-        .select('''*,${DbTable.phraseDisabledSchools}(*)''')
-        .eq('school', user?['school'])
-        .limit(1)
-        .maybeSingle();
-
-    return RemoteConfig.fromJson(data!);
   }
 
   Future<SpeechEvaluationModel?> callSuperSpeechApi({

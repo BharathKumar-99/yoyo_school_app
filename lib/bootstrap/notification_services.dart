@@ -109,61 +109,65 @@ class NotificationServices {
     // Note: We are querying the 'users' table using this ID.
     // If auth.uid != table.user_id, this will fail.
 
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    final fcmToken = await messaging.getToken();
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      final fcmToken = await messaging.getToken();
 
-    print('📱 [FCM] Retrieved FCM token: ${fcmToken?.substring(0, 20)}...');
+      print('📱 [FCM] Retrieved FCM token: ${fcmToken?.substring(0, 20)}...');
 
-    if (fcmToken == null) {
-      print('❌ [FCM] FCM token is null, skipping registration');
-      return;
-    }
+      if (fcmToken == null) {
+        print('❌ [FCM] FCM token is null, skipping registration');
+        return;
+      }
 
-    final response = await _client
-        .from(DbTable.users)
-        // FIXED: Renamed column from 'fcm_tokens' to 'fcm' to match database schema.
-        .select('fcm')
-        .eq('user_id', userId)
-        .maybeSingle();
+      final response = await _client
+          .from(DbTable.users)
+          // FIXED: Renamed column from 'fcm_tokens' to 'fcm' to match database schema.
+          .select('fcm')
+          .eq('user_id', userId)
+          .maybeSingle();
 
-    if (response == null) {
-      print('❌ [FCM] User record not found in database for ID: $userId');
-      return;
-    }
+      if (response == null) {
+        print('❌ [FCM] User record not found in database for ID: $userId');
+        return;
+      }
 
-    final Map<String, dynamic> userData = response;
-    // We store tokens as a list of objects: [{'deviceId': '...', 'fcmId': '...'}]
-    // This allows a single user to receive notifications on multiple devices (iPad + iPhone).
-    List<dynamic> deviceIds = userData['fcm'] ?? [];
+      final Map<String, dynamic> userData = response;
+      // We store tokens as a list of objects: [{'deviceId': '...', 'fcmId': '...'}]
+      // This allows a single user to receive notifications on multiple devices (iPad + iPhone).
+      List<dynamic> deviceIds = userData['fcm'] ?? [];
 
-    print('📱 [FCM] Existing tokens in database: ${deviceIds.length}');
+      print('📱 [FCM] Existing tokens in database: ${deviceIds.length}');
 
-    List<dynamic> ids = [];
-    for (var i = 0; i < deviceIds.length; i++) {
-      // We check 'fcmId' (the token) to prevent duplicates
-      ids.add(deviceIds[i]['fcmId']);
-    }
+      List<dynamic> ids = [];
+      for (var i = 0; i < deviceIds.length; i++) {
+        // We check 'fcmId' (the token) to prevent duplicates
+        ids.add(deviceIds[i]['fcmId']);
+      }
 
-    if (ids.contains(fcmToken)) {
+      if (ids.contains(fcmToken)) {
+        print(
+          '✅ [FCM] Current token is fresh and already in DB. Skipping update.',
+        );
+        return;
+      }
+
+      final deviceId = await _getId();
+      print('📱 [FCM] Device ID: $deviceId');
+
+      deviceIds.add({'deviceId': deviceId, 'fcmId': fcmToken});
+
+      await _client
+          .from(DbTable.users)
+          .update({'fcm': deviceIds})
+          .eq('user_id', userId);
+
       print(
-        '✅ [FCM] Current token is fresh and already in DB. Skipping update.',
+        '✅ [FCM] Successfully registered new token. Total tokens: ${deviceIds.length}',
       );
-      return;
+    } catch (e) {
+      print('❌ [FCM] Error saving token to Firebase/Supabase: $e');
     }
-
-    final deviceId = await _getId();
-    print('📱 [FCM] Device ID: $deviceId');
-
-    deviceIds.add({'deviceId': deviceId, 'fcmId': fcmToken});
-
-    await _client
-        .from(DbTable.users)
-        .update({'fcm': deviceIds})
-        .eq('user_id', userId);
-
-    print(
-      '✅ [FCM] Successfully registered new token. Total tokens: ${deviceIds.length}',
-    );
   }
 
   // 7. Show the actual notification popup
