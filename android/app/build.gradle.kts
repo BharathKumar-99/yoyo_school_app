@@ -18,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.yoyospeak.yoyo"
-    compileSdk = 36
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -33,8 +33,8 @@ android {
     defaultConfig {
         applicationId = "com.yoyospeak.yoyo"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 35
+        targetSdk = 37
+        versionCode = 37
         versionName = flutter.versionName
     }
 
