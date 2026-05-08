@@ -132,6 +132,7 @@ class AppRoutes {
             className: data['className'],
             levels: data['level'],
             student: data['student'],
+            completed: data['completed'],
           );
         },
       ),

@@ -10,7 +10,9 @@ import 'package:yoyo_school_app/config/utils/restarter.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/core/supabase/supabase_client.dart';
+import 'package:yoyo_school_app/config/router/app_router.dart';
 
+import '../../../app.dart';
 import '../../home/model/school_model.dart';
 import '../model/user_model.dart';
 
@@ -33,7 +35,12 @@ class ProfileRepository {
     await prefs.setBool(Constants.kMicGrantedKey, permission);
     await streamSubscription?.cancel();
     await _client.auth.signOut();
+    
+    globalProvider.clearUserData();
+    
     GlobalLoader.hide();
+    
+    AppRoutes.router.go(RouteNames.login);
     RestartWidget.restartApp(context);
   }
 

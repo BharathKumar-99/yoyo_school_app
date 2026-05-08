@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyo_school_app/config/constants/constants.dart';
@@ -121,7 +123,9 @@ class ResultProvider extends ChangeNotifier {
       );
 
       notifyListeners();
-    } catch (_) {}
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   Future<T> _safe<T>(Future<T> Function() call, String errorMessage) async {

@@ -889,7 +889,7 @@ class ResultScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          if (isLast)
+                                          if (isLast && homework == null)
                                             Expanded(
                                               child: OutlinedButton(
                                                 style: OutlinedButton.styleFrom(
@@ -922,6 +922,57 @@ class ResultScreen extends StatelessWidget {
                                                 },
                                                 child: AutoSizeText(
                                                   'Repeat All',
+                                                  textAlign: TextAlign.center,
+                                                  style: AppTextStyles
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .copyWith(
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                          if (isLast && homework != null)
+                                            Expanded(
+                                              child: OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 20,
+                                                  ),
+                                                  backgroundColor:
+                                                      value
+                                                          .language
+                                                          .gradient
+                                                          ?.first ??
+                                                      Colors.blue,
+                                                  foregroundColor: Color(
+                                                    0xffffffff,
+                                                  ),
+                                                  shape: RoundedRectangleBorder(
+                                                    side: BorderSide.none,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16,
+                                                        ),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  context.go(
+                                                    RouteNames.phraseCategories,
+                                                    extra: {
+                                                      'language':
+                                                          value.language,
+                                                      "className": className,
+                                                      "level":
+                                                          value.levels ?? [],
+                                                      'student':
+                                                          value.userClases,
+                                                      'completed': true,
+                                                    },
+                                                  );
+                                                },
+                                                child: AutoSizeText(
+                                                  'Complete Homework',
                                                   textAlign: TextAlign.center,
                                                   style: AppTextStyles
                                                       .textTheme

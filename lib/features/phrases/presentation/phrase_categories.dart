@@ -19,12 +19,14 @@ class PhraseCategories extends StatefulWidget {
   final Student? student;
   final String className;
   final List<Level> levels;
+  final bool? completed;
   const PhraseCategories({
     super.key,
     required this.language,
     required this.className,
     required this.levels,
     this.student,
+    this.completed,
   });
 
   @override
@@ -35,6 +37,7 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
   @override
   void initState() {
     checkMicPermission();
+
     super.initState();
   }
 
@@ -42,8 +45,11 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider<PhraseCategoriesViewModel>(
-        create: (_) =>
-            PhraseCategoriesViewModel(widget.language, widget.student),
+        create: (_) => PhraseCategoriesViewModel(
+          widget.language,
+          widget.student,
+          widget.completed ?? false,
+        ),
         child: Consumer<PhraseCategoriesViewModel>(
           builder: (context, provider, child) => provider.isLoading
               ? Container()
@@ -83,17 +89,20 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                                     imageUrl: provider.language.image ?? "",
                                     fadeInDuration: Duration.zero,
                                     fadeOutDuration: Duration.zero,
-                                    imageBuilder: (context, imageProvider) => Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitHeight,
-                                          alignment: Alignment.bottomRight,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.fitHeight,
+                                              alignment: Alignment.bottomRight,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    placeholder: (context, url) => const SizedBox(),
-                                    errorWidget: (context, url, error) => const SizedBox(),
+                                    placeholder: (context, url) =>
+                                        const SizedBox(),
+                                    errorWidget: (context, url, error) =>
+                                        const SizedBox(),
                                   ),
                                 ),
                               ),

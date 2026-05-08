@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyo_school_app/config/constants/constants.dart';
 import 'package:yoyo_school_app/config/router/navigation_helper.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
@@ -27,8 +29,13 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
   bool isLoading = true;
   GlobalProvider? globalProvider;
   int homeworkAvgScore = 0;
+  final bool isHomeworkCompleted;
 
-  PhraseCategoriesViewModel(this.language, this.student) {
+  PhraseCategoriesViewModel(
+    this.language,
+    this.student,
+    this.isHomeworkCompleted,
+  ) {
     try {
       init();
     } catch (e) {
@@ -116,6 +123,57 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     });
+    if (isHomeworkCompleted) {
+      showDialog(
+        context: ctx!,
+        builder: (context) => AlertDialog.adaptive(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Center(child: Text('Homework DONE!')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 200,
+                child: Lottie.asset(
+                  AnimationAsset.popupsuccess,
+                  fit: BoxFit.fill,
+                  repeat: false,
+                ),
+              ),
+              Row(
+                children: [
+                  Text('✅'),
+                  Text(
+                    '10 Phrase completed',
+                    style: TextTheme.of(context).titleSmall,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('✅'),
+                  Text(
+                    '$homeworkAvgScore% Average Score',
+                    style: TextTheme.of(context).titleSmall,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            Center(
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Continue'),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   String getDueText(DateTime dueDate) {

@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyo_school_app/app.dart';
 import 'package:yoyo_school_app/config/router/route_names.dart';
 import 'package:yoyo_school_app/config/utils/global_loader.dart';
 import 'package:yoyo_school_app/features/common/presentation/global_provider.dart';
@@ -49,7 +48,7 @@ class SplashViewModel extends ChangeNotifier {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _user = await _repo.getProfileData();
     if (_user != null) {
-      globalProvider = await GlobalProvider.create();
+      await _globalProvider?.reInitialize();
     }
     if (!(_user?.isTester ?? false)) {
       if (model?.isMaintainance ?? false) {

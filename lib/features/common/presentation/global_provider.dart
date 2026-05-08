@@ -34,6 +34,17 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearUserData() {
+    _results.clear();
+    try {
+      _resultSub?.cancel();
+    } catch (_) {}
+    _resultSub = null;
+    _isLoading = false;
+    _repo.disposeStream();
+    notifyListeners();
+  }
+
   Future<void> initRealtimeResults(List<int> phraseIds) async {
     try {
       if (phraseIds.isEmpty) return;
