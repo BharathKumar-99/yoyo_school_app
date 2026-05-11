@@ -355,11 +355,19 @@ class _PhraseCategoriesState extends State<PhraseCategories> {
                                                           vertical: 8,
                                                         ),
                                                     child: Text(
-                                                      provider.getDueText(
-                                                        provider
-                                                            .homeworkModel!
-                                                            .dueDate!,
-                                                      ),
+                                                      provider.homeWorkCompleted ==
+                                                              provider
+                                                                  .homeworkModel
+                                                                  ?.phrases
+                                                                  ?.length
+                                                          ? "Homework Completed"
+                                                          : provider.getDueText(
+                                                              provider
+                                                                  .homeworkModel!
+                                                                  .dueDate!,
+                                                            ),
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .titleSmall!

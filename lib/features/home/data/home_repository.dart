@@ -29,6 +29,24 @@ class HomeRepository {
     return lvl;
   }
 
+  Future<int> getCompletedPhraseCount({
+    required String userId,
+    required int homeworkId,
+  }) async {
+    try {
+      final response = await _client.rpc(
+        'get_completed_phrase_count',
+        params: {'p_user_id': userId, 'p_homework_id': homeworkId},
+      );
+
+      // Supabase returns dynamic → cast safely
+      return (response as num).toInt();
+    } catch (e) {
+      print('Error fetching completed phrase count: $e');
+      return 0; // fallback
+    }
+  }
+
   Future<Student> getClasses() async {
     final userId = GetUserDetails.getCurrentUserId() ?? "";
     if (userId.isEmpty) throw Exception("User ID not found");
@@ -114,7 +132,7 @@ class HomeRepository {
 
       final homeworkResponse = await getHomeWorkModel(schoolId, langId);
 
-        for (var val in homeworkResponse) {
+      for (var val in homeworkResponse) {
         if (val.phrases != null) {
           for (var p in val.phrases!) {
             allowedPhraseIds.add(p.id ?? 0);
@@ -131,7 +149,6 @@ class HomeRepository {
               .where(
                 (p) =>
                     p.level == languageLevel &&
-                     
                     (allowedPhraseIds.isEmpty ||
                         allowedPhraseIds.contains(p.id)) &&
                     !(disabledIds?.contains(p.id) ?? false),

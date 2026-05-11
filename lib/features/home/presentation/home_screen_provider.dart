@@ -45,6 +45,7 @@ class HomeScreenProvider extends ChangeNotifier {
   int schoolCPhrase = 0;
 
   int homeWorkScore = 0;
+  int homeWorkCompleted = 0;
   int homeworkStudent = 0;
   int homeworkCompletedStudents = 0;
 
@@ -152,7 +153,10 @@ class HomeScreenProvider extends ChangeNotifier {
     );
     if (homeWorkModel.isNotEmpty) {
       await getHomeWork();
-
+      homeWorkCompleted = await homeRepository.getCompletedPhraseCount(
+        userId: profileProvider?.user?.userId ?? '',
+        homeworkId: homeWorkModel.first.id ?? 0,
+      );
       DateTime now = DateTime.now();
       DateTime today = DateTime(now.year, now.month, now.day);
       DateTime dueDate = homeWorkModel.first.dueDate ?? DateTime.now();

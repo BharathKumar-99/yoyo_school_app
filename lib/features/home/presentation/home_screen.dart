@@ -46,37 +46,44 @@ class HomeScreen extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 10,
-                                  ),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: LinearGradient(
-                                      colors:
-                                          homeProvider
-                                              .userClases
-                                              ?.user
-                                              ?.studentClasses
-                                              ?.first
-                                              .classes
-                                              ?.language
-                                              ?.gradient ??
-                                          [],
+                                if (homeProvider.homeWorkCompleted !=
+                                    (homeProvider
+                                            .homeWorkModel
+                                            .first
+                                            .phrases
+                                            ?.length ??
+                                        0))
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 10,
+                                    ),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(
+                                        colors:
+                                            homeProvider
+                                                .userClases
+                                                ?.user
+                                                ?.studentClasses
+                                                ?.first
+                                                .classes
+                                                ?.language
+                                                ?.gradient ??
+                                            [],
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "🔔 Homework ${homeProvider.homeworkDays > 0 ? 'due in' : 'overdue by'} ${homeProvider.homeworkDays.abs()} days! ",
+                                      textAlign: TextAlign.center,
+                                      style: TextTheme.of(context).titleLarge!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                     ),
                                   ),
-                                  child: Text(
-                                    "🔔 Homework ${homeProvider.homeworkDays > 0 ? 'due in' : 'overdue by'} ${homeProvider.homeworkDays.abs()} days! ",
-                                    textAlign: TextAlign.center,
-                                    style: TextTheme.of(context).titleLarge!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                  ),
-                                ),
                                 _AnimatedSectionTitle(text.your_metrics),
                                 const SizedBox(height: 10),
 

@@ -126,7 +126,7 @@ class PhraseCategoriesViewModel extends ChangeNotifier {
     if (isHomeworkCompleted) {
       showDialog(
         context: ctx!,
-        builder: (context) => AlertDialog.adaptive(
+        builder: (context) => AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
